@@ -14,5 +14,7 @@
             "email": "william.hleucka@gmail.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^10"
+    }
 }
