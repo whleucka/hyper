@@ -38,7 +38,7 @@ composer install
 
 - **Deployment**: Once your application is ready for deployment, configure your web server (e.g., Apache, Nginx) to point to the public directory as the document root.
 
-For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a> <- WIP.
+For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a>
 
 
 ### Contributing
