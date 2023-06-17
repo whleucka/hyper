@@ -4,8 +4,8 @@ namespace Nebula\Config;
 
 class Database
 {
-    public array $config;
-    public array $options;
+    private array $config;
+    private array $options;
     public function __construct()
     {
         $this->config = [
@@ -19,5 +19,15 @@ class Database
         ];
         // Extra PDO options
         $this->options = [];
+    }
+
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 }

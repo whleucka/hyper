@@ -4,5 +4,10 @@ namespace Nebula\Config;
 
 class Paths
 {
-    public string $controllers = __DIR__ . "/../Controllers";
+    private string $controllers = __DIR__ . "/../Controllers";
+
+    public function getControllers(): string 
+    {
+        return $this->controllers;
+    }
 }

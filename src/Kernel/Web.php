@@ -2,12 +2,12 @@
 
 namespace Nebula\Kernel;
 
-use GalaxyPDO\DB;
+use Composer\ClassMapGenerator\ClassMapGenerator;
 use Dotenv\Dotenv;
+use Exception;
+use GalaxyPDO\DB;
 use StellarRouter\Router;
 use Symfony\Component\HttpFoundation\{Request, Response};
-use Composer\ClassMapGenerator\ClassMapGenerator;
-use Exception;
 
 class Web
 {
@@ -71,8 +71,8 @@ class Web
     private function setDB(): void
     {
         $this->db = new DB(
-            $this->config["db"]->config,
-            $this->config["db"]->options
+            $this->config["db"]->getConfig(),
+            $this->config["db"]->getOptions()
         );
     }
 
@@ -94,7 +94,7 @@ class Web
     {
         $this->router = new Router();
         foreach (
-            $this->classMap($this->config["path"]->controllers)
+            $this->classMap($this->config["path"]->getControllers())
             as $controllerClass => $path
         ) {
             $controller = new $controllerClass();
