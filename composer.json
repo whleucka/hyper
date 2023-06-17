@@ -14,7 +14,28 @@
             "email": "william.hleucka@gmail.com"
         }
     ],
+    "require": {
+        "libra-php/galaxy-pdo": "@dev",
+        "libra-php/stellar-router": "@dev",
+        "vlucas/phpdotenv": "^5.5"
+    },
     "require-dev": {
         "phpunit/phpunit": "^10"
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../galaxy-pdo",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "../stellar-router",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }
