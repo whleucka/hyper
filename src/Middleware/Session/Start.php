@@ -11,9 +11,9 @@ class Start
      */
     public function handle(Request $request): Request
     {
-        $this->sessionStart();
-        $this->enableSecureSession();
         $this->sessionCookiesHttpOnly();
+        $this->enableSecureSession();
+        $this->sessionStart();
         $this->limitSessionLifetime();
         return $request;
     }

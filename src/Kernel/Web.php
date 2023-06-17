@@ -9,7 +9,7 @@ use Exception;
 use GalaxyPDO\DB;
 use Nebula\Controllers\Controller;
 use StellarRouter\Router;
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
 class Web
 {
@@ -32,7 +32,6 @@ class Web
         $this->registerRoutes();
         $this->request();
         $this->executePayload();
-        $this->response();
         $this->terminate();
     }
 
@@ -153,8 +152,6 @@ class Web
                  *  $parameters
                  */
                 $this->controller = new $handlerClass($this->db);
-                // We can maybe do something with route middleware to detect the
-                // set a web request (text/html) or api request (json, etc)
                 if (in_array("api", $middleware)) {
                     $this->apiResponse($handlerMethod, $parameters);
                 } else {
@@ -164,10 +161,54 @@ class Web
                 $this->pageNotFound();
             }
         } catch (Exception $ex) {
-            die("wip: payload exeception: {$ex->getMessage()}");
+            if (in_array("api", $middleware)) {
+                $this->apiException($ex);
+            } else {
+                error_log("wip: web exception: {$ex->getMessage()}");
+                exit;
+            }
         } catch (Error $err) {
-            die("wip: payload error: {$err->getMessage()}");
+            if (in_array("api", $middleware)) {
+                $this->apiError($err);
+            } else {
+                error_log("wip: web error: {$err->getMessage()}");
+                exit;
+            }
         }
+    }
+
+    /**
+     * Set api exception response
+     */
+    public function apiException(Exception $exception): void
+    {
+        // TODO detect .env mode and if dev, show message otherwise ??
+        $content = [
+            "success" => false,
+            "message" => $exception->getMessage(),
+            "code" => $exception->getCode(),
+            "ts" => time(),
+        ];
+        $this->response = new JsonResponse($content);
+        $this->response->prepare($this->request);
+        $this->response->send();
+    }
+
+    /**
+     * Set api exception response
+     */
+    public function apiError(Error $error): void
+    {
+        // TODO detect .env mode and if dev, show message otherwise ??
+        $content = [
+            "success" => false,
+            "message" => $error->getMessage(),
+            "code" => $error->getCode(),
+            "ts" => time(),
+        ];
+        $this->response = new JsonResponse($content);
+        $this->response->prepare($this->request);
+        $this->response->send();
     }
 
     /**
@@ -190,11 +231,11 @@ class Web
     public function webResponse(string $endpoint, array $parameters): void
     {
         $content = $this->controller->$endpoint(...$parameters);
-        $this->response = [
-            "content" => $content,
-            "code" => Response::HTTP_OK,
-            "headers" => ["content-type" => "text/html"],
-        ];
+        $this->response = new Response(
+            $content,
+        );
+        $this->response->prepare($this->request);
+        $this->response->send();
     }
 
     /**
@@ -203,35 +244,14 @@ class Web
      */
     public function apiResponse(string $endpoint, array $parameters): void
     {
-        $content = json_encode([
-            "result" => true,
+        $content = [
+            "success" => true,
             "data" => $this->controller->$endpoint(...$parameters),
-            "code" => Response::HTTP_OK,
             "ts" => time(),
-            "message" => "",
-        ]);
-        $this->response = [
-            "content" => $content,
-            "code" => Response::HTTP_OK,
-            "headers" => [
-                "content-type" => "application/json",
-                "charset" => "utf-8",
-            ],
         ];
-    }
-
-    /**
-     * Send the response to the client
-     */
-    private function response(): void
-    {
-        $response = new Response(
-            $this->response["content"],
-            $this->response["code"],
-            $this->response["headers"]
-        );
-        $response->prepare($this->request);
-        $response->send();
+        $this->response = new JsonResponse($content);
+        $this->response->prepare($this->request);
+        $this->response->send();
     }
 
     /**
