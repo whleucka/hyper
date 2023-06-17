@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-php -S localhost:8888 --docroot=public
+host="${1:-localhost}"
+port="${2:-8888}"
+php -S "$host:$port" --docroot=public
