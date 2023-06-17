@@ -4,10 +4,13 @@ namespace Nebula\Kernel;
 
 use GalaxyPDO\DB;
 use Dotenv\Dotenv;
+use Symfony\Component\HttpFoundation\Request;
 
 class Web
 {
   private DB $db;
+  private $middleware;
+  private Request $request;
   private array $config = [];
 
   /**
@@ -67,6 +70,10 @@ class Web
    */
   private function loadMiddleware(): void
   {
+    $this->middleware = [
+      'session_start' => \Nebula\Middleware\Session\Start::class,
+      'auth_user' => \Nebula\Middleware\Authentication\User::class,
+    ];
   }
 
   /**
@@ -74,6 +81,16 @@ class Web
    */
   private function handleRequest(): void
   {
+    $request = Request::createFromGlobals();
+    foreach ($this->middleware as $alias => $middleware) {
+      $class = new $middleware;
+      $request = match ($alias) {
+        // We may define other match-arms to provide
+        // additional arguments to handle here
+        default => $class->handle($request)
+      };
+    }
+    $this->request = $request;
   }
 
   /**
