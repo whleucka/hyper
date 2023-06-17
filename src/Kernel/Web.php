@@ -4,6 +4,7 @@ namespace Nebula\Kernel;
 
 use Composer\ClassMapGenerator\ClassMapGenerator;
 use Dotenv\Dotenv;
+use Error;
 use Exception;
 use GalaxyPDO\DB;
 use StellarRouter\Router;
@@ -97,7 +98,7 @@ class Web
             $this->classMap($this->config["path"]->getControllers())
             as $controllerClass => $path
         ) {
-            $controller = new $controllerClass();
+            $controller = new $controllerClass($this->db);
             $this->router->registerRoutes($controller::class);
         }
     }
@@ -139,7 +140,7 @@ class Web
         try {
             if ($this->route) {
                 extract($this->route);
-                $controller = new $class();
+                $controller = new $class($this->db);
                 // We can maybe do something with route middleware to detect the
                 // set a web request (text/html) or api request (json, etc)
                 $this->response = [
@@ -157,6 +158,8 @@ class Web
             }
         } catch (Exception $ex) {
             die("wip: payload exeception: {$ex->getMessage()}");
+        } catch (Error $err) {
+            die("wip: payload error: {$err->getMessage()}");
         }
     }
 

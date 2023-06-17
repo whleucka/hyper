@@ -1,9 +1,10 @@
 <?php
 
 namespace Nebula\Controllers;
+
 use StellarRouter\Get;
 
-class HomeController
+class HomeController extends Controller
 {
     #[Get("/")]
     public function index(): mixed
