@@ -1,6 +1,8 @@
 # Nebula
 
-⭐ Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. It provides developers with a flexible and extensible architecture to build custom web applications with ease. 🛰️ 
+🌠 Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. 🌟
+
+💫 It provides developers with a flexible and extensible architecture to build custom web applications with ease. 🔭
 
 👷 *Currently under development*
 
@@ -28,17 +30,17 @@ composer install
 ```
 
 - **Configuration**: Customize the configuration files according to your project requirements, including database settings and routes.
+```
+cp .env.example .env
+```
 
 - **Development**: Start building your application by creating controllers, views, and models within the src directory.
 
-- **Testing**: Nebula includes a testing suite powered by PHPUnit. Add your tests under the tests directory and run them with:
-```bash
-./vendor/bin/phpunit --testdox tests
-```
+- **Testing**: Nebula includes a testing suite powered by PHPUnit. Add your tests under the tests directory and run them with: `./bin/test` or `composer run-script test` or `./vendor/bin/phpunit tests`
 
-- **Deployment**: Once your application is ready for deployment, configure your web server (e.g., Apache, Nginx) to point to the public directory as the document root.
+- **Deployment**: Once your application is ready for deployment, configure your web server to point to the public directory as the document root.
 
-For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a>
+<s>For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a></s>
 
 
 ### Contributing
@@ -56,8 +58,8 @@ This project is licensed under the <a href='https://github.com/your-username/neb
 We would like to express our gratitude to the following open-source projects that have inspired and contributed to Nebula:
 
 - Symfony
-- Laravel
 - Slim Framework
+- Laravel
 
 
 ### Contact
