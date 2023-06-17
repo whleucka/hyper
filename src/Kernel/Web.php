@@ -125,7 +125,10 @@ class Web
             };
         }
         $this->request = $request;
-        $this->route = $this->router->handleRequest($this->request->getMethod(), '/' . $this->request->getPathInfo());
+        $this->route = $this->router->handleRequest(
+            $this->request->getMethod(),
+            "/" . $this->request->getPathInfo()
+        );
     }
 
     /**
@@ -136,20 +139,20 @@ class Web
         try {
             if ($this->route) {
                 extract($this->route);
-                $controller = new $class;
-                // We can maybe do something with route middleware to detect the 
+                $controller = new $class();
+                // We can maybe do something with route middleware to detect the
                 // set a web request (text/html) or api request (json, etc)
                 $this->response = [
-                    'content' => $controller->$endpoint(...$parameters),
-                    'code' => Response::HTTP_OK,
-                    'headers' => ['content-type' => 'text/html'],
+                    "content" => $controller->$endpoint(...$parameters),
+                    "code" => Response::HTTP_OK,
+                    "headers" => ["content-type" => "text/html"],
                 ];
             } else {
                 // The route doesn't exist, 404
                 $this->response = [
-                    'content' => "The page you requested doesn't seem to exist",
-                    'code' => Response::HTTP_NOT_FOUND,
-                    'headers' => ['content-type' => 'text/html'],
+                    "content" => "The page you requested doesn't seem to exist",
+                    "code" => Response::HTTP_NOT_FOUND,
+                    "headers" => ["content-type" => "text/html"],
                 ];
             }
         } catch (Exception $ex) {
@@ -163,9 +166,9 @@ class Web
     private function response(): void
     {
         $response = new Response(
-            $this->response['content'],
-            $this->response['code'],
-            $this->response['headers'],
+            $this->response["content"],
+            $this->response["code"],
+            $this->response["headers"]
         );
         $response->prepare($this->request);
         $response->send();
