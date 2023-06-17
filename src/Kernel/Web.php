@@ -57,7 +57,10 @@ class Web
     private function config(): void
     {
         // Database configuration
-        $this->config["db"] = new \Nebula\Config\Database();
+        $this->config = [
+            "db" => new \Nebula\Config\Database(),
+            "path" => new \Nebula\Config\Paths(),
+        ];
     }
 
     /**
@@ -88,9 +91,8 @@ class Web
     private function routing(): void
     {
         $this->router = new Router();
-        $controller_path = __DIR__ . "/../Controllers/";
         foreach (
-            $this->classMap($controller_path)
+            $this->classMap($this->config["path"]->controllers)
             as $controllerClass => $path
         ) {
             $controller = new $controllerClass();

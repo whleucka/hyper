@@ -4,8 +4,8 @@ namespace Nebula\Config;
 
 class Database
 {
-    public $config;
-    public $options;
+    public array $config;
+    public array $options;
     public function __construct()
     {
         $this->config = [
@@ -17,6 +17,7 @@ class Database
             "password" => $_ENV["DB_PASSWORD"],
             "charset" => $_ENV["DB_CHARSET"],
         ];
+        // Extra PDO options
         $this->options = [];
     }
 }
