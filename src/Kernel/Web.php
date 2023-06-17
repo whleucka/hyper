@@ -4,10 +4,13 @@ namespace Nebula\Kernel;
 
 use GalaxyPDO\DB;
 use Dotenv\Dotenv;
+use StellarRouter\Router;
 use Symfony\Component\HttpFoundation\Request;
+use Composer\ClassMapGenerator\ClassMapGenerator;
 
 class Web
 {
+  private Router $router;
   private DB $db;
   private $middleware;
   private Request $request;
@@ -20,8 +23,8 @@ class Web
   {
     $this->bootstrap();
     $this->loadMiddleware();
-    $this->handleRequest();
     $this->routing();
+    $this->handleRequest();
     $this->payload();
     $this->handleExceptions();
     $this->response();
@@ -66,7 +69,7 @@ class Web
   }
 
   /**
-   * Load the middleware and process incoming requests
+   * Load the middleware to process incoming requests
    */
   private function loadMiddleware(): void
   {
@@ -74,6 +77,24 @@ class Web
       'session_start' => \Nebula\Middleware\Session\Start::class,
       'auth_user' => \Nebula\Middleware\Authentication\User::class,
     ];
+  }
+
+  /**
+   * Route to the correct controller endpoint
+   */
+  private function routing(): void
+  {
+    $this->router = new Router;
+    $controller_path = __DIR__ . "/../Controllers/";
+    foreach ($this->classMap($controller_path) as $controllerClass => $path) {
+      $controller = new $controllerClass;
+      $this->router->registerRoutes($controller::class);
+    }
+  }
+
+  public function classMap(string $path): array
+  {
+    return ClassMapGenerator::createMap($path);
   }
 
   /**
@@ -85,19 +106,12 @@ class Web
     foreach ($this->middleware as $alias => $middleware) {
       $class = new $middleware;
       $request = match ($alias) {
-        // We may define other match-arms to provide
-        // additional arguments to handle here
+          // We may define other match-arms to provide
+          // additional arguments to handle here
         default => $class->handle($request)
       };
     }
     $this->request = $request;
-  }
-
-  /**
-   * Route to the correct controller endpoint
-   */
-  private function routing(): void
-  {
   }
 
   /**
