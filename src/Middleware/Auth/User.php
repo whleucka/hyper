@@ -1,6 +1,6 @@
 <?php
 
-namespace Nebula\Middleware\Authentication;
+namespace Nebula\Middleware\Auth;
 
 use Symfony\Component\HttpFoundation\Request;
 

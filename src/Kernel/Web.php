@@ -5,12 +5,15 @@ namespace Nebula\Kernel;
 use GalaxyPDO\DB;
 use Dotenv\Dotenv;
 use StellarRouter\Router;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{Request, Response};
 use Composer\ClassMapGenerator\ClassMapGenerator;
+use Exception;
 
 class Web
 {
     private Router $router;
+    private ?array $route;
+    private mixed $response;
     private DB $db;
     private $middleware;
     private Request $request;
@@ -23,10 +26,9 @@ class Web
     {
         $this->bootstrap();
         $this->loadMiddleware();
-        $this->routing();
-        $this->handleRequest();
-        $this->payload();
-        $this->handleExceptions();
+        $this->registerRoutes();
+        $this->request();
+        $this->executePayload();
         $this->response();
         $this->terminate();
     }
@@ -36,15 +38,15 @@ class Web
      */
     private function bootstrap(): void
     {
-        $this->env();
-        $this->config();
-        $this->db();
+        $this->loadEnv();
+        $this->setConfig();
+        $this->setDB();
     }
 
     /**
      * Load .env secrets
      */
-    private function env(): void
+    private function loadEnv(): void
     {
         $dotenv = Dotenv::createImmutable(__DIR__ . "/../../");
         // .env is required in the web root
@@ -54,7 +56,7 @@ class Web
     /**
      * Load application configurations
      */
-    private function config(): void
+    private function setConfig(): void
     {
         // Database configuration
         $this->config = [
@@ -66,7 +68,7 @@ class Web
     /**
      * Initialize PDO
      */
-    private function db(): void
+    private function setDB(): void
     {
         $this->db = new DB(
             $this->config["db"]->config,
@@ -81,14 +83,14 @@ class Web
     {
         $this->middleware = [
             "session_start" => \Nebula\Middleware\Session\Start::class,
-            "auth_user" => \Nebula\Middleware\Authentication\User::class,
+            "auth_user" => \Nebula\Middleware\Auth\User::class,
         ];
     }
 
     /**
      * Route to the correct controller endpoint
      */
-    private function routing(): void
+    private function registerRoutes(): void
     {
         $this->router = new Router();
         foreach (
@@ -100,6 +102,9 @@ class Web
         }
     }
 
+    /**
+     * @return array<class-string,non-empty-string>
+     */
     public function classMap(string $path): array
     {
         return ClassMapGenerator::createMap($path);
@@ -108,7 +113,7 @@ class Web
     /**
      * Handle in the incoming requests and send through middleware stack
      */
-    private function handleRequest(): void
+    private function request(): void
     {
         $request = Request::createFromGlobals();
         foreach ($this->middleware as $alias => $middleware) {
@@ -120,20 +125,36 @@ class Web
             };
         }
         $this->request = $request;
+        $this->route = $this->router->handleRequest($this->request->getMethod(), '/' . $this->request->getPathInfo());
     }
 
     /**
      * Execute the controller method (controller interacts with models, prepares response)
      */
-    private function payload(): void
+    private function executePayload(): void
     {
-    }
-
-    /**
-     * Handle any errors / exceptions, logging, etc
-     */
-    private function handleExceptions(): void
-    {
+        try {
+            if ($this->route) {
+                extract($this->route);
+                $controller = new $class;
+                // We can maybe do something with route middleware to detect the 
+                // set a web request (text/html) or api request (json, etc)
+                $this->response = [
+                    'content' => $controller->$endpoint(...$parameters),
+                    'code' => Response::HTTP_OK,
+                    'headers' => ['content-type' => 'text/html'],
+                ];
+            } else {
+                // The route doesn't exist, 404
+                $this->response = [
+                    'content' => "The page you requested doesn't seem to exist",
+                    'code' => Response::HTTP_NOT_FOUND,
+                    'headers' => ['content-type' => 'text/html'],
+                ];
+            }
+        } catch (Exception $ex) {
+            die("wip: payload exeception: {$ex->getMessage()}");
+        }
     }
 
     /**
@@ -141,6 +162,13 @@ class Web
      */
     private function response(): void
     {
+        $response = new Response(
+            $this->response['content'],
+            $this->response['code'],
+            $this->response['headers'],
+        );
+        $response->prepare($this->request);
+        $response->send();
     }
 
     /**
@@ -148,5 +176,6 @@ class Web
      */
     private function terminate(): void
     {
+        $this->db->close();
     }
 }

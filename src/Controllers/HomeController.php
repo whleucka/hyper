@@ -6,8 +6,8 @@ use StellarRouter\Get;
 class HomeController
 {
     #[Get("/")]
-    public function index(): void
+    public function index(): mixed
     {
-        echo "hello, world!";
+        return "hello, world!";
     }
 }
