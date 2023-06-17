@@ -74,7 +74,7 @@
             "dist": {
                 "type": "path",
                 "url": "../galaxy-pdo",
-                "reference": "eb8955a0f1d37172399133ee928a46b5087fc025"
+                "reference": "3fdbd986a16146a984b50b4d42ad8e1742726dda"
             },
             "require": {
                 "php": "^7.4 || ^8.0"

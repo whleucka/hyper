@@ -35,42 +35,31 @@ class Web
     $this->db();
   }
 
-
   /**
    * Load .env secrets
    */
   private function env(): void
   {
-    $dotenv = Dotenv::createImmutable(__DIR__."/../../");
+    $dotenv = Dotenv::createImmutable(__DIR__ . "/../../");
     // .env is required in the web root
-    $dotenv->load(); 
+    $dotenv->load();
   }
 
   /**
-   * 
+   * Load application configurations
    */
   private function config(): void
   {
+    // Database configuration
+    $this->config['db'] = new \Nebula\Config\Database;
   }
 
   /**
-   * 
+   * Initialize PDO
    */
   private function db(): void
   {
-    // Database configuration
-    $config = [
-      'mode' => $_ENV["DB_MODE"],
-      'dbname' => $_ENV["DB_NAME"],
-      'host' => $_ENV["DB_HOST"],
-      'port' => $_ENV["DB_PORT"],
-      'username' => $_ENV["DB_USERNAME"],
-      'password' => $_ENV["DB_PASSWORD"],
-      'charset' => $_ENV["DB_CHARSET"],
-    ];
-    // PDO options
-    $options = [];
-    $this->db = new DB($config, $options);
+    $this->db = new DB($this->config['db']->config, $this->config['db']->options);
   }
 
   /**
