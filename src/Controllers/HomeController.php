@@ -6,7 +6,7 @@ use StellarRouter\Get;
 
 class HomeController extends Controller
 {
-    #[Get("/")]
+    #[Get("/", "home.index")]
     public function index(): mixed
     {
         return "hello, world!";

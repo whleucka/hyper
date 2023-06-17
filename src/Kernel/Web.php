@@ -7,6 +7,7 @@ use Dotenv\Dotenv;
 use Error;
 use Exception;
 use GalaxyPDO\DB;
+use Nebula\Controllers\Controller;
 use StellarRouter\Router;
 use Symfony\Component\HttpFoundation\{Request, Response};
 
@@ -14,6 +15,7 @@ class Web
 {
     private Router $router;
     private ?array $route;
+    private Controller $controller;
     private mixed $response;
     private DB $db;
     private $middleware;
@@ -94,9 +96,10 @@ class Web
     private function registerRoutes(): void
     {
         $this->router = new Router();
+        $controllers = array_keys($this->classMap($this->config["path"]->getControllers()));
         foreach (
-            $this->classMap($this->config["path"]->getControllers())
-            as $controllerClass => $path
+            $controllers
+            as $controllerClass
         ) {
             $controller = new $controllerClass($this->db);
             $this->router->registerRoutes($controller::class);
@@ -140,27 +143,81 @@ class Web
         try {
             if ($this->route) {
                 extract($this->route);
-                $controller = new $class($this->db);
+                /**
+                 *  $path
+                 *  $method
+                 *  $name
+                 *  $middleware
+                 *  $handlerClass
+                 *  $handlerMethod
+                 *  $parameters
+                 */
+                $this->controller = new $handlerClass($this->db);
                 // We can maybe do something with route middleware to detect the
                 // set a web request (text/html) or api request (json, etc)
-                $this->response = [
-                    "content" => $controller->$endpoint(...$parameters),
-                    "code" => Response::HTTP_OK,
-                    "headers" => ["content-type" => "text/html"],
-                ];
+                if (in_array("api", $middleware)) {
+                    $this->apiResponse($handlerMethod, $parameters);
+                } else {
+                    $this->webResponse($handlerMethod, $parameters);
+                }
             } else {
-                // The route doesn't exist, 404
-                $this->response = [
-                    "content" => "The page you requested doesn't seem to exist",
-                    "code" => Response::HTTP_NOT_FOUND,
-                    "headers" => ["content-type" => "text/html"],
-                ];
+                $this->pageNotFound();
             }
         } catch (Exception $ex) {
             die("wip: payload exeception: {$ex->getMessage()}");
         } catch (Error $err) {
             die("wip: payload error: {$err->getMessage()}");
         }
+    }
+
+    /**
+     * Set page not found response
+     */
+    public function pageNotFound(): void
+    {
+        // The route doesn't exist, 404
+        $this->response = [
+            "content" => "The page you requested doesn't seem to exist",
+            "code" => Response::HTTP_NOT_FOUND,
+            "headers" => ["content-type" => "text/html"],
+        ];
+    }
+
+    /**
+     * Set a web response
+     * @param array<int,mixed> $parameters
+     */
+    public function webResponse(string $endpoint, array $parameters): void
+    {
+        $content = $this->controller->$endpoint(...$parameters);
+        $this->response = [
+            "content" => $content,
+            "code" => Response::HTTP_OK,
+            "headers" => ["content-type" => "text/html"],
+        ];
+    }
+
+    /**
+     * Set an API response
+     * @param array<int,mixed> $parameters
+     */
+    public function apiResponse(string $endpoint, array $parameters): void
+    {
+        $content = json_encode([
+            "result" => true,
+            "data" => $this->controller->$endpoint(...$parameters),
+            "code" => Response::HTTP_OK,
+            "ts" => time(),
+            "message" => "",
+        ]);
+        $this->response = [
+            "content" => $content,
+            "code" => Response::HTTP_OK,
+            "headers" => [
+                "content-type" => "application/json",
+                "charset" => "utf-8",
+            ],
+        ];
     }
 
     /**
@@ -183,5 +240,6 @@ class Web
     private function terminate(): void
     {
         $this->db->close();
+        exit;
     }
 }
