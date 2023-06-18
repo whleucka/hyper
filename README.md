@@ -6,11 +6,12 @@
 
 👷 *Currently under development*
 
+**Not for production use**
 
 ### Features
 - [x] Modular Design: Nebula follows a modular approach, allowing you to organize your code into reusable and independent components.
 - [x] Routing: Efficient routing system for handling URL mapping and request handling.
-- [ ] Template Engine: Built-in template engine for easy and flexible view rendering.
+- [x] Template Engine: Built-in template engine for easy and flexible view rendering.
 - [ ] Database Abstraction: Simplified database interactions with a built-in ORM (Object-Relational Mapping) layer.
 - [ ] Form Handling: Convenient form handling and validation capabilities.
 - [ ] Security: Integrated security measures to protect against common web vulnerabilities.
