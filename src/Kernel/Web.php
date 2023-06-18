@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
 class Web
 {
-    private $middleware;
+    private array $middleware;
     private ?DB $db = null;
     private ?Route $route = null;
     private Controller $controller;
@@ -156,7 +156,6 @@ class Web
                 }
             } else {
                 $this->pageNotFound();
-                exit();
             }
         } catch (Exception $ex) {
             if ($this->config["debug"]) {
@@ -164,14 +163,14 @@ class Web
                     $this->apiException($ex);
                 }
             }
-            exit();
+            $this->terminate();
         } catch (Error $err) {
             if ($this->config["debug"]) {
                 if (in_array("api", $middleware)) {
                     $this->apiError($err);
                 }
             }
-            exit();
+            $this->terminate();
         }
     }
 
@@ -218,6 +217,7 @@ class Web
         $this->response = new Response(status: 404);
         $this->response->prepare($this->request);
         $this->response->send();
+        $this->terminate();
     }
 
     /**
