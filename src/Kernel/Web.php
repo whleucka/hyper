@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 class Web
 {
     private Router $router;
-    private Route $route;
+    private ?Route $route;
     private Controller $controller;
     private mixed $response;
-    private DB $db;
+    private ?DB $db;
     private $middleware;
     private Request $request;
     private array $config = [];
@@ -62,6 +62,7 @@ class Web
     {
         // Database configuration
         $this->config = [
+            "debug" => strtolower($_ENV["APP_DEBUG"]) === "true",
             "db" => new \Nebula\Config\Database(),
             "path" => new \Nebula\Config\Paths(),
         ];
@@ -95,11 +96,10 @@ class Web
     private function registerRoutes(): void
     {
         $this->router = new Router();
-        $controllers = array_keys($this->classMap($this->config["path"]->getControllers()));
-        foreach (
-            $controllers
-            as $controllerClass
-        ) {
+        $controllers = array_keys(
+            $this->classMap($this->config["path"]->getControllers())
+        );
+        foreach ($controllers as $controllerClass) {
             $controller = new $controllerClass($this->db);
             $this->router->registerRoutes($controller::class);
         }
@@ -153,21 +153,26 @@ class Web
                 }
             } else {
                 $this->pageNotFound();
+                exit();
             }
         } catch (Exception $ex) {
-            if (in_array("api", $middleware)) {
-                $this->apiException($ex);
-            } else {
-                error_log("wip: web exception: {$ex->getMessage()}");
-                exit;
+            if ($this->config["debug"]) {
+                if (in_array("api", $middleware)) {
+                    $this->apiException($ex);
+                } else {
+                    error_log("wip: web exception: {$ex->getMessage()}");
+                }
             }
+            exit();
         } catch (Error $err) {
-            if (in_array("api", $middleware)) {
-                $this->apiError($err);
-            } else {
-                error_log("wip: web error: {$err->getMessage()}");
-                exit;
+            if ($this->config["debug"]) {
+                if (in_array("api", $middleware)) {
+                    $this->apiError($err);
+                } else {
+                    error_log("wip: web error: {$err->getMessage()}");
+                }
             }
+            exit();
         }
     }
 
@@ -211,11 +216,9 @@ class Web
     public function pageNotFound(): void
     {
         // The route doesn't exist, 404
-        $this->response = [
-            "content" => "The page you requested doesn't seem to exist",
-            "code" => Response::HTTP_NOT_FOUND,
-            "headers" => ["content-type" => "text/html"],
-        ];
+        $this->response = new Response(status: 404);
+        $this->response->prepare($this->request);
+        $this->response->send();
     }
 
     /**
@@ -225,9 +228,7 @@ class Web
     public function webResponse(string $endpoint, array $parameters): void
     {
         $content = $this->controller->$endpoint(...$parameters);
-        $this->response = new Response(
-            $content,
-        );
+        $this->response = new Response($content);
         $this->response->prepare($this->request);
         $this->response->send();
     }
@@ -254,6 +255,6 @@ class Web
     private function terminate(): void
     {
         $this->db->close();
-        exit;
+        exit();
     }
 }

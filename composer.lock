@@ -773,7 +773,7 @@
             "dist": {
                 "type": "path",
                 "url": "../galaxy-pdo",
-                "reference": "3fdbd986a16146a984b50b4d42ad8e1742726dda"
+                "reference": "60347e2ba0c626f216c686b87a9802f3f1ee8c3d"
             },
             "require": {
                 "php": "^7.4 || ^8.0"
@@ -813,7 +813,7 @@
             "dist": {
                 "type": "path",
                 "url": "../stellar-router",
-                "reference": "acf832aa0991dba816daac8f09cf7cc4a9783290"
+                "reference": "af53b4d478835915e659cd17a3738c3726bc788f"
             },
             "require": {
                 "php": "^7.4 || ^8.0"
