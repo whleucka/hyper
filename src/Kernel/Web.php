@@ -13,14 +13,14 @@ use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
 class Web
 {
-    private array $middleware;
     private ?DB $db = null;
     private ?Route $route = null;
     private Controller $controller;
     private Request $request;
+    private Response $response;
     private Router $router;
     private array $config = [];
-    private mixed $response;
+    private array $middleware = [];
 
     /**
      * The application lifecycle
