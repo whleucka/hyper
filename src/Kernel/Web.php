@@ -182,7 +182,6 @@ class Web
         $content = [
             "success" => false,
             "message" => $exception->getMessage(),
-            "code" => $exception->getCode(),
             "ts" => time(),
         ];
         $this->response = new JsonResponse($content);
@@ -198,7 +197,6 @@ class Web
         $content = [
             "success" => false,
             "message" => $error->getMessage(),
-            "code" => $error->getCode(),
             "ts" => time(),
         ];
         $this->response = new JsonResponse($content);
