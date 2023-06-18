@@ -143,12 +143,15 @@ class Web
     private function executePayload(): void
     {
         try {
+            // Very carefully execute the payload
             if ($this->route) {
                 $handlerMethod = $this->route->getHandlerMethod();
                 $handlerClass = $this->route->getHandlerClass();
                 $middleware = $this->route->getMiddleware();
                 $parameters = $this->route->getParameters();
+                // Instansiate the controller
                 $this->controller = new $handlerClass($this->db);
+                // Now we decide what to do
                 if (in_array("api", $middleware)) {
                     $this->apiResponse($handlerMethod, $parameters);
                 } else {
@@ -158,17 +161,13 @@ class Web
                 $this->pageNotFound();
             }
         } catch (Exception $ex) {
-            if ($this->config["debug"]) {
-                if (in_array("api", $middleware)) {
-                    $this->apiException($ex);
-                }
+            if (in_array("api", $middleware)) {
+                $this->apiException($ex);
             }
             $this->terminate();
         } catch (Error $err) {
-            if ($this->config["debug"]) {
-                if (in_array("api", $middleware)) {
-                    $this->apiError($err);
-                }
+            if (in_array("api", $middleware)) {
+                $this->apiError($err);
             }
             $this->terminate();
         }
@@ -179,7 +178,9 @@ class Web
      */
     public function apiException(Exception $exception): void
     {
+        if (!$this->config['debug']) return;
         $content = [
+            "status" => "EXCEPTION",
             "success" => false,
             "message" => $exception->getMessage(),
             "ts" => time(),
@@ -194,7 +195,9 @@ class Web
      */
     public function apiError(Error $error): void
     {
+        if (!$this->config['debug']) return;
         $content = [
+            "status" => "ERROR",
             "success" => false,
             "message" => $error->getMessage(),
             "ts" => time(),
@@ -209,7 +212,6 @@ class Web
      */
     public function pageNotFound(): void
     {
-        // The route doesn't exist, 404
         $this->response = new Response(status: 404);
         $this->response->prepare($this->request);
         $this->response->send();
@@ -218,6 +220,7 @@ class Web
 
     /**
      * Set a web response
+     * The response could be a twig template or something else
      * @param array<int,mixed> $parameters
      */
     public function webResponse(string $endpoint, array $parameters): void
@@ -230,11 +233,13 @@ class Web
 
     /**
      * Set an API response
+     * Always returns a JSON response
      * @param array<int,mixed> $parameters
      */
     public function apiResponse(string $endpoint, array $parameters): void
     {
         $content = [
+            "status" => "OK",
             "success" => true,
             "data" => $this->controller->$endpoint(...$parameters),
             "ts" => time(),
