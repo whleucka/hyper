@@ -9,7 +9,7 @@ class HomeController extends Controller
     #[Get("/", "home.index")]
     public function index(): string
     {
-        return "hello, world!";
+        return $this->render("home/index.html", ["msg" => "hello, world!"]);
     }
 
     #[Get("/api/test", "home.api.test", ["api"])]
