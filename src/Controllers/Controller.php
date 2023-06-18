@@ -22,6 +22,7 @@ class Controller
         $loader = new Twig\Loader\FilesystemLoader($views['paths']);
         $twig = new Twig\Environment($loader, [
             'cache' => $views['cache'],
+            'auto_reload' => strtolower($_ENV['APP_DEBUG']) === 'true'
         ]);
         return $twig->render($path, $data);
     }
