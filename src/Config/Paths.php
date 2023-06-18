@@ -9,7 +9,7 @@ class Paths
     private string $controllers = __DIR__ . "/../Controllers";
     private array $views = [
         "paths" => __DIR__ . "/../../views",
-        "cache" => __DIR__ . "/../../views/.cache"
+        "cache" => __DIR__ . "/../../views/.cache",
     ];
 
     public function getProjectRoot(): string

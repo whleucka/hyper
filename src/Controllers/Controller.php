@@ -3,7 +3,7 @@
 namespace Nebula\Controllers;
 
 use GalaxyPDO\DB;
-use Nebula\Config\Paths; 
+use Nebula\Config\Paths;
 use Twig;
 
 class Controller
@@ -19,10 +19,10 @@ class Controller
     {
         $paths = new Paths();
         $views = $paths->getViews();
-        $loader = new Twig\Loader\FilesystemLoader($views['paths']);
+        $loader = new Twig\Loader\FilesystemLoader($views["paths"]);
         $twig = new Twig\Environment($loader, [
-            'cache' => $views['cache'],
-            'auto_reload' => strtolower($_ENV['APP_DEBUG']) === 'true'
+            "cache" => $views["cache"],
+            "auto_reload" => strtolower($_ENV["APP_DEBUG"]) === "true",
         ]);
         return $twig->render($path, $data);
     }
