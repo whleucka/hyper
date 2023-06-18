@@ -8,13 +8,13 @@ use Error;
 use Exception;
 use GalaxyPDO\DB;
 use Nebula\Controllers\Controller;
-use StellarRouter\Router;
+use StellarRouter\{Route, Router};
 use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
 class Web
 {
     private Router $router;
-    private ?array $route;
+    private Route $route;
     private Controller $controller;
     private mixed $response;
     private DB $db;
@@ -141,16 +141,10 @@ class Web
     {
         try {
             if ($this->route) {
-                extract($this->route);
-                /**
-                 *  $path
-                 *  $method
-                 *  $name
-                 *  $middleware
-                 *  $handlerClass
-                 *  $handlerMethod
-                 *  $parameters
-                 */
+                $handlerMethod = $this->route->getHandlerMethod();
+                $handlerClass = $this->route->getHandlerClass();
+                $middleware = $this->route->getMiddleware();
+                $parameters = $this->route->getParameters();
                 $this->controller = new $handlerClass($this->db);
                 if (in_array("api", $middleware)) {
                     $this->apiResponse($handlerMethod, $parameters);
