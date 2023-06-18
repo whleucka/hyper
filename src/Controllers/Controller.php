@@ -6,7 +6,7 @@ use GalaxyPDO\DB;
 
 class Controller
 {
-    public function __construct(protected DB $db)
+    public function __construct(protected ?DB $db)
     {
     }
 }

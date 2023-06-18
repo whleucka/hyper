@@ -9,6 +9,7 @@ class Database
     public function __construct()
     {
         $this->config = [
+            "enabled" => $_ENV["DB_ENABLED"],
             "mode" => $_ENV["DB_MODE"],
             "dbname" => $_ENV["DB_NAME"],
             "host" => $_ENV["DB_HOST"],

@@ -12,12 +12,9 @@ class HomeController extends Controller
         return "hello, world!";
     }
 
-    /**
-     * @param mixed $name
-     * @param mixed $age
-     */
-    #[Get("/api/test/{name}/{age}", "home.test.name_age", ["api"])]
-    public function name_age($name, $age): string {
-        return "Name: $name, Age: $age";
+    #[Get("/api/test", "home.api.test", ["api"])]
+    public function test(): int 
+    {
+        return 42;
     }
 }

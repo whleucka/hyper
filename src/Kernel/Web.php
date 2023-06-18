@@ -13,14 +13,14 @@ use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
 class Web
 {
-    private Router $router;
-    private ?Route $route;
-    private Controller $controller;
-    private mixed $response;
-    private ?DB $db;
     private $middleware;
+    private ?DB $db = null;
+    private ?Route $route = null;
+    private Controller $controller;
     private Request $request;
+    private Router $router;
     private array $config = [];
+    private mixed $response;
 
     /**
      * The application lifecycle
@@ -73,10 +73,13 @@ class Web
      */
     private function setDB(): void
     {
-        $this->db = new DB(
-            $this->config["db"]->getConfig(),
-            $this->config["db"]->getOptions()
-        );
+        $config = $this->config["db"]->getConfig();
+        if (strtolower($config["enabled"]) === "true") {
+            $this->db = new DB(
+                $this->config["db"]->getConfig(),
+                $this->config["db"]->getOptions()
+            );
+        }
     }
 
     /**
@@ -159,8 +162,6 @@ class Web
             if ($this->config["debug"]) {
                 if (in_array("api", $middleware)) {
                     $this->apiException($ex);
-                } else {
-                    error_log("wip: web exception: {$ex->getMessage()}");
                 }
             }
             exit();
@@ -168,8 +169,6 @@ class Web
             if ($this->config["debug"]) {
                 if (in_array("api", $middleware)) {
                     $this->apiError($err);
-                } else {
-                    error_log("wip: web error: {$err->getMessage()}");
                 }
             }
             exit();
@@ -254,7 +253,7 @@ class Web
      */
     private function terminate(): void
     {
-        $this->db->close();
+        $this->db?->close();
         exit();
     }
 }

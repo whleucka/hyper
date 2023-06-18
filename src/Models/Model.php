@@ -2,6 +2,6 @@
 
 namespace Nebula\Models;
 
-class User extends Model
+class Model
 {
 }
