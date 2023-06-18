@@ -13,7 +13,7 @@ class HomeController extends Controller
     }
 
     #[Get("/api/test", "home.api.test", ["api"])]
-    public function test(): int 
+    public function test(): int
     {
         return 42;
     }
