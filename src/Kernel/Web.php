@@ -179,7 +179,6 @@ class Web
      */
     public function apiException(Exception $exception): void
     {
-        // TODO detect .env mode and if dev, show message otherwise ??
         $content = [
             "success" => false,
             "message" => $exception->getMessage(),
@@ -196,7 +195,6 @@ class Web
      */
     public function apiError(Error $error): void
     {
-        // TODO detect .env mode and if dev, show message otherwise ??
         $content = [
             "success" => false,
             "message" => $error->getMessage(),
