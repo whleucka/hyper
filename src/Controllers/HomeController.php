@@ -15,7 +15,7 @@ class HomeController extends Controller
     #[Get("/api/test", "home.api.test", ["api"])]
     public function test(): int
     {
-        throw new \Error('test');
+        throw new \Error("test");
         return 42;
     }
 }

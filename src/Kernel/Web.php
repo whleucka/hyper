@@ -178,7 +178,9 @@ class Web
      */
     public function apiException(Exception $exception): void
     {
-        if (!$this->config['debug']) return;
+        if (!$this->config["debug"]) {
+            return;
+        }
         $content = [
             "status" => "EXCEPTION",
             "success" => false,
@@ -195,7 +197,9 @@ class Web
      */
     public function apiError(Error $error): void
     {
-        if (!$this->config['debug']) return;
+        if (!$this->config["debug"]) {
+            return;
+        }
         $content = [
             "status" => "ERROR",
             "success" => false,
