@@ -3,27 +3,27 @@
 namespace Nebula\Controllers;
 
 use GalaxyPDO\DB;
-use Nebula\Config\Paths;
+use Nebula\Container\Container;
 use Twig;
 
 class Controller
 {
-    public function __construct(protected ?DB $db)
+    protected DB $db;
+    protected Container $container;
+
+    public function __construct()
     {
+        $this->container = Container::getInstance();
+        $this->db = $this->container->get(DB::class);
     }
 
     /**
+     * Render a twig template
      * @param array<int,mixed> $data
      */
     protected function render(string $path, array $data = []): string
     {
-        $paths = new Paths();
-        $views = $paths->getViews();
-        $loader = new Twig\Loader\FilesystemLoader($views["paths"]);
-        $twig = new Twig\Environment($loader, [
-            "cache" => $views["cache"],
-            "auto_reload" => strtolower($_ENV["APP_DEBUG"]) === "true",
-        ]);
+        $twig = $this->container->get(Twig\Environment::class);
         return $twig->render($path, $data);
     }
 }

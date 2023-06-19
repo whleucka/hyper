@@ -6,14 +6,13 @@ use Composer\ClassMapGenerator\ClassMapGenerator;
 use Dotenv\Dotenv;
 use Error;
 use Exception;
-use GalaxyPDO\DB;
+use Nebula\Container\Container;
 use Nebula\Controllers\Controller;
 use StellarRouter\{Route, Router};
 use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 
 class Web
 {
-    private ?DB $db = null;
     private ?Route $route = null;
     private Controller $controller;
     private Request $request;
@@ -21,6 +20,7 @@ class Web
     private Router $router;
     private array $config = [];
     private array $middleware = [];
+    private Container $container;
 
     /**
      * The application lifecycle
@@ -36,13 +36,13 @@ class Web
     }
 
     /**
-     * Set up essential components such as environment, configurations, db, etc
+     * Set up essential components such as environment, configurations, DI container, etc
      */
     private function bootstrap(): void
     {
         $this->loadEnv();
         $this->setConfig();
-        $this->setDB();
+        $this->setContainer();
     }
 
     /**
@@ -60,26 +60,21 @@ class Web
      */
     private function setConfig(): void
     {
-        // Database configuration
         $this->config = [
             "debug" => strtolower($_ENV["APP_DEBUG"]) === "true",
-            "db" => new \Nebula\Config\Database(),
+            "container" => new \Nebula\Config\Container(),
             "path" => new \Nebula\Config\Paths(),
         ];
     }
 
     /**
-     * Initialize PDO
+     * Setup DI container
      */
-    private function setDB(): void
+    private function setContainer(): void
     {
-        $config = $this->config["db"]->getConfig();
-        if (strtolower($config["enabled"]) === "true") {
-            $this->db = new DB(
-                $this->config["db"]->getConfig(),
-                $this->config["db"]->getOptions()
-            );
-        }
+        $this->container = Container::getInstance()
+            ->setDefinitions($this->config['container']->getDefinitions())
+            ->build();
     }
 
     /**
@@ -98,12 +93,12 @@ class Web
      */
     private function registerRoutes(): void
     {
-        $this->router = new Router();
+        $this->router = $this->container->get(Router::class);
         $controllers = array_keys(
             $this->classMap($this->config["path"]->getControllers())
         );
         foreach ($controllers as $controllerClass) {
-            $controller = new $controllerClass($this->db);
+            $controller = $this->container->get($controllerClass);
             $this->router->registerRoutes($controller::class);
         }
     }
@@ -123,7 +118,7 @@ class Web
     {
         $request = Request::createFromGlobals();
         foreach ($this->middleware as $alias => $middleware) {
-            $class = new $middleware();
+            $class = $this->container->get($middleware);
             // We may define other match-arms to provide
             // additional arguments to handle here
             $request = match ($alias) {
@@ -150,7 +145,7 @@ class Web
                 $middleware = $this->route->getMiddleware();
                 $parameters = $this->route->getParameters();
                 // Instansiate the controller
-                $this->controller = new $handlerClass($this->db);
+                $this->controller = $this->container->get($handlerClass);
                 // Now we decide what to do
                 if (in_array("api", $middleware)) {
                     $this->apiResponse($handlerMethod, $parameters);
@@ -258,7 +253,10 @@ class Web
      */
     private function terminate(): void
     {
-        $this->db?->close();
+        if ($this->config["debug"]) {
+            $stop = (microtime(true) - APP_START) * 1000;
+            error_log(sprintf("Execution time: %s ms", number_format($stop, 2)));
+        }
         exit();
     }
 }
