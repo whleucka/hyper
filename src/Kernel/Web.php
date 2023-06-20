@@ -14,84 +14,91 @@ use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 class Web
 {
     private ?Route $route = null;
+    private Container $container;
     private Controller $controller;
     private Request $request;
     private Response $response;
     private Router $router;
     private array $config = [];
     private array $middleware = [];
-    private Container $container;
 
     /**
      * The application lifecycle
      */
     public function run(): void
     {
-        $this->bootstrap();
-        $this->loadMiddleware();
-        $this->registerRoutes();
-        $this->request();
-        $this->executePayload();
-        $this->terminate();
+        $this->bootstrap()
+            ?->loadMiddleware()
+            ?->registerRoutes()
+            ?->request()
+            ?->executePayload()
+            ?->terminate();
     }
 
     /**
      * Set up essential components such as environment, configurations, DI container, etc
      */
-    private function bootstrap(): void
+    private function bootstrap(): ?self
     {
-        $this->loadEnv();
-        $this->setConfig();
-        $this->setContainer();
+        return $this->loadEnv()
+            ?->setConfig()
+            ?->setContainer();
     }
 
     /**
      * Load .env secrets
      */
-    private function loadEnv(): void
+    private function loadEnv(): ?self
     {
         $dotenv = Dotenv::createImmutable(__DIR__ . "/../../");
         // .env is required in the web root
         $dotenv->load();
+        return $this;
     }
 
     /**
      * Load application configurations
      */
-    private function setConfig(): void
+    private function setConfig(): ?self
     {
         $this->config = [
             "debug" => strtolower($_ENV["APP_DEBUG"]) === "true",
             "container" => new \Nebula\Config\Container(),
             "path" => new \Nebula\Config\Paths(),
         ];
+        return $this;
     }
 
     /**
      * Setup DI container
      */
-    private function setContainer(): void
+    private function setContainer(): ?self
     {
         $this->container = Container::getInstance()
             ->setDefinitions($this->config['container']->getDefinitions())
             ->build();
+        return $this;
     }
 
     /**
      * Load the middleware to process incoming requests
      */
-    private function loadMiddleware(): void
+    private function loadMiddleware(): ?self
     {
         $this->middleware = [
+            "session_cookies" => \Nebula\Middleware\Session\Cookies::class,
+            "session_lifetime" => \Nebula\Middleware\Session\Lifetime::class,
             "session_start" => \Nebula\Middleware\Session\Start::class,
+            "session_csrf" => \Nebula\Middleware\Session\CSRF::class,
             "auth_user" => \Nebula\Middleware\Auth\User::class,
         ];
+        return $this;
     }
 
     /**
      * Route to the correct controller endpoint
      */
-    private function registerRoutes(): void
+    private function registerRoutes(): ?self
     {
         $this->router = $this->container->get(Router::class);
         $controllers = array_keys(
@@ -101,6 +108,7 @@ class Web
             $controller = $this->container->get($controllerClass);
             $this->router->registerRoutes($controller::class);
         }
+        return $this;
     }
 
     /**
@@ -114,7 +122,7 @@ class Web
     /**
      * Handle in the incoming requests and send through middleware stack
      */
-    private function request(): void
+    private function request(): ?self
     {
         $request = Request::createFromGlobals();
         foreach ($this->middleware as $alias => $middleware) {
@@ -130,12 +138,13 @@ class Web
             $this->request->getMethod(),
             "/" . $this->request->getPathInfo()
         );
+        return $this;
     }
 
     /**
      * Execute the controller method (controller interacts with models, prepares response)
      */
-    private function executePayload(): void
+    private function executePayload(): ?self
     {
         try {
             // Very carefully execute the payload
@@ -166,6 +175,7 @@ class Web
             }
             $this->terminate();
         }
+        return $this;
     }
 
     /**
