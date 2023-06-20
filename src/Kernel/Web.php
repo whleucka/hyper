@@ -175,12 +175,16 @@ class Web
                     $this->whoops->pushHandler(
                         new Whoops\Handler\JsonResponseHandler()
                     );
-                    $this->apiResponse($handlerMethod, $parameters);
+                    $this->apiResponse(
+                        $this->controller->$handlerMethod(...$parameters)
+                    );
                 } else {
                     $this->whoops->pushHandler(
                         new Whoops\Handler\PrettyPageHandler()
                     );
-                    $this->webResponse($handlerMethod, $parameters);
+                    $this->webResponse(
+                        $this->controller->$handlerMethod(...$parameters)
+                    );
                 }
             } else {
                 $this->pageNotFound();
@@ -191,13 +195,18 @@ class Web
             } else {
                 if ($this->config["debug"]) {
                     $html = $this->whoops->handleException($ex);
-                    $this->webResponse(content: $html);
+                    $this->webResponse($html);
                 }
             }
             $this->terminate();
         } catch (Error $err) {
             if (in_array("api", $middleware)) {
                 $this->apiError($err);
+            } else {
+                if ($this->config["debug"]) {
+                    $html = $this->whoops->handleException($err);
+                    $this->webResponse($html);
+                }
             }
             $this->terminate();
         }
@@ -233,15 +242,7 @@ class Web
         if (!$this->config["debug"]) {
             return;
         }
-        $content = [
-            "status" => "ERROR",
-            "success" => false,
-            "message" => $error->getMessage(),
-            "ts" => time(),
-        ];
-        $this->response = new JsonResponse($content);
-        $this->response->prepare($this->request);
-        $this->response->send();
+        $this->apiResponse($error->getMessage(), "ERROR", false);
     }
 
     /**
@@ -249,27 +250,18 @@ class Web
      */
     public function pageNotFound(): void
     {
-        $this->response = new Response(status: 404);
-        $this->response->prepare($this->request);
-        $this->response->send();
+        $this->webResponse(code: 404);
         $this->terminate();
     }
 
     /**
      * Set a web response
      * The response could be a twig template or something else
-     * @param array<int,mixed> $parameters
      * @param mixed $content
      */
-    public function webResponse(
-        string $endpoint = "",
-        array $parameters = [],
-        $content = null
-    ): void {
-        if (is_null($content)) {
-            $content = $this->controller->$endpoint(...$parameters);
-        }
-        $this->response = new Response($content);
+    public function webResponse(string $content = "", int $code = 200): void
+    {
+        $this->response = new Response($content, $code);
         $this->response->prepare($this->request);
         $this->response->send();
     }
@@ -277,14 +269,18 @@ class Web
     /**
      * Set an API response
      * Always returns a JSON response
-     * @param array<int,mixed> $parameters
+     * @param mixed $status
+     * @param mixed $success
      */
-    public function apiResponse(string $endpoint, array $parameters): void
-    {
+    public function apiResponse(
+        mixed $data = [],
+        $status = "OK",
+        $success = true
+    ): void {
         $content = [
-            "status" => "OK",
-            "success" => true,
-            "data" => $this->controller->$endpoint(...$parameters),
+            "status" => $status,
+            "success" => $success,
+            "data" => $data,
             "ts" => time(),
         ];
         $this->response = new JsonResponse($content);

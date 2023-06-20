@@ -14,9 +14,9 @@
 - [x] Template Engine: Built-in template engine for easy and flexible view rendering.
 - [ ] Database Abstraction: Simplified database interactions with a built-in ORM (Object-Relational Mapping) layer.
 - [ ] Form Handling: Convenient form handling and validation capabilities.
-- [ ] Security: Integrated security measures to protect against common web vulnerabilities.
-- [ ] Caching: Caching mechanisms to improve performance and optimize data retrieval.
-- [ ] Error Handling: Comprehensive error handling and logging for efficient debugging.
+- [x] Security: Integrated security measures to protect against common web vulnerabilities.
+- [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
+- [x] Error Handling: Comprehensive error handling and logging for efficient debugging.
 
 
 ### Getting Started
