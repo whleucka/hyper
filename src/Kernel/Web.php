@@ -22,6 +22,7 @@ class Web
     private Router $router;
     private array $config = [];
     private array $middleware = [];
+    private array $middleware_aliases = [];
     private $whoops;
 
     /**
@@ -97,15 +98,20 @@ class Web
 
     /**
      * Load the middleware to process incoming requests
+     * Note: handle method will be called for all middleware
      */
     private function loadMiddleware(): ?self
     {
         $this->middleware = [
-            "session_cookies" => \Nebula\Middleware\Session\Cookies::class,
-            "session_lifetime" => \Nebula\Middleware\Session\Lifetime::class,
-            "session_start" => \Nebula\Middleware\Session\Start::class,
-            "session_csrf" => \Nebula\Middleware\Session\CSRF::class,
-            "auth_user" => \Nebula\Middleware\Auth\User::class,
+            "session.cookies" => \Nebula\Middleware\Session\Cookies::class,
+            "session.lifetime" => \Nebula\Middleware\Session\Lifetime::class,
+            "session.start" => \Nebula\Middleware\Session\Start::class,
+            "session.csrf" => \Nebula\Middleware\Session\CSRF::class,
+            "auth.user" => \Nebula\Middleware\Auth\User::class,
+        ];
+        // Aliases (to be used as route middleware)
+        $this->middleware_aliases = [
+            "auth.user" => "auth",
         ];
         return $this;
     }
@@ -140,19 +146,28 @@ class Web
     private function request(): ?self
     {
         $request = Request::createFromGlobals();
-        foreach ($this->middleware as $alias => $middleware) {
-            $class = $this->container->get($middleware);
-            // We may define other match-arms to provide
-            // additional arguments to handle here
-            $request = match ($alias) {
-                default => $class->handle($request),
-            };
-        }
         $this->request = $request;
         $this->route = $this->router->handleRequest(
             $this->request->getMethod(),
             "/" . $this->request->getPathInfo()
         );
+        foreach ($this->middleware as $alias => $middleware) {
+            $class = $this->container->get($middleware);
+            // Always call handle
+            $request = $class->handle($request);
+        }
+        // Route-specific middleware
+        foreach ($this->route?->getMiddleware() as $route_middleware) {
+            $middleware_key = array_search(
+                $route_middleware,
+                $this->middleware_aliases
+            );
+            $middleware = $this->middleware[$middleware_key];
+            $class = $this->container->get($middleware);
+            $request = match ($this->middleware_aliases[$alias]) {
+                "auth" => $class->authorize($request),
+            };
+        }
         return $this;
     }
 
@@ -211,10 +226,11 @@ class Web
      */
     public function webException(Exception|Error $exception): void
     {
-        if ($this->config["debug"]) {
-            $html = $this->whoops->handleException($exception);
-            $this->webResponse($html);
+        if (!$this->config["debug"]) {
+            return;
         }
+        $html = $this->whoops->handleException($exception);
+        $this->webResponse($html);
     }
 
     /**
@@ -255,7 +271,7 @@ class Web
      * The response could be a twig template or something else
      * @param mixed $content
      */
-    public function webResponse(string $content = "", int $code = 200): void
+    public function webResponse(mixed $content = "", int $code = 200): void
     {
         $this->response = new Response($content, $code);
         $this->response->prepare($this->request);
