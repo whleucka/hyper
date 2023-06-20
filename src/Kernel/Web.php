@@ -10,6 +10,7 @@ use Nebula\Container\Container;
 use Nebula\Controllers\Controller;
 use StellarRouter\{Route, Router};
 use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
+use Whoops;
 
 class Web
 {
@@ -21,6 +22,7 @@ class Web
     private Router $router;
     private array $config = [];
     private array $middleware = [];
+    private $whoops;
 
     /**
      * The application lifecycle
@@ -42,7 +44,8 @@ class Web
     {
         return $this->loadEnv()
             ?->setConfig()
-            ?->setContainer();
+            ?->setContainer()
+            ?->errorHandler();
     }
 
     /**
@@ -66,6 +69,18 @@ class Web
             "container" => new \Nebula\Config\Container(),
             "path" => new \Nebula\Config\Paths(),
         ];
+        return $this;
+    }
+
+    /**
+     * Load error handling
+     */
+    private function errorHandler(): ?self
+    {
+        $whoops = new Whoops\Run();
+        $whoops->allowQuit(false);
+        $whoops->writeToOutput(false);
+        $this->whoops = $whoops;
         return $this;
     }
 
@@ -157,8 +172,14 @@ class Web
                 $this->controller = $this->container->get($handlerClass);
                 // Now we decide what to do
                 if (in_array("api", $middleware)) {
+                    $this->whoops->pushHandler(
+                        new Whoops\Handler\JsonResponseHandler()
+                    );
                     $this->apiResponse($handlerMethod, $parameters);
                 } else {
+                    $this->whoops->pushHandler(
+                        new Whoops\Handler\PrettyPageHandler()
+                    );
                     $this->webResponse($handlerMethod, $parameters);
                 }
             } else {
@@ -167,6 +188,11 @@ class Web
         } catch (Exception $ex) {
             if (in_array("api", $middleware)) {
                 $this->apiException($ex);
+            } else {
+                if ($this->config["debug"]) {
+                    $html = $this->whoops->handleException($ex);
+                    $this->webResponse(content: $html);
+                }
             }
             $this->terminate();
         } catch (Error $err) {
@@ -186,11 +212,13 @@ class Web
         if (!$this->config["debug"]) {
             return;
         }
+        $error = $this->whoops->handleException($exception);
+        $error = json_decode($error);
         $content = [
             "status" => "EXCEPTION",
             "success" => false,
-            "message" => $exception->getMessage(),
             "ts" => time(),
+            "error" => $error->error,
         ];
         $this->response = new JsonResponse($content);
         $this->response->prepare($this->request);
@@ -231,10 +259,16 @@ class Web
      * Set a web response
      * The response could be a twig template or something else
      * @param array<int,mixed> $parameters
+     * @param mixed $content
      */
-    public function webResponse(string $endpoint, array $parameters): void
-    {
-        $content = $this->controller->$endpoint(...$parameters);
+    public function webResponse(
+        string $endpoint = "",
+        array $parameters = [],
+        $content = null
+    ): void {
+        if (is_null($content)) {
+            $content = $this->controller->$endpoint(...$parameters);
+        }
         $this->response = new Response($content);
         $this->response->prepare($this->request);
         $this->response->send();
