@@ -22,7 +22,6 @@ class Web
     private Router $router;
     private array $config = [];
     private array $middleware = [];
-    private array $middleware_aliases = [];
     private $whoops;
 
     /**
@@ -103,15 +102,16 @@ class Web
     private function loadMiddleware(): ?self
     {
         $this->middleware = [
-            "session.cookies" => \Nebula\Middleware\Session\Cookies::class,
-            "session.lifetime" => \Nebula\Middleware\Session\Lifetime::class,
-            "session.start" => \Nebula\Middleware\Session\Start::class,
-            "session.csrf" => \Nebula\Middleware\Session\CSRF::class,
-            "auth.user" => \Nebula\Middleware\Auth\User::class,
-        ];
-        // Aliases (to be used as route middleware)
-        $this->middleware_aliases = [
-            "auth.user" => "auth",
+            "system" => [
+                "session.cookies" => \Nebula\Middleware\Session\Cookies::class,
+                "session.lifetime" =>
+                    \Nebula\Middleware\Session\Lifetime::class,
+                "session.start" => \Nebula\Middleware\Session\Start::class,
+                "session.csrf" => \Nebula\Middleware\Session\CSRF::class,
+            ],
+            "route" => [
+                "auth" => \Nebula\Middleware\Auth\User::class,
+            ],
         ];
         return $this;
     }
@@ -151,22 +151,22 @@ class Web
             $this->request->getMethod(),
             "/" . $this->request->getPathInfo()
         );
-        foreach ($this->middleware as $alias => $middleware) {
+        // System-specific middleware
+        foreach ($this->middleware["system"] as $alias => $middleware) {
             $class = $this->container->get($middleware);
             // Always call handle
-            $request = $class->handle($request);
+            $request = match ($alias) {
+                default => $class->handle($request),
+            };
         }
         // Route-specific middleware
         foreach ($this->route?->getMiddleware() as $route_middleware) {
-            $middleware_key = array_search(
-                $route_middleware,
-                $this->middleware_aliases
-            );
-            $middleware = $this->middleware[$middleware_key];
-            $class = $this->container->get($middleware);
-            $request = match ($this->middleware_aliases[$alias]) {
-                "auth" => $class->authorize($request),
-            };
+            if (isset($this->middleware["route"][$route_middleware])) {
+                $middleware = $this->middleware["route"][$route_middleware];
+                $class = $this->container->get($middleware);
+                // Only call the middlware if it is attached to the route
+                $request = $class->handle($request);
+            }
         }
         return $this;
     }
