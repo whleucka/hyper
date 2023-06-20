@@ -15,7 +15,10 @@ class Container
             // Auto config for DB
             DB::class => function () {
                 $database_config = new \Nebula\Config\Database();
-                return new DB($database_config->getConfig(), $database_config->getOptions());
+                return new DB(
+                    $database_config->getConfig(),
+                    $database_config->getOptions()
+                );
             },
             // Twig environment
             Environment::class => function () {

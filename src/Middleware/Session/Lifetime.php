@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Lifetime
 {
     private $minutes = 30;
-  
+
     /**
      * Limit the user session to x minutes
      * @param mixed $request

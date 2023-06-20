@@ -11,32 +11,54 @@ class CSRF
      */
     public function handle(Request $request): Request
     {
-        $this->csrfProtection();
-        $this->validateCSRFToken($request);
+        $this->init();
+        $this->validate($request);
+        $this->regenerate();
         return $request;
     }
 
     /**
      * CSRF (Cross-Site Request Forgery) protection
+     * Include the CSRF token as a hidden input field in your HTML forms.
+     * This will ensure that the token is submitted along with the form data.
      */
-    private function csrfProtection(): void
+    private function init(): void
     {
-        if (!isset($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        if (!isset($_SESSION["csrf_token"])) {
+            $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
         }
     }
 
-    private function validateCSRFToken(Request $request): void
+    /**
+     * Validate CSRF token
+     */
+    private function validate(Request $request): void
     {
-        if ($request->getMethod() === 'POST') {
-            // Validate CSRF token
-            if (!empty($_POST['csrf_token']) && hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        if ($request->getMethod() === "POST") {
+            if (
+                !empty($_POST["csrf_token"]) &&
+                hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
+            ) {
                 // CSRF token is valid
                 // Process the form submission
             } else {
                 // CSRF token is invalid
                 // Handle the error, e.g., redirect or show an error message
             }
+        }
+    }
+
+    /**
+     * Regenerate CSRF token every hour
+     */
+    private function regenerate(): void
+    {
+        if (
+            !isset($_SESSION["csrf_token_timestamp"]) ||
+            $_SESSION["csrf_token_timestamp"] + 3600 < time()
+        ) {
+            $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+            $_SESSION["csrf_token_timestamp"] = time();
         }
     }
 }

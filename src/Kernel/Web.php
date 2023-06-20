@@ -75,7 +75,7 @@ class Web
     private function setContainer(): ?self
     {
         $this->container = Container::getInstance()
-            ->setDefinitions($this->config['container']->getDefinitions())
+            ->setDefinitions($this->config["container"]->getDefinitions())
             ->build();
         return $this;
     }
@@ -265,7 +265,9 @@ class Web
     {
         if ($this->config["debug"]) {
             $stop = (microtime(true) - APP_START) * 1000;
-            error_log(sprintf("Execution time: %s ms", number_format($stop, 2)));
+            error_log(
+                sprintf("Execution time: %s ms", number_format($stop, 2))
+            );
         }
         exit();
     }
