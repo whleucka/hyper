@@ -209,14 +209,12 @@ class Web
             } else {
                 $this->webException($ex);
             }
-            $this->terminate();
         } catch (Error $err) {
             if (in_array("api", $middleware)) {
                 $this->apiError($err);
             } else {
                 $this->webException($err);
             }
-            $this->terminate();
         }
         return $this;
     }
@@ -263,7 +261,6 @@ class Web
     public function pageNotFound(): void
     {
         $this->webResponse(code: 404);
-        $this->terminate();
     }
 
     /**
