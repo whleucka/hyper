@@ -168,23 +168,22 @@ class Web
                 $handlerClass = $this->route->getHandlerClass();
                 $middleware = $this->route->getMiddleware();
                 $parameters = $this->route->getParameters();
-                // Instansiate the controller
+                // Instantiate the controller
                 $this->controller = $this->container->get($handlerClass);
                 // Now we decide what to do
+                $controller_response = $this->controller->$handlerMethod(
+                    ...$parameters
+                );
                 if (in_array("api", $middleware)) {
                     $this->whoops->pushHandler(
                         new Whoops\Handler\JsonResponseHandler()
                     );
-                    $this->apiResponse(
-                        $this->controller->$handlerMethod(...$parameters)
-                    );
+                    $this->apiResponse($controller_response);
                 } else {
                     $this->whoops->pushHandler(
                         new Whoops\Handler\PrettyPageHandler()
                     );
-                    $this->webResponse(
-                        $this->controller->$handlerMethod(...$parameters)
-                    );
+                    $this->webResponse($controller_response);
                 }
             } else {
                 $this->pageNotFound();
@@ -193,24 +192,29 @@ class Web
             if (in_array("api", $middleware)) {
                 $this->apiException($ex);
             } else {
-                if ($this->config["debug"]) {
-                    $html = $this->whoops->handleException($ex);
-                    $this->webResponse($html);
-                }
+                $this->webException($ex);
             }
             $this->terminate();
         } catch (Error $err) {
             if (in_array("api", $middleware)) {
                 $this->apiError($err);
             } else {
-                if ($this->config["debug"]) {
-                    $html = $this->whoops->handleException($err);
-                    $this->webResponse($html);
-                }
+                $this->webException($err);
             }
             $this->terminate();
         }
         return $this;
+    }
+
+    /**
+     * Set web exception response
+     */
+    public function webException(Exception|Error $exception): void
+    {
+        if ($this->config["debug"]) {
+            $html = $this->whoops->handleException($exception);
+            $this->webResponse($html);
+        }
     }
 
     /**
@@ -223,15 +227,7 @@ class Web
         }
         $error = $this->whoops->handleException($exception);
         $error = json_decode($error);
-        $content = [
-            "status" => "EXCEPTION",
-            "success" => false,
-            "ts" => time(),
-            "error" => $error->error,
-        ];
-        $this->response = new JsonResponse($content);
-        $this->response->prepare($this->request);
-        $this->response->send();
+        $this->apiResponse($error->error, "EXCEPTION", false);
     }
 
     /**
