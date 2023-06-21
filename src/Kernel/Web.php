@@ -161,14 +161,18 @@ class Web
     /**
      * System-specific middleware
      */
-    private function systemMiddleware(?Request &$request): ?Request
+    private function systemMiddleware(?Request $request): ?Request
     {
-        foreach ($this->middleware["system"] as $alias => $middleware) {
-            $class = $this->container->get($middleware);
-            // Always call handle
-            $request = match ($alias) {
-                default => $class->handle($request),
-            };
+        $system_middlewares = $this->middleware["system"];
+        if ($system_middlewares) {
+            foreach ($system_middlewares as $alias => $middleware) {
+                $class = $this->container->get($middleware);
+                // Always call handle, but if there are other methods to call,
+                // you can call them here
+                $request = match ($alias) {
+                    default => $class->handle($request),
+                };
+            }
         }
         return $request;
     }
@@ -176,7 +180,7 @@ class Web
     /**
      * Route-specific middleware
      */
-    private function routeMiddleware(?Request &$request): ?Request
+    private function routeMiddleware(?Request $request): ?Request
     {
         $route_middlewares = $this->route?->getMiddleware();
         if ($route_middlewares) {
@@ -184,8 +188,11 @@ class Web
                 if (isset($this->middleware["route"][$route_middleware])) {
                     $middleware = $this->middleware["route"][$route_middleware];
                     $class = $this->container->get($middleware);
-                    // Only call the middlware if it is attached to the route
-                    $request = $class->handle($request);
+                    // Same thing here, route middleware calls handle, but you
+                    // can call any method here
+                    $request = match ($route_middleware) {
+                        default => $class->handle($request),
+                    };
                 }
             }
         }
