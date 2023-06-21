@@ -12,7 +12,7 @@ class Lifetime
      * Limit the user session to x minutes
      * @param mixed $request
      */
-    public function handle(Request $request): Request
+    public function handle(Request $request): ?Request
     {
         $sessionTimeout = $this->minutes * 60; // minutes in seconds
 

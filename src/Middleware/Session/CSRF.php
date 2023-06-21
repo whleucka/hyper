@@ -9,12 +9,11 @@ class CSRF
     /**
      * @param mixed $request
      */
-    public function handle(Request $request): Request
+    public function handle(Request $request): ?Request
     {
         $this->init();
-        $this->validate($request);
         $this->regenerate();
-        return $request;
+        return $this->validate($request);
     }
 
     /**
@@ -32,8 +31,9 @@ class CSRF
     /**
      * Validate CSRF token
      */
-    private function validate(Request $request): void
+    private function validate(Request $request): ?Request
     {
+        $valid = true;
         if ($request->getMethod() === "POST") {
             if (
                 !empty($_POST["csrf_token"]) &&
@@ -41,11 +41,16 @@ class CSRF
             ) {
                 // CSRF token is valid
                 // Process the form submission
+                $valid &= true;
             } else {
                 // CSRF token is invalid
                 // Handle the error, e.g., redirect or show an error message
+                $valid &= false;
             }
         }
+        return $valid 
+            ? $request
+            : null;
     }
 
     /**

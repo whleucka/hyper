@@ -10,7 +10,7 @@ class Start
      * Start the application session
      * @param mixed $request
      */
-    public function handle(Request $request): Request
+    public function handle(Request $request): ?Request
     {
         session_start();
         return $request;

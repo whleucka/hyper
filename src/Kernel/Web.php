@@ -17,7 +17,7 @@ class Web
     private ?Route $route = null;
     private Container $container;
     private Controller $controller;
-    private Request $request;
+    private ?Request $request;
     private Response $response;
     private Router $router;
     private array $config = [];
@@ -105,7 +105,7 @@ class Web
             "system" => [
                 "session.cookies" => \Nebula\Middleware\Session\Cookies::class,
                 "session.lifetime" =>
-                    \Nebula\Middleware\Session\Lifetime::class,
+                \Nebula\Middleware\Session\Lifetime::class,
                 "session.start" => \Nebula\Middleware\Session\Start::class,
                 "session.csrf" => \Nebula\Middleware\Session\CSRF::class,
             ],
@@ -146,12 +146,21 @@ class Web
     private function request(): ?self
     {
         $request = Request::createFromGlobals();
-        $this->request = $request;
+        $request = $this->systemMiddleware($request);
         $this->route = $this->router->handleRequest(
-            $this->request->getMethod(),
-            "/" . $this->request->getPathInfo()
+            $request->getMethod(),
+            "/" . $request->getPathInfo()
         );
-        // System-specific middleware
+        $request = $this->routeMiddleware($request);
+        $this->request = $request;
+        return $this;
+    }
+
+    /**
+     * System-specific middleware
+     */
+    private function systemMiddleware(?Request &$request): ?Request
+    {
         foreach ($this->middleware["system"] as $alias => $middleware) {
             $class = $this->container->get($middleware);
             // Always call handle
@@ -159,16 +168,26 @@ class Web
                 default => $class->handle($request),
             };
         }
-        // Route-specific middleware
-        foreach ($this->route?->getMiddleware() as $route_middleware) {
-            if (isset($this->middleware["route"][$route_middleware])) {
-                $middleware = $this->middleware["route"][$route_middleware];
-                $class = $this->container->get($middleware);
-                // Only call the middlware if it is attached to the route
-                $request = $class->handle($request);
+        return $request;
+    }
+
+    /**
+     * Route-specific middleware
+     */
+    private function routeMiddleware(?Request &$request): ?Request
+    {
+        $route_middlewares = $this->route->getMiddleware();
+        if ($route_middlewares) {
+            foreach ($route_middlewares as $route_middleware) {
+                if (isset($this->middleware["route"][$route_middleware])) {
+                    $middleware = $this->middleware["route"][$route_middleware];
+                    $class = $this->container->get($middleware);
+                    // Only call the middlware if it is attached to the route
+                    $request = $class->handle($request);
+                }
             }
         }
-        return $this;
+        return $request;
     }
 
     /**
@@ -177,46 +196,73 @@ class Web
     private function executePayload(): ?self
     {
         try {
-            // Very carefully execute the payload
             if ($this->route) {
-                $handlerMethod = $this->route->getHandlerMethod();
-                $handlerClass = $this->route->getHandlerClass();
-                $middleware = $this->route->getMiddleware();
-                $parameters = $this->route->getParameters();
-                // Instantiate the controller
-                $this->controller = $this->container->get($handlerClass);
-                // Now we decide what to do
-                $controller_response = $this->controller->$handlerMethod(
-                    ...$parameters
-                );
-                if (in_array("api", $middleware)) {
-                    $this->whoops->pushHandler(
-                        new Whoops\Handler\JsonResponseHandler()
-                    );
-                    $this->apiResponse($controller_response);
-                } else {
-                    $this->whoops->pushHandler(
-                        new Whoops\Handler\PrettyPageHandler()
-                    );
-                    $this->webResponse($controller_response);
-                }
+                $this->controllerResponse();
             } else {
                 $this->pageNotFound();
             }
         } catch (Exception $ex) {
-            if (in_array("api", $middleware)) {
-                $this->apiException($ex);
-            } else {
-                $this->webException($ex);
-            }
+            $this->handleException($ex);
         } catch (Error $err) {
-            if (in_array("api", $middleware)) {
-                $this->apiError($err);
-            } else {
-                $this->webException($err);
-            }
+            $this->handleError($err);
         }
         return $this;
+    }
+
+    /**
+     * Handle controller exception
+     */
+    private function handleException(Exception $exception): void
+    {
+        $middleware = $this->route->getMiddleware();
+        if (in_array("api", $middleware)) {
+            $this->apiException($exception);
+        } else {
+            $this->webException($exception);
+        }
+    }
+
+    /**
+     * Handle controller error
+     */
+    private function handleError(Error $error): void
+    {
+        $middleware = $this->route->getMiddleware();
+        if (in_array("api", $middleware)) {
+            $this->apiError($error);
+        } else {
+            $this->webException($error);
+        }
+    }
+
+    /**
+     * The response from the controller method
+     */
+    private function controllerResponse(): void
+    {
+        if ($this->route) {
+            $handlerMethod = $this->route->getHandlerMethod();
+            $handlerClass = $this->route->getHandlerClass();
+            $middleware = $this->route->getMiddleware();
+            $parameters = $this->route->getParameters();
+            // Instantiate the controller
+            $this->controller = $this->container->get($handlerClass);
+            // Now we decide what to do
+            $controller_response = $this->controller->$handlerMethod(
+                ...$parameters
+            );
+            if (in_array("api", $middleware)) {
+                $this->whoops->pushHandler(
+                    new Whoops\Handler\JsonResponseHandler()
+                );
+                $this->apiResponse($controller_response);
+            } else {
+                $this->whoops->pushHandler(
+                    new Whoops\Handler\PrettyPageHandler()
+                );
+                $this->webResponse($controller_response);
+            }
+        }
     }
 
     /**
@@ -271,7 +317,9 @@ class Web
     public function webResponse(mixed $content = "", int $code = 200): void
     {
         $this->response = new Response($content, $code);
-        $this->response->prepare($this->request);
+        if ($this->request) {
+            $this->response->prepare($this->request);
+        }
         $this->response->send();
     }
 
@@ -293,7 +341,9 @@ class Web
             "ts" => time(),
         ];
         $this->response = new JsonResponse($content);
-        $this->response->prepare($this->request);
+        if ($this->request) {
+            $this->response->prepare($this->request);
+        }
         $this->response->send();
     }
 

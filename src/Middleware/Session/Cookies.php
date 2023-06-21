@@ -11,7 +11,7 @@ class Cookies
      * Session cookie to be accessible only via HTTP
      * @param mixed $request
      */
-    public function handle(Request $request): Request
+    public function handle(Request $request): ?Request
     {
         ini_set("session.cookie_secure", true);
         $cookieParams = session_get_cookie_params();
