@@ -105,7 +105,7 @@ class Web
             "system" => [
                 "session.cookies" => \Nebula\Middleware\Session\Cookies::class,
                 "session.lifetime" =>
-                \Nebula\Middleware\Session\Lifetime::class,
+                    \Nebula\Middleware\Session\Lifetime::class,
                 "session.start" => \Nebula\Middleware\Session\Start::class,
                 "session.csrf" => \Nebula\Middleware\Session\CSRF::class,
             ],

@@ -48,9 +48,7 @@ class CSRF
                 $valid &= false;
             }
         }
-        return $valid 
-            ? $request
-            : null;
+        return $valid ? $request : null;
     }
 
     /**

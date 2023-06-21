@@ -16,7 +16,7 @@ class User
         if (!isset($_SESSION["user"])) {
             $response = new RedirectResponse($sign_in_route);
             $response->send();
-            exit;
+            exit();
         }
         return $request;
     }
