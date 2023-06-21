@@ -20,7 +20,7 @@ class Web
     private Container $container;
     private Controller $controller;
     private Response $response;
-    private Router $router;
+    public Router $router;
     private array $config = [];
     private array $middleware = [];
 
@@ -40,12 +40,13 @@ class Web
     /**
      * Set up essential components such as environment, configurations, DI container, etc
      */
-    private function bootstrap(): ?self
+    public function bootstrap(): ?self
     {
         return $this->loadEnv()
             ?->setConfig()
             ?->setContainer()
-            ?->errorHandler();
+            ?->errorHandler()
+            ?->initRouter();
     }
 
     /**
@@ -95,11 +96,17 @@ class Web
         return $this;
     }
 
+    public function initRouter(): ?self
+    {
+        $this->router = $this->container->get(Router::class);
+        return $this;
+    }
+
     /**
      * Load the middleware to process incoming requests
      * Note: handle method will be called for all middleware
      */
-    private function loadMiddleware(): ?self
+    public function loadMiddleware(): ?self
     {
         $this->middleware = [
             "system" => [
@@ -119,9 +126,8 @@ class Web
     /**
      * Route to the correct controller endpoint
      */
-    private function registerRoutes(): ?self
+    public function registerRoutes(): ?self
     {
-        $this->router = $this->container->get(Router::class);
         $controllers = array_keys(
             $this->classMap($this->config["paths"]->getControllers())
         );
@@ -143,7 +149,7 @@ class Web
     /**
      * Handle in the incoming requests and send through middleware stack
      */
-    private function request(): ?self
+    public function request(): ?self
     {
         $request = Request::createFromGlobals();
         // Run the system middleware
@@ -171,7 +177,7 @@ class Web
         if (!$request) {
             return $request;
         }
-        $system_middlewares = $this->middleware["system"];
+        $system_middlewares = $this->middleware["system"] ?? null;
         if ($system_middlewares) {
             foreach ($system_middlewares as $alias => $middleware) {
                 $class = $this->container->get($middleware);
@@ -193,7 +199,7 @@ class Web
         if (!$request) {
             return $request;
         }
-        $route_middlewares = $request->attributes->middleware;
+        $route_middlewares = $request->attributes->middleware ?? null;
         if ($route_middlewares) {
             foreach ($route_middlewares as $route_middleware) {
                 if (isset($this->middleware["route"][$route_middleware])) {
@@ -213,7 +219,7 @@ class Web
     /**
      * Execute the controller method (controller interacts with models, prepares response)
      */
-    private function executePayload(): ?self
+    public function executePayload(): ?self
     {
         try {
             if ($this->route) {
@@ -258,7 +264,7 @@ class Web
     /**
      * The response from the controller method
      */
-    private function controllerResponse(): void
+    public function controllerResponse(): void
     {
         $handlerMethod = $this->route->getHandlerMethod();
         $handlerClass = $this->route->getHandlerClass();
@@ -366,7 +372,7 @@ class Web
     /**
      * Terminate the request
      */
-    private function terminate(): void
+    public function terminate(): void
     {
         if ($this->config["debug"]) {
             $stop = (microtime(true) - APP_START) * 1000;
