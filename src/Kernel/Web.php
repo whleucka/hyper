@@ -258,9 +258,7 @@ class Web
             );
             $this->apiResponse($controller_response);
         } else {
-            $this->whoops->pushHandler(
-                new Whoops\Handler\PrettyPageHandler()
-            );
+            $this->whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
             $this->webResponse($controller_response);
         }
     }
