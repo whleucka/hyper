@@ -14,15 +14,15 @@ use Whoops;
 
 class Web
 {
+    private $whoops;
+    private ?Request $request = null;
     private ?Route $route = null;
     private Container $container;
     private Controller $controller;
-    private ?Request $request;
     private Response $response;
     private Router $router;
     private array $config = [];
     private array $middleware = [];
-    private $whoops;
 
     /**
      * The application lifecycle
@@ -126,7 +126,7 @@ class Web
             $this->classMap($this->config["paths"]->getControllers())
         );
         foreach ($controllers as $controllerClass) {
-            $controller = $this->container->get($controllerClass);
+            $controller = new $controllerClass($this->request);
             $this->router->registerRoutes($controller::class);
         }
         return $this;
@@ -146,11 +146,16 @@ class Web
     private function request(): ?self
     {
         $request = Request::createFromGlobals();
+        // Run the system middleware
         $request = $this->systemMiddleware($request);
+        // Set the route
         $this->route = $this->router->handleRequest(
             $request->getMethod(),
             "/" . $request->getPathInfo()
         );
+        // Bind the middleware to the request
+        $request->attributes->middleware = $this->route?->getMiddleware();
+        // Run the route middleware
         if ($this->route) {
             $request = $this->routeMiddleware($request);
         }
@@ -163,6 +168,9 @@ class Web
      */
     private function systemMiddleware(?Request $request): ?Request
     {
+        if (!$request) {
+            return $request;
+        }
         $system_middlewares = $this->middleware["system"];
         if ($system_middlewares) {
             foreach ($system_middlewares as $alias => $middleware) {
@@ -182,7 +190,10 @@ class Web
      */
     private function routeMiddleware(?Request $request): ?Request
     {
-        $route_middlewares = $this->route?->getMiddleware();
+        if (!$request) {
+            return $request;
+        }
+        $route_middlewares = $request->attributes->middleware;
         if ($route_middlewares) {
             foreach ($route_middlewares as $route_middleware) {
                 if (isset($this->middleware["route"][$route_middleware])) {
@@ -254,7 +265,7 @@ class Web
         $middleware = $this->route->getMiddleware();
         $parameters = $this->route->getParameters();
         // Instantiate the controller
-        $this->controller = $this->container->get($handlerClass);
+        $this->controller = new $handlerClass($this->request);
         // Now we decide what to do
         $controller_response = $this->controller->$handlerMethod(
             ...$parameters

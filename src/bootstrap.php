@@ -2,8 +2,8 @@
 
 namespace Nebula;
 
-use Nebula\Kernel\Web;
+require_once __DIR__ . "/functions.php";
 
-$app = new Web();
+$app = new \Nebula\Kernel\Web();
 
 return $app;
