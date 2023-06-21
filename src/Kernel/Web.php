@@ -151,7 +151,9 @@ class Web
             $request->getMethod(),
             "/" . $request->getPathInfo()
         );
-        $request = $this->routeMiddleware($request);
+        if ($this->route) {
+            $request = $this->routeMiddleware($request);
+        }
         $this->request = $request;
         return $this;
     }
@@ -176,7 +178,7 @@ class Web
      */
     private function routeMiddleware(?Request &$request): ?Request
     {
-        $route_middlewares = $this->route->getMiddleware();
+        $route_middlewares = $this->route?->getMiddleware();
         if ($route_middlewares) {
             foreach ($route_middlewares as $route_middleware) {
                 if (isset($this->middleware["route"][$route_middleware])) {
@@ -240,28 +242,26 @@ class Web
      */
     private function controllerResponse(): void
     {
-        if ($this->route) {
-            $handlerMethod = $this->route->getHandlerMethod();
-            $handlerClass = $this->route->getHandlerClass();
-            $middleware = $this->route->getMiddleware();
-            $parameters = $this->route->getParameters();
-            // Instantiate the controller
-            $this->controller = $this->container->get($handlerClass);
-            // Now we decide what to do
-            $controller_response = $this->controller->$handlerMethod(
-                ...$parameters
+        $handlerMethod = $this->route->getHandlerMethod();
+        $handlerClass = $this->route->getHandlerClass();
+        $middleware = $this->route->getMiddleware();
+        $parameters = $this->route->getParameters();
+        // Instantiate the controller
+        $this->controller = $this->container->get($handlerClass);
+        // Now we decide what to do
+        $controller_response = $this->controller->$handlerMethod(
+            ...$parameters
+        );
+        if (in_array("api", $middleware)) {
+            $this->whoops->pushHandler(
+                new Whoops\Handler\JsonResponseHandler()
             );
-            if (in_array("api", $middleware)) {
-                $this->whoops->pushHandler(
-                    new Whoops\Handler\JsonResponseHandler()
-                );
-                $this->apiResponse($controller_response);
-            } else {
-                $this->whoops->pushHandler(
-                    new Whoops\Handler\PrettyPageHandler()
-                );
-                $this->webResponse($controller_response);
-            }
+            $this->apiResponse($controller_response);
+        } else {
+            $this->whoops->pushHandler(
+                new Whoops\Handler\PrettyPageHandler()
+            );
+            $this->webResponse($controller_response);
         }
     }
 
