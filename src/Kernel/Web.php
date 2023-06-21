@@ -67,7 +67,7 @@ class Web
         $this->config = [
             "debug" => strtolower($_ENV["APP_DEBUG"]) === "true",
             "container" => new \Nebula\Config\Container(),
-            "path" => new \Nebula\Config\Paths(),
+            "paths" => new \Nebula\Config\Paths(),
         ];
         return $this;
     }
@@ -123,7 +123,7 @@ class Web
     {
         $this->router = $this->container->get(Router::class);
         $controllers = array_keys(
-            $this->classMap($this->config["path"]->getControllers())
+            $this->classMap($this->config["paths"]->getControllers())
         );
         foreach ($controllers as $controllerClass) {
             $controller = $this->container->get($controllerClass);
