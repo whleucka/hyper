@@ -1,8 +1,6 @@
 # Nebula
 
-🌠 Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. 🌟
-
-💫 It provides developers with a flexible and extensible architecture to build custom web applications with ease. 🔭
+🌠 Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. It provides developers with a flexible and extensible architecture to build custom web applications with ease. Also, did we mention it was fast? 🔭
 
 👷 *Currently under development*
 
