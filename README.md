@@ -44,7 +44,7 @@ chown -R www-data:www-data views/.cache
 
 ### Basic usage
 
-Here is an extremely simple example of how you can build a route with a simple controller. Endpoints can be either class methods or closures! 
+Here is an extremely simple example of how you can build a route with a simple controller. Endpoints can be either class methods or closures! In this example, we define a GET and POST route.
 
 file: public/index.php
 ```php
@@ -67,7 +67,7 @@ app()
 
 ###  A better use case
 
-We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All http methods are supported. You can even define the route name and attach route middleware. How easy is that!?
+We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. You can even define the route name and attach route middleware. How easy is that!?
 
 
 file: src/Controllers/HomeController.php
