@@ -9,18 +9,4 @@
  */
 
 require_once "bootstrap.php";
-
-//app()->run();
-
-class TestController extends Nebula\Controllers\Controller
-{
-  public function test(): int 
-  { 
-    return 42; 
-  }
-}
-
-app()
-  ->get("/", payload: fn() => "hello, world!")
-  ->post("/test", "TestController", "test", middleware: ["api"])
-  ->run();
+app()->run();
