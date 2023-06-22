@@ -113,10 +113,11 @@ This project is licensed under the <a href='https://github.com/your-username/neb
 
 ### Acknowledgements
 
-We would like to express our gratitude to the following open-source projects that have inspired and contributed to Nebula:
+We would like to express our gratitude to the following open-source projects that have inspired Nebula:
 
 - Symfony
 - Slim Framework
+- Leaf
 - Laravel
 
 
