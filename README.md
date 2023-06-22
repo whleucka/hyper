@@ -56,14 +56,13 @@ require_once __DIR__.'/../src/Util/functions.php';
 
 class TestController extends Nebula\Controllers\Controller
 {
-  public function test() { return 42; }
+  public function test(): int { return 42; }
 }
 
 app()
   ->get("/", payload: fn() => "hello, world!")
   ->post("/test", "TestController", "test", middleware: ["api"])
   ->run();
- ->run();
 ```
 
 ###  A better use case
