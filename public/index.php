@@ -5,7 +5,7 @@
  * Created: william.hleucka@gmail.com
  * License: MIT
  *
- *  🇨🇦Made in Canada 
+ *  🇨🇦 Made in Canada 
  */
 
 require_once "bootstrap.php";
