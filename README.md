@@ -38,9 +38,9 @@ cp .env.example .env
 chown -R www-data:www-data views/.cache
 ```
 
-- **Development**: Start building your application by creating controllers, views, and models within the src directory.
+- **Development**: Start building your application by creating controllers, views, and models within the src directory. You can start a local development server by running `./bin/serve`
 
-- **Testing**: Nebula includes a testing suite powered by PHPUnit. Add your tests under the tests directory and run them with: `./bin/test` or `composer run-script test` or `./vendor/bin/phpunit tests`
+- **Testing**: Nebula includes a testing suite powered by PHPUnit. Add your tests under the tests directory and run them with: `./bin/test` or `composer run-script test` or `./vendor/bin/phpunit tests`. If you have `siege` installed, then you can benchmark the framework by running `./bin/benchmark`. Make sure you edit the script and change the hostname to match your environment.
 
 - **Deployment**: Once your application is ready for deployment, configure your web server to point to the public directory as the document root.
 
