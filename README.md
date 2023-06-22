@@ -44,6 +44,59 @@ chown -R www-data:www-data views/.cache
 
 - **Deployment**: Once your application is ready for deployment, configure your web server to point to the public directory as the document root.
 
+### Basic usage
+
+Here is an extremely simple example of how you can build a route with a simple controller. If you prefer manually defining your web routes, then this is the way.
+
+file: public/index.php
+```php
+<?php
+define('APP_START', microtime(true));
+
+require __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../src/Util/functions.php';
+
+class TestController extends Nebula\Controllers\Controller
+{
+  public function index() { return "hello, world!"; }
+}
+
+get("/", "TestController", "index");
+$app = Nebula\Kernel\Web::getInstance()->handle()->execute();
+```
+
+###  A better use case
+
+We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All http methods are supported. You can even define the route name and attach route middleware. How easy is that!?
+
+
+file: src/Controllers/HomeController.php
+```php
+<?php
+namespace Nebula\Controllers;
+
+use StellarRouter\Get;
+
+class HomeController extends Controller
+{
+    #[Get("/", "home.index")]
+    public function index(): string
+    {
+        // This is a web response
+        return "hello, world!";
+    }
+
+    #[Get("/api/test", "api.test", ["api"])]
+    public function test(): int
+    {
+        // This is a JSON response (from api middleware)
+        return 42;
+    }
+}
+```
+
+That's it! 
+
 <s>For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a></s>
 
 
