@@ -107,7 +107,7 @@ Contributions to Nebula are welcome! If you find any issues or have suggestions 
 
 ### License
 
-This project is licensed under the <a href='https://github.com/your-username/nebula/blob/main/LICENSE'>MIT License</a>.
+This project is licensed under the <a href='https://github.com/libra-php/nebula/blob/main/LICENSE'>MIT License</a>.
 
 
 ### Acknowledgements
