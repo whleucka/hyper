@@ -163,8 +163,14 @@ class Web
     /**
      * Wire up a GET route
      */
-    public function get($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
-    {
+    public function get(
+        $path,
+        $handlerClass = "",
+        $handlerMethod = "",
+        string $name = "",
+        array $middleware = [],
+        ?Closure $payload = null
+    ): Web {
         $this->router->registerRoute(
             $path,
             "GET",
@@ -172,7 +178,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null,
+            !is_null($payload) && is_callable($payload) ? $payload() : null
         );
         return $this;
     }
@@ -180,8 +186,14 @@ class Web
     /**
      * Wire up a POST route
      */
-    public function post($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
-    {
+    public function post(
+        $path,
+        $handlerClass = "",
+        $handlerMethod = "",
+        string $name = "",
+        array $middleware = [],
+        ?Closure $payload = null
+    ): Web {
         $this->router->registerRoute(
             $path,
             "POST",
@@ -189,7 +201,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null,
+            !is_null($payload) && is_callable($payload) ? $payload() : null
         );
         return $this;
     }
@@ -197,8 +209,14 @@ class Web
     /**
      * Wire up a PUT route
      */
-    public function put($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
-    {
+    public function put(
+        $path,
+        $handlerClass = "",
+        $handlerMethod = "",
+        string $name = "",
+        array $middleware = [],
+        ?Closure $payload = null
+    ): Web {
         $this->router->registerRoute(
             $path,
             "PUT",
@@ -206,7 +224,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null,
+            !is_null($payload) && is_callable($payload) ? $payload() : null
         );
         return $this;
     }
@@ -214,8 +232,14 @@ class Web
     /**
      * Wire up a PATCH route
      */
-    public function patch($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
-    {
+    public function patch(
+        $path,
+        $handlerClass = "",
+        $handlerMethod = "",
+        string $name = "",
+        array $middleware = [],
+        ?Closure $payload = null
+    ): Web {
         $this->router->registerRoute(
             $path,
             "PATCH",
@@ -223,7 +247,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null,
+            !is_null($payload) && is_callable($payload) ? $payload() : null
         );
         return $this;
     }
@@ -231,8 +255,14 @@ class Web
     /**
      * Wire up a DELETE route
      */
-    public function delete($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
-    {
+    public function delete(
+        $path,
+        $handlerClass = "",
+        $handlerMethod = "",
+        string $name = "",
+        array $middleware = [],
+        ?Closure $payload = null
+    ): Web {
         $this->router->registerRoute(
             $path,
             "DELETE",
@@ -240,7 +270,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null,
+            !is_null($payload) && is_callable($payload) ? $payload() : null
         );
         return $this;
     }

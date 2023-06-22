@@ -17,13 +17,15 @@ function dump($o)
     );
 }
 
-function app() 
+function app()
 {
     return Web::getInstance();
 }
 
-function twig($path, $data = []) 
+function twig($path, $data = [])
 {
-    $twig = app()->container()->get(Twig\Environment::class);
+    $twig = app()
+        ->container()
+        ->get(Twig\Environment::class);
     return $twig->render($path, $data);
 }
