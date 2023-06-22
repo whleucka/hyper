@@ -1,14 +1,14 @@
 <?php
 /**
  * NEBULA -- a powerful PHP framework inspired by the cosmos
+ * Github: https://github.com/libra-php/nebula
+ * Created: william.hleucka@gmail.com
  * License: MIT
- * Created by: william.hleucka@gmail.com
+ *
+ *  🇨🇦Made in Canada 
  */
 
-define('APP_START', microtime(true));
-
-require __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../src/Util/functions.php';
+require_once "bootsrap.php";
 
 //app()->run();
 
