@@ -76,7 +76,7 @@ file: src/Controllers/HomeController.php
 <?php
 namespace Nebula\Controllers;
 
-use StellarRouter\Get;
+use StellarRouter\{Get, Post};
 
 class HomeController extends Controller
 {
@@ -87,7 +87,7 @@ class HomeController extends Controller
         return "hello, world!";
     }
 
-    #[Get("/test", "home.test", ["api"])]
+    #[Post("/test", "home.test", ["api"])]
     public function test(): int
     {
         // This is a JSON response (from api middleware)

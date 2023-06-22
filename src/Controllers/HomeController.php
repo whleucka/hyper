@@ -2,7 +2,7 @@
 
 namespace Nebula\Controllers;
 
-use StellarRouter\Get;
+use StellarRouter\{Get, Post};
 
 class HomeController extends Controller
 {
@@ -26,8 +26,8 @@ class HomeController extends Controller
         return $echo;
     }
 
-    #[Get("/api/json", "home.json", ["api"])]
-    public function json(): int
+    #[Post("/api/test", "home.test", ["api"])]
+    public function test(): int
     {
         // When you use the api middleware, 42 is returned
         // inside of a JSON response automatically.
