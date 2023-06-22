@@ -60,7 +60,7 @@ class TestController extends Nebula\Controllers\Controller
 }
 
 app()
-  ->get(path: "/", payload: fn() => "hello, world!")
+  ->get("/", payload: fn() => "hello, world!")
   ->post("/test", "TestController", "test")
   ->run();
 ```
