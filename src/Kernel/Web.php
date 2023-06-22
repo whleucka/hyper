@@ -34,7 +34,6 @@ class Web
      */
     public function run(): void
     {
-        $this->init();
         $this->routing();
         $this->handle()->execute();
     }
@@ -153,5 +152,65 @@ class Web
     {
         $this->response->prepare($this->request)->send();
         exit();
+    }
+
+    public function get($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+        $this->router->registerRoute(
+            $path,
+            "GET",
+            $name,
+            $middleware,
+            $handlerClass,
+            $handlerMethod
+        );
+        return $this;
+    }
+
+    public function post($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+        $this->router->registerRoute(
+            $path,
+            "POST",
+            $name,
+            $middleware,
+            $handlerClass,
+            $handlerMethod
+        );
+        return $this;
+    }
+
+    public function put($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+        $this->router->registerRoute(
+            $path,
+            "PUT",
+            $name,
+            $middleware,
+            $handlerClass,
+            $handlerMethod
+        );
+        return $this;
+    }
+
+    public function patch($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+        $this->router->registerRoute(
+            $path,
+            "PATCH",
+            $name,
+            $middleware,
+            $handlerClass,
+            $handlerMethod
+        );
+        return $this;
+    }
+
+    public function delete($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+        $this->router->registerRoute(
+            $path,
+            "DELETE",
+            $name,
+            $middleware,
+            $handlerClass,
+            $handlerMethod
+        );
+        return $this;
     }
 }

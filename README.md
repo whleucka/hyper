@@ -57,10 +57,13 @@ require_once __DIR__.'/../src/Util/functions.php';
 class TestController extends Nebula\Controllers\Controller
 {
   public function index() { return "hello, world!"; }
+  public function test() { return "another route!"; }
 }
 
-get("/", "TestController", "index");
-$app = Nebula\Kernel\Web::getInstance()->handle()->execute();
+app()
+  ->get("/", "TestController", "index")
+  ->get("/test", "TestController", "test")
+  ->run();
 ```
 
 ###  A better use case
@@ -84,7 +87,7 @@ class HomeController extends Controller
         return "hello, world!";
     }
 
-    #[Get("/api/test", "api.test", ["api"])]
+    #[Get("/test", "home.test", ["api"])]
     public function test(): int
     {
         // This is a JSON response (from api middleware)

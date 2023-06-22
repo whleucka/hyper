@@ -10,13 +10,15 @@ define('APP_START', microtime(true));
 require __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../src/Util/functions.php';
 
-$app = new \Nebula\Kernel\Web();
-$app->run();
+app()->run();
 
 //class TestController extends Nebula\Controllers\Controller
 //{
 //  public function index() { return "hello, world!"; }
+//  public function test() { return "another route!"; }
 //}
 //
-//get("/", "TestController", "index");
-//$app = Nebula\Kernel\Web::getInstance()->handle()->execute();
+//app()
+//  ->get("/", "TestController", "index")
+//  ->get("/test", "TestController", "test")
+//  ->run();
