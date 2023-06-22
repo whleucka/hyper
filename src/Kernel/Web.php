@@ -8,13 +8,14 @@ use Nebula\Controllers\Controller;
 use StellarRouter\Route;
 use StellarRouter\Router;
 use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
+use Closure;
 
 class Web
 {
     public static $instance;
     private ?Route $route;
     private Container $container;
-    private Controller $controller;
+    private ?Controller $controller;
     private Request $request;
     private Response $response;
     public Router $router;
@@ -122,10 +123,10 @@ class Web
     /**
      * Instantiate the controller
      */
-    public function controller(): Controller
+    public function controller(): ?Controller
     {
         $handlerClass = $this->route->getHandlerClass();
-        return $this->container->get($handlerClass);
+        return $handlerClass ? $this->container->get($handlerClass) : null;
     }
 
     /**
@@ -136,10 +137,14 @@ class Web
         $handlerMethod = $this->route->getHandlerMethod();
         $routeParameters = $this->route->getParameters();
         $routeMiddleware = $this->route->getMiddleware();
-        // Now we decide what to do
-        $handlerResponse = $this->controller->$handlerMethod(
-            ...$routeParameters
-        );
+        $payload = $this->route->getPayload();
+        if (!is_null($payload)) {
+            $handlerResponse = $payload;
+        } else {
+            $handlerResponse = $this->controller->$handlerMethod(
+                ...$routeParameters
+            );
+        }
         return in_array("api", $routeMiddleware)
             ? new JsonResponse(["data" => $handlerResponse])
             : new Response($handlerResponse);
@@ -154,62 +159,87 @@ class Web
         exit();
     }
 
-    public function get($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+    /**
+     * Wire up a GET route
+     */
+    public function get($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
+    {
         $this->router->registerRoute(
             $path,
             "GET",
             $name,
             $middleware,
             $handlerClass,
-            $handlerMethod
+            $handlerMethod,
+            !is_null($payload) && is_callable($payload) ? $payload() : null,
         );
         return $this;
     }
 
-    public function post($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+    /**
+     * Wire up a POST route
+     */
+    public function post($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
+    {
         $this->router->registerRoute(
             $path,
             "POST",
             $name,
             $middleware,
             $handlerClass,
-            $handlerMethod
+            $handlerMethod,
+            !is_null($payload) && is_callable($payload) ? $payload() : null,
         );
         return $this;
     }
 
-    public function put($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+    /**
+     * Wire up a PUT route
+     */
+    public function put($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
+    {
         $this->router->registerRoute(
             $path,
             "PUT",
             $name,
             $middleware,
             $handlerClass,
-            $handlerMethod
+            $handlerMethod,
+            !is_null($payload) && is_callable($payload) ? $payload() : null,
         );
         return $this;
     }
 
-    public function patch($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+    /**
+     * Wire up a PATCH route
+     */
+    public function patch($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
+    {
         $this->router->registerRoute(
             $path,
             "PATCH",
             $name,
             $middleware,
             $handlerClass,
-            $handlerMethod
+            $handlerMethod,
+            !is_null($payload) && is_callable($payload) ? $payload() : null,
         );
         return $this;
     }
 
-    public function delete($path, $handlerClass, $handlerMethod, string $name = "", array $middleware = []): Web {
+    /**
+     * Wire up a DELETE route
+     */
+    public function delete($path, $handlerClass = "", $handlerMethod = "", string $name = "", array $middleware = [], ?Closure $payload = null): Web
+    {
         $this->router->registerRoute(
             $path,
             "DELETE",
             $name,
             $middleware,
             $handlerClass,
-            $handlerMethod
+            $handlerMethod,
+            !is_null($payload) && is_callable($payload) ? $payload() : null,
         );
         return $this;
     }

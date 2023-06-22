@@ -56,12 +56,11 @@ require_once __DIR__.'/../src/Util/functions.php';
 
 class TestController extends Nebula\Controllers\Controller
 {
-  public function index() { return "hello, world!"; }
   public function test() { return "another route!"; }
 }
 
 app()
-  ->get("/", "TestController", "index")
+  ->get(path: "/", payload: fn() => "hello, world!")
   ->post("/test", "TestController", "test")
   ->run();
 ```
