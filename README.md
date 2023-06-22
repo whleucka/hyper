@@ -49,10 +49,7 @@ Here is an extremely simple example of how you can build a route with a simple c
 file: public/index.php
 ```php
 <?php
-define('APP_START', microtime(true));
-
-require __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../src/Util/functions.php';
+require_once "bootsrap.php";
 
 class TestController extends Nebula\Controllers\Controller
 {
