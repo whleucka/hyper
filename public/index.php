@@ -14,10 +14,10 @@ require_once __DIR__.'/../src/Util/functions.php';
 
 class TestController extends Nebula\Controllers\Controller
 {
-  public function test() { return "another route!"; }
+  public function test() { return 42; }
 }
 
 app()
   ->get("/", payload: fn() => "hello, world!")
-  ->post("/test", "TestController", "test")
+  ->post("/test", "TestController", "test", middleware: ["api"])
   ->run();
