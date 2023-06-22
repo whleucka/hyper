@@ -904,7 +904,7 @@
             "dist": {
                 "type": "path",
                 "url": "../galaxy-pdo",
-                "reference": "1a53df0634e6f2faf4a7acbb083be9b282941c41"
+                "reference": "82e973cff124dd5e6d090ffbdb653f1ecf82b8e0"
             },
             "require": {
                 "php": "^7.4 || ^8.0"
@@ -944,7 +944,7 @@
             "dist": {
                 "type": "path",
                 "url": "../stellar-router",
-                "reference": "239124ea20cd3dce9953d518c4a042b5e6524d8e"
+                "reference": "02486326004115a075519fadd0ef036c2101cd3c"
             },
             "require": {
                 "php": "^7.4 || ^8.0"

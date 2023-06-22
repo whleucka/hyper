@@ -32,7 +32,10 @@ composer install
 
 - **Configuration**: Customize the configuration files according to your project requirements, including database settings and routes.
 ```
+# Copy the example settings
 cp .env.example .env
+# Change ownership of the view cache
+chown -R www-data:www-data views/.cache
 ```
 
 - **Development**: Start building your application by creating controllers, views, and models within the src directory.
