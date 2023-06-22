@@ -2,25 +2,25 @@
 <html lang="en">
 
 <head>
-  {% block head %}
+{% block head %}
     <link rel="stylesheet" href="/assets/css/style.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <title>{% block title %}{% endblock %}</title>
-  {% endblock %}
+{% endblock %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
   <section id="content">
-    {% block content %}{% endblock %}
+{% block content %}{% endblock %}
   </section>
   <footer>
-    {% block footer %}{% endblock %}
+{% block footer %}{% endblock %}
   </footer>
-  {% block body_scripts %}
+{% block body_scripts %}
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
-  {% endblock %}
+{% endblock %}
 </body>
 
 </html>
