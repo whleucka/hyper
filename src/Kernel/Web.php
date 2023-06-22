@@ -2,88 +2,121 @@
 
 namespace Nebula\Kernel;
 
-use Nebula\Container\Container;
 use Composer\ClassMapGenerator\ClassMapGenerator;
+use Nebula\Container\Container;
 use Nebula\Controllers\Controller;
 use StellarRouter\Route;
 use StellarRouter\Router;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
 
 class Web
 {
   private ?Route $route;
-  private Router $router;
   private Container $container;
   private Controller $controller;
+  private Request $request;
+  private Response $response;
+  private Router $router;
 
+  /**
+   * Run will initialize everything and prepare the response
+   */
   public function run(): void
   {
-    $this->buildContainer();
-    $this->setupRoutes();
-    $this->routing();
-    $this->controller();
+    $this->request = $this->request();
+    $this->container = $this->container();
+    $this->router = $this->router();
+    $this->route = $this->route();
+    $this->controller = $this->controller();
+    $this->response = $this->response();
+    $this->execute();
   }
 
   /**
-   * Route via method attributes
+   * Instantiate the request
    */
-  public function setupRoutes(): void
+  public function request(): Request
+  {
+    return Request::createFromGlobals();
+  }
+
+  /**
+   * Instantiate the router
+   */
+  public function router(): Router
   {
     // Controller path via getControllers
-    $this->router = $this->container->get(Router::class);
+    $router = $this->container->get(Router::class);
     $config = new \Nebula\Config\Paths();
     $controllers = array_keys(
-      $this->classMap($config->getControllers())
+      ClassMapGenerator::createMap($config->getControllers())
     );
     if ($controllers) {
       foreach ($controllers as $controllerClass) {
         $controller = $this->container->get($controllerClass);
-        $this->router->registerRoutes($controller::class);
+        $router->registerRoutes($controller::class);
       }
     }
+    return $router;
   }
 
   /**
-   * @return array<class-string,non-empty-string>
+   * Instantiate the DI container
    */
-  private function classMap(string $path): array
+  public function container(): Container
   {
-    return ClassMapGenerator::createMap($path);
-  }
-
-  /**
-   * Setup DI container
-   */
-  public function buildContainer(): void
-  {
-    $this->container = Container::getInstance();
+    $container = Container::getInstance();
     $config = new \Nebula\Config\Container();
-    $this->container
+    $container
       ->setDefinitions($config->getDefinitions())
       ->build();
+    return $container;
   }
 
-  public function routing(): void
+  /**
+   * Instantiate the route
+   */
+  public function route(): ?Route
   {
-      $request = Request::createFromGlobals();
-      // Set the route
-      $this->route = $this->router->handleRequest(
-          $request->getMethod(),
-          "/" . $request->getPathInfo()
-      );
+    return $this->router->handleRequest(
+      $this->request->getMethod(),
+      "/" . $this->request->getPathInfo()
+    );
   }
 
-  public function controller(): void
+  /**
+   * Instantiate the controller
+   */
+  public function controller(): Controller
+  {
+    $handlerClass = $this->route->getHandlerClass();
+    return $this->container->get($handlerClass);
+  }
+
+  /**
+   * Instantiate the response
+   */
+  public function response(): JsonResponse|Response
   {
     $handlerMethod = $this->route->getHandlerMethod();
-    $handlerClass = $this->route->getHandlerClass();
-    $parameters = $this->route->getParameters();
-    // Instantiate the controller
-    $this->controller = $this->container->get($handlerClass);
+    $routeParameters = $this->route->getParameters();
+    $routeMiddleware = $this->route->getMiddleware();
     // Now we decide what to do
-    $controller_response = $this->controller->$handlerMethod(
-      ...$parameters
+    $handlerResponse = $this->controller->$handlerMethod(
+      ...$routeParameters
     );
-    echo $controller_response;
+    return in_array('api', $routeMiddleware)
+      ? new JsonResponse($handlerResponse)
+      : new Response($handlerResponse);
+  }
+
+  /**
+   * Send the response to the client
+   */
+  public function execute(): void
+  {
+    $this->response
+      ->prepare($this->request)
+      ->send();
   }
 }
