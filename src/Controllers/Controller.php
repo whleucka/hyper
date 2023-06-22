@@ -13,11 +13,18 @@ class Controller
     protected Container $container;
     protected ?array $request;
 
-    public function __construct(?Request $request)
+    public function __construct()
     {
-        $this->container = Container::getInstance();
-        $this->db = $this->container->get(DB::class);
-        $this->request = $this->filterRequest($request);
+    }
+
+    public function container(): Container
+    {
+        return Container::getInstance();
+    }
+
+    public function db(): DB
+    {
+        return $this->container()->get(DB::class);
     }
 
     protected function filterRequest(?Request $request): ?array
@@ -39,7 +46,7 @@ class Controller
      */
     protected function render(string $path, array $data = []): string
     {
-        $twig = $this->container->get(Twig\Environment::class);
+        $twig = $this->container()->get(Twig\Environment::class);
         return $twig->render($path, $data);
     }
 }

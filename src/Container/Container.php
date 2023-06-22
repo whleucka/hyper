@@ -21,17 +21,16 @@ class Container
         return static::$instance;
     }
 
-    public function build(): Container
+    public function build(): void
     {
         $this->builder = new ContainerBuilder();
         if (!empty($this->definitions)) {
             $this->builder->addDefinitions($this->definitions);
         }
         $this->container = $this->builder->build();
-        return $this;
     }
 
-    public function get($target)
+    public function get(string $target): mixed
     {
         return $this->container?->get($target);
     }

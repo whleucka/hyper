@@ -2,21 +2,24 @@
 
 namespace Nebula\Config;
 
+use Nebula\Kernel\Environment;
+
 class Database
 {
     private array $config;
     private array $options;
     public function __construct()
     {
+        $env = Environment::getInstance()->env();
         $this->config = [
-            "enabled" => $_ENV["DB_ENABLED"],
-            "mode" => $_ENV["DB_MODE"],
-            "dbname" => $_ENV["DB_NAME"],
-            "host" => $_ENV["DB_HOST"],
-            "port" => $_ENV["DB_PORT"],
-            "username" => $_ENV["DB_USERNAME"],
-            "password" => $_ENV["DB_PASSWORD"],
-            "charset" => $_ENV["DB_CHARSET"],
+            "enabled" => $env["DB_ENABLED"],
+            "mode" => $env["DB_MODE"],
+            "dbname" => $env["DB_NAME"],
+            "host" => $env["DB_HOST"],
+            "port" => $env["DB_PORT"],
+            "username" => $env["DB_USERNAME"],
+            "password" => $env["DB_PASSWORD"],
+            "charset" => $env["DB_CHARSET"],
         ];
         // Extra PDO options
         $this->options = [];

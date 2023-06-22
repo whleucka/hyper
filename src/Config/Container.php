@@ -24,8 +24,8 @@ class Container
             },
             // Twig environment
             Environment::class => function () {
-                $paths = new \Nebula\Config\Paths();
-                $views = $paths->getViews();
+                $config = new \Nebula\Config\Paths();
+                $views = $config->getViews();
                 $loader = new FilesystemLoader($views["paths"]);
                 return new Environment($loader, [
                     "cache" => $views["cache"],

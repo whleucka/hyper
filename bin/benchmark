@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-siege -c 10 -t 1s http://nebula/
+siege -c 20 -t 1s http://nebula/
