@@ -62,7 +62,7 @@ class TestController extends Nebula\Controllers\Controller
 
 app()
   ->get("/", "TestController", "index")
-  ->get("/test", "TestController", "test")
+  ->post("/test", "TestController", "test")
   ->run();
 ```
 
