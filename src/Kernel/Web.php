@@ -59,7 +59,8 @@ class Web
 
     public function pageNotFound(): void
     {
-        $this->response = new Response(status: 404);
+        $content = twig("errors/404.html");
+        $this->response = new Response($content, status: 404);
         $this->execute();
     }
 

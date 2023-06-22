@@ -58,6 +58,7 @@ class TestController extends Nebula\Controllers\Controller
 
 app()
   ->get("/", payload: fn() => "hello, world!")
+  ->get("/view", payload: fn() => twig("home/index.html", ["msg" => "hello, world!"]))
   ->post("/test", "TestController", "test", middleware: ["api"])
   ->run();
 ```
@@ -81,6 +82,14 @@ class HomeController extends Controller
     {
         // This is a web response
         return "hello, world!";
+    }
+
+    #[Get("/view", "home.view")]
+    public function view(): string
+    {
+        // This is a twig web response
+        // msg is a variable that is accessible in the template
+        return twig("home/index.html", ["msg" => "hello, world!"]);
     }
 
     #[Post("/test", "home.test", ["api"])]

@@ -15,7 +15,7 @@ class HomeController extends Controller
     #[Get("/view", "home.view")]
     public function view(): string
     {
-        return $this->render("home/index.html", ["msg" => "hello, world!"]);
+        return twig("home/index.html", ["msg" => "hello, world!"]);
     }
 
     #[Get("/test/{echo}", "home.placeholder")]

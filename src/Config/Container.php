@@ -5,6 +5,7 @@ namespace Nebula\Config;
 use GalaxyPDO\DB;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Nebula\Kernel\Env;
 
 class Container
 {
@@ -25,11 +26,12 @@ class Container
             // Twig environment
             Environment::class => function () {
                 $config = new \Nebula\Config\Paths();
+                $env = Env::getInstance()->env();
                 $views = $config->getViews();
                 $loader = new FilesystemLoader($views["paths"]);
                 return new Environment($loader, [
                     "cache" => $views["cache"],
-                    "auto_reload" => strtolower($_ENV["APP_DEBUG"]) === "true",
+                    "auto_reload" => strtolower($env["APP_DEBUG"]) === "true",
                 ]);
             },
         ];

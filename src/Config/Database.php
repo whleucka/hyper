@@ -2,7 +2,7 @@
 
 namespace Nebula\Config;
 
-use Nebula\Kernel\Environment;
+use Nebula\Kernel\Env;
 
 class Database
 {
@@ -10,7 +10,7 @@ class Database
     private array $options;
     public function __construct()
     {
-        $env = Environment::getInstance()->env();
+        $env = Env::getInstance()->env();
         $this->config = [
             "enabled" => $env["DB_ENABLED"],
             "mode" => $env["DB_MODE"],

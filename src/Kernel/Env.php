@@ -5,7 +5,7 @@ namespace Nebula\Kernel;
 use Dotenv\Dotenv;
 use Exception;
 
-class Environment
+class Env
 {
     protected static $instance;
     private $env;
