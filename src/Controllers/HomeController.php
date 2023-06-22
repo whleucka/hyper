@@ -12,13 +12,13 @@ class HomeController extends Controller
         return "hello, world!";
     }
 
-    #[Get("/template", "home.template")]
-    public function template(): string
+    #[Get("/view", "home.view")]
+    public function view(): string
     {
         return $this->render("home/index.html", ["msg" => "hello, world!"]);
     }
 
-    #[Get("/placeholder/{echo}", "home.placeholder")]
+    #[Get("/test/{echo}", "home.placeholder")]
     public function placeholder(string $echo): string
     {
         // The placeholder echo is derived from the URI
