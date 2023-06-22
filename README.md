@@ -49,7 +49,7 @@ Here is an extremely simple example of how you can build a route with a simple c
 file: public/index.php
 ```php
 <?php
-require_once "bootsrap.php";
+require_once "bootstrap.php";
 
 class TestController extends Nebula\Controllers\Controller
 {

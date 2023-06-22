@@ -8,7 +8,7 @@
  *  🇨🇦Made in Canada 
  */
 
-require_once "bootsrap.php";
+require_once "bootstrap.php";
 
 //app()->run();
 
