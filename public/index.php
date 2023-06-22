@@ -12,3 +12,11 @@ require_once __DIR__.'/../src/Util/functions.php';
 
 $app = new \Nebula\Kernel\Web();
 $app->run();
+
+//class TestController extends Nebula\Controllers\Controller
+//{
+//  public function index() { return "hello, world!"; }
+//}
+//
+//get("/", "TestController", "index");
+//$app = Nebula\Kernel\Web::getInstance()->handle()->execute();
