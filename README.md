@@ -111,15 +111,15 @@ Here is a result from running a `siege` test
 
 ```
 Lifting the server siege...
-Transactions:		       8838 hits
+Transactions:		      11111 hits
 Availability:		     100.00 %
-Elapsed time:		       1.45 secs
-Data transferred:	       0.11 MB
+Elapsed time:		       1.74 secs
+Data transferred:	       0.14 MB
 Response time:		       0.00 secs
-Transaction rate:	    6095.17 trans/sec
+Transaction rate:	    6385.63 trans/sec
 Throughput:		       0.08 MB/sec
-Concurrency:		       9.65
-Successful transactions:        8839
+Concurrency:		       9.59
+Successful transactions:       11111
 Failed transactions:	          0
 Longest transaction:	       0.01
 Shortest transaction:	       0.00

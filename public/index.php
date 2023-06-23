@@ -9,4 +9,7 @@
  */
 
 require_once "bootstrap.php";
-app()->run();
+//app()->run();
+app()->get("/",payload: fn()=>"hello, world!")->run();
+
+
