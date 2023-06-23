@@ -44,7 +44,7 @@ chown -R www-data:www-data views/.cache
 
 ### Basic usage
 
-Here is an extremely simple example of how you can build a route with a simple controller. Endpoints can be either class methods or closures! In this example, we define a GET and POST route.
+Here is an extremely simple example of how you can build a route with a simple controller. Endpoints can be either class methods or closures! In this example, we define two GET method routes and POST method route.
 
 file: public/index.php
 ```php
