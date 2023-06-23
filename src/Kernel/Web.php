@@ -145,7 +145,7 @@ class Web
         $routeMiddleware = $this->route->getMiddleware();
         $payload = $this->route->getPayload();
         if (!is_null($payload)) {
-            $handlerResponse = $payload;
+            $handlerResponse = $payload();
         } else {
             $handlerResponse = $this->controller->$handlerMethod(
                 ...$routeParameters
@@ -234,7 +234,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null
+            is_callable($payload) ? $payload : null
         );
         return $this;
     }
@@ -257,7 +257,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null
+            is_callable($payload) ? $payload : null
         );
         return $this;
     }
@@ -280,7 +280,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null
+            is_callable($payload) ? $payload : null
         );
         return $this;
     }
@@ -303,7 +303,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null
+            is_callable($payload) ? $payload : null
         );
         return $this;
     }
@@ -326,7 +326,7 @@ class Web
             $middleware,
             $handlerClass,
             $handlerMethod,
-            !is_null($payload) && is_callable($payload) ? $payload() : null
+            is_callable($payload) ? $payload : null
         );
         return $this;
     }
