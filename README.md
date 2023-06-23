@@ -38,13 +38,13 @@ chown -R www-data:www-data views/.cache
 
 - **Development**: Start building your application by creating controllers, views, and models within the src directory. You can start a local development server by running `./bin/serve`
 
-- **Testing**: Nebula includes a testing suite powered by PHPUnit. Add your tests under the tests directory and run them with: `./bin/test` or `composer run-script test` or `./vendor/bin/phpunit tests`. If you have `siege` installed, then you can benchmark the framework by running `./bin/benchmark`. Make sure you edit the script and change the hostname to match your environment.
+- **Testing**: Nebula includes a testing suite powered by PHPUnit. Add your tests under the tests directory and run them with: `./bin/test` or `composer run-script test` or `./vendor/bin/phpunit tests`. If you have `siege` installed, then you can benchmark the framework by running `./bin/benchmark`. Make sure you edit the script and change the host name to match your environment.
 
 - **Deployment**: Once your application is ready for deployment, configure your web server to point to the public directory as the document root.
 
-### Basic usage
+### Routing
 
-Here is an extremely simple example of how you can build a route with a simple controller. Endpoints can be either class methods or closures! In this example, we define two GET method routes and POST method route.
+Here is an example of how to build routes using Nebula. It is super easy to call class methods or simply just define a closure. Noice.
 
 file: public/index.php
 ```php
@@ -63,9 +63,9 @@ app()
   ->run();
 ```
 
-###  A better use case
+###  Attribute-based Routing
 
-We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. You can even define the route name and attach route middleware. How easy is that!?
+We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. You can even define the route name and attach route middleware. How easy is that?
 
 
 file: src/Controllers/HomeController.php
