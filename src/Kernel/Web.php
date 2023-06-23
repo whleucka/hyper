@@ -177,6 +177,36 @@ class Web
     }
 
     /**
+     * Send a forbidden response
+     */
+    public function forbidden(): void
+    {
+        $content = twig("errors/403.html");
+        $this->response = new Response($content, status: 403);
+        $this->execute();
+    }
+
+    /**
+     * Send an unauthorized response
+     */
+    public function unauthorized(): void
+    {
+        $content = twig("errors/401.html");
+        $this->response = new Response($content, status: 401);
+        $this->execute();
+    }
+
+    /**
+     * Send a server error response
+     */
+    public function serverError(): void
+    {
+        $content = twig("errors/500.html");
+        $this->response = new Response($content, status: 500);
+        $this->execute();
+    }
+
+    /**
      * Log the application execution time to the error log
      */
     public function logExecutionTime(): void
