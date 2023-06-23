@@ -9,10 +9,10 @@ body {
   height: 100%;
 }
 
-.vl-100 {
+.vl {
   border-left: 4px solid white;
-  height: 75px;
-  opacity: 0.7;
+  height: 50px;
+  opacity: 0.4;
 }
 
 .bg-gradient-titanium {

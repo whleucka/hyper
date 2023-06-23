@@ -157,7 +157,15 @@ class Web
     public function execute(): void
     {
         $this->response->prepare($this->request)->send();
+        //$this->logExecutionTime();
         exit();
+    }
+
+    public function logExecutionTime(): void
+    {
+        $executionTime = microtime(true) - APP_START;
+        $time = number_format($executionTime * 1000, 2);
+        error_log("Execution time: {$time} ms");
     }
 
     /**
