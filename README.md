@@ -44,7 +44,7 @@ chown -R www-data:www-data views/.cache
 
 ### Routing
 
-Here is an example of how to build routes using Nebula. It is super easy to call class methods or simply just define a closure. Noice.
+Routing is super easy in Nebula. Call a class method or simply define a closure that returns a payload. Noice.
 
 file: public/index.php
 ```php
@@ -65,7 +65,7 @@ app()
 
 ###  Attribute-based Routing
 
-We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. You can even define the route name and attach route middleware. How easy is that?
+We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. How easy is that?
 
 
 file: src/Controllers/HomeController.php
