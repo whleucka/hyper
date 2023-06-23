@@ -124,7 +124,7 @@ Failed transactions:	          0
 Longest transaction:	       0.01
 Shortest transaction:	       0.00
 ```
-** Basic siege test: `siege -c 10 -t 1s http://nebula/` **
+**Basic siege test: `siege -c 10 -t 1s http://nebula/`**
 
 ### Contributing
 
