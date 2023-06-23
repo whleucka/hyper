@@ -108,7 +108,7 @@ That's it!
 
 ### Benchmarks
 
-Here is a result from `siege`. 6095.17 trans/sec -- nice!
+Here is a result from running a `siege` test
 
 ```
 Lifting the server siege...
