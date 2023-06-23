@@ -19,7 +19,7 @@ class HomeController extends Controller
     }
 
     #[Get("/test/{echo}", "home.placeholder")]
-    public function placeholder(string $echo): string
+    public function placeholder(string $echo): string 
     {
         // The placeholder echo is derived from the URI
         // and it is accessible as a method parameter.
