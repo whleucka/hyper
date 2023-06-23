@@ -106,6 +106,27 @@ That's it!
 <s>For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a></s>
 
 
+### Benchmarks
+
+Here is a result from `siege`. 6095.17 trans/sec -- nice!
+
+```
+Lifting the server siege...
+Transactions:		       8838 hits
+Availability:		     100.00 %
+Elapsed time:		       1.45 secs
+Data transferred:	       0.11 MB
+Response time:		       0.00 secs
+Transaction rate:	    6095.17 trans/sec
+Throughput:		       0.08 MB/sec
+Concurrency:		       9.65
+Successful transactions:        8839
+Failed transactions:	          0
+Longest transaction:	       0.01
+Shortest transaction:	       0.00
+```
+
+
 ### Contributing
 
 Contributions to Nebula are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request. 
