@@ -31,37 +31,14 @@ class Web
     }
 
     /**
-     * Run will initialize everything and prepare the response
+     * Initialize the application
+     * We require the request, container, and router
      */
-    public function run(): void
-    {
-        $this->routing();
-        $this->handle()->execute();
-    }
-
     public function init(): void
     {
         $this->request = $this->request();
         $this->container = $this->container();
         $this->router = $this->router();
-    }
-
-    public function handle(): self
-    {
-        $this->route = $this->route();
-        if (!$this->route) {
-            $this->pageNotFound();
-        }
-        $this->controller = $this->controller();
-        $this->response = $this->response();
-        return $this;
-    }
-
-    public function pageNotFound(): void
-    {
-        $content = twig("errors/404.html");
-        $this->response = new Response($content, status: 404);
-        $this->execute();
     }
 
     /**
@@ -70,6 +47,17 @@ class Web
     public function request(): Request
     {
         return Request::createFromGlobals();
+    }
+
+    /**
+     * Instantiate the DI container
+     */
+    public function container(): Container
+    {
+        $container = Container::getInstance();
+        $config = new \Nebula\Config\Container();
+        $container->setDefinitions($config->getDefinitions())->build();
+        return $container;
     }
 
     /**
@@ -82,6 +70,21 @@ class Web
         return $router;
     }
 
+    /**
+     * Run will initialize everything and send the response
+     */
+    public function run(): void
+    {
+        $this->routing();
+        $this->handle()->execute();
+    }
+
+    /**
+     * Register the routes
+     * Note: this method assumes attribute routing. If there are
+     * routes defined before routing() is called, then it will
+     * skip the attribute-based routing.
+     */
     public function routing(): void
     {
         if ($this->router->hasRoutes()) {
@@ -93,21 +96,23 @@ class Web
         );
         if ($controllers) {
             foreach ($controllers as $controllerClass) {
-                $controller = $this->container->get($controllerClass);
-                $this->router->registerRoutes($controller::class);
+                $this->router->registerRoutes($controllerClass);
             }
         }
     }
 
     /**
-     * Instantiate the DI container
+     * Handle the controller response
      */
-    public function container(): Container
+    public function handle(): self
     {
-        $container = Container::getInstance();
-        $config = new \Nebula\Config\Container();
-        $container->setDefinitions($config->getDefinitions())->build();
-        return $container;
+        $this->route = $this->route();
+        if (!$this->route) {
+            $this->pageNotFound();
+        }
+        $this->controller = $this->controller();
+        $this->response = $this->response();
+        return $this;
     }
 
     /**
@@ -161,6 +166,19 @@ class Web
         exit();
     }
 
+    /**
+     * Send a page not found response
+     */
+    public function pageNotFound(): void
+    {
+        $content = twig("errors/404.html");
+        $this->response = new Response($content, status: 404);
+        $this->execute();
+    }
+
+    /**
+     * Log the application execution time to the error log
+     */
     public function logExecutionTime(): void
     {
         $executionTime = microtime(true) - APP_START;
