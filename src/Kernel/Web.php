@@ -104,7 +104,7 @@ class Web
     /**
      * Handle the controller response
      */
-    public function handle(): self
+    public function handle(): Web
     {
         $this->route = $this->route();
         if (!$this->route) {
@@ -220,9 +220,9 @@ class Web
      * Wire up a GET route
      */
     public function get(
-        $path,
-        $handlerClass = "",
-        $handlerMethod = "",
+        string $path,
+        string $handlerClass = "",
+        string $handlerMethod = "",
         string $name = "",
         array $middleware = [],
         ?Closure $payload = null
@@ -243,9 +243,9 @@ class Web
      * Wire up a POST route
      */
     public function post(
-        $path,
-        $handlerClass = "",
-        $handlerMethod = "",
+        string $path,
+        string $handlerClass = "",
+        string $handlerMethod = "",
         string $name = "",
         array $middleware = [],
         ?Closure $payload = null
@@ -266,9 +266,9 @@ class Web
      * Wire up a PUT route
      */
     public function put(
-        $path,
-        $handlerClass = "",
-        $handlerMethod = "",
+        string $path,
+        string $handlerClass = "",
+        string $handlerMethod = "",
         string $name = "",
         array $middleware = [],
         ?Closure $payload = null
@@ -289,9 +289,9 @@ class Web
      * Wire up a PATCH route
      */
     public function patch(
-        $path,
-        $handlerClass = "",
-        $handlerMethod = "",
+        string $path,
+        string $handlerClass = "",
+        string $handlerMethod = "",
         string $name = "",
         array $middleware = [],
         ?Closure $payload = null
@@ -312,9 +312,9 @@ class Web
      * Wire up a DELETE route
      */
     public function delete(
-        $path,
-        $handlerClass = "",
-        $handlerMethod = "",
+        string $path,
+        string $handlerClass = "",
+        string $handlerMethod = "",
         string $name = "",
         array $middleware = [],
         ?Closure $payload = null
