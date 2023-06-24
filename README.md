@@ -111,7 +111,7 @@ That's it!
 
 ### Benchmarks
 
-Here are some of our `siege` test results. As you can see, we are working hard to make Nebula one of the fastest PHP frameworks 🚀 
+Here are a few sample test results using the siege tool. Our team is dedicated to optimizing Nebula to deliver exceptional performance, striving to position it among the top-performing PHP frameworks available. 🚀 
 
 Nebula dev:
 ```
