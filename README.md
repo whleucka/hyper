@@ -169,7 +169,7 @@ Symfony 6.3:
 Coming soon
 ```
 
-Based on these results, Nebula achieved a transaction rate of 6,951.04 trans/sec, Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec 😔. 
+Based on these results, Nebula achieved a transaction rate of 6,951.04 trans/sec, Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec 😔
 
 These numbers demonstrate the strong performance of Nebula and Leaf, making them excellent choices for high-traffic applications.
 
