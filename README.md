@@ -12,7 +12,7 @@
 - [x] Database Abstraction: Simplified database interactions with <a href='https://github.com/libra-php/galaxy-pdo'>GalaxyPDO</a>.
 - [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
 - [x] Templating: Built-in template engine support for easy and flexible view rendering.
-- [ ] Admin Backend: Coming soon.
+- [ ] Administrative Access Layer: Coming soon.
 - [ ] Caching: Caching mechanisms to improve performance and optimize data retrieval.
 - [ ] Error Handling: Comprehensive error handling and logging for efficient debugging.
 - [ ] Form Handling: Convenient form handling and validation capabilities.
