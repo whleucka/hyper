@@ -111,15 +111,15 @@ Running a `siege` test on Nebula
 
 ```
 Lifting the server siege...
-Transactions:		       1451 hits
+Transactions:		       1827 hits
 Availability:		     100.00 %
-Elapsed time:		       1.35 secs
+Elapsed time:		       1.59 secs
 Data transferred:	       0.02 MB
 Response time:		       0.01 secs
-Transaction rate:	    1074.81 trans/sec
+Transaction rate:	    1149.06 trans/sec
 Throughput:		       0.01 MB/sec
-Concurrency:		       9.84
-Successful transactions:        1451
+Concurrency:		       9.82
+Successful transactions:        1827
 Failed transactions:	          0
 Longest transaction:	       0.03
 Shortest transaction:	       0.00
