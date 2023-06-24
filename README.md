@@ -1,20 +1,24 @@
 # Nebula
 
-⭐ Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. It provides developers with a flexible and extensible architecture to build custom web applications with ease. Also, Nebula blazingly fast 🚀
+⭐ Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. 
+- ✅ Provides developers with a flexible and extensible architecture to build custom web applications with ease.
+- 
 
 👷 *Currently under development*
 
 ❌ **Not ready for production use**
 
 ### Features
-- [x] Modular Design: Nebula follows a modular approach, allowing you to organize your code into reusable and independent components.
-- [x] Routing: Efficient routing system for handling URL mapping and request handling.
-- [x] Template Engine: Built-in template engine for easy and flexible view rendering.
-- [ ] Database Abstraction: Simplified database interactions with a built-in ORM (Object-Relational Mapping) layer.
+- [ ] Admin Backend: Coming soon.
+- [ ] Modular Design: Reusable and independent modules.
+- [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
+- [x] Templating: Built-in template engine support for easy and flexible view rendering.
+- [ ] Database Abstraction: Simplified database interactions with <a href='https://github.com/libra-php/galaxy-pdo'>GalaxyPDO</a>.
+- [ ] Migrations: coming soon.
 - [ ] Form Handling: Convenient form handling and validation capabilities.
-- [x] Security: Integrated security measures to protect against common web vulnerabilities.
-- [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
-- [x] Error Handling: Comprehensive error handling and logging for efficient debugging.
+- [ ] Security: Integrated security measures to protect against common web vulnerabilities.
+- [ ] Caching: Caching mechanisms to improve performance and optimize data retrieval.
+- [ ] Error Handling: Comprehensive error handling and logging for efficient debugging.
 
 
 ### Getting Started
@@ -36,7 +40,7 @@ cp .env.example .env
 chown -R www-data:www-data views/.cache
 ```
 
-- **Development**: Start building your application by creating controllers, views, and models within the src directory. You can start a local development server by running `./bin/serve`
+- **Development**: Start building your application by creating controllers, views, and models within the `src` directory. You can start a local development server by running `./bin/serve`
 
 - **Testing**: Nebula includes a testing suite powered by PHPUnit. Add your tests under the tests directory and run them with: `./bin/test` or `composer run-script test` or `./vendor/bin/phpunit tests`. If you have `siege` installed, then you can benchmark the framework by running `./bin/benchmark`. Make sure you edit the script and change the host name to match your environment.
 
@@ -107,20 +111,20 @@ That's it!
 
 ### Benchmarks
 
-Running a `siege` tests:
+Here are some of our `siege` test results. As you can see, we are working hard to make Nebula one of the fastest PHP frameworks 🚀 
 
 Nebula dev:
 ```
 Lifting the server siege...
-Transactions:		       7331 hits
+Transactions:		      13346 hits
 Availability:		     100.00 %
-Elapsed time:		       1.49 secs
-Data transferred:	       0.09 MB
+Elapsed time:		       1.92 secs
+Data transferred:	       0.17 MB
 Response time:		       0.00 secs
-Transaction rate:	    4920.13 trans/sec
-Throughput:		       0.06 MB/sec
-Concurrency:		       9.61
-Successful transactions:        7331
+Transaction rate:	    6951.04 trans/sec
+Throughput:		       0.09 MB/sec
+Concurrency:		       9.77
+Successful transactions:       13346
 Failed transactions:	          0
 Longest transaction:	       0.01
 Shortest transaction:	       0.00
@@ -129,15 +133,15 @@ Shortest transaction:	       0.00
 Leaf 3.0:
 ```
 Lifting the server siege...
-Transactions:		       5035 hits
+Transactions:		      11527 hits
 Availability:		     100.00 %
-Elapsed time:		       1.05 secs
-Data transferred:	       0.06 MB
+Elapsed time:		       1.60 secs
+Data transferred:	       0.14 MB
 Response time:		       0.00 secs
-Transaction rate:	    4795.24 trans/sec
-Throughput:		       0.06 MB/sec
-Concurrency:		       9.65
-Successful transactions:        5035
+Transaction rate:	    7204.38 trans/sec
+Throughput:		       0.09 MB/sec
+Concurrency:		       9.41
+Successful transactions:       11527
 Failed transactions:	          0
 Longest transaction:	       0.01
 Shortest transaction:	       0.00
@@ -146,17 +150,17 @@ Shortest transaction:	       0.00
 Laravel 10:
 ```
 Lifting the server siege...
-Transactions:		       1011 hits
+Transactions:		        753 hits
 Availability:		     100.00 %
-Elapsed time:		       1.45 secs
+Elapsed time:		       1.19 secs
 Data transferred:	       0.01 MB
-Response time:		       0.01 secs
-Transaction rate:	     697.24 trans/sec
+Response time:		       0.02 secs
+Transaction rate:	     632.77 trans/sec
 Throughput:		       0.01 MB/sec
-Concurrency:		       9.94
-Successful transactions:        1011
+Concurrency:		       9.87
+Successful transactions:         753
 Failed transactions:	          0
-Longest transaction:	       0.04
+Longest transaction:	       0.03
 Shortest transaction:	       0.01
 ```
 
