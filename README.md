@@ -107,7 +107,7 @@ That's it!
 
 ### Benchmarks
 
-Here is a result from running a `siege` test
+Running a `siege` test on Nebula
 
 ```
 Lifting the server siege...
@@ -124,10 +124,8 @@ Failed transactions:	          0
 Longest transaction:	       0.03
 Shortest transaction:	       0.00
 ```
-- *Command: `siege -c 10 -t 1s $APP_URL`*
-- *Server is on LAN*
 
-Compared to Leaf `siege` test
+When compared with Leaf v3
 
 ```
 Lifting the server siege...
@@ -144,6 +142,9 @@ Failed transactions:	          0
 Longest transaction:	       0.05
 Shortest transaction:	       0.00
 ```
+
+- *Command: `siege -c 10 -t 1s $APP_URL`*
+- *Server is on LAN*
 
 ### Contributing
 
