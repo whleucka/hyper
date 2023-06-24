@@ -107,40 +107,62 @@ That's it!
 
 ### Benchmarks
 
-Running a `siege` test on Nebula
+Running a `siege` tests:
 
+Nebula v0-dev:
 ```
 Lifting the server siege...
-Transactions:		       1827 hits
+Transactions:		       7331 hits
 Availability:		     100.00 %
-Elapsed time:		       1.59 secs
-Data transferred:	       0.02 MB
-Response time:		       0.01 secs
-Transaction rate:	    1149.06 trans/sec
-Throughput:		       0.01 MB/sec
-Concurrency:		       9.82
-Successful transactions:        1827
+Elapsed time:		       1.49 secs
+Data transferred:	       0.09 MB
+Response time:		       0.00 secs
+Transaction rate:	    4920.13 trans/sec
+Throughput:		       0.06 MB/sec
+Concurrency:		       9.61
+Successful transactions:        7331
 Failed transactions:	          0
-Longest transaction:	       0.03
+Longest transaction:	       0.01
 Shortest transaction:	       0.00
 ```
 
-When compared with Leaf v3
-
+Leaf 3.0:
 ```
 Lifting the server siege...
-Transactions:		       1009 hits
+Transactions:		       5035 hits
 Availability:		     100.00 %
-Elapsed time:		       1.21 secs
+Elapsed time:		       1.05 secs
+Data transferred:	       0.06 MB
+Response time:		       0.00 secs
+Transaction rate:	    4795.24 trans/sec
+Throughput:		       0.06 MB/sec
+Concurrency:		       9.65
+Successful transactions:        5035
+Failed transactions:	          0
+Longest transaction:	       0.01
+Shortest transaction:	       0.00
+```
+
+Laravel 10:
+```
+Lifting the server siege...
+Transactions:		       1011 hits
+Availability:		     100.00 %
+Elapsed time:		       1.45 secs
 Data transferred:	       0.01 MB
 Response time:		       0.01 secs
-Transaction rate:	     833.88 trans/sec
+Transaction rate:	     697.24 trans/sec
 Throughput:		       0.01 MB/sec
-Concurrency:		       9.95
-Successful transactions:        1009
+Concurrency:		       9.94
+Successful transactions:        1011
 Failed transactions:	          0
-Longest transaction:	       0.05
-Shortest transaction:	       0.00
+Longest transaction:	       0.04
+Shortest transaction:	       0.01
+```
+
+Symfony 6.3:
+```
+Coming soon
 ```
 
 - *Command: `siege -c 10 -t 1s $APP_URL`*
