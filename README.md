@@ -111,20 +111,39 @@ Here is a result from running a `siege` test
 
 ```
 Lifting the server siege...
-Transactions:		      11111 hits
+Transactions:		       1451 hits
 Availability:		     100.00 %
-Elapsed time:		       1.74 secs
-Data transferred:	       0.14 MB
-Response time:		       0.00 secs
-Transaction rate:	    6385.63 trans/sec
-Throughput:		       0.08 MB/sec
-Concurrency:		       9.59
-Successful transactions:       11111
+Elapsed time:		       1.35 secs
+Data transferred:	       0.02 MB
+Response time:		       0.01 secs
+Transaction rate:	    1074.81 trans/sec
+Throughput:		       0.01 MB/sec
+Concurrency:		       9.84
+Successful transactions:        1451
 Failed transactions:	          0
-Longest transaction:	       0.01
+Longest transaction:	       0.03
 Shortest transaction:	       0.00
 ```
-*Basic siege test: `siege -c 10 -t 1s http://nebula/`*
+- *Command: `siege -c 10 -t 1s $APP_URL`*
+- *Server is on LAN*
+
+Compared to Leaf `siege` test
+
+```
+Lifting the server siege...
+Transactions:		       1009 hits
+Availability:		     100.00 %
+Elapsed time:		       1.21 secs
+Data transferred:	       0.01 MB
+Response time:		       0.01 secs
+Transaction rate:	     833.88 trans/sec
+Throughput:		       0.01 MB/sec
+Concurrency:		       9.95
+Successful transactions:        1009
+Failed transactions:	          0
+Longest transaction:	       0.05
+Shortest transaction:	       0.00
+```
 
 ### Contributing
 
