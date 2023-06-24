@@ -109,7 +109,7 @@ That's it!
 
 Running a `siege` tests:
 
-Nebula v0-dev:
+Nebula dev:
 ```
 Lifting the server siege...
 Transactions:		       7331 hits
