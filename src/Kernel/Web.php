@@ -8,7 +8,10 @@ use Nebula\Controllers\Controller;
 use StellarRouter\Route;
 use StellarRouter\Router;
 use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
+use Whoops;
 use Closure;
+use Error;
+use Exception;
 
 class Web
 {
@@ -18,6 +21,7 @@ class Web
     private ?Controller $controller;
     private Request $request;
     private Response $response;
+    private Whoops\Run $whoops;
     public Router $router;
 
     public static function getInstance(): static
@@ -39,6 +43,7 @@ class Web
         $this->request = $this->request();
         $this->container = $this->container();
         $this->router = $this->router();
+        $this->whoops = $this->whoops();
     }
 
     /**
@@ -138,22 +143,70 @@ class Web
     /**
      * Instantiate the response
      */
-    public function response(): JsonResponse|Response
+    public function response(): Response
     {
         $handlerMethod = $this->route->getHandlerMethod();
         $routeParameters = $this->route->getParameters();
-        $routeMiddleware = $this->route->getMiddleware();
+        //$routeMiddleware = $this->route->getMiddleware();
         $payload = $this->route->getPayload();
-        if (!is_null($payload)) {
-            $handlerResponse = $payload();
+        $this->setupErrorHandling();
+        try {
+            if (!is_null($payload)) {
+                $handlerResponse = $payload();
+            } else {
+                $handlerResponse = $this->controller->$handlerMethod(
+                    ...$routeParameters
+                );
+            }
+        } catch (Exception $ex) {
+            return $this->catch($ex);
+        } catch (Error $err) {
+            return $this->catch($err);
+        }
+        return $this->isAPI()
+            ? new JsonResponse([
+                "ts" => time(),
+                "data" => $handlerResponse
+            ])
+            : new Response($handlerResponse);
+    }
+
+    public function setupErrorHandling(): void
+    {
+        if ($this->isAPI()) {
+            $this->whoops->pushHandler(
+                new Whoops\Handler\JsonResponseHandler()
+            );
         } else {
-            $handlerResponse = $this->controller->$handlerMethod(
-                ...$routeParameters
+            // Web response
+            $this->whoops->pushHandler(
+                new Whoops\Handler\PrettyPageHandler()
             );
         }
-        return in_array("api", $routeMiddleware)
-            ? new JsonResponse(["data" => $handlerResponse])
-            : new Response($handlerResponse);
+    }
+
+    public function isAPI(): bool
+    {
+        $middleware = $this->route?->getMiddleware();
+        return !empty($middleware) && in_array('api', $middleware);
+    }
+
+    public function isDebug(): bool
+    {
+        $env = Env::getInstance()->env();
+        return isset($env["APP_DEBUG"]) && strtolower($env["APP_DEBUG"]) === "true";
+    }
+
+    public function catch(Exception|Error $problem): Response
+    {
+        if ($this->isDebug()) {
+            $response = $this->whoops->handleException($problem);
+            return $this->isAPI()
+                ? new JsonResponse($response)
+                : new Response($response);
+        } else {
+            $this->serverError();
+        }
     }
 
     /**
@@ -214,6 +267,18 @@ class Web
         $executionTime = microtime(true) - APP_START;
         $time = number_format($executionTime * 1000, 2);
         error_log("Execution time: {$time} ms");
+    }
+
+    /**
+     * Init error handling using Whoops
+     */
+    private function whoops(): Whoops\Run
+    {
+        $whoops = new Whoops\Run();
+        if (!$this->isDebug()) return $whoops;
+        $whoops->allowQuit(false);
+        $whoops->writeToOutput(false);
+        return $whoops;
     }
 
     /**
