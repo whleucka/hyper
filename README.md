@@ -130,51 +130,7 @@ Longest transaction:	       0.01
 Shortest transaction:	       0.00
 ```
 
-Leaf 3.0:
-```
-Lifting the server siege...
-Transactions:		      11527 hits
-Availability:		     100.00 %
-Elapsed time:		       1.60 secs
-Data transferred:	       0.14 MB
-Response time:		       0.00 secs
-Transaction rate:	    7204.38 trans/sec
-Throughput:		       0.09 MB/sec
-Concurrency:		       9.41
-Successful transactions:       11527
-Failed transactions:	          0
-Longest transaction:	       0.01
-Shortest transaction:	       0.00
-```
-
-Laravel 10:
-```
-Lifting the server siege...
-Transactions:		        753 hits
-Availability:		     100.00 %
-Elapsed time:		       1.19 secs
-Data transferred:	       0.01 MB
-Response time:		       0.02 secs
-Transaction rate:	     632.77 trans/sec
-Throughput:		       0.01 MB/sec
-Concurrency:		       9.87
-Successful transactions:         753
-Failed transactions:	          0
-Longest transaction:	       0.03
-Shortest transaction:	       0.01
-```
-
-Symfony 6.3:
-```
-Coming soon
-```
-
-Slim 4:
-```
-Coming soon
-```
-
-Based on these results, Nebula achieved a transaction rate of 6,951.04 trans/sec, Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec 😔
+Based on this results, Nebula achieved a transaction rate of 6,951.04 trans/sec. Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec.
 
 These numbers demonstrate the strong performance of Nebula and Leaf, making them excellent choices for high-traffic applications.
 
