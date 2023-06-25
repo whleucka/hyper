@@ -218,6 +218,7 @@ class Web
 
     /**
      * Wire up a GET route
+     * @param array<int,mixed> $middleware
      */
     public function get(
         string $path,
@@ -241,6 +242,7 @@ class Web
 
     /**
      * Wire up a POST route
+     * @param array<int,mixed> $middleware
      */
     public function post(
         string $path,
@@ -264,6 +266,7 @@ class Web
 
     /**
      * Wire up a PUT route
+     * @param array<int,mixed> $middleware
      */
     public function put(
         string $path,
@@ -287,6 +290,7 @@ class Web
 
     /**
      * Wire up a PATCH route
+     * @param array<int,mixed> $middleware
      */
     public function patch(
         string $path,
@@ -310,6 +314,7 @@ class Web
 
     /**
      * Wire up a DELETE route
+     * @param array<int,mixed> $middleware
      */
     public function delete(
         string $path,

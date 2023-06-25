@@ -72,8 +72,8 @@ class Model
      * @param mixed $name
      * @param mixed $value
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
-        return $this->attributes[$name] = $value;
+        $this->attributes[$name] = $value;
     }
 }
