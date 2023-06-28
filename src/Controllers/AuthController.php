@@ -26,7 +26,6 @@ class AuthController extends Controller
             "password" => ["required", "string"],
         ]);
         dump($request);
-        dump($this->request);
         return $this->sign_in();
     }
 
@@ -47,7 +46,6 @@ class AuthController extends Controller
             ],
         ]);
         dump($request);
-        dump($this->request);
         return $this->register();
     }
 }
