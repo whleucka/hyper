@@ -41,7 +41,6 @@
   .form-signin input[type="password"] {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    border-top: none;
   }
 
   .lock-png {
@@ -54,11 +53,11 @@
   <main class='form-signin'>
     <form method="POST" action="/admin/sign-in">
       <div class="form-floating">
-        <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <input name="email" type="email" class="form-control {% if 'email' in form_errors|keys %}is-invalid{% endif %}" id="floatingInput" placeholder="name@example.com">
         <label for="floatingInput">Email address</label>
       </div>
-      <div class="form-floating">
-        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <div class="form-floating mt-1">
+        <input name="password" type="password" class="form-control {% if 'password' in form_errors|keys %}is-invalid{% endif %}" id="floatingPassword" placeholder="Password">
         <label for="floatingPassword">Password</label>
       </div>
 

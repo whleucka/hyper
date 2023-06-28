@@ -40,14 +40,11 @@
   }
   .form-signin #email {
     border-radius: 0;
-    border-top: none;
   }
   .form-signin #password {
     border-radius: 0;
-    border-top: none;
   }
   .form-signin #password-check {
-    border-top: none;
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -63,19 +60,19 @@
   <main class='form-signin'>
     <form method="POST" action="/admin/register">
       <div class="form-floating">
-        <input name="name" type="text" class="form-control" id="name" placeholder="John Smith">
+        <input name="name" type="text" class="form-control {% if 'name' in form_errors|keys %}is-invalid{% endif %}" id="name" placeholder="John Smith">
         <label for="name">Name</label>
       </div>
-      <div class="form-floating">
-        <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
+      <div class="form-floating mt-1">
+        <input name="email" type="email" class="form-control {% if 'email' in form_errors|keys %}is-invalid{% endif %}" id="email" placeholder="name@example.com">
         <label for="email">Email address</label>
       </div>
-      <div class="form-floating">
-        <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+      <div class="form-floating mt-1">
+        <input name="password" type="password" class="form-control {% if 'password' in form_errors|keys %}is-invalid{% endif %}" id="password" placeholder="Password">
         <label for="password">Password</label>
       </div>
-      <div class="form-floating">
-        <input name="password_check" type="password" class="form-control" id="password-check" placeholder="Password Again...">
+      <div class="form-floating mt-1">
+        <input name="password_check" type="password" class="form-control {% if 'password_check' in form_errors|keys %}is-invalid{% endif %}" id="password-check" placeholder="Password Again...">
         <label for="password-check">Password (again)</label>
       </div>
 

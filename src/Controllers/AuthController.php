@@ -38,12 +38,12 @@ class AuthController extends Controller
             "password" => [
                 "required",
                 "string",
-                "match",
                 "min_length=8",
                 "uppercase=1",
                 "lowercase=1",
                 "symbol=1",
             ],
+            "password_check" => ["required", "match"]
         ]);
         dump($request);
         return $this->register();

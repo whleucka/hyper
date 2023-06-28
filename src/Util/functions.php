@@ -34,6 +34,8 @@ function twig($path, $data = [])
     $twig = app()
         ->container()
         ->get(Twig\Environment::class);
+    $data['form_errors'] = Validate::$errors;
+    dump($data);
     return $twig->render($path, $data);
 }
 
