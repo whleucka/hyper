@@ -8,15 +8,15 @@
     text-align: center;
   }
 
-  #sign-in {
+  #register {
     height: 100%;
     width: 100%;
     text-align: center;
   }
 
-  .form-signin {
+  .form-register {
     width: 100%;
-    max-width: 330px;
+    max-width: 375px;
     padding: 15px;
     margin: auto;
     border-radius: 6px;
@@ -26,25 +26,30 @@
     padding: 20px;
   }
 
-  .form-signin .checkbox {
+  .form-register ul {
+    padding-left: 20px;
+  }
+
+
+  .form-register .checkbox {
     font-weight: 400;
   }
 
-  .form-signin .form-floating:focus-within {
+  .form-register .form-floating:focus-within {
     z-index: 2;
   }
 
-  .form-signin #name {
+  .form-register #name {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
-  .form-signin #email {
+  .form-register #email {
     border-radius: 0;
   }
-  .form-signin #password {
+  .form-register #password {
     border-radius: 0;
   }
-  .form-signin #password-check {
+  .form-register #password-check {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -57,23 +62,27 @@
 {% endblock %}
 
 {% block content %}
-  <main class='form-signin'>
+  <main class='form-register'>
     <form method="POST" action="/admin/register">
       <div class="form-floating">
         <input name="name" type="text" class="form-control {% if 'name' in form_errors|keys %}is-invalid{% endif %}" id="name" placeholder="John Smith">
         <label for="name">Name</label>
+        {% include 'validation/feedback.html' with {'field': 'name'} %}
       </div>
       <div class="form-floating mt-1">
         <input name="email" type="email" class="form-control {% if 'email' in form_errors|keys %}is-invalid{% endif %}" id="email" placeholder="name@example.com">
         <label for="email">Email address</label>
+        {% include 'validation/feedback.html' with {'field': 'email'} %}
       </div>
       <div class="form-floating mt-1">
         <input name="password" type="password" class="form-control {% if 'password' in form_errors|keys %}is-invalid{% endif %}" id="password" placeholder="Password">
         <label for="password">Password</label>
+        {% include 'validation/feedback.html' with {'field': 'password'} %}
       </div>
       <div class="form-floating mt-1">
         <input name="password_check" type="password" class="form-control {% if 'password_check' in form_errors|keys %}is-invalid{% endif %}" id="password-check" placeholder="Password Again...">
         <label for="password-check">Password (again)</label>
+        {% include 'validation/feedback.html' with {'field': 'password_check'} %}
       </div>
 
       <button class="w-100 btn btn-lg btn-outline-primary mt-3" type="submit">Register</button>

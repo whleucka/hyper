@@ -16,7 +16,7 @@
 
   .form-signin {
     width: 100%;
-    max-width: 330px;
+    max-width: 375px;
     padding: 15px;
     margin: auto;
     border-radius: 6px;
@@ -24,6 +24,10 @@
     background-color: #fff;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     padding: 20px;
+  }
+
+  .form-signin ul {
+    padding-left: 20px;
   }
 
   .form-signin .checkbox {
@@ -50,15 +54,17 @@
 {% endblock %}
 
 {% block content %}
-  <main class='form-signin'>
+  <main class='form-signin' novalidate>
     <form method="POST" action="/admin/sign-in">
       <div class="form-floating">
         <input name="email" type="email" class="form-control {% if 'email' in form_errors|keys %}is-invalid{% endif %}" id="floatingInput" placeholder="name@example.com">
         <label for="floatingInput">Email address</label>
+        {% include 'validation/feedback.html' with {'field': 'email'} %}
       </div>
       <div class="form-floating mt-1">
         <input name="password" type="password" class="form-control {% if 'password' in form_errors|keys %}is-invalid{% endif %}" id="floatingPassword" placeholder="Password">
         <label for="floatingPassword">Password</label>
+        {% include 'validation/feedback.html' with {'field': 'password'} %}
       </div>
 
       <div class="checkbox my-3 text-start">
