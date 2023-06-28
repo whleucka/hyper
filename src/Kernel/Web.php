@@ -55,6 +55,14 @@ class Web
     }
 
     /**
+     * Return the app request
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
+    }
+
+    /**
      * Instantiate the DI container
      */
     public function container(): Container
@@ -118,6 +126,14 @@ class Web
         $this->controller = $this->controller();
         $this->response = $this->response();
         return $this;
+    }
+
+    /**
+     * Get the app route
+     */
+    public function getRoute(): ?Route
+    {
+        return $this->route;
     }
 
     /**

@@ -4,15 +4,14 @@ use Nebula\Kernel\Web;
 
 function dump($o)
 {
-    printf(
-        "<pre
-    style='overflow: auto; 
-    padding: 20px; 
-    background-color: #fbfbfb; 
-    border: 2px dashed darkred;'>
-<strong>DUMP</strong><br><br>
+    $template = <<<PRE
+<pre class='pre-debug'>
+<strong>DEBUG</strong><br><br>
 %s
-    </pre>",
+</pre>
+PRE;
+    printf(
+        $template,
         print_r($o, true)
     );
 }
@@ -20,6 +19,16 @@ function dump($o)
 function app()
 {
     return Web::getInstance();
+}
+
+function request()
+{
+    return app()->getRequest();
+}
+
+function route()
+{
+    return app()->getRoute();
 }
 
 function twig($path, $data = [])
