@@ -10,10 +10,7 @@ function dump($o)
 %s
 </pre>
 PRE;
-    printf(
-        $template,
-        print_r($o, true)
-    );
+    printf($template, print_r($o, true));
 }
 
 function app()

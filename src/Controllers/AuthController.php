@@ -2,7 +2,7 @@
 
 namespace Nebula\Controllers;
 
-use StellarRouter\{Get,Post};
+use StellarRouter\{Get, Post};
 
 class AuthController extends Controller
 {
@@ -32,4 +32,3 @@ class AuthController extends Controller
         return $this->register();
     }
 }
-

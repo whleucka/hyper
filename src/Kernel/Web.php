@@ -182,7 +182,7 @@ class Web
         return $this->isAPI()
             ? new JsonResponse([
                 "ts" => time(),
-                "data" => $handlerResponse
+                "data" => $handlerResponse,
             ])
             : new Response($handlerResponse);
     }
@@ -195,22 +195,21 @@ class Web
             );
         } else {
             // Web response
-            $this->whoops->pushHandler(
-                new Whoops\Handler\PrettyPageHandler()
-            );
+            $this->whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
         }
     }
 
     public function isAPI(): bool
     {
         $middleware = $this->route?->getMiddleware();
-        return !empty($middleware) && in_array('api', $middleware);
+        return !empty($middleware) && in_array("api", $middleware);
     }
 
     public function isDebug(): bool
     {
         $env = Env::getInstance()->env();
-        return isset($env["APP_DEBUG"]) && strtolower($env["APP_DEBUG"]) === "true";
+        return isset($env["APP_DEBUG"]) &&
+            strtolower($env["APP_DEBUG"]) === "true";
     }
 
     public function catch(Exception|Error $problem): Response
@@ -291,7 +290,9 @@ class Web
     private function whoops(): Whoops\Run
     {
         $whoops = new Whoops\Run();
-        if (!$this->isDebug()) return $whoops;
+        if (!$this->isDebug()) {
+            return $whoops;
+        }
         $whoops->allowQuit(false);
         $whoops->writeToOutput(false);
         return $whoops;
