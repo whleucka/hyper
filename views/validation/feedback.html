@@ -1,0 +1,7 @@
+<div class="invalid-feedback">
+  <ul class="text-start">
+  {% for error in form_errors[field] %}
+    <li>{{ error }}</li>
+  {% endfor %}
+  <ul>
+</div>
