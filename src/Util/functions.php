@@ -1,6 +1,7 @@
 <?php
 
 use Nebula\Kernel\Web;
+use Nebula\Validation\Validate;
 
 function dump($o)
 {
@@ -34,4 +35,9 @@ function twig($path, $data = [])
         ->container()
         ->get(Twig\Environment::class);
     return $twig->render($path, $data);
+}
+
+function validate(array $request_data, array $rules)
+{
+    return Validate::request($request_data, $rules);
 }
