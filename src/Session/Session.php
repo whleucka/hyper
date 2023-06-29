@@ -14,7 +14,7 @@ class Session
     return $this->data[$name] ?? null;
   }
 
-  public function set(string $name, string $value)
+  public function set(string $name, mixed $value)
   {
     @session_start();
     $this->data[$name] = $value;
@@ -33,6 +33,14 @@ class Session
   {
     @session_start();
     @session_destroy();    
+    session_write_close();
+  }
+
+  public function unsetIndex($target, $index) 
+  {
+    @session_start();
+    unset($this->data[$target][$index]);
+    $_SESSION = $this->data;
     session_write_close();
   }
 }

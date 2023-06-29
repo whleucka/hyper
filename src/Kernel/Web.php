@@ -181,6 +181,7 @@ class Web
             \Nebula\Middleware\Session\Lifetime::class,
             \Nebula\Middleware\Session\CSRF::class,
             \Nebula\Middleware\Auth\User::class,
+            \Nebula\Middleware\Access\RateLimit::class,
         ];
         // Register and run middleware handle method
         foreach ($middlewares as $i => $middleware) {
@@ -329,6 +330,16 @@ class Web
     {
         $content = twig("errors/403.html");
         $this->response = new Response($content, status: 403);
+        $this->execute();
+    }
+
+    /**
+     * Send a too many requests response
+     */
+    public function tooManyRequests(): void
+    {
+        $content = twig("errors/429.html");
+        $this->response = new Response($content, status: 429);
         $this->execute();
     }
 
