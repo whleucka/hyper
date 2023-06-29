@@ -21,13 +21,14 @@ namespace Nebula\Models;
 class User extends Model
 {
     /**
-     * User attributes are defined here as private <- important
+     * User attributes are defined here
+     * Only public properties can be inserted / updated
      */
     private $id;
-    private $uuid;
-    private $name;
-    private $email;
-    private $password;
+    public $uuid;
+    public $name;
+    public $email;
+    public $password;
     private $created_at;
     private $updated_at;
 

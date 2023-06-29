@@ -1,6 +1,9 @@
 <?php
 
-namespace Nebula\Controllers;
+namespace Nebula\Controllers\Admin;
+
+use Nebula\Admin\Auth;
+use Nebula\Controllers\Controller;
 
 use StellarRouter\{Get, Post};
 
@@ -9,13 +12,13 @@ class AuthController extends Controller
     #[Get("/admin/sign-in", "auth.sign_in")]
     public function sign_in(): string
     {
-        return twig("auth/sign-in.html");
+        return twig("admin/sign-in.html");
     }
 
     #[Get("/admin/register", "auth.register")]
     public function register(): string
     {
-        return twig("auth/register.html");
+        return twig("admin/register.html");
     }
 
     #[Post("/admin/sign-in", "auth.sign_in_post")]
@@ -25,7 +28,6 @@ class AuthController extends Controller
             "email" => ["required", "string", "email"],
             "password" => ["required", "string"],
         ]);
-        dump($request);
         return $this->sign_in();
     }
 
@@ -45,7 +47,12 @@ class AuthController extends Controller
             ],
             "password_check" => ["required", "match"]
         ]);
-        dump($request);
+        if ($request) {
+            $user = Auth::register($request);
+            if ($user) {
+                Auth::signIn($user);
+            }
+        }
         return $this->register();
     }
 }

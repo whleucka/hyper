@@ -12,6 +12,7 @@ use Whoops;
 use Closure;
 use Error;
 use Exception;
+use GalaxyPDO\DB;
 
 class Web
 {
@@ -22,7 +23,8 @@ class Web
     private Request $request;
     private Response $response;
     private Whoops\Run $whoops;
-    public Router $router;
+    private ?DB $db = null;
+    private Router $router;
 
     public static function getInstance(): static
     {
@@ -71,6 +73,26 @@ class Web
         $config = new \Nebula\Config\Container();
         $container->setDefinitions($config->getDefinitions())->build();
         return $container;
+    }
+
+    /**
+     * Return the PDO database connection
+     */
+    public function getDatabase(): DB
+    {
+        // Lazy init
+        if (!$this->db) {
+            $this->db = $this->container->get(DB::class);
+        }
+        return $this->db;
+    }
+
+    /**
+     * Return the DI container
+     */
+    public function getContainer(): Container
+    {
+        return $this->container;
     }
 
     /**

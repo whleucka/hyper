@@ -9,7 +9,6 @@ use stdClass;
 
 class Controller
 {
-    protected DB $db;
     protected Container $container;
     protected array $request;
 
@@ -19,19 +18,11 @@ class Controller
     }
 
     /**
-     * Get the DI container
-     */
-    public function container(): Container
-    {
-        return Container::getInstance();
-    }
-
-    /**
-     * Get database connection
+     * Get PDO database connection
      */
     public function db(): DB
     {
-        return $this->container()->get(DB::class);
+        return app()->getDatabase();
     }
 
     /**
@@ -51,6 +42,7 @@ class Controller
     /**
      * Validate the controller request based on an array of rules
      * If there is a validation error, then you will recieve null
+     * @param array<int,mixed> $rules
      */
     protected function validate(array $rules): ?stdClass
     {
