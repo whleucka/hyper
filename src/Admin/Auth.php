@@ -43,7 +43,7 @@ class Auth
     {
         // TODO lookup route
         $route = "/admin";
-        session()->set('user', $user->id);
+        session()->set("user", $user->id);
         $response = new RedirectResponse($route);
         $response->send();
         exit();

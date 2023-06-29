@@ -40,7 +40,9 @@ class CSRF extends Middleware
      */
     private function validate(Request $request): ?Request
     {
-        if (in_array($request->getMethod(), ["POST", "PUT", "PATCH", "DELETE"])) {
+        if (
+            in_array($request->getMethod(), ["POST", "PUT", "PATCH", "DELETE"])
+        ) {
             if (
                 !empty($request->get("csrf_token")) &&
                 hash_equals(
@@ -64,10 +66,7 @@ class CSRF extends Middleware
     private function regenerate(): void
     {
         $csrf_ts = session()->get("csrf_token_timestamp");
-        if (
-            is_null($csrf_ts) ||
-            $csrf_ts + 3600 < time()
-        ) {
+        if (is_null($csrf_ts) || $csrf_ts + 3600 < time()) {
             session()->set("csrf_token", bin2hex(random_bytes(32)));
             session()->set("csrf_token_timestamp", time());
         }

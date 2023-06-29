@@ -53,7 +53,7 @@ class Web
 
     public function session(): Session
     {
-        return new Session;
+        return new Session();
     }
 
     /**
