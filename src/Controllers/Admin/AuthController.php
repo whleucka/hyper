@@ -51,7 +51,7 @@ class AuthController extends Controller
                 "lowercase=1",
                 "symbol=1",
             ],
-            "password_check" => ["required", "match"]
+            "password_check" => ["required", "match"],
         ]);
         if ($request) {
             $user = Auth::register($request);

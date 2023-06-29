@@ -6,14 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class Middleware
 {
-  protected $next;
+    protected $next;
 
-  public function setNext(Middleware $next): void
-  {
-    $this->next = $next;
-  }
-  /**
-   * @return void
-   */
-  abstract public function handle(Request $request);
+    public function setNext(Middleware $next): void
+    {
+        $this->next = $next;
+    }
+    /**
+     * @return void
+     */
+    abstract public function handle(Request $request);
 }

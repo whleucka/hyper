@@ -55,8 +55,14 @@ class Model
             $property = $one->name;
             $this->attributes[$property] = $row?->$property ?? null;
         }
-        $this->public_properties = array_map(fn ($public) => $public->name, $public_properties);
-        $this->private_properties = array_map(fn ($private) => $private->name, $private_properties);
+        $this->public_properties = array_map(
+            fn($public) => $public->name,
+            $public_properties
+        );
+        $this->private_properties = array_map(
+            fn($private) => $private->name,
+            $private_properties
+        );
     }
 
     /**
@@ -66,7 +72,7 @@ class Model
     {
         // Keys are the columns names
         $columns = $this->public_properties;
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
@@ -76,12 +82,14 @@ class Model
     public function insert(): ?Model
     {
         $columns = $this->getInsertColumns();
-        $values = array_map(fn ($public) => $this->$public ?? null, $this->public_properties);
-        $result = $this->db
-            ->query(
-                "INSERT INTO $this->table_name SET $columns",
-                ...array_values($values)
-            );
+        $values = array_map(
+            fn($public) => $this->$public ?? null,
+            $this->public_properties
+        );
+        $result = $this->db->query(
+            "INSERT INTO $this->table_name SET $columns",
+            ...array_values($values)
+        );
         if ($result) {
             $id = $this->db->lastInsertId();
             $class = static::class;

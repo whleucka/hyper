@@ -17,9 +17,9 @@ class Validate
         "min_length" => "%field is too short (min length: %rule_extra)",
         "max_length" => "%field is too long (max length: %rule_extra)",
         "uppercase" =>
-        "%field requires at least %rule_extra uppercase character",
+            "%field requires at least %rule_extra uppercase character",
         "lowercase" =>
-        "%field requires at least %rule_extra lowercase character",
+            "%field requires at least %rule_extra lowercase character",
         "symbol" => "%field requires at least %rule_extra symbol character",
         "reg_ex" => "%field is invalid",
     ];

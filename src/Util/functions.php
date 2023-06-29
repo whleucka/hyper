@@ -14,17 +14,17 @@ function dump($o)
 </pre>
 PRE;
     $debug = debug_backtrace()[1];
-    $line = $debug['line'];
-    $file = $debug['file'];
-    $function = $debug['function'];
-    $dump = print_r($o ?? 'null', true);
-    printf($template, $file.':'.$line, $function, $dump);
+    $line = $debug["line"];
+    $file = $debug["file"];
+    $function = $debug["function"];
+    $dump = print_r($o ?? "null", true);
+    printf($template, $file . ":" . $line, $function, $dump);
 }
 
 function dd($o)
 {
     dump($o);
-    die;
+    die();
 }
 
 function uuid($data = null)
@@ -34,12 +34,12 @@ function uuid($data = null)
     assert(strlen($data) == 16);
 
     // Set version to 0100
-    $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+    $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
     // Set bits 6-7 to 10
-    $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+    $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
 
     // Output the 36 character UUID.
-    return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    return vsprintf("%s%s-%s-%s-%s-%s%s%s", str_split(bin2hex($data), 4));
 }
 
 function app()
@@ -62,7 +62,7 @@ function twig($path, $data = [])
     $twig = app()
         ->container()
         ->get(Twig\Environment::class);
-    $data['form_errors'] = Validate::$errors;
+    $data["form_errors"] = Validate::$errors;
     return $twig->render($path, $data);
 }
 
