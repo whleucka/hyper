@@ -16,7 +16,7 @@ class Lifetime extends Middleware
     {
         $sessionTimeout = $this->minutes * 60; // minutes in seconds
 
-        $last_activity = session()->get("LAST_ACTIVITY");
+        $last_activity = session()->get("last_activity");
         if (
             !is_null($last_activity) &&
             time() - $last_activity > $sessionTimeout
@@ -25,7 +25,7 @@ class Lifetime extends Middleware
             session_destroy();
         }
         
-        session()->set("LAST_ACTIVITY", time());
+        session()->set("last_activity", time());
 
         if ($this->next !== null) {
             return $this->next->handle($request);

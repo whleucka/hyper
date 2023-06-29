@@ -21,4 +21,18 @@ class Session
     $_SESSION = $this->data;
     session_write_close();
   }
+
+  public function getAll()
+  {
+    @session_start();
+    session_write_close();
+    return $_SESSION;
+  }
+
+  public function destroy()
+  {
+    @session_start();
+    @session_destroy();    
+    session_write_close();
+  }
 }
