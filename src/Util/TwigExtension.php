@@ -1,0 +1,23 @@
+<?php
+
+namespace Nebula\Util;
+
+use Twig\Extension\AbstractExtension;
+use Twig\Extension\ExtensionInterface;
+
+class TwigExtension extends AbstractExtension implements ExtensionInterface
+{
+    public function getFunctions(): array
+    {
+        return [new \Twig\TwigFunction("csrf", [$this, "csrf"])];
+    }
+
+    public function csrf(): string
+    {
+        $token = $_SESSION["csrf_token"];
+        $input = <<<EOT
+<input type="hidden" name="csrf_token" value="{$token}">
+EOT;
+        return $input;
+    }
+}
