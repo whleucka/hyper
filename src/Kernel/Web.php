@@ -154,8 +154,12 @@ class Web
         return $this;
     }
 
+    /**
+     * Register and run middleware
+     */
     public function middleware(): void
     {
+        // Middlewares order matters here
         $middlewares = [
             \Nebula\Middleware\Session\Cookies::class,
             \Nebula\Middleware\Session\Start::class,
@@ -163,6 +167,7 @@ class Web
             \Nebula\Middleware\Session\CSRF::class,
             \Nebula\Middleware\Auth\User::class,
         ];
+        // Register and run middleware handle method
         foreach ($middlewares as $i => $middleware) {
             $class = new $middleware();
             if ($i !== count($middlewares) - 1) {
@@ -233,6 +238,9 @@ class Web
             : new Response($handlerResponse);
     }
 
+    /**
+     * Setup the response error handling
+     */
     public function setupErrorHandling(): void
     {
         if ($this->isAPI()) {
@@ -245,12 +253,18 @@ class Web
         }
     }
 
+    /**
+     * Does the current route have 'api' defined?
+     */
     public function isAPI(): bool
     {
         $middleware = $this->route?->getMiddleware();
         return !empty($middleware) && in_array("api", $middleware);
     }
 
+    /**
+     * Is APP_DEBUG true in the .env config?
+     */
     public function isDebug(): bool
     {
         $env = Env::getInstance()->env();
@@ -258,6 +272,9 @@ class Web
             strtolower($env["APP_DEBUG"]) === "true";
     }
 
+    /**
+     * Catch a controller response exception or error
+     */
     public function catch(Exception|Error $problem): Response
     {
         if ($this->isDebug()) {
