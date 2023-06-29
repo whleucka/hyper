@@ -3,17 +3,21 @@
 namespace Nebula\Middleware\Session;
 
 use Symfony\Component\HttpFoundation\Request;
+use Nebula\Middleware\Middleware;
 
-class CSRF
+class CSRF extends Middleware
 {
-    /**
-     * @param mixed $request
-     */
-    public function handle(Request $request): ?Request
+    public function handle(Request $request): Middleware|Request
     {
         $this->init();
         $this->regenerate();
-        return $this->validate($request);
+
+        // If authentication succeeds, call the next middleware
+        if ($this->next !== null) {
+            return $this->next->handle($request);
+        }
+
+        return $request;
     }
 
     /**

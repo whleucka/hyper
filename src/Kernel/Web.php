@@ -145,9 +145,34 @@ class Web
         if (!$this->route) {
             $this->pageNotFound();
         }
+        // Store the route in the request attributes
+        $this->request->attributes->route = $this->route;
+        // Run the middleware
+        $this->middleware(); 
         $this->controller = $this->controller();
         $this->response = $this->response();
         return $this;
+    }
+
+
+    public function middleware(): void
+    {
+        $middlewares = [
+            \Nebula\Middleware\Session\Cookies::class,
+            \Nebula\Middleware\Session\Start::class,
+            \Nebula\Middleware\Session\Lifetime::class,
+            \Nebula\Middleware\Session\CSRF::class,
+            \Nebula\Middleware\Auth\User::class,
+        ];
+        foreach ($middlewares as $i => $middleware) {
+            $class = new $middleware;
+            if ($i !== count($middlewares) - 1) {
+                $next = $middlewares[$i + 1];
+                $next_class = new $next;
+                $class->setNext($next_class);
+            }
+            $class->handle($this->request);
+        }
     }
 
     /**

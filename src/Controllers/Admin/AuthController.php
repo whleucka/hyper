@@ -9,6 +9,12 @@ use StellarRouter\{Get, Post};
 
 class AuthController extends Controller
 {
+    #[Get("/admin/sign-out", "auth.sign_out")]
+    public function sign_out(): void
+    {
+        Auth::signOut();
+    }
+
     #[Get("/admin/sign-in", "auth.sign_in")]
     public function sign_in(): string
     {

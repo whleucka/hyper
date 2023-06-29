@@ -2,16 +2,21 @@
 
 namespace Nebula\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Nebula\Models\User;
 use stdClass;
 
-/**
- * Planned static methods:
- * register
- * login
- */
 class Auth
 {
+  public static function signOut(): void
+  {
+    $_SESSION = [];
+    session_destroy();
+    // TODO lookup route
+    $route = "/admin/sign-in";
+    $response = new RedirectResponse($route); 
+    $response->send();
+  }
   public static function register(stdClass $data): ?User
   {
     $user = new User;
@@ -22,13 +27,12 @@ class Auth
     return $user->insert();
   }
 
-  public static function login()
+  public static function signIn(User $user): void
   {
-  }
-
-  public static function signIn(User $user)
-  {
-    dump($user);
-    die("success");
+    // TODO lookup route
+    $route = "/admin";
+    $_SESSION['user'] = $user->id;
+    $response = new RedirectResponse($route); 
+    $response->send();
   }
 }

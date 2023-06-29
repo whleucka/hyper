@@ -3,16 +3,16 @@
 namespace Nebula\Middleware\Session;
 
 use Symfony\Component\HttpFoundation\Request;
+use Nebula\Middleware\Middleware;
 
-class Lifetime
+class Lifetime extends Middleware
 {
     private $minutes = 30;
 
     /**
      * Limit the user session to x minutes
-     * @param mixed $request
      */
-    public function handle(Request $request): ?Request
+    public function handle(Request $request): Middleware|Request
     {
         $sessionTimeout = $this->minutes * 60; // minutes in seconds
 
@@ -25,6 +25,12 @@ class Lifetime
         }
 
         $_SESSION["LAST_ACTIVITY"] = time();
+
+        // If authentication succeeds, call the next middleware
+        if ($this->next !== null) {
+            return $this->next->handle($request);
+        }
+
         return $request;
     }
 }
