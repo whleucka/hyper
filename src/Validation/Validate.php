@@ -42,7 +42,7 @@ class Validate
      */
     public static function addError(string $item, string $msg): void
     {
-        self::$errors[$item][] = $msg; 
+        self::$errors[$item][] = $msg;
     }
 
     /**

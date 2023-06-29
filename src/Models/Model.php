@@ -33,20 +33,23 @@ class Model
     {
     }
 
-    public static function findByAttribute(string $attribute, mixed $value): ?Model
-    {
+    public static function findByAttribute(
+        string $attribute,
+        mixed $value
+    ): ?Model {
         $class = static::class;
         $model = new $class();
-        $id = $model->db
-            ->selectVar("SELECT $model->primary_key 
+        $id = $model->db->selectVar(
+            "SELECT $model->primary_key 
             FROM $model->table_name 
-            WHERE $attribute = ?", $value);
+            WHERE $attribute = ?",
+            $value
+        );
         if ($id) {
             return new $class($id);
         }
         return null;
     }
-
 
     /**
      * Load attributes and private/public properties
@@ -75,11 +78,11 @@ class Model
             $this->attributes[$property] = $row?->$property ?? null;
         }
         $this->public_properties = array_map(
-            fn ($public) => $public->name,
+            fn($public) => $public->name,
             $public_properties
         );
         $this->private_properties = array_map(
-            fn ($private) => $private->name,
+            fn($private) => $private->name,
             $private_properties
         );
     }
@@ -91,7 +94,7 @@ class Model
     {
         // Keys are the columns names
         $columns = $this->public_properties;
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
@@ -102,7 +105,7 @@ class Model
     {
         $columns = $this->getInsertColumns();
         $values = array_map(
-            fn ($public) => $this->$public ?? null,
+            fn($public) => $this->$public ?? null,
             $this->public_properties
         );
         $result = $this->db->query(
