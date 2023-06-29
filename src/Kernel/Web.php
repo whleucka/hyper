@@ -13,6 +13,7 @@ use Closure;
 use Error;
 use Exception;
 use GalaxyPDO\DB;
+use Nebula\Session\Session;
 
 class Web
 {
@@ -25,6 +26,7 @@ class Web
     private Whoops\Run $whoops;
     private ?DB $db = null;
     private Router $router;
+    private Session $session;
 
     public static function getInstance(): static
     {
@@ -42,10 +44,16 @@ class Web
      */
     public function init(): void
     {
+        $this->session = $this->session();
         $this->request = $this->request();
         $this->container = $this->container();
         $this->router = $this->router();
         $this->whoops = $this->whoops();
+    }
+
+    public function session(): Session
+    {
+        return new Session;
     }
 
     /**
@@ -54,6 +62,14 @@ class Web
     public function request(): Request
     {
         return Request::createFromGlobals();
+    }
+
+    /**
+     * Return the app request
+     */
+    public function getSession(): Session
+    {
+        return $this->session;
     }
 
     /**
@@ -162,7 +178,6 @@ class Web
         // Middlewares order matters here
         $middlewares = [
             \Nebula\Middleware\Session\Cookies::class,
-            \Nebula\Middleware\Session\Start::class,
             \Nebula\Middleware\Session\Lifetime::class,
             \Nebula\Middleware\Session\CSRF::class,
             \Nebula\Middleware\Auth\User::class,

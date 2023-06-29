@@ -21,7 +21,6 @@ class Auth
 
     public static function signOut(): void
     {
-        $_SESSION = [];
         session_destroy();
         // TODO lookup route
         $route = "/admin/sign-in";
@@ -44,7 +43,7 @@ class Auth
     {
         // TODO lookup route
         $route = "/admin";
-        $_SESSION["user"] = $user->id;
+        session()->set('user', $user->id);
         $response = new RedirectResponse($route);
         $response->send();
         exit();

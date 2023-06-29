@@ -29,8 +29,9 @@ class CSRF extends Middleware
      */
     private function init(): void
     {
-        if (!isset($_SESSION["csrf_token"])) {
-            $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+        $csrf_token = session()->get("csrf_token");
+        if (is_null($csrf_token)) {
+            session()->set("csrf_token", bin2hex(random_bytes(32)));
         }
     }
 
@@ -43,7 +44,7 @@ class CSRF extends Middleware
             if (
                 !empty($request->get("csrf_token")) &&
                 hash_equals(
-                    $_SESSION["csrf_token"],
+                    session()->get("csrf_token"),
                     $request->get("csrf_token")
                 )
             ) {
@@ -62,12 +63,13 @@ class CSRF extends Middleware
      */
     private function regenerate(): void
     {
+        $csrf_ts = session()->get("csrf_token_timestamp");
         if (
-            !isset($_SESSION["csrf_token_timestamp"]) ||
-            $_SESSION["csrf_token_timestamp"] + 3600 < time()
+            is_null($csrf_ts) ||
+            $csrf_ts + 3600 < time()
         ) {
-            $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
-            $_SESSION["csrf_token_timestamp"] = time();
+            session()->set("csrf_token", bin2hex(random_bytes(32)));
+            session()->set("csrf_token_timestamp", time());
         }
     }
 }

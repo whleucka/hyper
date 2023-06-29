@@ -17,7 +17,8 @@ class User extends Middleware
     {
         $sign_in_route = "/admin/sign-in";
         $middlewares = $request->attributes->route->getMiddleware();
-        if (in_array("auth", $middlewares) && !isset($_SESSION["user"])) {
+        $session_user = session()->get("user");
+        if (in_array("auth", $middlewares) && is_null($session_user)) {
             $response = new RedirectResponse($sign_in_route);
             $response->send();
             exit();

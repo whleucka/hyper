@@ -58,6 +58,11 @@ function route()
     return app()->getRoute();
 }
 
+function session()
+{
+    return app()->getSession();
+}
+
 function twig($path, $data = [])
 {
     $twig = app()
