@@ -7,11 +7,24 @@ function dump($o)
 {
     $template = <<<PRE
 <pre class='pre-debug'>
-<strong>DEBUG</strong><br><br>
-%s
+    <strong>DEBUG</strong><br>
+    <small>File: %s</small><br>
+    <small>Function: %s</small><br>
+    <div style='padding-left: 32px;'>%s</div>
 </pre>
 PRE;
-    printf($template, print_r($o, true));
+    $debug = debug_backtrace()[1];
+    $line = $debug['line'];
+    $file = $debug['file'];
+    $function = $debug['function'];
+    $dump = print_r($o ?? 'null', true);
+    printf($template, $file.':'.$line, $function, $dump);
+}
+
+function dd($o)
+{
+    dump($o);
+    die;
 }
 
 function app()
