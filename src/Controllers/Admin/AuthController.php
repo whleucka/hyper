@@ -18,8 +18,6 @@ class AuthController extends Controller
     #[Get("/admin/sign-in", "auth.sign_in")]
     public function sign_in(): string
     {
-        $all = session()->getAll();
-        dump($all);
         return twig("admin/sign-in.html");
     }
 
