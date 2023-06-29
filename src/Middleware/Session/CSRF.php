@@ -7,12 +7,15 @@ use Nebula\Middleware\Middleware;
 
 class CSRF extends Middleware
 {
+    /**
+     * CSRF (Cross-Site Request Forgery) protection
+     */
     public function handle(Request $request): Middleware|Request
     {
         $this->init();
         $this->regenerate();
+        $request = $this->validate($request);
 
-        // If authentication succeeds, call the next middleware
         if ($this->next !== null) {
             return $this->next->handle($request);
         }
@@ -20,8 +23,7 @@ class CSRF extends Middleware
         return $request;
     }
 
-    /**
-     * CSRF (Cross-Site Request Forgery) protection
+    /*
      * Include the CSRF token as a hidden input field in your HTML forms.
      * This will ensure that the token is submitted along with the form data.
      */
@@ -37,22 +39,22 @@ class CSRF extends Middleware
      */
     private function validate(Request $request): ?Request
     {
-        $valid = true;
         if ($request->getMethod() === "POST") {
             if (
-                !empty($_POST["csrf_token"]) &&
-                hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
+                !empty($request->get("csrf_token")) &&
+                hash_equals(
+                    $_SESSION["csrf_token"],
+                    $request->get("csrf_token")
+                )
             ) {
                 // CSRF token is valid
-                // Process the form submission
-                $valid &= true;
+                return $request;
             } else {
                 // CSRF token is invalid
-                // Handle the error, e.g., redirect or show an error message
-                $valid &= false;
+                app()->forbidden();
             }
         }
-        return $valid ? $request : null;
+        return $request;
     }
 
     /**

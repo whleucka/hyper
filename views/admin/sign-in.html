@@ -56,6 +56,7 @@
 {% block content %}
   <main class='form-signin' novalidate>
     <form method="POST" action="/admin/sign-in">
+      {{ csrf()|raw }}
       <div class="form-floating">
         <input name="email" type="email" class="form-control {% if 'email' in form_errors|keys %}is-invalid{% endif %}" id="floatingInput" placeholder="name@example.com">
         <label for="floatingInput">Email address</label>

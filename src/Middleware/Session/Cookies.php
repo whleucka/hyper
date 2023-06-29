@@ -18,7 +18,6 @@ class Cookies extends Middleware
         $cookieParams["httponly"] = true;
         session_set_cookie_params($cookieParams);
 
-        // If authentication succeeds, call the next middleware
         if ($this->next !== null) {
             return $this->next->handle($request);
         }

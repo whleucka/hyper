@@ -2,6 +2,7 @@
 
 use Nebula\Kernel\Web;
 use Nebula\Validation\Validate;
+use Nebula\Util\TwigExtension;
 
 function dump($o)
 {
@@ -62,7 +63,15 @@ function twig($path, $data = [])
     $twig = app()
         ->container()
         ->get(Twig\Environment::class);
+    $twig->addExtension(new TwigExtension());
     $data["form_errors"] = Validate::$errors;
+    $data["csrf"] = function () {
+        $token = $_SESSION["csrf_token"];
+        $input = <<<EOT
+<input type="hidden" name="csrf_token" value="{$token}">
+EOT;
+        echo $input;
+    };
     return $twig->render($path, $data);
 }
 

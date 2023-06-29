@@ -14,7 +14,6 @@ class Start extends Middleware
     {
         @session_start();
 
-        // If authentication succeeds, call the next middleware
         if ($this->next !== null) {
             return $this->next->handle($request);
         }

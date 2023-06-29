@@ -64,6 +64,7 @@
 {% block content %}
   <main class='form-register'>
     <form method="POST" action="/admin/register">
+      {{ csrf()|raw }}
       <div class="form-floating">
         <input name="name" type="text" class="form-control {% if 'name' in form_errors|keys %}is-invalid{% endif %}" id="name" placeholder="John Smith">
         <label for="name">Name</label>

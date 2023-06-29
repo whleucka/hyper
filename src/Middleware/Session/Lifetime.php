@@ -26,7 +26,6 @@ class Lifetime extends Middleware
 
         $_SESSION["LAST_ACTIVITY"] = time();
 
-        // If authentication succeeds, call the next middleware
         if ($this->next !== null) {
             return $this->next->handle($request);
         }

@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class User extends Middleware
 {
+    /**
+     * Route authentication
+     * If the route has auth defined in middleware,
+     * then user must be signed in to get response
+     */
     public function handle(Request $request): Middleware|Request
     {
         $sign_in_route = "/admin/sign-in";
@@ -18,7 +23,6 @@ class User extends Middleware
             exit();
         }
 
-        // If authentication succeeds, call the next middleware
         if ($this->next !== null) {
             return $this->next->handle($request);
         }

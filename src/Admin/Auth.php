@@ -27,6 +27,7 @@ class Auth
         $route = "/admin/sign-in";
         $response = new RedirectResponse($route);
         $response->send();
+        exit();
     }
 
     public static function register(stdClass $data): ?User
@@ -46,5 +47,6 @@ class Auth
         $_SESSION["user"] = $user->id;
         $response = new RedirectResponse($route);
         $response->send();
+        exit();
     }
 }
