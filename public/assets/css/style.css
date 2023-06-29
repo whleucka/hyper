@@ -37,3 +37,11 @@ body {
   background: -webkit-linear-gradient(to top, #859398, #283048);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to top, #859398, #283048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
+.invalid-feedback li {
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+.invalid-feedback li:last-child {
+  border-bottom: 0 none;
+}

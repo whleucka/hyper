@@ -4,7 +4,7 @@ namespace Nebula\Controllers\Admin;
 
 use Nebula\Admin\Auth;
 use Nebula\Controllers\Controller;
-
+use Nebula\Validation\Validate;
 use StellarRouter\{Get, Post};
 
 class AuthController extends Controller
@@ -34,6 +34,15 @@ class AuthController extends Controller
             "email" => ["required", "string", "email"],
             "password" => ["required", "string"],
         ]);
+        if ($request) {
+            $user = Auth::authenticate($request);
+            if ($user) {
+                Auth::signIn($user);
+            } else {
+                Validate::addError("password", "Bad email or password. Please try again.");
+                Validate::addError("email", "");
+            }
+        }
         return $this->sign_in();
     }
 

@@ -29,12 +29,20 @@ class Validate
     /**
      * Add arbitrary error to $errors array
      */
-    public static function addError($item, $replacements): void
+    public static function registerError($item, $replacements): void
     {
         self::$errors[$replacements["%field"]][] = strtr(
             self::$messages[$item],
             $replacements
         );
+    }
+
+    /**
+     * Add arbitrary error to $errors array
+     */
+    public static function addError(string $item, string $msg): void
+    {
+        self::$errors[$item][] = $msg; 
     }
 
     /**
@@ -61,7 +69,7 @@ class Validate
                     "reg_ex" => self::regEx($value, $extra),
                 };
                 if (!$result) {
-                    self::addError($rule, [
+                    self::registerError($rule, [
                         "%rule" => $rule,
                         "%rule_extra" => $extra,
                         "%field" => $request_item,

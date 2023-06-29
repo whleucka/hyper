@@ -8,6 +8,14 @@ use stdClass;
 
 class Auth
 {
+    public static function authenticate(stdClass $data): ?User
+    {
+        $user = User::findByAttribute('email', $data->email);
+        return password_verify($data->password, $user?->getAttribute('password'))
+            ? $user
+            : null;
+    }
+
     public static function signOut(): void
     {
         $_SESSION = [];
@@ -17,6 +25,7 @@ class Auth
         $response = new RedirectResponse($route);
         $response->send();
     }
+
     public static function register(stdClass $data): ?User
     {
         $user = new User();
