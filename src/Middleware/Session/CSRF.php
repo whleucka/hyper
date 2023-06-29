@@ -39,7 +39,7 @@ class CSRF extends Middleware
      */
     private function validate(Request $request): ?Request
     {
-        if ($request->getMethod() === "POST") {
+        if (in_array($request->getMethod(), ["POST", "PUT", "PATCH", "DELETE"])) {
             if (
                 !empty($request->get("csrf_token")) &&
                 hash_equals(
