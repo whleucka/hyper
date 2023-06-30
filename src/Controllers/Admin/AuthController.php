@@ -54,15 +54,11 @@ class AuthController extends Controller
     public function register_post(): string
     {
         // Override the unique message
-        Validate::$messages['unique'] = "an account exists for this email address";
+        Validate::$messages["unique"] =
+            "an account exists for this email address";
         $request = $this->validate([
             "name" => ["required", "string"],
-            "email" => [
-                "required", 
-                "string", 
-                "email", 
-                "unique=users"
-            ],
+            "email" => ["required", "string", "email", "unique=users"],
             "password" => [
                 "required",
                 "string",
