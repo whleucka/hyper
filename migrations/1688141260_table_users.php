@@ -5,16 +5,31 @@ use Nebula\Database\Blueprint;
 use Nebula\Database\Migration;
 use Nebula\Database\Schema;
 
+/** users schema
+CREATE TABLE `users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` char(36) NOT NULL DEFAULT uuid(),
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` binary(96) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
+  `remember_me` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+*/
+
 return new class extends Migration {
     public function up(): string
     {
         return Schema::create("users", function (Blueprint $table) {
             $table->id();
-            $table->uuid("uuid");
+            $table->uuid("uuid")->default("UUID()");
             $table->varchar("name");
             $table->varchar("email");
             $table->binary("password", 96);
-            $table->char('remember_token', 32);
+            $table->char('remember_token', 32)->nullable();
             $table->timestamps();
             $table->unique("email");
             $table->primaryKey("id");
