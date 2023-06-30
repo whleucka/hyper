@@ -2,13 +2,8 @@
 
 namespace Nebula\Database;
 
-class Migration
+abstract class Migration
 {
-    public function up(): void
-    {
-    }
-
-    public function down(): void
-    {
-    }
+    abstract public function up(): string;
+    abstract public function down(): string;
 }
