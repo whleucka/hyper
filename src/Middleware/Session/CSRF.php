@@ -23,9 +23,8 @@ class CSRF extends Middleware
         return $request;
     }
 
-    /*
-     * Include the CSRF token as a hidden input field in your HTML forms.
-     * This will ensure that the token is submitted along with the form data.
+    /**
+     * Generate a CSRF token
      */
     private function init(): void
     {

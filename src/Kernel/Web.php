@@ -177,9 +177,9 @@ class Web
     {
         // Middlewares order matters here
         $middlewares = [
+            \Nebula\Middleware\Session\CSRF::class,
             \Nebula\Middleware\Session\Cookies::class,
             \Nebula\Middleware\Session\Lifetime::class,
-            \Nebula\Middleware\Session\CSRF::class,
             \Nebula\Middleware\Auth\User::class,
             \Nebula\Middleware\Access\RateLimit::class,
         ];
