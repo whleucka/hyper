@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->varchar("name");
             $table->varchar("email");
             $table->binary("password", 96);
+            $table->char('remember_token', 32);
             $table->timestamps();
             $table->unique("email");
             $table->primaryKey("id");

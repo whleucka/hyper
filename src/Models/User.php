@@ -10,7 +10,8 @@ namespace Nebula\Models;
     uuid CHAR(36) NOT NULL,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    password BINARY(40) NOT NULL,
+    password BINARY(96) NOT NULL,
+    remember_me CHAR(32),
     created_at DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP(0) NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT '0000-00-00 00:00:00',
     UNIQUE KEY (email),
@@ -29,6 +30,7 @@ class User extends Model
     public $name;
     public $email;
     public $password;
+    public $remember_me;
     private $created_at;
     private $updated_at;
 

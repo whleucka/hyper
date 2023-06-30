@@ -5,13 +5,15 @@ namespace Nebula\Middleware\Session;
 use Symfony\Component\HttpFoundation\Request;
 use Nebula\Middleware\Middleware;
 
+/**
+ * Session lifetime middleware
+ *
+ * Destroy the session if last_activty is older than $minutes 
+ */
 class Lifetime extends Middleware
 {
     private $minutes = 30;
 
-    /**
-     * Limit the user session to x minutes
-     */
     public function handle(Request $request): Middleware|Request
     {
         $sessionTimeout = $this->minutes * 60; // minutes in seconds

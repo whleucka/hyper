@@ -37,6 +37,10 @@ class AuthController extends Controller
         if ($request) {
             $user = Auth::authenticate($request);
             if ($user) {
+                $remember_me = $request?->remember_me;
+                if ($remember_me) {
+                    Auth::rememberMe($user);
+                }
                 Auth::signIn($user);
             } else {
                 // Add a custom validation error for bad password

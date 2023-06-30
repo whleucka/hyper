@@ -180,7 +180,7 @@ class Web
             \Nebula\Middleware\Request\CSRF::class,
             \Nebula\Middleware\Session\Cookies::class,
             \Nebula\Middleware\Session\Lifetime::class,
-            \Nebula\Middleware\Auth\User::class,
+            \Nebula\Middleware\Auth\Authorize::class,
             \Nebula\Middleware\Request\RateLimit::class,
         ];
         // Register and run middleware handle method
