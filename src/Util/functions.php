@@ -63,6 +63,11 @@ function session()
     return app()->getSession();
 }
 
+function user()
+{
+    return app()->getUser();
+}
+
 function twig($path, $data = [])
 {
     $twig = app()

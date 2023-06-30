@@ -10,12 +10,12 @@ class Auth
 {
     public static function rememberMe(User $user): void
     {
-        $duration = time() + (30 * 24 * 60 * 60);
+        $duration = time() + 30 * 24 * 60 * 60;
         // Generate a random token for the user
         $token = bin2hex(random_bytes(16));
 
         // Store the token in a cookie that expires after $duration
-        setcookie('remember_token', $token, $duration, '/');
+        setcookie("remember_token", $token, $duration, "/");
 
         // Store the token in the user row
         $user->remember_me = md5($token);
@@ -43,9 +43,9 @@ class Auth
 
     public static function destroyRememberCookie(): void
     {
-        if (isset($_COOKIE['remember_token'])) {
-            unset($_COOKIE['remember_token']); 
-            setcookie('remember_token', '', -1, '/');
+        if (isset($_COOKIE["remember_token"])) {
+            unset($_COOKIE["remember_token"]);
+            setcookie("remember_token", "", -1, "/");
         }
     }
 
@@ -63,7 +63,7 @@ class Auth
     {
         // TODO lookup route
         $route = "/admin";
-        if (!isset($_COOKIE['remember_token'])) {
+        if (!isset($_COOKIE["remember_token"])) {
             session()->set("user", $user->id);
         }
         $response = new RedirectResponse($route);

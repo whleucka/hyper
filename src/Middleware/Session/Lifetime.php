@@ -8,7 +8,7 @@ use Nebula\Middleware\Middleware;
 /**
  * Session lifetime middleware
  *
- * Destroy the session if last_activty is older than $minutes 
+ * Destroy the session if last_activty is older than $minutes
  */
 class Lifetime extends Middleware
 {

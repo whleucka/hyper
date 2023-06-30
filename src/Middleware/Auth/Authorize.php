@@ -16,31 +16,21 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Authorize extends Middleware
 {
+    private $sign_in_route = "/admin/sign-in";
     public function handle(Request $request): Middleware|Request
     {
-        $sign_in_route = "/admin/sign-in";
+        // Get route middleware
         $middlewares = $request->attributes->route->getMiddleware();
-        $session_user = session()->get("user");
-        $token = $_COOKIE['remember_token'] ?? null;
-        if ($token) {
-            $user = User::findByAttribute('remember_me', md5($token));
-            if (!$user) {
-                // No users found with this token
-                $token = null;
-                Auth::destroyRememberCookie();
+
+        // Only affects auth routes
+        if (in_array("auth", $middlewares)) {
+            $user_id = session()->get("user");
+            $token = $_COOKIE["remember_token"] ?? null;
+            if ($token) {
+                $this->cookieAuth($token);
             } else {
-                // Set the user session if not already done
-                $user = session()->get('user');
-                if (!$user) {
-                    session()->set("user", $user->id);
-                }
+                $this->sessionAuth($user_id);
             }
-        }
-        
-        if (in_array("auth", $middlewares) && (is_null($token) && is_null($session_user))) {
-            $response = new RedirectResponse($sign_in_route);
-            $response->send();
-            exit();
         }
 
         if ($this->next !== null) {
@@ -48,5 +38,43 @@ class Authorize extends Middleware
         }
 
         return $request;
+    }
+
+    /**
+     * Validate cookie and set app user
+     */
+    private function cookieAuth(string $token): void
+    {
+        $user = User::findByAttribute("remember_me", md5($token));
+        if ($user) {
+            // User exists
+            $user = new User($user->id);
+            app()->setUser($user);
+        } else {
+            // No users found with this token
+            Auth::destroyRememberCookie();
+            $this->redirectSignIn();
+        }
+    }
+
+    /**
+     * Validate session and set app user
+     */
+    private function sessionAuth(?string $user_id): void
+    {
+        $user = User::find($user_id);
+        if ($user) {
+            $user = new User($user_id);
+            app()->setUser($user);
+        } else {
+            $this->redirectSignIn();
+        }
+    }
+
+    private function redirectSignIn(): void
+    {
+        $response = new RedirectResponse($this->sign_in_route);
+        $response->send();
+        exit();
     }
 }

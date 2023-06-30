@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Nebula\Middleware\Middleware;
 
 /**
- * Cookies middleware 
+ * Cookies middleware
  *
  * Secure cookies
  * Session cookie to be accessible only via HTTP

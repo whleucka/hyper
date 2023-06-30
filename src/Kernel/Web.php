@@ -14,6 +14,7 @@ use Error;
 use Exception;
 use GalaxyPDO\DB;
 use Nebula\Session\Session;
+use Nebula\Models\User;
 
 class Web
 {
@@ -27,6 +28,7 @@ class Web
     private ?DB $db = null;
     private Router $router;
     private Session $session;
+    private ?User $user = null;
 
     public static function getInstance(): static
     {
@@ -36,6 +38,22 @@ class Web
         }
 
         return static::$instance;
+    }
+
+    /**
+     * Set the app user
+     */
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * Get the app user
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 
     /**

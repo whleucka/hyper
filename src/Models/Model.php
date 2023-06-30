@@ -32,7 +32,7 @@ class Model
     /**
      * Find a model in the database
      */
-    public static function find(string|int $id): ?Model
+    public static function find(mixed $id): ?Model
     {
         $class = static::class;
         $model = new $class($id);
