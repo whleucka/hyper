@@ -8,7 +8,7 @@ use stdClass;
 
 class Auth
 {
-    public static function rememberMe(User $user): void
+    public static function rememberMe(User $user): bool
     {
         $duration = time() + 30 * 24 * 60 * 60;
         // Generate a random token for the user
@@ -19,7 +19,7 @@ class Auth
 
         // Store the token in the user row
         $user->remember_me = md5($token);
-        $user->update();
+        return $user->update();
     }
 
     public static function authenticate(stdClass $data): ?User
