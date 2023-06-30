@@ -12,8 +12,5 @@ abstract class Middleware
     {
         $this->next = $next;
     }
-    /**
-     * @return void
-     */
-    abstract public function handle(Request $request);
+    abstract public function handle(Request $request): Middleware|Request;
 }
