@@ -17,11 +17,12 @@ class Validate
         "min_length" => "%field is too short (min length: %rule_extra)",
         "max_length" => "%field is too long (max length: %rule_extra)",
         "uppercase" =>
-            "%field requires at least %rule_extra uppercase character",
+        "%field requires at least %rule_extra uppercase character",
         "lowercase" =>
-            "%field requires at least %rule_extra lowercase character",
+        "%field requires at least %rule_extra lowercase character",
         "symbol" => "%field requires at least %rule_extra symbol character",
         "reg_ex" => "%field is invalid",
+        "unique" => "%field must be unique",
     ];
     public static $errors = [];
     public static $custom = [];
@@ -67,6 +68,7 @@ class Validate
                     "lowercase" => self::isLowercase($value, $extra),
                     "symbol" => self::isSymbol($value, $extra),
                     "reg_ex" => self::regEx($value, $extra),
+                    "unique" => self::unique($value, $extra, $request_item),
                 };
                 if (!$result) {
                     self::registerError($rule, [
@@ -176,5 +178,17 @@ class Validate
     public static function regEx($value, $pattern): int|bool
     {
         return preg_match("/{$pattern}/", $value);
+    }
+
+    /**
+     * Request value must be unique
+     */
+    public static function unique($value, $table, $column): bool
+    {
+        $result = app()->getDatabase()
+            ->selectOne("SELECT $column 
+            FROM $table 
+            WHERE $column = ?", $value);
+        return !$result;
     }
 }
