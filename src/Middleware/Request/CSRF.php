@@ -1,14 +1,20 @@
 <?php
 
-namespace Nebula\Middleware\Session;
+namespace Nebula\Middleware\Request;
 
 use Symfony\Component\HttpFoundation\Request;
 use Nebula\Middleware\Middleware;
 
+/**
+ * CSRF (Cross-Site Request Forgery) Middleware
+ *
+ * Generates a csrf token in the session
+ * Validates request methods: POST, PUT, PATCH, DELETE which require CSRF token
+ */
 class CSRF extends Middleware
 {
     /**
-     * CSRF (Cross-Site Request Forgery) protection
+     * 
      */
     public function handle(Request $request): Middleware|Request
     {
@@ -53,6 +59,7 @@ class CSRF extends Middleware
                 return $request;
             } else {
                 // CSRF token is invalid
+                error_log("CSRF token missing or invalid: " . $request->server->get("REMOTE_ADDR"));
                 app()->forbidden();
             }
         }

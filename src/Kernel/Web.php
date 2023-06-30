@@ -177,11 +177,11 @@ class Web
     {
         // Middlewares order matters here
         $middlewares = [
-            \Nebula\Middleware\Session\CSRF::class,
+            \Nebula\Middleware\Request\CSRF::class,
             \Nebula\Middleware\Session\Cookies::class,
             \Nebula\Middleware\Session\Lifetime::class,
             \Nebula\Middleware\Auth\User::class,
-            \Nebula\Middleware\Access\RateLimit::class,
+            \Nebula\Middleware\Request\RateLimit::class,
         ];
         // Register and run middleware handle method
         foreach ($middlewares as $i => $middleware) {

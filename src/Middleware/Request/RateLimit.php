@@ -1,16 +1,20 @@
 <?php
 
-namespace Nebula\Middleware\Access;
+namespace Nebula\Middleware\Request;
 
 use Nebula\Middleware\Middleware;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Rate Limit Middleware
+ *
+ * Only allow RATE_LIMIT number of requests for 
+ * a sliding window of WINDOW_SIZE seconds
+ */
 class RateLimit extends Middleware
 {
-    // Maybe keep it on the lower window size
-    // to keep the requests array small
-    const RATE_LIMIT = 100; // Maximum number of requests allowed per window
-    const WINDOW_SIZE = 1; // Window size in seconds
+    const RATE_LIMIT = 120; // Maximum number of requests allowed per window
+    const WINDOW_SIZE = 5; // Window size in seconds
 
     public function handle(Request $request): Middleware|Request
     {
@@ -30,6 +34,10 @@ class RateLimit extends Middleware
         return $request;
     }
 
+    /**
+     * Clear the expired ts from $requests
+     * @param mixed $expires
+     */
     private function clearExpiredRequests($expires): void
     {
         $requests = session()->get("requests");
@@ -40,6 +48,9 @@ class RateLimit extends Middleware
         }
     }
 
+    /**
+     * Determines if the request should proceed
+     */
     public function allowRequest(): bool
     {
         $currentTime = time();
@@ -48,6 +59,7 @@ class RateLimit extends Middleware
         // Remove expired requests from the sliding window
         $this->clearExpiredRequests($expires);
 
+        // Get the requests from the session, again
         $requests = session()->get("requests");
 
         if (count($requests) < self::RATE_LIMIT) {

@@ -6,13 +6,14 @@ use Nebula\Middleware\Middleware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Auth User Middleware
+ *
+ * If the route has middleware 'auth' then the user
+ * must be authenticated to retrieve response 
+ */
 class User extends Middleware
 {
-    /**
-     * Route authentication
-     * If the route has auth defined in middleware,
-     * then user must be signed in to get response
-     */
     public function handle(Request $request): Middleware|Request
     {
         $sign_in_route = "/admin/sign-in";
