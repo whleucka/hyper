@@ -10,15 +10,15 @@
 
 ### Features
 - [x] Database Abstraction: Simplified database interactions with <a href='https://github.com/libra-php/galaxy-pdo'>GalaxyPDO</a>.
+- [x] Error Handling: Comprehensive error handling and logging for efficient debugging.
+- [x] Form Handling: Convenient form handling and validation capabilities.
 - [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
+- [x] Security: Integrated security measures to protect against common web vulnerabilities.
 - [x] Templating: Built-in template engine support for easy and flexible view rendering.
 - [ ] Admin Access Layer: Coming soon.
 - [ ] Caching: Caching mechanisms to improve performance and optimize data retrieval.
-- [ ] Error Handling: Comprehensive error handling and logging for efficient debugging.
-- [ ] Form Handling: Convenient form handling and validation capabilities.
 - [ ] Migrations: coming soon.
 - [ ] Modular Design: Reusable and independent modules.
-- [ ] Security: Integrated security measures to protect against common web vulnerabilities.
 
 
 ### Getting Started
