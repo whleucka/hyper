@@ -14,7 +14,7 @@ use Nebula\Middleware\Middleware;
 class CSRF extends Middleware
 {
     /**
-     * 
+     *
      */
     public function handle(Request $request): Middleware|Request
     {
@@ -59,7 +59,10 @@ class CSRF extends Middleware
                 return $request;
             } else {
                 // CSRF token is invalid
-                error_log("CSRF token missing or invalid: " . $request->server->get("REMOTE_ADDR"));
+                error_log(
+                    "CSRF token missing or invalid: " .
+                        $request->server->get("REMOTE_ADDR")
+                );
                 app()->forbidden();
             }
         }

@@ -12,7 +12,7 @@ class Model
     private string $table_name;
     private string $primary_key;
     private ?string $id;
-    private bool $loaded = false;
+    private bool $exists = false;
     private array $attributes = [];
     private array $public_properties = [];
     private array $private_properties = [];
@@ -29,10 +29,22 @@ class Model
         $this->loadAttributes();
     }
 
-    public static function find()
+    /**
+     * Find a model in the database
+     */
+    public static function find(string|int $id): ?Model
     {
+        $class = static::class;
+        $model = new $class($id);
+        if ($model->exists()) {
+            return $model;
+        }
+        return null;
     }
 
+    /**
+     * Find a model in the database by attribute
+     */
     public static function findByAttribute(
         string $attribute,
         mixed $value
@@ -70,7 +82,7 @@ class Model
                 $this->id
             );
             if ($row) {
-                $this->loaded = true;
+                $this->exists = true;
             }
         }
         foreach ([...$private_properties, ...$public_properties] as $one) {
@@ -85,12 +97,34 @@ class Model
             fn($private) => $private->name,
             $private_properties
         );
+        if ($this->exists()) {
+            $this->fillProperties();
+        }
+    }
+
+    /**
+     * Fills public / private properties
+     */
+    public function fillProperties(): void
+    {
+        foreach (
+            [$this->public_properties, $this->private_properties]
+            as $properties
+        ) {
+            foreach ($properties as $column) {
+                if (property_exists($this, $column) && !isset($this->$column)) {
+                    if (isset($this->attributes[$column])) {
+                        $this->$column = $this->attributes[$column];
+                    }
+                }
+            }
+        }
     }
 
     /**
      * Formatted columns for insert query
      */
-    public function getInsertColumns(): string
+    public function getFormattedColumns(): string
     {
         // Keys are the columns names
         $columns = $this->public_properties;
@@ -103,7 +137,7 @@ class Model
      */
     public function insert(): ?Model
     {
-        $columns = $this->getInsertColumns();
+        $columns = $this->getFormattedColumns();
         $values = array_map(
             fn($public) => $this->$public ?? null,
             $this->public_properties
@@ -120,14 +154,51 @@ class Model
         return null;
     }
 
-    public function isLoaded(): bool
+    /**
+     * Update model in database
+     */
+    public function update(): bool
     {
-        return $this->loaded === true;
+        $columns = $this->getFormattedColumns();
+        $values = array_map(
+            fn($public) => $this->$public ?? null,
+            $this->public_properties
+        );
+        // Add the id to the values array as the last entry
+        $values[] = $this->id;
+        $result = $this->db->query(
+            "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
+            ...array_values($values)
+        );
+        if ($result) {
+            $this->loadAttributes();
+            return true;
+        }
+        return false;
     }
 
-    public function getAttribute(string $name): mixed
+    /**
+     * Delete model in database
+     */
+    public function delete(): bool
     {
-        return $this->attributes[$name];
+        $result = $this->db->query(
+            "DELETE FROM $this->table_name WHERE $this->primary_key = ?",
+            $this->id
+        );
+        if ($result) {
+            $this->loadAttributes();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Does this model exist in the database?
+     */
+    public function exists(): bool
+    {
+        return $this->exists === true;
     }
 
     /**
@@ -135,7 +206,7 @@ class Model
      */
     public function __get($name): mixed
     {
-        return $this->getAttribute($name);
+        return $this->attributes[$name];
     }
 
     /**

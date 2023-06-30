@@ -25,7 +25,7 @@ class User extends Model
      * Only public properties can be inserted / updated
      */
     private $id;
-    public $uuid;
+    private $uuid;
     public $name;
     public $email;
     public $password;

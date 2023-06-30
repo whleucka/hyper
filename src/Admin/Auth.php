@@ -11,10 +11,7 @@ class Auth
     public static function authenticate(stdClass $data): ?User
     {
         $user = User::findByAttribute("email", $data->email);
-        return password_verify(
-            $data->password,
-            $user?->getAttribute("password")
-        )
+        return password_verify($data->password, $user?->password)
             ? $user
             : null;
     }

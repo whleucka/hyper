@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Auth User Middleware
  *
  * If the route has middleware 'auth' then the user
- * must be authenticated to retrieve response 
+ * must be authenticated to retrieve response
  */
 class User extends Middleware
 {

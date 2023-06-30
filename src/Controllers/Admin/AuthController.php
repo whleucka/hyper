@@ -39,6 +39,7 @@ class AuthController extends Controller
             if ($user) {
                 Auth::signIn($user);
             } else {
+                // Add a custom validation error for bad password
                 Validate::addError(
                     "password",
                     "Bad email or password. Please try again."

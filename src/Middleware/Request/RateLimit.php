@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Rate Limit Middleware
  *
- * Only allow RATE_LIMIT number of requests for 
+ * Only allow RATE_LIMIT number of requests for
  * a sliding window of WINDOW_SIZE seconds
  */
 class RateLimit extends Middleware
