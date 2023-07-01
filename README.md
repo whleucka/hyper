@@ -9,7 +9,7 @@
 
 ❌ **Not ready for production use**
 
-### Features
+### Features for v0.0.1
 - [x] Database Abstraction: Simplified database interactions with <a href='https://github.com/libra-php/galaxy-pdo'>GalaxyPDO</a>.
 - [x] Error Handling: Comprehensive error handling and logging for efficient debugging.
 - [x] Form Handling: Convenient form handling and validation capabilities.
@@ -20,6 +20,12 @@
 - [ ] Admin Access Layer: Coming soon.
 - [ ] Migrations: coming soon.
 
+### TODO
+- Ability to look up route by name & build route from parameters
+- Writing tests that cover various components of Nebula
+- Support for other template engines
+- Docker development environment
+- Logging
 
 ### Getting Started
 
