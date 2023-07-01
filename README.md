@@ -1,5 +1,4 @@
 # Nebula
-[![PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
 ⭐ Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. 
 
