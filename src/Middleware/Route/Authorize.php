@@ -1,6 +1,6 @@
 <?php
 
-namespace Nebula\Middleware\Auth;
+namespace Nebula\Middleware\Route;
 
 use Nebula\Admin\Auth;
 use Nebula\Middleware\Middleware;
