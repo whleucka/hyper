@@ -23,12 +23,11 @@ class Controller
      */
     protected function filterRequest(): array
     {
-        $filtered_request = [
+        return [
             ...$this->request->request,
             ...$this->request->query,
             ...$this->request->files,
         ];
-        return $filtered_request;
     }
 
     /**
