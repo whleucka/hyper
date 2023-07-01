@@ -14,7 +14,7 @@ class Lifetime extends Middleware
 {
     const MINUTES = 30;
 
-    public function handle(Request $request): Middleware|Request
+    public function handle(Request $request): Request
     {
         $sessionTimeout = self::MINUTES * 60; // minutes in seconds
 
@@ -27,10 +27,6 @@ class Lifetime extends Middleware
         }
 
         session()->set("last_activity", time());
-
-        if ($this->next !== null) {
-            return $this->next->handle($request);
-        }
 
         return $request;
     }

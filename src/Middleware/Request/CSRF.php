@@ -16,15 +16,11 @@ class CSRF extends Middleware
     /**
      *
      */
-    public function handle(Request $request): Middleware|Request
+    public function handle(Request $request): Request
     {
         $this->init();
         $this->regenerate();
         $request = $this->validate($request);
-
-        if ($this->next !== null) {
-            return $this->next->handle($request);
-        }
 
         return $request;
     }

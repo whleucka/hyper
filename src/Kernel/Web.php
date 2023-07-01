@@ -204,21 +204,10 @@ class Web
             \Nebula\Middleware\Session\Cookies::class,
             \Nebula\Middleware\Request\RateLimit::class,
         ];
-        // Register middleware
-        $first_middlware = null;
         foreach ($middlewares as $i => $target_middleware) {
-            $class = new $target_middleware();
-            if ($i === 0) {
-                $first_middlware = $class;
-            }
-            if ($i !== count($middlewares) - 1) {
-                $next = $middlewares[$i + 1];
-                $next_class = new $next();
-                $class->setNext($next_class);
-            }
+            $class = new $target_middleware;
+            $this->request = $class->handle($this->request);
         }
-        // Run the first middleware in the chain
-        $first_middlware->handle($this->request);
     }
 
     /**

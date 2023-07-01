@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Authorize extends Middleware
 {
     private $sign_in_route = "/admin/sign-in";
-    public function handle(Request $request): Middleware|Request
+    public function handle(Request $request): Request
     {
         // Get route middleware
         $middlewares = $request->attributes->route->getMiddleware();
@@ -31,10 +31,6 @@ class Authorize extends Middleware
             } else {
                 $this->sessionAuth($user_id);
             }
-        }
-
-        if ($this->next !== null) {
-            return $this->next->handle($request);
         }
 
         return $request;

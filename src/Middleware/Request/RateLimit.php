@@ -16,7 +16,7 @@ class RateLimit extends Middleware
     const RATE_LIMIT = 120; // Maximum number of requests allowed per window
     const WINDOW_SIZE = 5; // Window size in seconds
 
-    public function handle(Request $request): Middleware|Request
+    public function handle(Request $request): Request
     {
         $requests = session()->get("requests");
         if (is_null($requests)) {
@@ -25,10 +25,6 @@ class RateLimit extends Middleware
 
         if (!$this->allowRequest()) {
             app()->tooManyRequests();
-        }
-
-        if ($this->next !== null) {
-            return $this->next->handle($request);
         }
 
         return $request;
@@ -61,7 +57,6 @@ class RateLimit extends Middleware
 
         // Get the requests from the session, again
         $requests = session()->get("requests");
-        dump($requests);
 
         if (count($requests) < self::RATE_LIMIT) {
             // Add the current request timestamp to the sliding window

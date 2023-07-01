@@ -13,14 +13,10 @@ use Nebula\Middleware\Middleware;
  */
 class Cookies extends Middleware
 {
-    public function handle(Request $request): Middleware|Request
+    public function handle(Request $request): Request
     {
         $this->secureCookies();
         $this->cookiesHTTPOnly();
-
-        if ($this->next !== null) {
-            return $this->next->handle($request);
-        }
 
         return $request;
     }
