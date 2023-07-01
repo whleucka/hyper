@@ -73,7 +73,7 @@ class AuthController extends Controller
                 "symbol=1",
             ],
             // We don't want the validation message to say "Password_check"
-            // so we can override the label like this. Now the validation 
+            // so we can override the label like this. Now the validation
             // message will say "Password" for the field
             "password_check" => ["Password" => ["required", "match"]],
         ]);

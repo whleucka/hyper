@@ -17,9 +17,9 @@ class Validate
         "min_length" => "%label is too short (min length: %rule_extra)",
         "max_length" => "%label is too long (max length: %rule_extra)",
         "uppercase" =>
-        "%label requires at least %rule_extra uppercase character",
+            "%label requires at least %rule_extra uppercase character",
         "lowercase" =>
-        "%label requires at least %rule_extra lowercase character",
+            "%label requires at least %rule_extra lowercase character",
         "symbol" => "%label requires at least %rule_extra symbol character",
         "reg_ex" => "%label is invalid",
         "unique" => "%label must be unique",
@@ -197,13 +197,12 @@ class Validate
      */
     public static function unique($value, $table, $column): bool
     {
-        $result = db()
-            ->selectOne(
-                "SELECT $column 
+        $result = db()->selectOne(
+            "SELECT $column 
             FROM $table 
             WHERE $column = ?",
-                $value
-            );
+            $value
+        );
         return !$result;
     }
 }
