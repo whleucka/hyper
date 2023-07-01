@@ -61,6 +61,7 @@ class RateLimit extends Middleware
 
         // Get the requests from the session, again
         $requests = session()->get("requests");
+        dump($requests);
 
         if (count($requests) < self::RATE_LIMIT) {
             // Add the current request timestamp to the sliding window

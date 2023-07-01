@@ -12,11 +12,11 @@ use Nebula\Middleware\Middleware;
  */
 class Lifetime extends Middleware
 {
-    private $minutes = 30;
+    CONST MINUTES = 30;
 
     public function handle(Request $request): Middleware|Request
     {
-        $sessionTimeout = $this->minutes * 60; // minutes in seconds
+        $sessionTimeout = self::MINUTES * 60; // minutes in seconds
 
         $last_activity = session()->get("last_activity");
         if (

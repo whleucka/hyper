@@ -204,16 +204,19 @@ class Web
             \Nebula\Middleware\Auth\Authorize::class,
             \Nebula\Middleware\Request\RateLimit::class,
         ];
-        // Register and run middleware handle method
+        // Register middleware
+        $first_middlware = null;
         foreach ($middlewares as $i => $target_middleware) {
             $class = new $target_middleware();
+            if ($i === 0) $first_middlware = $class;
             if ($i !== count($middlewares) - 1) {
                 $next = $middlewares[$i + 1];
                 $next_class = new $next();
                 $class->setNext($next_class);
             }
-            $class->handle($this->request);
         }
+        // Run the first middleware in the chain
+        $first_middlware->handle($this->request);
     }
 
     /**
