@@ -208,7 +208,9 @@ class Web
         $first_middlware = null;
         foreach ($middlewares as $i => $target_middleware) {
             $class = new $target_middleware();
-            if ($i === 0) $first_middlware = $class;
+            if ($i === 0) {
+                $first_middlware = $class;
+            }
             if ($i !== count($middlewares) - 1) {
                 $next = $middlewares[$i + 1];
                 $next_class = new $next();

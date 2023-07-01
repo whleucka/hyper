@@ -12,7 +12,7 @@ use Nebula\Middleware\Middleware;
  */
 class Lifetime extends Middleware
 {
-    CONST MINUTES = 30;
+    const MINUTES = 30;
 
     public function handle(Request $request): Middleware|Request
     {
