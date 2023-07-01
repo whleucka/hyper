@@ -15,8 +15,6 @@
         }
     ],
     "require": {
-        "libra-php/galaxy-pdo": "@dev",
-        "libra-php/stellar-router": "@dev",
         "vlucas/phpdotenv": "^5.5",
         "symfony/http-foundation": "^6.3",
         "composer/composer": "^2.5",
@@ -25,7 +23,9 @@
         "filp/whoops": "^2.15"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10"
+        "phpunit/phpunit": "^10",
+        "libra-php/galaxy-pdo": "@dev",
+        "libra-php/stellar-router": "@dev"
     },
     "repositories": [
         {
