@@ -22,7 +22,6 @@ class Model
         string $primary_key,
         ?string $id = null
     ) {
-        $this->db = app()->getDatabase();
         $this->table_name = $table_name;
         $this->primary_key = $primary_key;
         $this->id = $id;
@@ -51,7 +50,7 @@ class Model
     ): ?Model {
         $class = static::class;
         $model = new $class();
-        $id = $model->db->selectVar(
+        $id = db()->selectVar(
             "SELECT $model->primary_key 
             FROM $model->table_name 
             WHERE $attribute = ?",
@@ -77,7 +76,7 @@ class Model
             \ReflectionProperty::IS_PUBLIC
         );
         if (!is_null($this->id)) {
-            $row = $this->db->selectOne(
+            $row = db()->selectOne(
                 "SELECT * FROM $this->table_name WHERE $this->primary_key = ?",
                 $this->id
             );
@@ -145,12 +144,12 @@ class Model
             fn($public) => $this->$public ?? null,
             $this->public_properties
         );
-        $result = $this->db->query(
+        $result = db()->query(
             "INSERT INTO $this->table_name SET $columns",
             ...array_values($values)
         );
         if ($result) {
-            $id = $this->db->lastInsertId();
+            $id = db()->lastInsertId();
             $class = static::class;
             return new $class($id);
         }
@@ -169,7 +168,7 @@ class Model
         );
         // Add the id to the values array as the last entry
         $values[] = $this->id;
-        $result = $this->db->query(
+        $result = db()->query(
             "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
             ...array_values($values)
         );
@@ -185,7 +184,7 @@ class Model
      */
     public function delete(): bool
     {
-        $result = $this->db->query(
+        $result = db()->query(
             "DELETE FROM $this->table_name WHERE $this->primary_key = ?",
             $this->id
         );

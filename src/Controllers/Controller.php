@@ -2,39 +2,31 @@
 
 namespace Nebula\Controllers;
 
-use GalaxyPDO\DB;
 use Nebula\Container\Container;
 use Nebula\Validation\Validate;
+use Symfony\Component\HttpFoundation\Request;
 use stdClass;
 
 class Controller
 {
     protected Container $container;
-    protected array $request;
+    protected Request $request;
 
     public function __construct()
     {
-        $this->request = $this->filterRequest();
-    }
-
-    /**
-     * Get PDO database connection
-     */
-    public function db(): DB
-    {
-        return app()->getDatabase();
+        $this->request = request();
     }
 
     /**
      * Filter the request to only contain data from POST, GET, and FILES
+     * @return array<int,mixed>
      */
     protected function filterRequest(): array
     {
-        $request = app()->getRequest();
         $filtered_request = [
-            ...$request->request,
-            ...$request->query,
-            ...$request->files,
+            ...$this->request->request,
+            ...$this->request->query,
+            ...$this->request->files,
         ];
         return $filtered_request;
     }
@@ -46,6 +38,6 @@ class Controller
      */
     protected function validate(array $rules): ?stdClass
     {
-        return Validate::request($this->request, $rules);
+        return Validate::request($this->filterRequest(), $rules);
     }
 }

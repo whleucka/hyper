@@ -66,6 +66,11 @@ function request()
     return app()->getRequest();
 }
 
+function db()
+{
+    return app()->getDatabase();
+}
+
 /**
  * App route
  */
