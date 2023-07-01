@@ -32,7 +32,8 @@ class Session
     public function destroy()
     {
         @session_start();
-        @session_destroy();
+        $_SESSION = $this->data = [];
+        session_destroy();
         session_write_close();
     }
 

@@ -198,10 +198,10 @@ class Web
     {
         // Middlewares order matters here
         $middlewares = [
+            \Nebula\Middleware\Auth\Authorize::class,
             \Nebula\Middleware\Session\Lifetime::class,
             \Nebula\Middleware\Request\CSRF::class,
             \Nebula\Middleware\Session\Cookies::class,
-            \Nebula\Middleware\Auth\Authorize::class,
             \Nebula\Middleware\Request\RateLimit::class,
         ];
         // Register middleware

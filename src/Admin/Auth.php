@@ -46,6 +46,7 @@ class Auth
         if (isset($_COOKIE["remember_token"])) {
             unset($_COOKIE["remember_token"]);
             setcookie("remember_token", "", -1, "/");
+        } else {
         }
     }
 
