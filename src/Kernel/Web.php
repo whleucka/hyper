@@ -205,7 +205,7 @@ class Web
             \Nebula\Middleware\Request\RateLimit::class,
         ];
         foreach ($middlewares as $i => $target_middleware) {
-            $class = new $target_middleware;
+            $class = new $target_middleware();
             $this->request = $class->handle($this->request);
         }
     }
