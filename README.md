@@ -17,15 +17,17 @@
 - [x] Security: Integrated security measures to protect against common web vulnerabilities.
 - [x] Templating: Built-in template engine support for easy and flexible view rendering.
 - [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
-- [ ] Admin Access Layer: Coming soon.
-- [ ] Migrations: coming soon.
+- [ ] Admin Access Layer: wip
+- [ ] Migrations: wip
+- [ ] Logging: wip
+- [ ] Docker Environment: wip
 
 ### TODO
 - Ability to look up route by name & build route from parameters
 - Writing tests that cover various components of Nebula
 - Support for other template engines
 - Docker development environment
-- Logging
+- Investigate php logging solutions
 
 ### Getting Started
 
