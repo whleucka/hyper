@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0cf470c8468b37d348a706283d2b3b1",
+    "content-hash": "e24bb65e63a20c2bc31aa498942cf176",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -897,6 +897,94 @@
                 "source": "https://github.com/laravel/serializable-closure"
             },
             "time": "2023-01-30T18:31:20+00:00"
+        },
+        {
+            "name": "libra-php/galaxy-pdo",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/libra-php/galaxy-pdo.git",
+                "reference": "397329fbdaf5f1442c01e6144d820020d139143a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/libra-php/galaxy-pdo/zipball/397329fbdaf5f1442c01e6144d820020d139143a",
+                "reference": "397329fbdaf5f1442c01e6144d820020d139143a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GalaxyPDO\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Hleucka",
+                    "email": "william.hleucka@gmail.com"
+                }
+            ],
+            "description": "GalaxyPDO is a powerful PHP library that serves as a comprehensive PDO (PHP Data Objects) wrapper.",
+            "support": {
+                "issues": "https://github.com/libra-php/galaxy-pdo/issues",
+                "source": "https://github.com/libra-php/galaxy-pdo/tree/main"
+            },
+            "time": "2023-06-29T13:29:12+00:00"
+        },
+        {
+            "name": "libra-php/stellar-router",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/libra-php/stellar-router.git",
+                "reference": "6f9ba7968db0dff3782020fae70a5831262564a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/libra-php/stellar-router/zipball/6f9ba7968db0dff3782020fae70a5831262564a4",
+                "reference": "6f9ba7968db0dff3782020fae70a5831262564a4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "StellarRouter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Hleucka",
+                    "email": "william.hleucka@gmail.com"
+                }
+            ],
+            "description": "StellarRouter is a PHP library that provides a powerful attribute-based router for mapping HTTP requests to request handlers.",
+            "support": {
+                "issues": "https://github.com/libra-php/stellar-router/issues",
+                "source": "https://github.com/libra-php/stellar-router/tree/main"
+            },
+            "time": "2023-06-24T15:18:56+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -2844,86 +2932,6 @@
         }
     ],
     "packages-dev": [
-        {
-            "name": "libra-php/galaxy-pdo",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../galaxy-pdo",
-                "reference": "397329fbdaf5f1442c01e6144d820020d139143a"
-            },
-            "require": {
-                "php": "^7.4 || ^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "GalaxyPDO\\": "src/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit tests"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "William Hleucka",
-                    "email": "william.hleucka@gmail.com"
-                }
-            ],
-            "description": "GalaxyPDO is a powerful PHP library that serves as a comprehensive PDO (PHP Data Objects) wrapper.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "libra-php/stellar-router",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../stellar-router",
-                "reference": "6f9ba7968db0dff3782020fae70a5831262564a4"
-            },
-            "require": {
-                "php": "^7.4 || ^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "StellarRouter\\": "src/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit tests"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "William Hleucka",
-                    "email": "william.hleucka@gmail.com"
-                }
-            ],
-            "description": "StellarRouter is a PHP library that provides a powerful attribute-based router for mapping HTTP requests to request handlers.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
         {
             "name": "myclabs/deep-copy",
             "version": "1.11.1",
