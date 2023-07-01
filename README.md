@@ -15,10 +15,9 @@
 - [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
 - [x] Security: Integrated security measures to protect against common web vulnerabilities.
 - [x] Templating: Built-in template engine support for easy and flexible view rendering.
+- [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
 - [ ] Admin Access Layer: Coming soon.
-- [ ] Caching: Caching mechanisms to improve performance and optimize data retrieval.
 - [ ] Migrations: coming soon.
-- [ ] Modular Design: Reusable and independent modules.
 
 
 ### Getting Started
