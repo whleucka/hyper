@@ -48,7 +48,7 @@ chown -R www-data:www-data views/.cache
 
 ### Routing
 
-Routing is super easy with Nebula. Call a class method or simply define a closure that returns a payload. Noice.
+Routing is super easy with Nebula. Call a class method or simply define a closure that returns a payload.
 
 - With the http method helpers, you can easily wire up the routing for your app. Here is a basic example of `/public/index.php` which wires up 3 routes.
 ```php
