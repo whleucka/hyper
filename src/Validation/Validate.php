@@ -41,8 +41,11 @@ class Validate
     /**
      * Add arbitrary error to $errors array
      */
-    public static function addError(string $item, string $msg): void
+    public static function addError(string $item, string $msg = ""): void
     {
+        // having $msg default to "" seems strange,
+        // but sometimes we just want to know $item
+        // has and error and the message is irrelevant
         self::$errors[$item][] = $msg;
     }
 

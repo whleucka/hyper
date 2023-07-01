@@ -37,18 +37,19 @@ class AuthController extends Controller
         if ($request) {
             $user = Auth::authenticate($request);
             if ($user) {
-                $remember_me = $request?->remember_me;
-                if ($remember_me) {
-                    Auth::rememberMe($user);
+                if (property_exists($request, "remember_me")) {
+                    $remember_me = $request->remember_me;
+                    if ($remember_me) {
+                        Auth::rememberMe($user);
+                    }
                 }
                 Auth::signIn($user);
             } else {
                 // Add a custom validation error for bad password
-                Validate::addError(
-                    "password",
-                    "Bad email or password. Please try again."
-                );
-                Validate::addError("email", "");
+                Validate::addError("password", "bad email or password");
+                // We can trigger an error with no message. In this case
+                // the email field will turn red with no message.
+                Validate::addError("email");
             }
         }
         return $this->sign_in();

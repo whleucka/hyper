@@ -87,7 +87,10 @@ class Model
         }
         foreach ([...$private_properties, ...$public_properties] as $one) {
             $property = $one->name;
-            $this->attributes[$property] = $row?->$property ?? null;
+            $this->attributes[$property] =
+                isset($row) && property_exists($row, $property)
+                    ? $row->$property
+                    : null;
         }
         $this->public_properties = array_map(
             fn($public) => $public->name,

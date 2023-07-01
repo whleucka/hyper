@@ -628,8 +628,8 @@ class Blueprint
     {
         $this->dateTime("created_at")->default("CURRENT_TIMESTAMP");
         $this->timestamp("updated_at")
-            ->onUpdate("CURRENT_TIMESTAMP")
-            ->default("'0000-00-00 00:00:00'");
+            ->nullable()
+            ->onUpdate("CURRENT_TIMESTAMP");
         return $this;
     }
 
