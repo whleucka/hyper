@@ -46,8 +46,8 @@ class AuthController extends Controller
                 Auth::signIn($user);
             } else {
                 // Add a custom validation error for bad password
-                Validate::addError("password", "bad email or password");
-                // We can trigger an error with no message. In this case
+                Validate::addError("password", "Oops! Bad email or password");
+                // We can trigger an error with no message. In this case,
                 // the email field will turn red with no message.
                 Validate::addError("email");
             }
@@ -60,7 +60,7 @@ class AuthController extends Controller
     {
         // Override the unique message
         Validate::$messages["unique"] =
-            "an account exists for this email address";
+            "An account already exists for this email address";
         $request = $this->validate([
             "name" => ["required", "string"],
             "email" => ["required", "string", "email", "unique=users"],
@@ -72,7 +72,10 @@ class AuthController extends Controller
                 "lowercase=1",
                 "symbol=1",
             ],
-            "password_check" => ["required", "match"],
+            // We don't want the validation message to say "Password_check"
+            // so we can override the label like this. Now the validation 
+            // message will say "Password" for the field
+            "password_check" => ["Password" => ["required", "match"]],
         ]);
         if ($request) {
             $user = Auth::register($request);

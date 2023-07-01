@@ -10,19 +10,19 @@ class Validate
      * Note: you can modify these messages to anything you like
      */
     public static $messages = [
-        "string" => "%value must be a string",
-        "email" => "you must supply a valid email address",
-        "required" => "%field is a required field",
-        "match" => "%field does not match",
-        "min_length" => "%field is too short (min length: %rule_extra)",
-        "max_length" => "%field is too long (max length: %rule_extra)",
+        "string" => "%label must be a string",
+        "email" => "You must supply a valid email address",
+        "required" => "%label is a required field",
+        "match" => "%label does not match",
+        "min_length" => "%label is too short (min length: %rule_extra)",
+        "max_length" => "%label is too long (max length: %rule_extra)",
         "uppercase" =>
-        "%field requires at least %rule_extra uppercase character",
+        "%label requires at least %rule_extra uppercase character",
         "lowercase" =>
-        "%field requires at least %rule_extra lowercase character",
-        "symbol" => "%field requires at least %rule_extra symbol character",
-        "reg_ex" => "%field is invalid",
-        "unique" => "%field must be unique",
+        "%label requires at least %rule_extra lowercase character",
+        "symbol" => "%label requires at least %rule_extra symbol character",
+        "reg_ex" => "%label is invalid",
+        "unique" => "%label must be unique",
     ];
     public static $errors = [];
     public static $custom = [];
@@ -56,10 +56,17 @@ class Validate
     {
         foreach ($request_rules as $request_item => $ruleset) {
             $value = $data[$request_item] ?? null;
+            if (!array_is_list($ruleset)) {
+                $label = array_keys($ruleset)[0];
+                $ruleset = array_values($ruleset)[0];
+            } else {
+                $label = null;
+            }
             foreach ($ruleset as $rule_raw) {
                 $rule_split = explode("=", $rule_raw);
                 $rule = $rule_split[0];
                 $extra = count($rule_split) == 2 ? $rule_split[1] : "";
+                $label = $label ? $label : ucfirst($request_item);
                 $result = match ($rule) {
                     "string" => self::isString($value),
                     "email" => self::isEmail($value),
@@ -72,6 +79,7 @@ class Validate
                     "symbol" => self::isSymbol($value, $extra),
                     "reg_ex" => self::regEx($value, $extra),
                     "unique" => self::unique($value, $extra, $request_item),
+                    default => true,
                 };
                 if (!$result) {
                     self::registerError($rule, [
@@ -79,6 +87,7 @@ class Validate
                         "%rule_extra" => $extra,
                         "%field" => $request_item,
                         "%value" => $value,
+                        "%label" => $label,
                     ]);
                 }
                 foreach (self::$custom as $custom_rule => $callback) {

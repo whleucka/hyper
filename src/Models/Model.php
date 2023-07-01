@@ -87,7 +87,7 @@ class Model
         foreach ([...$private_properties, ...$public_properties] as $one) {
             $property = $one->name;
             $this->attributes[$property] =
-                isset($row) && property_exists($row, $property)
+                isset($row) && $row && property_exists($row, $property)
                     ? $row->$property
                     : null;
         }
