@@ -23,8 +23,7 @@ class Lifetime extends Middleware
             !is_null($last_activity) &&
             time() - $last_activity > $sessionTimeout
         ) {
-            session_unset();
-            session_destroy();
+            session()->destroy();
         }
 
         session()->set("last_activity", time());

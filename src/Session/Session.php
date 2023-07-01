@@ -4,7 +4,7 @@ namespace Nebula\Session;
 
 class Session
 {
-    private $data;
+    private $data = [];
 
     public function get(string $name)
     {

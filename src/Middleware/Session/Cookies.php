@@ -27,7 +27,9 @@ class Cookies extends Middleware
 
     private function secureCookies(): void
     {
-        ini_set("session.cookie_secure", true);
+        if (!app()->isDebug()) {
+            ini_set("session.cookie_secure", true);
+        }
     }
 
     private function cookiesHTTPOnly(): void

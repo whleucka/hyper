@@ -18,7 +18,7 @@ use Nebula\Models\User;
 
 class Web
 {
-    public static $instance;
+    public static $instance = null;
     private ?Route $route;
     private Container $container;
     private ?Controller $controller;
@@ -71,7 +71,10 @@ class Web
 
     public function session(): Session
     {
-        return new Session();
+        if (!isset($this->session)) {
+            $this->session = new Session();
+        }
+        return $this->session;
     }
 
     /**
@@ -182,7 +185,7 @@ class Web
         // Store the route in the request attributes
         $this->request->attributes->route = $this->route;
         // Run the middleware
-        $this->middleware();
+        $this->runMiddleware();
         $this->controller = $this->controller();
         $this->response = $this->response();
         return $this;
@@ -191,19 +194,19 @@ class Web
     /**
      * Register and run middleware
      */
-    public function middleware(): void
+    public function runMiddleware(): void
     {
         // Middlewares order matters here
         $middlewares = [
+            \Nebula\Middleware\Session\Lifetime::class,
             \Nebula\Middleware\Request\CSRF::class,
             \Nebula\Middleware\Session\Cookies::class,
-            \Nebula\Middleware\Session\Lifetime::class,
             \Nebula\Middleware\Auth\Authorize::class,
             \Nebula\Middleware\Request\RateLimit::class,
         ];
         // Register and run middleware handle method
-        foreach ($middlewares as $i => $middleware) {
-            $class = new $middleware();
+        foreach ($middlewares as $i => $target_middleware) {
+            $class = new $target_middleware();
             if ($i !== count($middlewares) - 1) {
                 $next = $middlewares[$i + 1];
                 $next_class = new $next();

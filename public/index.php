@@ -5,6 +5,5 @@
  * Created: william.hleucka@gmail.com
  * License: MIT
  */
-
 require_once "bootstrap.php";
 app()->run();
