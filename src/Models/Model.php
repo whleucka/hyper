@@ -128,7 +128,6 @@ class Model
      */
     public function getFormattedColumns(): string
     {
-        // Keys are the columns names
         $columns = $this->public_properties;
         $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
