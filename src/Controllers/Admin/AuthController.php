@@ -18,13 +18,19 @@ class AuthController extends Controller
     #[Get("/admin/sign-in", "auth.sign_in")]
     public function sign_in(): string
     {
-        return twig("admin/sign-in.html");
+        return twig("admin/auth/sign-in.html");
     }
 
     #[Get("/admin/register", "auth.register")]
     public function register(): string
     {
-        return twig("admin/register.html");
+        return twig("admin/auth/register.html");
+    }
+
+    #[Get("/admin/forgot-password", "auth.forgot_password")]
+    public function forgot_password(): string
+    {
+        return twig("admin/auth/forgot_password.html");
     }
 
     #[Post("/admin/sign-in", "auth.sign_in_post")]
@@ -84,5 +90,12 @@ class AuthController extends Controller
             }
         }
         return $this->register();
+    }
+
+    #[Post("/admin/forgot-password", "auth.forgot_password_post")]
+    public function forgot_password_post()
+    {
+        // WIP
+        return $this->forgot_password();
     }
 }
