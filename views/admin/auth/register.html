@@ -1,0 +1,96 @@
+{% extends "layouts/base.html" %}
+{% block head %}
+  {{ parent() }}
+  <style>
+  #content {
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  #register {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+  }
+
+  .form-register {
+    width: 100%;
+    max-width: 375px;
+    padding: 15px;
+    margin: auto;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    background-color: #fff;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    padding: 20px;
+  }
+
+  .form-register ul {
+    padding-left: 20px;
+  }
+
+
+  .form-register .checkbox {
+    font-weight: 400;
+  }
+
+  .form-register .form-floating:focus-within {
+    z-index: 2;
+  }
+
+  .form-register #name {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .form-register #email {
+    border-radius: 0;
+  }
+  .form-register #password {
+    border-radius: 0;
+  }
+  .form-register #password-check {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .lock-png {
+    height: 16px;
+  }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <main class='form-register'>
+    <form method="POST" action="/admin/register">
+      {{ csrf()|raw }}
+      <div class="form-floating">
+        <input name="name" type="text" class="form-control {% if 'name' in form_errors|keys %}is-invalid{% endif %}" id="name" placeholder="John Smith">
+        <label for="name">Name</label>
+        {% include 'validation/feedback.html' with {'field': 'name'} %}
+      </div>
+      <div class="form-floating mt-1">
+        <input name="email" type="email" class="form-control {% if 'email' in form_errors|keys %}is-invalid{% endif %}" id="email" placeholder="name@example.com">
+        <label for="email">Email address</label>
+        {% include 'validation/feedback.html' with {'field': 'email'} %}
+      </div>
+      <div class="form-floating mt-1">
+        <input name="password" type="password" class="form-control {% if 'password' in form_errors|keys %}is-invalid{% endif %}" id="password" placeholder="Password">
+        <label for="password">Password</label>
+        {% include 'validation/feedback.html' with {'field': 'password'} %}
+      </div>
+      <div class="form-floating mt-1">
+        <input name="password_check" type="password" class="form-control {% if 'password_check' in form_errors|keys %}is-invalid{% endif %}" id="password-check" placeholder="Password Again...">
+        <label for="password-check">Password (again)</label>
+        {% include 'validation/feedback.html' with {'field': 'password_check'} %}
+      </div>
+
+      <button class="w-100 btn btn-lg btn-outline-success mt-3" type="submit">Create</button>
+      <p class="mt-3 text-muted">
+        <small><img src='/assets/img/lock.png' alt='lock' class="me-2 lock-png" /> 256-Bit SSL Encryption (AES-256)</small><br>
+        <small>&copy; 2023 Libra PHP</small>
+      </p>
+    </form>
+  </main>
+{% endblock %}
