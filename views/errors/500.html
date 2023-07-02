@@ -1,13 +1,5 @@
-{% extends "layouts/base.html" %}
+{% extends "errors/error.html" %}
 
-{% block content %}
-  <div class="d-flex justify-content-center align-items-center h-100 bg-gradient-titanium text-white">
-    <div class="d-flex align-items-center">
-      <h3 class="m-0 p-0"><strong>500</strong></h3>
-      <div class="vl mx-4">&nbsp;</div>
-      <div class="d-flex">
-        <span>Error &#8212 internal server error.<br>Try reloading the page.</span>
-      </div>
-    </div>
-  </div>
-{% endblock %}
+{% block error_code %}500{% endblock %}
+{% block error_title %}internal server error.{% endblock %}
+{% block error_description %}Try reloading the page.{% endblock %}

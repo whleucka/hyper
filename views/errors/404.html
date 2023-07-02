@@ -1,13 +1,5 @@
-{% extends "layouts/base.html" %}
+{% extends "errors/error.html" %}
 
-{% block content %}
-  <div class="d-flex justify-content-center align-items-center h-100 bg-gradient-titanium text-white">
-    <div class="d-flex align-items-center">
-      <h3 class="m-0 p-0"><strong>404</strong></h3>
-      <div class="vl mx-4">&nbsp;</div>
-      <div class="d-flex">
-        <span>Error &#8212 page not found.<br>The page you requested could not be found.</span>
-      </div>
-    </div>
-  </div>
-{% endblock %}
+{% block error_code %}404{% endblock %}
+{% block error_title %}page not found.{% endblock %}
+{% block error_description %}The page you requested could not be found.{% endblock %}

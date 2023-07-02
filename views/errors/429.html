@@ -1,13 +1,5 @@
-{% extends "layouts/base.html" %}
+{% extends "errors/error.html" %}
 
-{% block content %}
-  <div class="d-flex justify-content-center align-items-center h-100 bg-gradient-titanium text-white">
-    <div class="d-flex align-items-center">
-      <h3 class="m-0 p-0"><strong>429</strong></h3>
-      <div class="vl mx-4">&nbsp;</div>
-      <div class="d-flex">
-        <span>Error &#8212 too many requests.<br>You've been busy! Please try agian in a few minutes.</span>
-      </div>
-    </div>
-  </div>
-{% endblock %}
+{% block error_code %}429{% endblock %}
+{% block error_title %}too many requests.{% endblock %}
+{% block error_description %}You've been busy! Please try agian in a few minutes.{% endblock %}
