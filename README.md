@@ -1,7 +1,7 @@
 # Nebula
 [![PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
-⭐ Nebula is a powerful PHP web framework inspired by the vastness and beauty of the cosmos. 
+⭐ Nebula is a powerful PHP web framework
 
 ✅ Provides developers with a flexible and extensible architecture to build custom web applications with ease.
 
@@ -9,25 +9,30 @@
 
 ❌ **Not ready for production use**
 
+
 ### Features for v0.0.1
 - [x] Database Abstraction: Simplified database interactions with <a href='https://github.com/libra-php/galaxy-pdo'>GalaxyPDO</a>.
 - [x] Error Handling: Comprehensive error handling and logging for efficient debugging.
 - [x] Form Handling: Convenient form handling and validation capabilities.
 - [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
-- [x] Security: Integrated security measures to protect against common web vulnerabilities.
 - [x] Templating: Built-in template engine support for easy and flexible view rendering.
 - [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
+- [ ] Security: Integrated security measures to protect against common web vulnerabilities.
 - [ ] Admin Access Layer: wip
 - [ ] Migrations: wip
 - [ ] Logging: wip
 - [ ] Docker Environment: wip
 
+
 ### TODO
-- Ability to look up route by name & build route from parameters
-- Writing tests that cover various components of Nebula
+- Two-factor authentication
+- Look up route by name & build route from args
 - Support for other template engines
 - Docker development environment
-- Investigate php logging solutions
+- Investigate PHP logging solutions
+- Writing tests that cover various components of Nebula
+- Refactor and benchmark
+
 
 ### Getting Started
 
@@ -54,11 +59,12 @@ chown -R www-data:www-data views/.cache
 
 - **Deployment**: Once your application is ready for deployment, configure your web server to point to the public directory as the document root.
 
+
 ### Routing
 
 Routing is super easy with Nebula. Call a class method or simply define a closure that returns a payload.
 
-- With the http method helpers, you can easily wire up the routing for your app. Here is a basic example of `/public/index.php` which wires up 3 routes.
+- With app's http method helpers, you can easily wire up the routing for your app. Here is a basic example of `/public/index.php` which creates 3 routes.
 ```php
 <?php
 require_once "bootstrap.php";
@@ -75,9 +81,10 @@ app()
   ->run();
 ```
 
+
 ###  Attribute-based Routing
 
-We also support attribute routing, which is the preferred way of routing in Nebula. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. How easy is that?
+We also support attribute routing. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. Awesome!
 
 - Here is an example controller located at `/src/Controllers/HomeController.php`
 ```php
@@ -106,13 +113,11 @@ class HomeController extends Controller
     #[Post("/test", "home.test", ["api"])]
     public function test(): int
     {
-        // This is a JSON response (from api middleware)
+        // This is a JSON response (from api route middleware)
         return 42;
     }
 }
 ```
-
-That's it! 
 
 <s>For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a></s>
 
@@ -140,10 +145,13 @@ Shortest transaction:	       0.00
 
 Based on this results, Nebula achieved a transaction rate of 6,951.04 trans/sec. Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec.
 
-These numbers demonstrate the strong performance of Nebula and Leaf, making them excellent choices for high-traffic applications.
+These numbers demonstrate the strong performance of Nebula and Leaf, making them excellent choices for high-traffic applications. 
 
-- *Command: `siege -c 10 -t 1s $APP_URL`*
+While considering these numbers, it's important to approach them with caution. Benchmarking frameworks on my personal network and hardware may not yield an entirely accurate measure of requests per second (RPS). Nonetheless, based on my own tests, this type of benchmarking does reveal a noticeable latency.
+
+- *Command: `siege -b -c 10 -t 1s $APP_URL`*
 - *Server is on LAN*
+
 
 ### Contributing
 
@@ -168,8 +176,6 @@ We would like to express our gratitude to the following open-source projects tha
 ### Contact
 
 For any inquiries or questions, please contact william.hleucka@gmail.com.
-
-Let the Nebula framework guide you through the cosmos of web development, and create stellar applications that shine bright in the digital universe.
 
 
 🇨🇦 Made in Canada
