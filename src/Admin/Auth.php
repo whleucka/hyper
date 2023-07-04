@@ -72,8 +72,9 @@ class Auth
     public static function generateToken(): string
     {
         $length = 32;
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $token = '';
+        $characters =
+            "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $token = "";
 
         for ($i = 0; $i < $length; $i++) {
             $token .= $characters[random_int(0, strlen($characters) - 1)];

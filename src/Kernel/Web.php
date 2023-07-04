@@ -334,10 +334,7 @@ class Web
     public function findRoute(string $name): ?Route
     {
         $routes = $this->router->getRoutes();
-        $exists = array_filter(
-            $routes,
-            fn ($route) => $route['name'] === $name
-        );
+        $exists = array_filter($routes, fn($route) => $route["name"] === $name);
         if (!empty($exists) && count($exists) === 1) {
             $route = reset($exists);
             return new Route(...$route);
@@ -358,7 +355,7 @@ class Web
             if ($matches) {
                 array_walk(
                     $matches[0],
-                    fn (&$item) => ($item =
+                    fn(&$item) => ($item =
                         "#" . str_replace("?", "\?", $item) . "#")
                 );
                 return preg_replace($matches[0], $params, $uri);

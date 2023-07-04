@@ -31,7 +31,7 @@ EOT;
         if (!is_null($route)) {
             return $route->getPath();
         }
-        return '';
+        return "";
     }
 
     public function buildRoute(string $name, ...$args): string
@@ -40,6 +40,6 @@ EOT;
         if (!is_null($route)) {
             return $route;
         }
-        return '';
+        return "";
     }
 }
