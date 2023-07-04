@@ -54,7 +54,7 @@ class Auth
         $user = new User();
         $user->name = $data->name;
         $user->email = $data->email;
-        $user->password = password_hash($data->password, PASSWORD_ARGON2I);
+        $user->password = self::hashPassword($data->password);
         return $user->insert();
     }
 
@@ -64,6 +64,10 @@ class Auth
         if (!isset($_COOKIE["remember_token"])) {
             session()->set("user", $user->id);
         }
+        // Clear the password reset token / ts
+        $user->reset_token = null;
+        $user->reset_expires_at = null;
+        $user->update();
         $response = new RedirectResponse($route->getPath());
         $response->send();
         exit();
@@ -81,5 +85,41 @@ class Auth
         }
 
         return $token;
+    }
+
+    public static function forgotPassword(string $email)
+    {
+        $user = User::findByAttribute("email", $email);
+        if ($user) {
+            $expires = strtotime("+ 15 minute");
+            $token = self::generateToken();
+            $user->reset_token = $token;
+            $user->reset_expires_at = $expires;
+            $user->update();
+            $password_reset_route = app()->buildRoute("auth.password_reset", $user->uuid, $token);
+            $url = app()->routePathURL($password_reset_route);
+            mailer()
+                ->setSubject("Password reset requested")
+                ->setTo($user->email)
+                ->setTemplate("admin/auth/email/forgot-password.html", ["url" => $url])
+                ->send();
+        }
+    }
+
+    public static function hashPassword(string $password): string|bool
+    {
+        return password_hash($password, PASSWORD_ARGON2I);
+    }
+
+    public static function validateForgotPassword(User $user, string $token): bool
+    {
+        // Valid for 15 minutes
+        return $user?->reset_token === $token && $user?->reset_expires_at - time() > 0;
+    }
+
+    public static function changePassword(User $user, string $password): bool
+    {
+        $user->password = self::hashPassword($password);
+        return $user->update();
     }
 }

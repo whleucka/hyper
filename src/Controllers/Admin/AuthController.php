@@ -4,6 +4,7 @@ namespace Nebula\Controllers\Admin;
 
 use Nebula\Admin\Auth;
 use Nebula\Controllers\Controller;
+use Nebula\Models\User;
 use Nebula\Validation\Validate;
 use StellarRouter\{Get, Post};
 
@@ -28,9 +29,21 @@ class AuthController extends Controller
     }
 
     #[Get("/admin/forgot-password", "auth.forgot_password")]
-    public function forgot_password(): string
+    public function forgot_password($email_sent = false): string
     {
-        return twig("admin/auth/forgot_password.html");
+        return twig("admin/auth/forgot-password.html", [
+            "email_sent" => $email_sent
+        ]);
+    }
+
+    #[Get("/admin/password-reset/{uuid}/{token}", "auth.password_reset")]
+    public function password_reset(string $uuid, string $token): string
+    {
+        $user = User::findByAttribute('uuid', $uuid);
+        if (!Auth::validateForgotPassword($user, $token)) {
+            app()->forbidden();
+        }
+        return twig("admin/auth/password-reset.html");
     }
 
     #[Post("/admin/sign-in", "auth.sign_in_post")]
@@ -95,7 +108,38 @@ class AuthController extends Controller
     #[Post("/admin/forgot-password", "auth.forgot_password_post")]
     public function forgot_password_post()
     {
-        // WIP
-        return $this->forgot_password();
+        $request = $this->validate([
+            "email" => ["required", "email"]
+        ]);
+        if ($request) {
+            Auth::forgotPassword($request->email);
+        }
+        return $this->forgot_password(true);
+    }
+
+    #[Post("/admin/password-reset/{uuid}/{token}", "auth.password_reset_post")]
+    public function password_reset_post(string $uuid, string $token): string
+    {
+        $user = User::findByAttribute('uuid', $uuid);
+        if (!Auth::validateForgotPassword($user, $token)) {
+            app()->forbidden();
+        }
+        $request = $this->validate([
+            "password" => [
+                "required",
+                "string",
+                "min_length=8",
+                "uppercase=1",
+                "lowercase=1",
+                "symbol=1",
+            ],
+            "password_check" => ["Password" => ["required", "match"]],
+        ]);
+        if ($request) {
+            if (Auth::changePassword($user, $request->password)) {
+                Auth::signIn($user);
+            }
+        }
+        return $this->password_reset($uuid, $token);
     }
 }

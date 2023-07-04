@@ -298,9 +298,9 @@ class Web
      */
     public function isDebug(): bool
     {
-        $env = Env::getInstance()->env();
-        return isset($env["APP_DEBUG"]) &&
-            strtolower($env["APP_DEBUG"]) === "true";
+        $app = new \Nebula\Config\Application();
+        $config = $app->getConfig();
+        return strtolower($config["debug"]) === "true";
     }
 
     /**
@@ -340,6 +340,14 @@ class Web
             return new Route(...$route);
         }
         return null;
+    }
+
+    public function routePathURL(string $route_path): string
+    {
+        $app = new \Nebula\Config\Application();
+        $config = $app->getConfig();
+        $url = $config['url'];
+        return $url . $route_path;
     }
 
     /**

@@ -13,7 +13,9 @@ class User extends Model
     public $name;
     public $email;
     public $password;
-    public $remember_me;
+    public $remember_token;
+    public $reset_token;
+    public $reset_expires_at;
     private $created_at;
     private $updated_at;
 
