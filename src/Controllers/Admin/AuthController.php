@@ -20,6 +20,7 @@ class AuthController extends Controller
             "symbol=1",
         ],
     ];
+
     #[Get("/admin/sign-out", "auth.sign_out")]
     public function sign_out(): void
     {
