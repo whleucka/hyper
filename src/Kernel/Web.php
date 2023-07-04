@@ -346,7 +346,7 @@ class Web
     {
         $app = new \Nebula\Config\Application();
         $config = $app->getConfig();
-        $url = $config['url'];
+        $url = $config["url"];
         return $url . $route_path;
     }
 

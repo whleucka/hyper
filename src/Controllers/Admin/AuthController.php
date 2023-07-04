@@ -32,14 +32,14 @@ class AuthController extends Controller
     public function forgot_password($email_sent = false): string
     {
         return twig("admin/auth/forgot-password.html", [
-            "email_sent" => $email_sent
+            "email_sent" => $email_sent,
         ]);
     }
 
     #[Get("/admin/password-reset/{uuid}/{token}", "auth.password_reset")]
     public function password_reset(string $uuid, string $token): string
     {
-        $user = User::findByAttribute('uuid', $uuid);
+        $user = User::findByAttribute("uuid", $uuid);
         if (!Auth::validateForgotPassword($user, $token)) {
             app()->forbidden();
         }
@@ -109,7 +109,7 @@ class AuthController extends Controller
     public function forgot_password_post()
     {
         $request = $this->validate([
-            "email" => ["required", "email"]
+            "email" => ["required", "email"],
         ]);
         if ($request) {
             Auth::forgotPassword($request->email);
@@ -120,7 +120,7 @@ class AuthController extends Controller
     #[Post("/admin/password-reset/{uuid}/{token}", "auth.password_reset_post")]
     public function password_reset_post(string $uuid, string $token): string
     {
-        $user = User::findByAttribute('uuid', $uuid);
+        $user = User::findByAttribute("uuid", $uuid);
         if (!Auth::validateForgotPassword($user, $token)) {
             app()->forbidden();
         }

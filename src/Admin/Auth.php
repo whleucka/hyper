@@ -107,14 +107,18 @@ class Auth
             $user->reset_token = $token;
             $user->reset_expires_at = $expires;
             $user->update();
-            $password_reset_route = app()->buildRoute("auth.password_reset", $user->uuid, $token);
+            $password_reset_route = app()->buildRoute(
+                "auth.password_reset",
+                $user->uuid,
+                $token
+            );
             $url = app()->routePathURL($password_reset_route);
             mailer()
                 ->setSubject("Password reset requested")
                 ->setTo($user->email)
                 ->setTemplate("admin/auth/email/forgot-password.html", [
                     "name" => $user->name,
-                    "url" => $url
+                    "url" => $url,
                 ])
                 ->send();
         }
@@ -125,10 +129,13 @@ class Auth
         return password_hash($password, PASSWORD_ARGON2I);
     }
 
-    public static function validateForgotPassword(User $user, string $token): bool
-    {
+    public static function validateForgotPassword(
+        User $user,
+        string $token
+    ): bool {
         // Valid for 15 minutes
-        return $user?->reset_token === $token && $user?->reset_expires_at - time() > 0;
+        return $user?->reset_token === $token &&
+            $user?->reset_expires_at - time() > 0;
     }
 
     public static function changePassword(User $user, string $password): bool

@@ -13,7 +13,7 @@ class Application
         $this->config = [
             "name" => $env["APP_NAME"],
             "url" => $env["APP_URL"],
-            "debug" => $env["APP_DEBUG"]
+            "debug" => $env["APP_DEBUG"],
         ];
     }
 
