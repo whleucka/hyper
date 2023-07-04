@@ -1,5 +1,6 @@
 <?php
 
+use Nebula\Email\EmailerSMTP;
 use Nebula\Kernel\Web;
 use Nebula\Validation\Validate;
 use Nebula\Util\TwigExtension;
@@ -106,6 +107,11 @@ function twig($path, $data = [])
     $twig->addExtension(new TwigExtension());
     $data["form_errors"] = Validate::$errors;
     return $twig->render($path, $data);
+}
+
+function mailer(): EmailerSMTP
+{
+    return app()->getContainer()->get(EmailerSMTP::class);
 }
 
 /**
