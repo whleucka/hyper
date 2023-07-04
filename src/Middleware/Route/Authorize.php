@@ -21,8 +21,10 @@ class Authorize extends Middleware
 
     public function handle(Request $request): Request
     {
-        $this->sign_in_route = app()->findRoute("auth.sign_in");
-        $this->admin_route = app()->findRoute("admin.index");
+        $sign_in_route = app()->findRoute("auth.sign_in");
+        $admin_route = app()->findRoute("admin.index");
+        $this->sign_in_route = $sign_in_route->getPath();
+        $this->admin_route = $admin_route->getPath();
 
         $middlewares = $request->attributes->route->getMiddleware();
 

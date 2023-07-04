@@ -106,6 +106,7 @@ function twig($path, $data = [])
         ->get(Twig\Environment::class);
     $twig->addExtension(new TwigExtension());
     $data["form_errors"] = Validate::$errors;
+    $data["js_form_errors"] = json_encode(Validate::$errors);
     return $twig->render($path, $data);
 }
 

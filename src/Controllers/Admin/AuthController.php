@@ -123,8 +123,9 @@ class AuthController extends Controller
         ]);
         if ($request) {
             Auth::forgotPassword($request->email);
+            return $this->forgot_password(true);
         }
-        return $this->forgot_password(true);
+        return $this->forgot_password();
     }
 
     #[Post("/admin/password-reset/{uuid}/{token}", "auth.password_reset_post")]
