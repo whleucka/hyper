@@ -55,7 +55,18 @@ class Auth
         $user->name = $data->name;
         $user->email = $data->email;
         $user->password = self::hashPassword($data->password);
-        return $user->insert();
+        $result = $user->insert();
+        if ($result) {
+            mailer()
+                ->setSubject("New account created")
+                ->setTo($user->email)
+                ->setTemplate("admin/auth/email/new-registration.html", [
+                    "name" => $user->name,
+                    "email" => $user->email,
+                ])
+                ->send();
+        }
+        return $result;
     }
 
     public static function signIn(User $user): void
@@ -87,7 +98,7 @@ class Auth
         return $token;
     }
 
-    public static function forgotPassword(string $email)
+    public static function forgotPassword(string $email): void
     {
         $user = User::findByAttribute("email", $email);
         if ($user) {
@@ -101,7 +112,10 @@ class Auth
             mailer()
                 ->setSubject("Password reset requested")
                 ->setTo($user->email)
-                ->setTemplate("admin/auth/email/forgot-password.html", ["url" => $url])
+                ->setTemplate("admin/auth/email/forgot-password.html", [
+                    "name" => $user->name,
+                    "url" => $url
+                ])
                 ->send();
         }
     }
@@ -120,6 +134,16 @@ class Auth
     public static function changePassword(User $user, string $password): bool
     {
         $user->password = self::hashPassword($password);
-        return $user->update();
+        $result = $user->update();
+        if ($result) {
+            mailer()
+                ->setSubject("Password changed successfully")
+                ->setTo($user->email)
+                ->setTemplate("admin/auth/email/password-change.html", [
+                    "name" => $user->name,
+                ])
+                ->send();
+        }
+        return $result;
     }
 }
