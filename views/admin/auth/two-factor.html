@@ -8,7 +8,7 @@
     text-align: center;
   }
 
-  .form-2fa {
+  .form-two-fa {
     width: 100%;
     max-width: 375px;
     padding: 15px;
@@ -20,29 +20,29 @@
     padding: 20px;
   }
 
-  .form-2fa .form-floating:focus-within {
+  .form-two-fa .form-floating:focus-within {
     z-index: 2;
   }
 
-  .form-2fa .keypad > .btn {
+  .form-two-fa .keypad > .btn {
     flex: 1 1 30%;
     border: 1px solid #ccc;
     margin: 2px;
     font-size: 1.4em;
     font-family: monospace;
   }
-  .form-2fa .keypad {
+  .form-two-fa .keypad {
     margin-top: 10px;
     flex-wrap: wrap;
   }
-  .form-2fa .keypad > .btn:hover {
+  .form-two-fa .keypad > .btn:hover {
     font-weight: bold;
   }
   </style>
 {% endblock %}
 
 {% block content %}
-  <main class='form-2fa' novalidate>
+  <main class='form-two-fa' novalidate>
     <form method="POST" action="{{ findRoute('auth.two_factor_post') }}">
       {{ csrf()|raw }}
       <p class="mb-3">Please verify your account by entering your two-factor authentication code.</p>
