@@ -10,6 +10,16 @@ use StellarRouter\{Get, Post};
 
 class AuthController extends Controller
 {
+    private $password_rules = [
+        "password" => [
+            "required",
+            "string",
+            "min_length=8",
+            "uppercase=1",
+            "lowercase=1",
+            "symbol=1",
+        ],
+    ];
     #[Get("/admin/sign-out", "auth.sign_out")]
     public function sign_out(): void
     {
@@ -29,7 +39,7 @@ class AuthController extends Controller
     }
 
     #[Get("/admin/forgot-password", "auth.forgot_password")]
-    public function forgot_password($email_sent = false): string
+    public function forgot_password(bool $email_sent = false): string
     {
         return twig("admin/auth/forgot-password.html", [
             "email_sent" => $email_sent,
@@ -83,18 +93,11 @@ class AuthController extends Controller
         $request = $this->validate([
             "name" => ["required", "string"],
             "email" => ["required", "string", "email", "unique=users"],
-            "password" => [
-                "required",
-                "string",
-                "min_length=8",
-                "uppercase=1",
-                "lowercase=1",
-                "symbol=1",
-            ],
             // We don't want the validation message to say "Password_check"
             // so we can override the label like this. Now the validation
             // message will say "Password" for the field
             "password_check" => ["Password" => ["required", "match"]],
+            ...$this->password_rules,
         ]);
         if ($request) {
             $user = Auth::register($request);
@@ -106,7 +109,7 @@ class AuthController extends Controller
     }
 
     #[Post("/admin/forgot-password", "auth.forgot_password_post")]
-    public function forgot_password_post()
+    public function forgot_password_post(): string
     {
         $request = $this->validate([
             "email" => ["required", "email"],
@@ -125,15 +128,8 @@ class AuthController extends Controller
             app()->forbidden();
         }
         $request = $this->validate([
-            "password" => [
-                "required",
-                "string",
-                "min_length=8",
-                "uppercase=1",
-                "lowercase=1",
-                "symbol=1",
-            ],
             "password_check" => ["Password" => ["required", "match"]],
+            ...$this->password_rules,
         ]);
         if ($request) {
             if (Auth::changePassword($user, $request->password)) {
