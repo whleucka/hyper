@@ -111,7 +111,9 @@ function twig($path, $data = [])
 
 function mailer(): EmailerSMTP
 {
-    return app()->getContainer()->get(EmailerSMTP::class);
+    return app()
+        ->getContainer()
+        ->get(EmailerSMTP::class);
 }
 
 /**

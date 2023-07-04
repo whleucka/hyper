@@ -35,9 +35,9 @@ class Container
                     "auto_reload" => strtolower($env["APP_DEBUG"]) === "true",
                 ]);
             },
-            EmailerSMTP::class => function() {
+            EmailerSMTP::class => function () {
                 $email = new \Nebula\Config\Email();
-                $config = $email->getConfig(); 
+                $config = $email->getConfig();
                 return new EmailerSMTP($config);
             },
         ];
