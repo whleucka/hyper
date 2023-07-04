@@ -40,6 +40,7 @@ class EmailerSMTP
     $this->mail->setFrom($from_address);
     $this->mail->addReplyTo($reply_to_address);
     $this->mail->isHTML(true);
+    $this->mail->CharSet = 'UTF-8';
   }
 
   public function send(): bool
