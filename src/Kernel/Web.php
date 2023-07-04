@@ -329,6 +329,45 @@ class Web
     }
 
     /**
+     * Find a route by route name
+     */
+    public function findRoute(string $name): ?Route
+    {
+        $routes = $this->router->getRoutes();
+        $exists = array_filter(
+            $routes,
+            fn ($route) => $route['name'] === $name
+        );
+        if (!empty($exists) && count($exists) === 1) {
+            $route = reset($exists);
+            return new Route(...$route);
+        }
+        return null;
+    }
+
+    /**
+     * Build a route with params
+     */
+    public function buildRoute(string $name, ...$params): ?string
+    {
+        $route = $this->findRoute($name);
+        if (!is_null($route)) {
+            $regex = "#({[\w\?]+})#";
+            $uri = $route->getPath();
+            preg_match_all($regex, $uri, $matches);
+            if ($matches) {
+                array_walk(
+                    $matches[0],
+                    fn (&$item) => ($item =
+                        "#" . str_replace("?", "\?", $item) . "#")
+                );
+                return preg_replace($matches[0], $params, $uri);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Send a page not found response
      */
     public function pageNotFound(): void

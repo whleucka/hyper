@@ -12,9 +12,11 @@ CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` binary(96) DEFAULT NULL,
+  `remember_me` char(32) DEFAULT NULL,
+  `reset_token` char(32) DEFAULT NULL,
+  `reset_expires_at` datetime,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp ON UPDATE current_timestamp(),
-  `remember_me` char(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ); 
@@ -30,6 +32,8 @@ return new class extends Migration {
             $table->varchar("email");
             $table->binary("password", 96);
             $table->char('remember_token', 32)->nullable();
+            $table->char('reset_token', 32)->nullable();
+            $table->dateTime('reset_expires_at')->nullable();
             $table->timestamps();
             $table->unique("email");
             $table->primaryKey("id");

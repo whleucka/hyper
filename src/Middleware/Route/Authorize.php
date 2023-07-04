@@ -16,11 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Authorize extends Middleware
 {
-    private $sign_in_route = "/admin/sign-in";
-    private $admin_route = "/admin";
+    private $sign_in_route;
+    private $admin_route;
+
     public function handle(Request $request): Request
     {
-        // Get route middleware
+        $this->sign_in_route = app()->findRoute("auth.sign_in");
+        $this->admin_route = app()->findRoute("admin.index");
+
         $middlewares = $request->attributes->route->getMiddleware();
 
         $user_id = session()->get("user");

@@ -34,9 +34,8 @@ class Auth
     {
         self::destroyRememberCookie();
         session()->destroy();
-        // TODO lookup route
-        $route = "/admin/sign-in";
-        $response = new RedirectResponse($route);
+        $route = app()->findRoute("auth.sign_in");
+        $response = new RedirectResponse($route->getPath());
         $response->send();
         exit();
     }
@@ -61,13 +60,25 @@ class Auth
 
     public static function signIn(User $user): void
     {
-        // TODO lookup route
-        $route = "/admin";
+        $route = app()->findRoute("admin.index");
         if (!isset($_COOKIE["remember_token"])) {
             session()->set("user", $user->id);
         }
-        $response = new RedirectResponse($route);
+        $response = new RedirectResponse($route->getPath());
         $response->send();
         exit();
+    }
+
+    public static function generateToken(): string
+    {
+        $length = 32;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $token = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $token .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+
+        return $token;
     }
 }
