@@ -4,16 +4,14 @@ namespace Nebula\Config;
 
 use Nebula\Kernel\Env;
 
-class Application
+class Authentication
 {
     private array $config;
     public function __construct()
     {
         $env = Env::getInstance()->env();
         $this->config = [
-            "name" => $env["APP_NAME"],
-            "url" => $env["APP_URL"],
-            "debug" => strtolower($env["APP_DEBUG"]) === "true",
+            "2fa_enabled" => strtolower($env["AUTH_2FA_ENABLED"]) === "true",
         ];
     }
 

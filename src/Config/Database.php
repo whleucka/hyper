@@ -12,7 +12,7 @@ class Database
     {
         $env = Env::getInstance()->env();
         $this->config = [
-            "enabled" => $env["DB_ENABLED"],
+            "enabled" => strtolower($env["DB_ENABLED"]) === "true",
             "mode" => $env["DB_MODE"],
             "dbname" => $env["DB_NAME"],
             "host" => $env["DB_HOST"],

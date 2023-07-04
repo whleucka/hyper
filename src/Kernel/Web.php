@@ -300,7 +300,7 @@ class Web
     {
         $app = new \Nebula\Config\Application();
         $config = $app->getConfig();
-        return strtolower($config["debug"]) === "true";
+        return $config["debug"];
     }
 
     /**

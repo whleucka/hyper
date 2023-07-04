@@ -11,6 +11,7 @@ class Validate
      */
     public static $messages = [
         "string" => "%label must be a string",
+        "numeric" => "%label must be a number",
         "email" => "You must supply a valid email address",
         "required" => "%label is a required field",
         "match" => "%label does not match",
@@ -69,6 +70,7 @@ class Validate
                 $label = $label ? $label : ucfirst($request_item);
                 $result = match ($rule) {
                     "string" => self::isString($value),
+                    "numeric" => self::isNumeric($value),
                     "email" => self::isEmail($value),
                     "required" => self::isRequired($value),
                     "match" => self::isMatch($data, $request_item, $value),
@@ -109,6 +111,14 @@ class Validate
     public static function isString($value): bool
     {
         return is_string($value);
+    }
+
+    /**
+     * Request value must be numeric
+     */
+    public static function isNumeric($value): bool
+    {
+        return is_numeric($value);
     }
 
     /**

@@ -33,6 +33,12 @@ class AuthController extends Controller
         return twig("admin/auth/sign-in.html");
     }
 
+    #[Get("/admin/two-factor-authentication", "auth.two_factor")]
+    public function two_factor(): string
+    {
+        return twig("admin/auth/two-factor.html");
+    }
+
     #[Get("/admin/register", "auth.register")]
     public function register(): string
     {
@@ -129,7 +135,12 @@ class AuthController extends Controller
             app()->forbidden();
         }
         $request = $this->validate([
-            "password_check" => ["Password" => ["required", "match"]],
+            "password_check" => [
+                "Password" => [
+                    "required",
+                    "match",
+                ]
+            ],
             ...$this->password_rules,
         ]);
         if ($request) {
@@ -138,5 +149,24 @@ class AuthController extends Controller
             }
         }
         return $this->password_reset($uuid, $token);
+    }
+
+    #[Post("/admin/two-factor-authentication", "auth.two_factor_post")]
+    public function two_factor_post(): string
+    {
+        $request = $this->validate([
+            "code" => [
+                "2FA Code" => [
+                    "numeric",
+                    "required",
+                    "min_length=6",
+                    "max_length=6",
+                ]
+            ]
+        ]);
+        if ($request) {
+            die("wip");
+        }
+        return $this->two_factor();
     }
 }

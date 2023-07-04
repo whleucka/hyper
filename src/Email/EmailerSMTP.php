@@ -8,6 +8,7 @@ use PHPMailer\PHPMailer\SMTP;
 class EmailerSMTP
 {
     private bool $enabled = true;
+    private bool $debug = true;
     private PHPMailer $mail;
     private array $to_addresses = [];
     private array $cc_addresses = [];
@@ -21,7 +22,7 @@ class EmailerSMTP
     {
         extract($config);
         $this->enabled = $enabled;
-        $debug = strtolower($debug) === "true";
+        $this->debug = $debug;
         $this->mail = new PHPMailer($debug);
 
         //Server settings
