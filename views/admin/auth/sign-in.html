@@ -14,7 +14,7 @@
     text-align: center;
   }
 
-  .form-signin {
+  .form-sign-in {
     width: 100%;
     max-width: 375px;
     padding: 15px;
@@ -26,25 +26,16 @@
     padding: 20px;
   }
 
-  .form-signin ul {
+  .form-sign-in ul {
     padding-left: 20px;
   }
 
-  .form-signin .checkbox {
+  .form-sign-in .checkbox {
     font-weight: 400;
   }
 
-  .form-signin .form-floating:focus-within {
+  .form-sign-in .form-floating:focus-within {
     z-index: 2;
-  }
-
-  .form-signin input[type="email"] {
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  .form-signin input[type="password"] {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
   }
 
   .lock-png {
@@ -54,7 +45,7 @@
 {% endblock %}
 
 {% block content %}
-  <main class='form-signin' novalidate>
+  <main class='form-sign-in' novalidate>
     <form method="POST" action="{{ findRoute('auth.sign_in_post') }}">
       {{ csrf()|raw }}
       <div class="form-floating">
