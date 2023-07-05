@@ -34,13 +34,13 @@ class AuthController extends Controller
     }
 
     #[Get("/admin/sign-in/2fa", "auth.sign_in_2fa")]
-    public function two_factor(): string
+    public function sign_in_2fa(): string
     {
         $uuid = session()->get("two_fa_user");
         if (!$uuid) {
             app()->forbidden();
         }
-        return twig("admin/auth/two-factor.html");
+        return twig("admin/auth/sign-in-2fa.html");
     }
 
     #[Get("/admin/register", "auth.register")]
@@ -50,7 +50,7 @@ class AuthController extends Controller
     }
 
     #[Get("/admin/register/2fa", "auth.register_2fa")]
-    public function two_factor_qr(): string
+    public function register_2fa(): string
     {
         $uuid = session()->get("two_fa_user");
         if (!$uuid) {
@@ -63,7 +63,7 @@ class AuthController extends Controller
             Auth::signIn($user);
         }
 
-        return twig("admin/auth/two-factor-qr.html", [
+        return twig("admin/auth/register-2fa.html", [
             "qr_url" => Auth::getQR($user),
         ]);
     }
@@ -184,8 +184,8 @@ class AuthController extends Controller
         return $this->password_reset($uuid, $token);
     }
 
-    #[Post("/admin/sign-in/2fa", "auth.sign_in_2fa_post")]
-    public function two_factor_post(): string
+    #[Post("/admin/register/2fa", "auth.register_2fa_post")]
+    public function register_2fa_post(): string 
     {
         $uuid = session()->get("two_fa_user");
         $user = User::findByAttribute("uuid", $uuid);
@@ -211,6 +211,36 @@ class AuthController extends Controller
                 Validate::addError("code", "Permission denied");
             }
         }
-        return $this->two_factor();
+        return $this->register_2fa();
+    }
+
+    #[Post("/admin/sign-in/2fa", "auth.sign_in_2fa_post")]
+    public function sign_in_2fa_post(): string
+    {
+        $uuid = session()->get("two_fa_user");
+        $user = User::findByAttribute("uuid", $uuid);
+        if (is_null($uuid) || is_null($user)) {
+            app()->forbidden();
+        }
+
+        $request = $this->validate([
+            "code" => [
+                "2FA Code" => [
+                    "numeric",
+                    "required",
+                    "min_length=6",
+                    "max_length=6",
+                ],
+            ],
+        ]);
+
+        if ($request) {
+            if (Auth::validateTwoFactorCode($user, $request->code)) {
+                Auth::signIn($user);
+            } else {
+                Validate::addError("code", "Permission denied");
+            }
+        }
+        return $this->sign_in_2fa();
     }
 }

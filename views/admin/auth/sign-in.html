@@ -39,8 +39,8 @@
 {% endblock %}
 
 {% block content %}
-  <main class='form-sign-in' novalidate>
-    <form method="POST" action="{{ findRoute('auth.sign_in_post') }}">
+  <main class='form-sign-in'>
+    <form method="POST" action="{{ findRoute('auth.sign_in_post') }}" novalidate>
       {{ csrf()|raw }}
       <div class="form-floating">
         <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
