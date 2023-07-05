@@ -7,7 +7,7 @@ use Nebula\Container\Container;
 use Nebula\Controllers\Controller;
 use StellarRouter\Route;
 use StellarRouter\Router;
-use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
+use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse, RedirectResponse};
 use Whoops;
 use Closure;
 use Error;
@@ -370,6 +370,17 @@ class Web
             }
         }
         return null;
+    }
+
+    public function redirect(string $route_name): void
+    {
+        $route = app()->findRoute($route_name);
+        if (!$route) {
+            throw new Error("Route cannot be found: $route_name");
+        }
+        $response = new RedirectResponse($route->getPath());
+        $response->send();
+        exit();
     }
 
     /**

@@ -5,7 +5,6 @@ namespace Nebula\Middleware\Route;
 use Nebula\Admin\Auth;
 use Nebula\Middleware\Middleware;
 use Nebula\Models\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -21,11 +20,6 @@ class Authorize extends Middleware
 
     public function handle(Request $request): Request
     {
-        $sign_in_route = app()->findRoute("auth.sign_in");
-        $admin_route = app()->findRoute("admin.index");
-        $this->sign_in_route = $sign_in_route->getPath();
-        $this->admin_route = $admin_route->getPath();
-
         $middlewares = $request->attributes->route->getMiddleware();
 
         $user_id = session()->get("user");
@@ -73,16 +67,6 @@ class Authorize extends Middleware
     private function redirectSignIn(): void
     {
         Auth::destroyRememberCookie();
-        $response = new RedirectResponse($this->sign_in_route);
-        $response->send();
-        exit();
-    }
-
-    private function redirectAdmin(): void
-    {
-        Auth::destroyRememberCookie();
-        $response = new RedirectResponse($this->admin_route);
-        $response->send();
-        exit();
+        app()->redirect("auth.sign_in");
     }
 }

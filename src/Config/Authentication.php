@@ -11,7 +11,7 @@ class Authentication
     {
         $env = Env::getInstance()->env();
         $this->config = [
-            "2fa_enabled" => strtolower($env["AUTH_2FA_ENABLED"]) === "true",
+            "two_fa_enabled" => strtolower($env["AUTH_2FA_ENABLED"]) === "true",
         ];
     }
 

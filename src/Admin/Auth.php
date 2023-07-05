@@ -2,8 +2,8 @@
 
 namespace Nebula\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Nebula\Models\User;
+use PragmaRX\Google2FA\Google2FA;
 use stdClass;
 
 class Auth
@@ -22,6 +22,45 @@ class Auth
         return $user->update();
     }
 
+    public static function twoFactorEnabled(): bool
+    {
+        $auth = new \Nebula\Config\Authentication();
+        $config = $auth->getConfig();
+        return $config['two_fa_enabled'];
+    }
+
+    public static function twoFactorSecret(User $user): bool
+    {
+        // Generate and save 2fa secret
+        $google2fa = new Google2FA();
+        $secret = $google2fa->generateSecretKey();
+        $user->two_fa_secret = $secret;
+        return $user->update();
+    }
+
+    public static function getQR(User $user): string
+    {
+        $app = new \Nebula\Config\Application();
+        $config = $app->getConfig();
+        $name = $config['name'];
+
+        $google2fa = new Google2FA();
+        $text = $google2fa->getQRCodeUrl(
+            $name,
+            $user->uuid,
+            $user->two_fa_secret
+        );
+
+        $image_url = 'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl='.$text;
+        return $image_url;
+    }
+
+    public static function validateTwoFactorCode(User $user, string $code): bool
+    {
+        $google2fa = new Google2FA();
+        return $google2fa->verifyKey($user->two_fa_secret, $code);
+    }
+
     public static function authenticate(stdClass $data): ?User
     {
         $user = User::findByAttribute("email", $data->email);
@@ -34,10 +73,7 @@ class Auth
     {
         self::destroyRememberCookie();
         session()->destroy();
-        $route = app()->findRoute("auth.sign_in");
-        $response = new RedirectResponse($route->getPath());
-        $response->send();
-        exit();
+        app()->redirect("auth.sign_in");
     }
 
     public static function destroyRememberCookie(): void
@@ -45,7 +81,6 @@ class Auth
         if (isset($_COOKIE["remember_token"])) {
             unset($_COOKIE["remember_token"]);
             setcookie("remember_token", "", -1, "/");
-        } else {
         }
     }
 
@@ -71,7 +106,6 @@ class Auth
 
     public static function signIn(User $user): void
     {
-        $route = app()->findRoute("admin.index");
         if (!isset($_COOKIE["remember_token"])) {
             session()->set("user", $user->id);
         }
@@ -79,9 +113,7 @@ class Auth
         $user->reset_token = null;
         $user->reset_expires_at = null;
         $user->update();
-        $response = new RedirectResponse($route->getPath());
-        $response->send();
-        exit();
+        app()->redirect("admin.index");
     }
 
     public static function generateToken(): string

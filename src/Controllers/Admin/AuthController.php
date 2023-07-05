@@ -33,9 +33,13 @@ class AuthController extends Controller
         return twig("admin/auth/sign-in.html");
     }
 
-    #[Get("/admin/two-factor-authentication", "auth.two_factor")]
+    #[Get("/admin/sign-in/2fa", "auth.sign_in_2fa")]
     public function two_factor(): string
     {
+        $uuid = session()->get("two_fa_user");
+        if (!$uuid) {
+            app()->forbidden();
+        }
         return twig("admin/auth/two-factor.html");
     }
 
@@ -44,6 +48,26 @@ class AuthController extends Controller
     {
         return twig("admin/auth/register.html");
     }
+
+    #[Get("/admin/register/2fa", "auth.register_2fa")]
+    public function two_factor_qr(): string
+    {
+        $uuid = session()->get("two_fa_user");
+        if (!$uuid) {
+            app()->forbidden();
+        }
+
+        $user = User::findByAttribute("uuid", $uuid);
+        $continue = $this->request->get("continue");
+        if ($continue) {
+            Auth::signIn($user);
+        }
+
+        return twig("admin/auth/two-factor-qr.html", [
+            "qr_url" => Auth::getQR($user),
+        ]);
+    }
+
 
     #[Get("/admin/forgot-password", "auth.forgot_password")]
     public function forgot_password(bool $email_sent = false): string
@@ -79,7 +103,12 @@ class AuthController extends Controller
                         Auth::rememberMe($user);
                     }
                 }
-                Auth::signIn($user);
+                if (Auth::twoFactorEnabled()) {
+                    session()->set("two_fa_user", $user->uuid);
+                    app()->redirect("auth.sign_in_2fa");
+                } else{
+                    Auth::signIn($user);
+                }
             } else {
                 // Add a custom validation error for bad password
                 Validate::addError("password", "Oops! Bad email or password");
@@ -109,7 +138,13 @@ class AuthController extends Controller
         if ($request) {
             $user = Auth::register($request);
             if ($user) {
-                Auth::signIn($user);
+                if (Auth::twoFactorEnabled()) {
+                    Auth::twoFactorSecret($user);
+                    session()->set("two_fa_user", $user->uuid);
+                    app()->redirect("auth.register_2fa");
+                } else{
+                    Auth::signIn($user);
+                }
             }
         }
         return $this->register();
@@ -152,9 +187,14 @@ class AuthController extends Controller
         return $this->password_reset($uuid, $token);
     }
 
-    #[Post("/admin/two-factor-authentication", "auth.two_factor_post")]
+    #[Post("/admin/sign-in/2fa", "auth.sign_in_2fa_post")]
     public function two_factor_post(): string
     {
+        $uuid = session()->get("two_fa_user");
+        if (!$uuid) {
+            app()->forbidden();
+        }
+
         $request = $this->validate([
             "code" => [
                 "2FA Code" => [
@@ -165,8 +205,14 @@ class AuthController extends Controller
                 ]
             ]
         ]);
+
+        $user = User::findByAttribute("uuid", $uuid);
         if ($request) {
-            die("wip");
+            if (Auth::validateTwoFactorCode($user, $request->code)) {
+                Auth::signIn($user);
+            } else {
+                Validate::addError("code", "Permission denied");
+            }
         }
         return $this->two_factor();
     }

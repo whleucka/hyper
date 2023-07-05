@@ -12,6 +12,7 @@ CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` binary(96) DEFAULT NULL,
+  `two_fa_secret` char(16) DEFAULT NULL,
   `remember_token` char(32) DEFAULT NULL,
   `reset_token` char(32) DEFAULT NULL,
   `reset_expires_at` bigint unsigned,
@@ -31,6 +32,7 @@ return new class extends Migration {
             $table->varchar("name");
             $table->varchar("email");
             $table->binary("password", 96);
+            $table->char("two_fa_secret", 16)->nullable();
             $table->char('remember_token', 32)->nullable();
             $table->char('reset_token', 32)->nullable();
             $table->unsignedBigInteger('reset_expires_at')->nullable();
