@@ -185,7 +185,7 @@ class AuthController extends Controller
     }
 
     #[Post("/admin/register/2fa", "auth.register_2fa_post")]
-    public function register_2fa_post(): string 
+    public function register_2fa_post(): string
     {
         $uuid = session()->get("two_fa_user");
         $user = User::findByAttribute("uuid", $uuid);
