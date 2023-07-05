@@ -3,6 +3,7 @@
 namespace Nebula\Admin;
 
 use Nebula\Models\User;
+use Nebula\Validation\Validate;
 use PragmaRX\Google2FA\Google2FA;
 use stdClass;
 
@@ -60,15 +61,25 @@ class Auth
     public static function validateTwoFactorCode(User $user, string $code): bool
     {
         $google2fa = new Google2FA();
-        return $google2fa->verifyKey($user->two_fa_secret, $code);
+        $result = $google2fa->verifyKey($user->two_fa_secret, $code);
+        if (!$result) {
+            self::failedAttempt($user);
+        }
+        return self::checkUserLock($user) && $result;
     }
 
     public static function authenticate(stdClass $data): ?User
     {
         $user = User::findByAttribute("email", $data->email);
-        return password_verify($data->password, $user?->password)
-            ? $user
-            : null;
+        if ($user && self::checkUserLock($user)) {
+            $result = password_verify($data->password, $user->password);
+            if ($result) {
+                return $user;
+            }
+            // Failed attempt
+            self::failedAttempt($user);
+        }
+        return null;
     }
 
     public static function signOut(): void
@@ -92,6 +103,7 @@ class Auth
         $user->name = $data->name;
         $user->email = $data->email;
         $user->password = self::hashPassword($data->password);
+        $user->failed_login_attempts = 0;
         $result = $user->insert();
         if ($result) {
             mailer()
@@ -111,11 +123,67 @@ class Auth
         if (!isset($_COOKIE["remember_token"])) {
             session()->set("user", $user->id);
         }
-        // Clear the password reset token / ts
-        $user->reset_token = null;
-        $user->reset_expires_at = null;
+        self::clearReset($user);
+        self::unlockAccount($user);
         $user->update();
         app()->redirect("admin.index");
+    }
+
+    public static function clearReset(User $user): bool
+    {
+        $user->reset_token = null;
+        $user->reset_expires_at = null;
+        return $user->update();
+    }
+
+    public static function failedAttempt(User $user): bool
+    {
+        if ($user->failed_login_attempts >= 10) return true;
+        $user->failed_login_attempts++;
+        return $user->update();
+    }
+
+    public static function lockAccount(User $user): bool
+    {
+        mailer()
+            ->setSubject("Account locked")
+            ->setTo($user->email)
+            ->setTemplate("admin/auth/email/account-locked.html", [
+                "name" => $user->name
+            ])
+            ->send();
+        $user->lock_expires_at = strtotime("+15 minute");
+        return $user->update();
+    }
+
+    public static function unlockAccount(User $user): bool
+    {
+        $user->lock_expires_at = null;
+        $user->failed_login_attempts = 0;
+        return $user->update();
+    }
+
+    public static function checkUserLock(User $user): mixed
+    {
+        $valid = true;
+        $time = time();
+        if ($user->lock_expires_at) {
+            if ($user->lock_expires_at > $time) {
+                $valid &= false;
+            } else {
+                self::unlockAccount($user);
+            }
+        } else if ($user->failed_login_attempts >= 10) {
+            self::lockAccount($user);
+            $valid &= false;
+        }
+        if (!$valid) {
+            // Set validation error messages for email and code
+            $remaining = gmdate("i:s", $user->lock_expires_at - $time);
+            Validate::addError("email", "This account is locked. Time remaining: $remaining");
+            Validate::addError("code", "This account is locked. Time remaining: $remaining");
+        }
+        return $valid;
     }
 
     public static function generateToken(): string

@@ -17,6 +17,8 @@ class User extends Model
     public $remember_token;
     public $reset_token;
     public $reset_expires_at;
+    public $failed_login_attempts;
+    public $lock_expires_at;
     private $created_at;
     private $updated_at;
 

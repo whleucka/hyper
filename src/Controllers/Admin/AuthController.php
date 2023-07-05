@@ -68,7 +68,7 @@ class AuthController extends Controller
         ]);
     }
 
-    #[Get("/admin/forgot-password", "auth.forgot_password")]
+    #[Get("/admin/forgot-passwgrd", "auth.forgot_password")]
     public function forgot_password(bool $email_sent = false): string
     {
         return twig("admin/auth/forgot-password.html", [
@@ -137,8 +137,9 @@ class AuthController extends Controller
         if ($request) {
             $user = Auth::register($request);
             if ($user) {
+                // Generate 2FA secret for user
+                Auth::twoFactorSecret($user);
                 if (Auth::twoFactorEnabled()) {
-                    Auth::twoFactorSecret($user);
                     session()->set("two_fa_user", $user->uuid);
                     app()->redirect("auth.register_2fa");
                 } else {
@@ -187,7 +188,8 @@ class AuthController extends Controller
     public function two_factor_post(): string
     {
         $uuid = session()->get("two_fa_user");
-        if (!$uuid) {
+        $user = User::findByAttribute("uuid", $uuid);
+        if (is_null($uuid) || is_null($user)) {
             app()->forbidden();
         }
 
@@ -202,7 +204,6 @@ class AuthController extends Controller
             ],
         ]);
 
-        $user = User::findByAttribute("uuid", $uuid);
         if ($request) {
             if (Auth::validateTwoFactorCode($user, $request->code)) {
                 Auth::signIn($user);
