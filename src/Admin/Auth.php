@@ -26,7 +26,7 @@ class Auth
     {
         $auth = new \Nebula\Config\Authentication();
         $config = $auth->getConfig();
-        return $config['two_fa_enabled'];
+        return $config["two_fa_enabled"];
     }
 
     public static function twoFactorSecret(User $user): bool
@@ -42,7 +42,7 @@ class Auth
     {
         $app = new \Nebula\Config\Application();
         $config = $app->getConfig();
-        $name = $config['name'];
+        $name = $config["name"];
 
         $google2fa = new Google2FA();
         $text = $google2fa->getQRCodeUrl(
@@ -51,7 +51,9 @@ class Auth
             $user->two_fa_secret
         );
 
-        $image_url = 'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl='.$text;
+        $image_url =
+            "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" .
+            $text;
         return $image_url;
     }
 

@@ -68,7 +68,6 @@ class AuthController extends Controller
         ]);
     }
 
-
     #[Get("/admin/forgot-password", "auth.forgot_password")]
     public function forgot_password(bool $email_sent = false): string
     {
@@ -106,7 +105,7 @@ class AuthController extends Controller
                 if (Auth::twoFactorEnabled()) {
                     session()->set("two_fa_user", $user->uuid);
                     app()->redirect("auth.sign_in_2fa");
-                } else{
+                } else {
                     Auth::signIn($user);
                 }
             } else {
@@ -142,7 +141,7 @@ class AuthController extends Controller
                     Auth::twoFactorSecret($user);
                     session()->set("two_fa_user", $user->uuid);
                     app()->redirect("auth.register_2fa");
-                } else{
+                } else {
                     Auth::signIn($user);
                 }
             }
@@ -172,10 +171,7 @@ class AuthController extends Controller
         }
         $request = $this->validate([
             "password_check" => [
-                "Password" => [
-                    "required",
-                    "match",
-                ]
+                "Password" => ["required", "match"],
             ],
             ...$this->password_rules,
         ]);
@@ -202,8 +198,8 @@ class AuthController extends Controller
                     "required",
                     "min_length=6",
                     "max_length=6",
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $user = User::findByAttribute("uuid", $uuid);

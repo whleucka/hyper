@@ -11,8 +11,8 @@ class Email
     {
         $env = Env::getInstance()->env();
         $this->config = [
-            "enabled" => strtolower($env["EMAIL_ENABLED"]) === 'true',
-            "debug" => strtolower($env["EMAIL_DEBUG"]) === 'true',
+            "enabled" => strtolower($env["EMAIL_ENABLED"]) === "true",
+            "debug" => strtolower($env["EMAIL_DEBUG"]) === "true",
             "host" => $env["EMAIL_HOST"],
             "port" => $env["EMAIL_PORT"],
             "username" => $env["EMAIL_USERNAME"],

@@ -7,7 +7,12 @@ use Nebula\Container\Container;
 use Nebula\Controllers\Controller;
 use StellarRouter\Route;
 use StellarRouter\Router;
-use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse, RedirectResponse};
+use Symfony\Component\HttpFoundation\{
+    Request,
+    Response,
+    JsonResponse,
+    RedirectResponse
+};
 use Whoops;
 use Closure;
 use Error;

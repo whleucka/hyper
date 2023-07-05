@@ -11,13 +11,13 @@
 
 
 ### Features for v0.0.1
+- [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
 - [x] Database Abstraction: Simplified database interactions with <a href='https://github.com/libra-php/galaxy-pdo'>GalaxyPDO</a>.
 - [x] Error Handling: Comprehensive error handling and logging for efficient debugging.
 - [x] Form Handling: Convenient form handling and validation capabilities.
 - [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
+- [x] Security: Integrated security measures to protect against common web vulnerabilities.
 - [x] Templating: Built-in template engine support for easy and flexible view rendering.
-- [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
-- [ ] Security: Integrated security measures to protect against common web vulnerabilities.
 - [ ] Admin Access Layer: wip
 - [ ] Migrations: wip
 - [ ] Logging: wip
