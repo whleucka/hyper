@@ -10,7 +10,7 @@ final class SchemaTest extends TestCase
   {
     $migration_class = require_once __DIR__ . "/../migrations/1688141260_table_users.php";
     $user_migration = new $migration_class;
-    $query = "CREATE TABLE IF NOT EXISTS users (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, uuid CHAR(36) NOT NULL DEFAULT (UUID()), name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password BINARY(96) NOT NULL, remember_token CHAR(32), reset_token CHAR(32), reset_expires_at BIGINT UNSIGNED, created_at DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP, UNIQUE KEY (email), PRIMARY KEY (id))";
+    $query = "CREATE TABLE IF NOT EXISTS users (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, uuid CHAR(36) NOT NULL DEFAULT (UUID()), name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password BINARY(96) NOT NULL, two_fa_secret CHAR(16), remember_token CHAR(32), reset_token CHAR(32), reset_expires_at BIGINT UNSIGNED, created_at DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP, UNIQUE KEY (email), PRIMARY KEY (id))";
     $this->assertSame(
       $query,
       $user_migration->up()
