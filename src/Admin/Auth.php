@@ -138,7 +138,9 @@ class Auth
 
     public static function failedAttempt(User $user): bool
     {
-        if ($user->failed_login_attempts >= 10) return true;
+        if ($user->failed_login_attempts >= 10) {
+            return true;
+        }
         $user->failed_login_attempts++;
         return $user->update();
     }
@@ -149,7 +151,7 @@ class Auth
             ->setSubject("Account locked")
             ->setTo($user->email)
             ->setTemplate("admin/auth/email/account-locked.html", [
-                "name" => $user->name
+                "name" => $user->name,
             ])
             ->send();
         $user->lock_expires_at = strtotime("+15 minute");
@@ -173,15 +175,21 @@ class Auth
             } else {
                 self::unlockAccount($user);
             }
-        } else if ($user->failed_login_attempts >= 10) {
+        } elseif ($user->failed_login_attempts >= 10) {
             self::lockAccount($user);
             $valid &= false;
         }
         if (!$valid) {
             // Set validation error messages for email and code
             $remaining = gmdate("i:s", $user->lock_expires_at - $time);
-            Validate::addError("email", "This account is locked. Time remaining: $remaining");
-            Validate::addError("code", "This account is locked. Time remaining: $remaining");
+            Validate::addError(
+                "email",
+                "This account is locked. Time remaining: $remaining"
+            );
+            Validate::addError(
+                "code",
+                "This account is locked. Time remaining: $remaining"
+            );
         }
         return $valid;
     }
