@@ -68,7 +68,7 @@ class AuthController extends Controller
         ]);
     }
 
-    #[Get("/admin/forgot-passwgrd", "auth.forgot_password")]
+    #[Get("/admin/forgot-password", "auth.forgot_password")]
     public function forgot_password(bool $email_sent = false): string
     {
         return twig("admin/auth/forgot-password.html", [

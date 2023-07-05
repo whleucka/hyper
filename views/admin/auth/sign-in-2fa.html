@@ -43,6 +43,7 @@
 
 {% block content %}
   <main class='form-two-fa'>
+    <h4>Two-factor Authentication</h4>
     <form method="POST" action="{{ findRoute('auth.sign_in_2fa_post') }}" novalidate>
       {{ csrf()|raw }}
       <p class="mb-3">Please  your account by entering your two-factor authentication code.</p>
