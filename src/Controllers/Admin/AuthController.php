@@ -110,7 +110,7 @@ class AuthController extends Controller
                 }
             } else {
                 // Add a custom validation error for bad password
-                Validate::addError("password", "Oops! Bad email or password");
+                Validate::addError("password", "Bad email or password");
                 // We can trigger an error with no message. In this case,
                 // the email field will turn red with no message.
                 Validate::addError("email");
