@@ -48,7 +48,7 @@ class Auth
         $google2fa = new Google2FA();
         $text = $google2fa->getQRCodeUrl(
             $name,
-            $user->uuid,
+            " $user->email",
             $user->two_fa_secret
         );
 

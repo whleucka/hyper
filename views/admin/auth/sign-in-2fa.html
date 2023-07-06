@@ -48,8 +48,8 @@
       {{ csrf()|raw }}
       <p class="mb-3">Please  your account by entering your two-factor authentication code.</p>
       <div class="form-floating">
-        <input id="two_fa" name="code" type="tel" minlength="6" maxlength="6" class="form-control" id="floatingInput" placeholder="Code">
-        <label for="floatingInput">2FA Code</label>
+        <input id="two_fa" name="code" type="tel" minlength="6" maxlength="6" class="form-control" placeholder="Code" autocomplete="off">
+        <label for="two_fa">2FA Code</label>
         {% include 'validation/feedback.html' with {'field': 'code'} %}
       </div>
       <div class="keypad d-flex">

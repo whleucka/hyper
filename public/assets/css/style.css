@@ -45,3 +45,13 @@ body {
 .invalid-feedback li:last-child {
   border-bottom: 0 none;
 }
+
+.keypad > .btn:focus,
+.keypad > .btn:active{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.keypad > button.active {
+  background-color: #d7ffcf;
+}

@@ -4,6 +4,7 @@ namespace Nebula\Models;
 
 use Nebula\Container\Container;
 use GalaxyPDO\DB;
+use PDO;
 
 class Model
 {
@@ -84,11 +85,17 @@ class Model
             if ($row) {
                 $this->exists = true;
             }
-        }
-        foreach ([...$private_properties, ...$public_properties] as $one) {
-            $property = $one->name;
-            if ($row && property_exists($row, $property)) {
-                $this->attributes[$property] = $row->$property;
+            foreach ([...$private_properties, ...$public_properties] as $one) {
+                $property = $one->name;
+                if ($row && property_exists($row, $property)) {
+                    $this->attributes[$property] = $row->$property;
+                }
+            }
+        } else {
+            $desc = db()->query("DESCRIBE $this->table_name");
+            $fields = $desc->fetchAll(PDO::FETCH_COLUMN);
+            foreach ($fields as $field) {
+                $this->attributes[$field] = null;
             }
         }
         $this->public_properties = array_map(
