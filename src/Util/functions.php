@@ -1,4 +1,9 @@
 <?php
+/**
+ * A collection of helper utility funcitons
+ */
+
+// DO NOT NAMESPACE THIS FILE
 
 use Nebula\Email\EmailerSMTP;
 use Nebula\Kernel\Web;
@@ -121,6 +126,9 @@ function twig($path, $data = [])
     return $twig->render($path, $data);
 }
 
+/**
+ * App mailer
+ */
 function mailer(): EmailerSMTP
 {
     return app()

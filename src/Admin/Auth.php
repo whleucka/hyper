@@ -9,6 +9,9 @@ use stdClass;
 
 class Auth
 {
+    /**
+     * Set a remember me cookie for user
+     */
     public static function rememberMe(User $user): bool
     {
         $duration = time() + 30 * 24 * 60 * 60;
@@ -23,6 +26,9 @@ class Auth
         return $user->update();
     }
 
+    /**
+     * Is two factor enabled for the application?
+     */
     public static function twoFactorEnabled(): bool
     {
         $auth = new \Nebula\Config\Authentication();
@@ -30,6 +36,9 @@ class Auth
         return $config["two_fa_enabled"];
     }
 
+    /**
+     * Generate a 2FA secret for a user
+     */
     public static function twoFactorSecret(User $user): bool
     {
         // Generate and save 2fa secret
@@ -39,6 +48,9 @@ class Auth
         return $user->update();
     }
 
+    /**
+     * Generate a 2FA QR code image link
+     */
     public static function getQR(User $user): string
     {
         $app = new \Nebula\Config\Application();
@@ -52,12 +64,12 @@ class Auth
             $user->two_fa_secret
         );
 
-        $image_url =
-            "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" .
-            $text;
-        return $image_url;
+        return "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" . $text;
     }
 
+    /**
+     * Validate a user 2FA code
+     */
     public static function validateTwoFactorCode(User $user, string $code): bool
     {
         $google2fa = new Google2FA();
@@ -68,6 +80,9 @@ class Auth
         return self::checkUserLock($user) && $result;
     }
 
+    /**
+     * Authenticate a user by email and password
+     */
     public static function authenticate(stdClass $data): ?User
     {
         $user = User::findByAttribute("email", $data->email);
@@ -82,6 +97,9 @@ class Auth
         return null;
     }
 
+    /**
+     * Sign out of application
+     */
     public static function signOut(): void
     {
         self::destroyRememberCookie();
@@ -89,6 +107,9 @@ class Auth
         app()->redirect("auth.sign_in");
     }
 
+    /**
+     * Destroy a remember me token
+     */
     public static function destroyRememberCookie(): void
     {
         if (isset($_COOKIE["remember_token"])) {
@@ -97,6 +118,9 @@ class Auth
         }
     }
 
+    /**
+     * Register a new user
+     */
     public static function register(stdClass $data): ?User
     {
         $user = new User();
@@ -118,6 +142,9 @@ class Auth
         return $result;
     }
 
+    /**
+     * Sign in user and redirect to admin index
+     */
     public static function signIn(User $user): void
     {
         if (!isset($_COOKIE["remember_token"])) {
@@ -129,6 +156,9 @@ class Auth
         app()->redirect("admin.index");
     }
 
+    /**
+     * Clear user password reset
+     */
     public static function clearReset(User $user): bool
     {
         $user->reset_token = null;
@@ -136,6 +166,9 @@ class Auth
         return $user->update();
     }
 
+    /**
+     * Record a user failed login attempt
+     */
     public static function failedAttempt(User $user): bool
     {
         if ($user->failed_login_attempts >= 10) {
@@ -145,6 +178,9 @@ class Auth
         return $user->update();
     }
 
+    /**
+     * Lock a user account for x minutes
+     */
     public static function lockAccount(User $user): bool
     {
         mailer()
@@ -158,6 +194,9 @@ class Auth
         return $user->update();
     }
 
+    /**
+     * Unlock a user account
+     */
     public static function unlockAccount(User $user): bool
     {
         $user->lock_expires_at = null;
@@ -165,6 +204,9 @@ class Auth
         return $user->update();
     }
 
+    /**
+     * Check for a user lock (locks and unlocks user if necessary)
+     */
     public static function checkUserLock(User $user): mixed
     {
         $valid = true;
@@ -194,6 +236,9 @@ class Auth
         return $valid;
     }
 
+    /**
+     * Generate a random 32-character token
+     */
     public static function generateToken(): string
     {
         $length = 32;
@@ -208,6 +253,9 @@ class Auth
         return $token;
     }
 
+    /**
+     * Issue user a password reset link via email
+     */
     public static function forgotPassword(string $email): void
     {
         $user = User::findByAttribute("email", $email);
@@ -234,11 +282,17 @@ class Auth
         }
     }
 
+    /**
+     * Hash a user password
+     */
     public static function hashPassword(string $password): string|bool
     {
         return password_hash($password, PASSWORD_ARGON2I);
     }
 
+    /**
+     * Validate a user's forgot password token
+     */
     public static function validateForgotPassword(
         User $user,
         string $token
@@ -248,6 +302,9 @@ class Auth
             $user?->reset_expires_at - time() > 0;
     }
 
+    /**
+     * Change a user's password
+     */
     public static function changePassword(User $user, string $password): bool
     {
         $user->password = self::hashPassword($password);

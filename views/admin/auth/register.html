@@ -24,7 +24,6 @@
     padding-left: 20px;
   }
 
-
   .form-register .checkbox {
     font-weight: 400;
   }
@@ -44,12 +43,12 @@
     <form method="POST" action="{{ findRoute('auth.register_post') }}">
       {{ csrf()|raw }}
       <div class="form-floating">
-        <input name="name" type="text" class="form-control" id="name" placeholder="John Smith">
+        <input name="name" type="text" class="form-control" value="{{ old('name') }}" id="name" placeholder="John Smith">
         <label for="name">Name</label>
         {% include 'validation/feedback.html' with {'field': 'name'} %}
       </div>
       <div class="form-floating mt-1">
-        <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
+        <input name="email" type="email" class="form-control" value="{{ old('email') }}" id="email" placeholder="name@example.com">
         <label for="email">Email address</label>
         {% include 'validation/feedback.html' with {'field': 'email'} %}
       </div>
