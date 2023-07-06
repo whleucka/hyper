@@ -75,6 +75,7 @@ class Model
         $public_properties = $reflection->getProperties(
             \ReflectionProperty::IS_PUBLIC
         );
+        $row = null;
         if (!is_null($this->id)) {
             $row = db()->selectOne(
                 "SELECT * FROM $this->table_name WHERE $this->primary_key = ?",
@@ -86,17 +87,16 @@ class Model
         }
         foreach ([...$private_properties, ...$public_properties] as $one) {
             $property = $one->name;
-            $this->attributes[$property] =
-                isset($row) && $row && property_exists($row, $property)
-                    ? $row->$property
-                    : null;
+            if ($row && property_exists($row, $property)) {
+                $this->attributes[$property] = $row->$property;
+            }
         }
         $this->public_properties = array_map(
-            fn($public) => $public->name,
+            fn ($public) => $public->name,
             $public_properties
         );
         $this->private_properties = array_map(
-            fn($private) => $private->name,
+            fn ($private) => $private->name,
             $private_properties
         );
         if ($this->exists()) {
@@ -109,10 +109,8 @@ class Model
      */
     public function fillProperties(): void
     {
-        foreach (
-            [$this->public_properties, $this->private_properties]
-            as $properties
-        ) {
+        foreach ([$this->public_properties, $this->private_properties]
+            as $properties) {
             foreach ($properties as $column) {
                 if (property_exists($this, $column) && !isset($this->$column)) {
                     if (isset($this->attributes[$column])) {
@@ -128,9 +126,20 @@ class Model
      */
     public function getFormattedColumns(): string
     {
-        $columns = $this->public_properties;
-        $stmt = array_map(fn($column) => $column . " = ?", $columns);
+        $columns = array_filter($this->public_properties, fn ($property) => key_exists($property, $this->attributes));
+        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
+    }
+
+    /**
+     * We only want public properties that exists as an entity attribute
+     */
+    public function publicAttributeValues(): array
+    {
+        return array_map(
+            fn ($public) => $this->$public ?? null,
+            array_filter($this->public_properties, fn ($public) => key_exists($public, $this->attributes))
+        );
     }
 
     /**
@@ -139,10 +148,7 @@ class Model
     public function insert(): ?Model
     {
         $columns = $this->getFormattedColumns();
-        $values = array_map(
-            fn($public) => $this->$public ?? null,
-            $this->public_properties
-        );
+        $values = $this->publicAttributeValues();
         $result = db()->query(
             "INSERT INTO $this->table_name SET $columns",
             ...array_values($values)
@@ -161,10 +167,7 @@ class Model
     public function update(): bool
     {
         $columns = $this->getFormattedColumns();
-        $values = array_map(
-            fn($public) => $this->$public ?? null,
-            $this->public_properties
-        );
+        $values = $this->publicAttributeValues();
         // Add the id to the values array as the last entry
         $values[] = $this->id;
         $result = db()->query(

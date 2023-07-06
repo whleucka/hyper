@@ -105,12 +105,17 @@ function twig($path, $data = [])
         ->container()
         ->get(Twig\Environment::class);
     $twig->addExtension(new TwigExtension());
-    $app = new \Nebula\Config\Application();
+
     $user = user();
-    $user->gravatar = 'http://www.gravatar.com/avatar/' . md5($user->email) . '?s=32';
-    $data["form_errors"] = Validate::$errors;
     $data["user"] = $user;
+    if ($user) {
+        $user->gravatar = 'http://www.gravatar.com/avatar/' . md5($user->email) . '?s=32';
+    }
+
+    $data["form_errors"] = Validate::$errors;
     $data["js_form_errors"] = json_encode(Validate::$errors);
+
+    $app = new \Nebula\Config\Application();
     $data["app"] = $app->getConfig();
     return $twig->render($path, $data);
 }
