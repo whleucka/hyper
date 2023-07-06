@@ -136,12 +136,12 @@ class Model
     }
 
     /**
-     * Formatted columns for insert query
+     * Formatted columns for query
      */
     public function getFormattedColumns(): string
     {
         $columns = array_filter(
-            [...$this->public_properties, ...$this->protected_properties],
+            $this->public_properties,
             fn ($property) => key_exists($property, $this->attributes)
         );
         $stmt = array_map(fn ($column) => $column . " = ?", $columns);
@@ -149,14 +149,14 @@ class Model
     }
 
     /**
-     * We only want public/protected properties that exists as an entity attribute
+     * We only want public properties that exists as an entity attribute
      */
     public function attributeValues(): array
     {
         return array_map(
             fn ($property) => $this->$property ?? null,
             array_filter(
-                [...$this->public_properties, ...$this->protected_properties],
+                $this->public_properties,
                 fn ($property) => key_exists($property, $this->attributes)
             )
         );
@@ -240,7 +240,7 @@ class Model
     public function __set($name, $value): void
     {
         // Only allow setting pulbic properties
-        if (in_array($name, [...$this->public_properties, ...$this->protected_properties])) {
+        if (in_array($name, $this->public_properties)) {
             $this->attributes[$name] = $value;
         }
     }
