@@ -21,6 +21,8 @@ class User extends Model
     public $lock_expires_at;
     private $created_at;
     private $updated_at;
+    // The attributes below are not part of the entity
+    public $gravatar;
 
     public function __construct(?string $id = null)
     {

@@ -13,4 +13,10 @@ class AdminController extends Controller
     {
         return twig("admin/index.html");
     }
+
+    #[Get("/admin/profile", "admin.profile", ["auth"])]
+    public function profile(): string
+    {
+        return twig("admin/profile.html");
+    }
 }

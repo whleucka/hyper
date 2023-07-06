@@ -1,0 +1,29 @@
+#sidebar {
+  height: 100%;
+  width: 4.5rem;
+  border-right: 1px solid #ddd;
+}
+
+#sidebar .active {
+  background-color: #eee;
+}
+
+#sidebar .nav-flush .nav-link {
+  border-radius: 0;
+}
+
+.feather {
+  width: 24px;
+  height: 24px;
+  stroke: black;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

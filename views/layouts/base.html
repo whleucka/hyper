@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <title>{% block title %}{{ app.name }}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 {% block head %}
     <link rel="stylesheet" href="/assets/css/style.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
-    <title>{% block title %}{% endblock %}</title>
 {% endblock %}
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -18,8 +18,8 @@
   <footer>
 {% block footer %}{% endblock %}
   </footer>
+  <script src="/assets/js/bootstrap.bundle.min.js"></script>
 {% block body_scripts %}
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/scripts.js"></script>
     <script>
       const form_errors = {{ js_form_errors|raw }};
