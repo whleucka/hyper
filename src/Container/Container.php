@@ -5,6 +5,9 @@ namespace Nebula\Container;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Dependency injection container
+ */
 class Container
 {
     protected static $instance;

@@ -6,22 +6,25 @@ class User extends Model
 {
     /**
      * User attributes are defined here
-     * Only public properties can be inserted / updated
+     * Only public & protected properties can be modified
+     * Private properties are immutable
      */
     private $id;
     private $uuid;
-    public $name;
-    public $email;
-    public $password;
-    public $two_fa_secret;
-    public $remember_token;
-    public $reset_token;
-    public $reset_expires_at;
-    public $failed_login_attempts;
-    public $lock_expires_at;
+    protected $name;
+    protected $email;
+    protected $password;
+    protected $two_fa_secret;
+    protected $remember_token;
+    protected $reset_token;
+    protected $reset_expires_at;
+    protected $failed_login_attempts;
+    protected $lock_expires_at;
     private $created_at;
     private $updated_at;
-    // The attributes below are not part of the entity
+
+    // The properties below are not entity attributes,
+    // so they won't be affected by insert/update etc.
     public $gravatar;
 
     public function __construct(?string $id = null)
