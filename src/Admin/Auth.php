@@ -64,7 +64,8 @@ class Auth
             $user->two_fa_secret
         );
 
-        return "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" . $text;
+        return "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=" .
+            $text;
     }
 
     /**
