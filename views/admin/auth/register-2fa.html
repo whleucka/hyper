@@ -52,7 +52,7 @@
       <div class="form-floating">
         <input id="two_fa" name="code" type="tel" minlength="6" maxlength="6" class="form-control" placeholder="Code" autocomplete="off">
         <label for="two_fa">2FA Code</label>
-        {% include 'validation/feedback.html' with {'field': 'code'} %}
+        <span id="code-errors"></span>
       </div>
       <div class="keypad d-flex">
         <button type="button" class="btn" value="1" onClick="key(event)">1</button>

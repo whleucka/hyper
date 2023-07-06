@@ -45,22 +45,22 @@
       <div class="form-floating">
         <input name="name" type="text" class="form-control" value="{{ old('name') }}" id="name" placeholder="John Smith">
         <label for="name">Name</label>
-        {% include 'validation/feedback.html' with {'field': 'name'} %}
+        <span id="name-errors"></span>
       </div>
       <div class="form-floating mt-1">
         <input name="email" type="email" class="form-control" value="{{ old('email') }}" id="email" placeholder="name@example.com">
         <label for="email">Email address</label>
-        {% include 'validation/feedback.html' with {'field': 'email'} %}
+        <span id="email-errors"></span>
       </div>
       <div class="form-floating mt-1">
         <input name="password" type="password" class="form-control" id="password" placeholder="Password">
         <label for="password">Password</label>
-        {% include 'validation/feedback.html' with {'field': 'password'} %}
+        <span id="password-errors"></span>
       </div>
       <div class="form-floating mt-1">
         <input name="password_check" type="password" class="form-control" id="password-check" placeholder="Password Again...">
         <label for="password-check">Password (again)</label>
-        {% include 'validation/feedback.html' with {'field': 'password_check'} %}
+        <span id="password_check-errors"></span>
       </div>
 
       <button class="w-100 btn btn-lg btn-outline-success mt-3" type="submit">Create</button>

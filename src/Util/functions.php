@@ -111,6 +111,7 @@ function twig($path, $data = [])
         ->get(Twig\Environment::class);
     $twig->addExtension(new TwigExtension());
 
+    // App user
     $user = user();
     $data["user"] = $user;
     if ($user) {
@@ -118,11 +119,14 @@ function twig($path, $data = [])
             "http://www.gravatar.com/avatar/" . md5($user->email) . "?s=32";
     }
 
-    $data["form_errors"] = Validate::$errors;
+    // Form validation errors are passed directly to twig
+    //$data["form_errors"] = Validate::$errors;
     $data["js_form_errors"] = json_encode(Validate::$errors);
 
+    // Application-specific vars
     $app = new \Nebula\Config\Application();
     $data["app"] = $app->getConfig();
+
     return $twig->render($path, $data);
 }
 

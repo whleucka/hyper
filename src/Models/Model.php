@@ -88,7 +88,14 @@ class Model
             if ($row) {
                 $this->exists = true;
             }
-            foreach ([...$public_properties, ...$protected_properties, ...$private_properties] as $one) {
+            foreach (
+                [
+                    ...$public_properties,
+                    ...$protected_properties,
+                    ...$private_properties,
+                ]
+                as $one
+            ) {
                 $property = $one->name;
                 if ($row && property_exists($row, $property)) {
                     $this->attributes[$property] = $row->$property;
@@ -102,15 +109,15 @@ class Model
             }
         }
         $this->public_properties = array_map(
-            fn ($public) => $public->name,
+            fn($public) => $public->name,
             $public_properties
         );
         $this->protected_properties = array_map(
-            fn ($protected) => $protected->name,
+            fn($protected) => $protected->name,
             $protected_properties
         );
         $this->private_properties = array_map(
-            fn ($private) => $private->name,
+            fn($private) => $private->name,
             $private_properties
         );
         if ($this->exists()) {
@@ -123,8 +130,14 @@ class Model
      */
     public function fillProperties(): void
     {
-        foreach ([$this->public_properties, $this->protected_properties, $this->private_properties]
-            as $properties) {
+        foreach (
+            [
+                $this->public_properties,
+                $this->protected_properties,
+                $this->private_properties,
+            ]
+            as $properties
+        ) {
             foreach ($properties as $column) {
                 if (property_exists($this, $column) && !isset($this->$column)) {
                     if (isset($this->attributes[$column])) {
@@ -142,9 +155,9 @@ class Model
     {
         $columns = array_filter(
             $this->public_properties,
-            fn ($property) => key_exists($property, $this->attributes)
+            fn($property) => key_exists($property, $this->attributes)
         );
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
@@ -154,10 +167,10 @@ class Model
     public function attributeValues(): array
     {
         return array_map(
-            fn ($property) => $this->$property ?? null,
+            fn($property) => $this->$property ?? null,
             array_filter(
                 $this->public_properties,
-                fn ($property) => key_exists($property, $this->attributes)
+                fn($property) => key_exists($property, $this->attributes)
             )
         );
     }

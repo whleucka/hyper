@@ -45,12 +45,12 @@
       <div class="form-floating">
         <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
         <label for="floatingInput">Email address</label>
-        {% include 'validation/feedback.html' with {'field': 'email'} %}
+        <span id="email-errors"></span>
       </div>
       <div class="form-floating mt-1">
         <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
         <label for="floatingPassword">Password</label>
-        {% include 'validation/feedback.html' with {'field': 'password'} %}
+        <span id="password-errors"></span>
       </div>
 
       <div class="checkbox my-3 text-start">
