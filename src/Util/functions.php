@@ -109,7 +109,8 @@ function twig($path, $data = [])
     $user = user();
     $data["user"] = $user;
     if ($user) {
-        $user->gravatar = 'http://www.gravatar.com/avatar/' . md5($user->email) . '?s=32';
+        $user->gravatar =
+            "http://www.gravatar.com/avatar/" . md5($user->email) . "?s=32";
     }
 
     $data["form_errors"] = Validate::$errors;

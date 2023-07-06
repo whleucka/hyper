@@ -92,11 +92,11 @@ class Model
             }
         }
         $this->public_properties = array_map(
-            fn ($public) => $public->name,
+            fn($public) => $public->name,
             $public_properties
         );
         $this->private_properties = array_map(
-            fn ($private) => $private->name,
+            fn($private) => $private->name,
             $private_properties
         );
         if ($this->exists()) {
@@ -109,8 +109,10 @@ class Model
      */
     public function fillProperties(): void
     {
-        foreach ([$this->public_properties, $this->private_properties]
-            as $properties) {
+        foreach (
+            [$this->public_properties, $this->private_properties]
+            as $properties
+        ) {
             foreach ($properties as $column) {
                 if (property_exists($this, $column) && !isset($this->$column)) {
                     if (isset($this->attributes[$column])) {
@@ -126,8 +128,11 @@ class Model
      */
     public function getFormattedColumns(): string
     {
-        $columns = array_filter($this->public_properties, fn ($property) => key_exists($property, $this->attributes));
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $columns = array_filter(
+            $this->public_properties,
+            fn($property) => key_exists($property, $this->attributes)
+        );
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
@@ -137,8 +142,11 @@ class Model
     public function publicAttributeValues(): array
     {
         return array_map(
-            fn ($public) => $this->$public ?? null,
-            array_filter($this->public_properties, fn ($public) => key_exists($public, $this->attributes))
+            fn($public) => $this->$public ?? null,
+            array_filter(
+                $this->public_properties,
+                fn($public) => key_exists($public, $this->attributes)
+            )
         );
     }
 
