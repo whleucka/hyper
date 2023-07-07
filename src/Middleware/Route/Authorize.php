@@ -47,7 +47,7 @@ class Authorize extends Middleware
     {
         $user = User::findByAttribute("remember_me", md5($token));
         if ($user) {
-            return new User($user->id);
+            return new User($user->getId());
         }
         return null;
     }

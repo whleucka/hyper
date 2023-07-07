@@ -15,9 +15,8 @@ class Model
     private ?string $id;
     private bool $exists = false;
     private array $attributes = [];
-    private array $public_properties = [];
-    private array $protected_properties = [];
-    private array $private_properties = [];
+    private array $properties = [];
+    protected array $guarded = [];
 
     public function __construct(
         string $table_name,
@@ -27,7 +26,13 @@ class Model
         $this->table_name = $table_name;
         $this->primary_key = $primary_key;
         $this->id = $id;
+        $this->loadProperties();
         $this->loadAttributes();
+    }
+
+    public function getId(): ?string
+    {
+        return $this->{$this->primary_key};
     }
 
     /**
@@ -64,64 +69,53 @@ class Model
         return null;
     }
 
+    private function loadProperties(): void
+    {
+        $class = static::class;
+        $reflection = new \ReflectionClass($class);
+        $this->properties = array_filter($reflection->getProperties(), fn($ref) => $ref->class === $class);
+        $this->properties = array_map(fn($property) => $property->name, $this->properties);
+    }
+
     /**
      * Load attributes and private/public properties
      */
     private function loadAttributes(): void
     {
-        $class = static::class;
-        $reflection = new \ReflectionClass($class);
-        $public_properties = $reflection->getProperties(
-            \ReflectionProperty::IS_PUBLIC
-        );
-        $protected_properties = $reflection->getProperties(
-            \ReflectionProperty::IS_PROTECTED
-        );
-        $private_properties = $reflection->getProperties(
-            \ReflectionProperty::IS_PRIVATE
-        );
         if (!is_null($this->id)) {
-            $row = db()->selectOne(
-                "SELECT * FROM $this->table_name WHERE $this->primary_key = ?",
-                $this->id
-            );
-            if ($row) {
-                $this->exists = true;
-            }
-            foreach (
-                [
-                    ...$public_properties,
-                    ...$protected_properties,
-                    ...$private_properties,
-                ]
-                as $one
-            ) {
-                $property = $one->name;
-                if ($row && property_exists($row, $property)) {
-                    $this->attributes[$property] = $row->$property;
-                }
-            }
+            $this->loadFromId();
         } else {
-            $desc = db()->query("DESCRIBE $this->table_name");
-            $fields = $desc->fetchAll(PDO::FETCH_COLUMN);
-            foreach ($fields as $field) {
-                $this->attributes[$field] = null;
-            }
+            $this->loadFromSchema();
         }
-        $this->public_properties = array_map(
-            fn($public) => $public->name,
-            $public_properties
-        );
-        $this->protected_properties = array_map(
-            fn($protected) => $protected->name,
-            $protected_properties
-        );
-        $this->private_properties = array_map(
-            fn($private) => $private->name,
-            $private_properties
-        );
         if ($this->exists()) {
             $this->fillProperties();
+        }
+    }
+
+    private function loadFromId(): void
+    {
+        $model = db()->selectOne(
+            "SELECT * FROM $this->table_name WHERE $this->primary_key = ?",
+            $this->id
+        );
+        if ($model) {
+            $this->exists = true;
+        }
+        foreach (
+        $this->properties as $property
+    ) {
+            if ($model && property_exists($model, $property)) {
+                $this->attributes[$property] = $model->$property;
+            }
+        }
+    }
+
+    private function loadFromSchema(): void
+    {
+        $desc = db()->query("DESCRIBE $this->table_name");
+        $columns = $desc->fetchAll(PDO::FETCH_COLUMN);
+        foreach ($columns as $name) {
+            $this->attributes[$name] = null;
         }
     }
 
@@ -131,18 +125,11 @@ class Model
     public function fillProperties(): void
     {
         foreach (
-            [
-                $this->public_properties,
-                $this->protected_properties,
-                $this->private_properties,
-            ]
-            as $properties
+            $this->properties as $property
         ) {
-            foreach ($properties as $column) {
-                if (property_exists($this, $column) && !isset($this->$column)) {
-                    if (isset($this->attributes[$column])) {
-                        $this->$column = $this->attributes[$column];
-                    }
+            if (property_exists($this, $property) && !isset($this->$property)) {
+                if (isset($this->attributes[$property])) {
+                    $this->$property = $this->attributes[$property];
                 }
             }
         }
@@ -154,8 +141,8 @@ class Model
     public function getFormattedColumns(): string
     {
         $columns = array_filter(
-            $this->public_properties,
-            fn($property) => key_exists($property, $this->attributes)
+            $this->properties,
+            fn($property) => key_exists($property, $this->attributes) && !in_array($property, $this->guarded)
         );
         $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
@@ -166,12 +153,13 @@ class Model
      */
     public function attributeValues(): array
     {
+        $columns = array_filter(
+            $this->properties,
+            fn($property) => key_exists($property, $this->attributes) && !in_array($property, $this->guarded)
+        );
         return array_map(
             fn($property) => $this->$property ?? null,
-            array_filter(
-                $this->public_properties,
-                fn($property) => key_exists($property, $this->attributes)
-            )
+            $columns
         );
     }
 
@@ -252,9 +240,6 @@ class Model
      */
     public function __set($name, $value): void
     {
-        // Only allow setting pulbic properties
-        if (in_array($name, $this->public_properties)) {
-            $this->attributes[$name] = $value;
-        }
+        $this->attributes[$name] = $value;
     }
 }

@@ -148,9 +148,7 @@ class Auth
      */
     public static function signIn(User $user): void
     {
-        if (!isset($_COOKIE["remember_token"])) {
-            session()->set("user", $user->id);
-        }
+        session()->set("user", $user->getId());
         self::clearReset($user);
         self::unlockAccount($user);
         $user->update();

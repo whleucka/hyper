@@ -4,13 +4,7 @@ namespace Nebula\Models;
 
 class User extends Model
 {
-    /**
-     * User attributes are defined here
-     * Only public properties can be modified
-     * Private & protected properties are immutable
-     */
-    private $id;
-    private $uuid;
+    public $uuid;
     public $name;
     public $email;
     public $password;
@@ -20,12 +14,17 @@ class User extends Model
     public $reset_expires_at;
     public $failed_login_attempts;
     public $lock_expires_at;
-    private $created_at;
-    private $updated_at;
-
-    // The properties below are not entity attributes,
-    // so they won't be affected by insert/update etc.
+    public $created_at;
+    public $updated_at;
     public $gravatar;
+
+    // These columns won't be updated on insert / update
+    protected array $guarded = [
+        'id',
+        'uuid',
+        'updated_at',
+        'created_at',
+    ];
 
     public function __construct(?string $id = null)
     {
