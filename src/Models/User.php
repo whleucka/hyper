@@ -19,12 +19,7 @@ class User extends Model
     public $gravatar;
 
     // These columns won't be updated on insert / update
-    protected array $guarded = [
-        'id',
-        'uuid',
-        'updated_at',
-        'created_at',
-    ];
+    protected array $guarded = ["id", "uuid", "updated_at", "created_at"];
 
     public function __construct(?string $id = null)
     {

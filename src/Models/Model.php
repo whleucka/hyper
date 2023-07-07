@@ -73,8 +73,14 @@ class Model
     {
         $class = static::class;
         $reflection = new \ReflectionClass($class);
-        $this->properties = array_filter($reflection->getProperties(), fn($ref) => $ref->class === $class);
-        $this->properties = array_map(fn($property) => $property->name, $this->properties);
+        $this->properties = array_filter(
+            $reflection->getProperties(),
+            fn($ref) => $ref->class === $class
+        );
+        $this->properties = array_map(
+            fn($property) => $property->name,
+            $this->properties
+        );
     }
 
     /**
@@ -101,9 +107,7 @@ class Model
         if ($model) {
             $this->exists = true;
         }
-        foreach (
-        $this->properties as $property
-    ) {
+        foreach ($this->properties as $property) {
             if ($model && property_exists($model, $property)) {
                 $this->attributes[$property] = $model->$property;
             }
@@ -124,9 +128,7 @@ class Model
      */
     public function fillProperties(): void
     {
-        foreach (
-            $this->properties as $property
-        ) {
+        foreach ($this->properties as $property) {
             if (property_exists($this, $property) && !isset($this->$property)) {
                 if (isset($this->attributes[$property])) {
                     $this->$property = $this->attributes[$property];
@@ -142,7 +144,8 @@ class Model
     {
         $columns = array_filter(
             $this->properties,
-            fn($property) => key_exists($property, $this->attributes) && !in_array($property, $this->guarded)
+            fn($property) => key_exists($property, $this->attributes) &&
+                !in_array($property, $this->guarded)
         );
         $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
@@ -155,12 +158,10 @@ class Model
     {
         $columns = array_filter(
             $this->properties,
-            fn($property) => key_exists($property, $this->attributes) && !in_array($property, $this->guarded)
+            fn($property) => key_exists($property, $this->attributes) &&
+                !in_array($property, $this->guarded)
         );
-        return array_map(
-            fn($property) => $this->$property ?? null,
-            $columns
-        );
+        return array_map(fn($property) => $this->$property ?? null, $columns);
     }
 
     /**
