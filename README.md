@@ -18,6 +18,7 @@
 - [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
 - [x] Security: Integrated security measures to protect against common web vulnerabilities.
 - [x] Templating: Built-in template engine support for easy and flexible view rendering.
+- [x] Two-factor authentication (2FA): Adds an extra layer of security to your accounts by requiring a second form of verification. This feature is optional.
 - [ ] Admin Access Layer: wip
 - [ ] Migrations: wip
 - [ ] Logging: wip
@@ -25,8 +26,6 @@
 
 
 ### TODO
-- Two-factor authentication
-- Look up route by name & build route from args
 - Support for other template engines
 - Docker development environment
 - Investigate PHP logging solutions
