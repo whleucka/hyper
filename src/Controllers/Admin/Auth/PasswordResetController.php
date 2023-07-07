@@ -40,4 +40,3 @@ class PasswordResetController extends Controller
         return $this->password_reset($uuid, $token);
     }
 }
-
