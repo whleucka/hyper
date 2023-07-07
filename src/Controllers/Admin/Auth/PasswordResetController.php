@@ -16,27 +16,29 @@ class PasswordResetController extends Controller
         if (!Auth::validateForgotPassword($user, $token)) {
             app()->forbidden();
         }
+
         return twig("admin/auth/password-reset.html");
     }
 
     #[Post("/admin/password-reset/{uuid}/{token}", "auth.password_reset_post")]
     public function password_reset_post(string $uuid, string $token): string
     {
-        $user = User::findByAttribute("uuid", $uuid);
-        if (!Auth::validateForgotPassword($user, $token)) {
-            app()->forbidden();
-        }
-        $request = $this->validate([
+        if (!$this->validate([
             "password_check" => [
                 "Password" => ["required", "match"],
             ],
             ...RegisterController::$password_rules,
-        ]);
-        if ($request) {
-            if (Auth::changePassword($user, $request->password)) {
-                Auth::signIn($user);
-            }
+        ])) {
+            return $this->password_reset($uuid, $token);
         }
-        return $this->password_reset($uuid, $token);
+
+        $user = User::findByAttribute("uuid", $uuid);
+        if (!Auth::validateForgotPassword($user, $token)) {
+            app()->forbidden();
+        }
+
+        if (Auth::changePassword($user, request()->get('password'))) {
+            Auth::signIn($user);
+        }
     }
 }

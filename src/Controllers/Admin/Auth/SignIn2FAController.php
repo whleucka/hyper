@@ -17,19 +17,14 @@ class SignIn2FAController extends Controller
         if (is_null($uuid)) {
             app()->forbidden();
         }
+
         return twig("admin/auth/sign-in-2fa.html");
     }
 
     #[Post("/admin/sign-in/2fa", "auth.sign_in_2fa_post")]
-    public function sign_in_2fa_post(): string
+    public function sign_in_2fa_post(): mixed
     {
-        $uuid = session()->get("two_fa_user");
-        $user = User::findByAttribute("uuid", $uuid);
-        if (is_null($uuid) || is_null($user)) {
-            app()->forbidden();
-        }
-
-        $request = $this->validate([
+        if (!$this->validate([
             "code" => [
                 "2FA Code" => [
                     "numeric",
@@ -38,15 +33,21 @@ class SignIn2FAController extends Controller
                     "max_length=6",
                 ],
             ],
-        ]);
-
-        if ($request) {
-            if (Auth::validateTwoFactorCode($user, $request->code)) {
-                Auth::signIn($user);
-            } else {
-                Validate::addError("code", "Permission denied");
-            }
+        ])) {
+            return $this->sign_in_2fa();
         }
-        return $this->sign_in_2fa();
+
+        $uuid = session()->get("two_fa_user");
+        $user = User::findByAttribute("uuid", $uuid);
+        if (is_null($uuid) || is_null($user)) {
+            app()->forbidden();
+        }
+
+        if (Auth::validateTwoFactorCode($user, request()->get('code'))) {
+            Auth::signIn($user);
+        } else {
+            Validate::addError("code", "Permission denied");
+            return $this->sign_in_2fa();
+        }
     }
 }

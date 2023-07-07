@@ -29,10 +29,7 @@ class RegisterController extends Controller
     #[Post("/admin/register", "auth.register_post")]
     public function register_post(): string
     {
-        // Override the unique message
-        Validate::$messages["unique"] =
-            "An account already exists for this email address";
-        $request = $this->validate([
+        if (!$this->validate([
             "name" => ["required", "string"],
             "email" => ["required", "string", "email", "unique=users"],
             // We don't want the validation message to say "Password_check"
@@ -40,20 +37,22 @@ class RegisterController extends Controller
             // message will say "Password" for the field
             "password_check" => ["Password" => ["required", "match"]],
             ...self::$password_rules,
-        ]);
-        if ($request) {
-            $user = Auth::register($request);
-            if ($user) {
-                // Generate 2FA secret for user
-                Auth::twoFactorSecret($user);
-                if (Auth::twoFactorEnabled()) {
-                    session()->set("two_fa_user", $user->uuid);
-                    app()->redirect("auth.register_2fa");
-                } else {
-                    Auth::signIn($user);
-                }
+        ])) {
+            return $this->register();
+        };
+
+        // Override the unique message
+        Validate::$messages["unique"] =
+            "An account already exists for this email address";
+        if ($user = Auth::register()) {
+            // Generate 2FA secret for user
+            Auth::twoFactorSecret($user);
+            if (Auth::twoFactorEnabled()) {
+                session()->set("two_fa_user", $user->uuid);
+                app()->redirect("auth.register_2fa");
+            } else {
+                Auth::signIn($user);
             }
         }
-        return $this->register();
     }
 }

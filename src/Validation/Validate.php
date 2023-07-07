@@ -2,8 +2,6 @@
 
 namespace Nebula\Validation;
 
-use stdClass;
-
 class Validate
 {
     /**
@@ -30,6 +28,8 @@ class Validate
 
     /**
      * Add arbitrary error to $errors array
+     * @param mixed $item
+     * @param mixed $replacements
      */
     public static function registerError($item, $replacements): void
     {
@@ -52,11 +52,12 @@ class Validate
 
     /**
      * Validate the request data
+     * @param array<int,mixed> $request_rules
      */
-    public static function request(array $data, array $request_rules): ?stdClass
+    public static function request(array $request_rules): bool
     {
         foreach ($request_rules as $request_item => $ruleset) {
-            $value = $data[$request_item] ?? null;
+            $value = request()->get($request_item) ?? null;
             if (!array_is_list($ruleset)) {
                 $label = array_keys($ruleset)[0];
                 $ruleset = array_values($ruleset)[0];
@@ -73,7 +74,7 @@ class Validate
                     "numeric" => self::isNumeric($value),
                     "email" => self::isEmail($value),
                     "required" => self::isRequired($value),
-                    "match" => self::isMatch($data, $request_item, $value),
+                    "match" => self::isMatch($request_item, $value),
                     "min_length" => self::isMinLength($value, $extra),
                     "max_length" => self::isMaxLength($value, $extra),
                     "uppercase" => self::isUppercase($value, $extra),
@@ -102,11 +103,12 @@ class Validate
                 }
             }
         }
-        return count(self::$errors) == 0 ? (object) $data : null;
+        return count(self::$errors) == 0;
     }
 
     /**
      * Request value must be a string
+     * @param mixed $value
      */
     public static function isString($value): bool
     {
@@ -115,6 +117,7 @@ class Validate
 
     /**
      * Request value must be numeric
+     * @param mixed $value
      */
     public static function isNumeric($value): bool
     {
@@ -123,6 +126,7 @@ class Validate
 
     /**
      * Request value must be an email
+     * @param mixed $value
      */
     public static function isEmail($value): mixed
     {
@@ -131,6 +135,7 @@ class Validate
 
     /**
      * Request value is required
+     * @param mixed $value
      */
     public static function isRequired($value): bool
     {
@@ -141,18 +146,23 @@ class Validate
      * Two request values match
      * You must have a field prefixed with _check for this to work
      * ie) password and password_check (must match)
+     * @param mixed $item
+     * @param mixed $value
      */
-    public static function isMatch($request_data, $item, $value): bool
+    public static function isMatch($item, $value): bool
     {
         $filtered_name = str_replace("_check", "", $item);
-        if (!isset($request_data[$filtered_name])) {
+        $match_value = request()->get($filtered_name);
+        if (is_null($match_value)) {
             return false;
         }
-        return $request_data[$filtered_name] === $value;
+        return $match_value === $value;
     }
 
     /**
      * Request value has min length restriction
+     * @param mixed $value
+     * @param mixed $min_length
      */
     public static function isMinLength($value, $min_length): bool
     {
@@ -161,6 +171,8 @@ class Validate
 
     /**
      * Request value has max length restriction
+     * @param mixed $value
+     * @param mixed $max_length
      */
     public static function isMaxLength($value, $max_length): bool
     {
@@ -169,6 +181,8 @@ class Validate
 
     /**
      * Request value is uppercase
+     * @param mixed $value
+     * @param mixed $count
      */
     public static function isUppercase($value, $count): bool
     {
@@ -178,6 +192,8 @@ class Validate
 
     /**
      * Request value is lowercase
+     * @param mixed $value
+     * @param mixed $count
      */
     public static function isLowercase($value, $count): bool
     {
@@ -187,6 +203,8 @@ class Validate
 
     /**
      * Request value has a symbol
+     * @param mixed $value
+     * @param mixed $count
      */
     public static function isSymbol($value, $count): bool
     {
@@ -196,6 +214,8 @@ class Validate
 
     /**
      * Request value matches regex pattern
+     * @param mixed $value
+     * @param mixed $pattern
      */
     public static function regEx($value, $pattern): int|bool
     {
@@ -204,6 +224,9 @@ class Validate
 
     /**
      * Request value must be unique
+     * @param mixed $value
+     * @param mixed $table
+     * @param mixed $column
      */
     public static function unique($value, $table, $column): bool
     {

@@ -84,11 +84,11 @@ class Auth
     /**
      * Authenticate a user by email and password
      */
-    public static function authenticate(stdClass $data): ?User
+    public static function authenticate(): ?User
     {
-        $user = User::findByAttribute("email", $data->email);
+        $user = User::findByAttribute("email", request()->get('email'));
         if ($user && self::checkUserLock($user)) {
-            $result = password_verify($data->password, $user->password);
+            $result = password_verify(request()->get('password'), $user->password);
             if ($result) {
                 return $user;
             }
@@ -122,12 +122,12 @@ class Auth
     /**
      * Register a new user
      */
-    public static function register(stdClass $data): ?User
+    public static function register(): ?User
     {
         $user = new User();
-        $user->name = $data->name;
-        $user->email = $data->email;
-        $user->password = self::hashPassword($data->password);
+        $user->name = request()->get('name');
+        $user->email = request()->get('email');
+        $user->password = self::hashPassword(request()->get('password'));
         $user->failed_login_attempts = 0;
         $result = $user->insert();
         if ($result) {

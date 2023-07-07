@@ -19,7 +19,7 @@ class Register2FAController extends Controller
         }
 
         $user = User::findByAttribute("uuid", $uuid);
-        $continue = $this->request->get("continue");
+        $continue = request()->get("continue");
         if ($continue) {
             Auth::signIn($user);
         }
@@ -32,13 +32,7 @@ class Register2FAController extends Controller
     #[Post("/admin/register/2fa", "auth.register_2fa_post")]
     public function register_2fa_post(): string
     {
-        $uuid = session()->get("two_fa_user");
-        $user = User::findByAttribute("uuid", $uuid);
-        if (is_null($uuid) || is_null($user)) {
-            app()->forbidden();
-        }
-
-        $request = $this->validate([
+        if (!$this->validate([
             "code" => [
                 "2FA Code" => [
                     "numeric",
@@ -47,15 +41,22 @@ class Register2FAController extends Controller
                     "max_length=6",
                 ],
             ],
-        ]);
-
-        if ($request) {
-            if (Auth::validateTwoFactorCode($user, $request->code)) {
-                Auth::signIn($user);
-            } else {
-                Validate::addError("code", "Permission denied");
-            }
+        ])) {
+            return $this->register_2fa();
         }
-        return $this->register_2fa();
+
+        $uuid = session()->get("two_fa_user");
+        $user = User::findByAttribute("uuid", $uuid);
+        if (is_null($uuid) || is_null($user)) {
+            app()->forbidden();
+        }
+
+
+        if (Auth::validateTwoFactorCode($user, request()->get('code'))) {
+            Auth::signIn($user);
+        } else {
+            Validate::addError("code", "Permission denied");
+            return $this->register_2fa();
+        }
     }
 }
