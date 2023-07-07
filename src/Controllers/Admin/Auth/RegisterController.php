@@ -29,17 +29,19 @@ class RegisterController extends Controller
     #[Post("/admin/register", "auth.register_post")]
     public function register_post(): string
     {
-        if (!$this->validate([
-            "name" => ["required", "string"],
-            "email" => ["required", "string", "email", "unique=users"],
-            // We don't want the validation message to say "Password_check"
-            // so we can override the label like this. Now the validation
-            // message will say "Password" for the field
-            "password_check" => ["Password" => ["required", "match"]],
-            ...self::$password_rules,
-        ])) {
+        if (
+            !$this->validate([
+                "name" => ["required", "string"],
+                "email" => ["required", "string", "email", "unique=users"],
+                // We don't want the validation message to say "Password_check"
+                // so we can override the label like this. Now the validation
+                // message will say "Password" for the field
+                "password_check" => ["Password" => ["required", "match"]],
+                ...self::$password_rules,
+            ])
+        ) {
             return $this->register();
-        };
+        }
 
         // Override the unique message
         Validate::$messages["unique"] =

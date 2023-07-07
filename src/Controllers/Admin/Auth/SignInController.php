@@ -18,10 +18,12 @@ class SignInController extends Controller
     #[Post("/admin/sign-in", "auth.sign_in_post")]
     public function sign_in_post(): string
     {
-        if (!$this->validate([
-            "email" => ["required", "string", "email"],
-            "password" => ["required", "string"],
-        ])) {
+        if (
+            !$this->validate([
+                "email" => ["required", "string", "email"],
+                "password" => ["required", "string"],
+            ])
+        ) {
             return $this->sign_in();
         }
 

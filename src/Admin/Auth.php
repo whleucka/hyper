@@ -86,9 +86,12 @@ class Auth
      */
     public static function authenticate(): ?User
     {
-        $user = User::findByAttribute("email", request()->get('email'));
+        $user = User::findByAttribute("email", request()->get("email"));
         if ($user && self::checkUserLock($user)) {
-            $result = password_verify(request()->get('password'), $user->password);
+            $result = password_verify(
+                request()->get("password"),
+                $user->password
+            );
             if ($result) {
                 return $user;
             }
@@ -125,9 +128,9 @@ class Auth
     public static function register(): ?User
     {
         $user = new User();
-        $user->name = request()->get('name');
-        $user->email = request()->get('email');
-        $user->password = self::hashPassword(request()->get('password'));
+        $user->name = request()->get("name");
+        $user->email = request()->get("email");
+        $user->password = self::hashPassword(request()->get("password"));
         $user->failed_login_attempts = 0;
         $result = $user->insert();
         if ($result) {

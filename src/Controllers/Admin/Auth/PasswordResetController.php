@@ -23,12 +23,14 @@ class PasswordResetController extends Controller
     #[Post("/admin/password-reset/{uuid}/{token}", "auth.password_reset_post")]
     public function password_reset_post(string $uuid, string $token): string
     {
-        if (!$this->validate([
-            "password_check" => [
-                "Password" => ["required", "match"],
-            ],
-            ...RegisterController::$password_rules,
-        ])) {
+        if (
+            !$this->validate([
+                "password_check" => [
+                    "Password" => ["required", "match"],
+                ],
+                ...RegisterController::$password_rules,
+            ])
+        ) {
             return $this->password_reset($uuid, $token);
         }
 
@@ -37,7 +39,7 @@ class PasswordResetController extends Controller
             app()->forbidden();
         }
 
-        if (Auth::changePassword($user, request()->get('password'))) {
+        if (Auth::changePassword($user, request()->get("password"))) {
             Auth::signIn($user);
         }
     }

@@ -24,16 +24,18 @@ class SignIn2FAController extends Controller
     #[Post("/admin/sign-in/2fa", "auth.sign_in_2fa_post")]
     public function sign_in_2fa_post(): mixed
     {
-        if (!$this->validate([
-            "code" => [
-                "2FA Code" => [
-                    "numeric",
-                    "required",
-                    "min_length=6",
-                    "max_length=6",
+        if (
+            !$this->validate([
+                "code" => [
+                    "2FA Code" => [
+                        "numeric",
+                        "required",
+                        "min_length=6",
+                        "max_length=6",
+                    ],
                 ],
-            ],
-        ])) {
+            ])
+        ) {
             return $this->sign_in_2fa();
         }
 
@@ -43,7 +45,7 @@ class SignIn2FAController extends Controller
             app()->forbidden();
         }
 
-        if (Auth::validateTwoFactorCode($user, request()->get('code'))) {
+        if (Auth::validateTwoFactorCode($user, request()->get("code"))) {
             Auth::signIn($user);
         } else {
             Validate::addError("code", "Permission denied");

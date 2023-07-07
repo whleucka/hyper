@@ -19,13 +19,15 @@ class ForgotPasswordController extends Controller
     #[Post("/admin/forgot-password", "auth.forgot_password_post")]
     public function forgot_password_post(): string
     {
-        if (!$this->validate([
-            "email" => ["required", "email"],
-        ])) {
+        if (
+            !$this->validate([
+                "email" => ["required", "email"],
+            ])
+        ) {
             return $this->forgot_password();
         }
 
-        Auth::forgotPassword(request()->get('email'));
+        Auth::forgotPassword(request()->get("email"));
         return $this->forgot_password(true);
     }
 }
