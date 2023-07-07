@@ -45,7 +45,7 @@ class Authorize extends Middleware
      */
     private function cookieAuth(string $token): ?User
     {
-        $user = User::findByAttribute("remember_me", md5($token));
+        $user = User::findByAttribute("remember_token", md5($token));
         if ($user) {
             return new User($user->getId());
         }

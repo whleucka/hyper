@@ -5,7 +5,6 @@ namespace Nebula\Admin;
 use Nebula\Models\User;
 use Nebula\Validation\Validate;
 use PragmaRX\Google2FA\Google2FA;
-use stdClass;
 
 class Auth
 {
@@ -22,7 +21,7 @@ class Auth
         setcookie("remember_token", $token, $duration, "/");
 
         // Store the token in the user row
-        $user->remember_me = md5($token);
+        $user->remember_token = md5($token);
         return $user->update();
     }
 
