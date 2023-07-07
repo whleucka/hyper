@@ -14,11 +14,13 @@ const handleFormValidation = () => {
         div.style.display = "block";
 
         form_errors[name].forEach((error) => {
-          const li = document.createElement("li");
-          li.classList.add('list-group-item', 'text-danger');
-          const node = document.createTextNode(error); 
-          li.appendChild(node);
-          div.appendChild(li);
+          if (error) {
+            const li = document.createElement("li");
+            li.classList.add('list-group-item', 'text-danger');
+            const node = document.createTextNode(error); 
+            li.appendChild(node);
+            div.appendChild(li);
+          }
         });
 
         error_container.appendChild(div);
@@ -28,7 +30,6 @@ const handleFormValidation = () => {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => { 
-  console.log("Hello, from nebula!");
   handleFormValidation();
 });
 

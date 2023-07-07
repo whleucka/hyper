@@ -39,9 +39,8 @@ class SignIn2FAController extends Controller
             return $this->sign_in_2fa();
         }
 
-        $uuid = session()->get("two_fa_user");
-        $user = User::findByAttribute("uuid", $uuid);
-        if (is_null($uuid) || is_null($user)) {
+        $user = User::findByAttribute("uuid", session()->get("two_fa_user"));
+        if (is_null($user)) {
             app()->forbidden();
         }
 
