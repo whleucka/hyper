@@ -14,7 +14,7 @@ class Register2FAController extends Controller
     public function register_2fa(): string
     {
         $uuid = session()->get("two_fa_user");
-        if (!$uuid) {
+        if (is_null($uuid)) {
             app()->forbidden();
         }
 
