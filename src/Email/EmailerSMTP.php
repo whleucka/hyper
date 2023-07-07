@@ -84,7 +84,7 @@ class EmailerSMTP
      */
     public function setAttachments(...$attachments): EmailerSMTP
     {
-        $this->attachments = array_map('trim', $attachments);
+        $this->attachments = array_map("trim", $attachments);
         return $this;
     }
 
@@ -114,8 +114,12 @@ class EmailerSMTP
         return $this;
     }
 
-    private function configureServer(string $host, string $username, string $password, int $port): void
-    {
+    private function configureServer(
+        string $host,
+        string $username,
+        string $password,
+        int $port
+    ): void {
         $this->mail->isSMTP();
         $this->mail->Host = $host;
         $this->mail->Username = $username;
@@ -128,8 +132,10 @@ class EmailerSMTP
         $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     }
 
-    private function configureMail(string $from_address, string $reply_to_address): void
-    {
+    private function configureMail(
+        string $from_address,
+        string $reply_to_address
+    ): void {
         $this->mail->setFrom($from_address);
         $this->mail->addReplyTo($reply_to_address);
         $this->mail->isHTML(true);
@@ -138,11 +144,9 @@ class EmailerSMTP
 
     private function shouldSend(): bool
     {
-        return (
-            !empty($this->to_addresses) &&
+        return !empty($this->to_addresses) &&
             $this->enabled &&
-            trim($this->body) . trim($this->plain) !== ""
-        );
+            trim($this->body) . trim($this->plain) !== "";
     }
 
     private function addAddresses(): void
@@ -169,6 +173,9 @@ class EmailerSMTP
      */
     private function filterValidEmailAddresses(array $addresses): array
     {
-        return array_filter($addresses, fn($address) => filter_var($address, FILTER_VALIDATE_EMAIL));
+        return array_filter(
+            $addresses,
+            fn($address) => filter_var($address, FILTER_VALIDATE_EMAIL)
+        );
     }
 }
