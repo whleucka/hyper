@@ -44,6 +44,7 @@ class SignInController extends Controller
             // We can trigger an error with no message. In this case,
             // the email field will turn red with no message.
             Validate::addError("email");
+            return $this->sign_in();
         }
     }
 }

@@ -29,6 +29,9 @@ class RegisterController extends Controller
     #[Post("/admin/register", "auth.register_post")]
     public function register_post(): string
     {
+        // Override the unique message
+        Validate::$messages["unique"] =
+            "An account already exists for this email address";
         if (
             !$this->validate([
                 "name" => ["required", "string"],
@@ -43,9 +46,6 @@ class RegisterController extends Controller
             return $this->register();
         }
 
-        // Override the unique message
-        Validate::$messages["unique"] =
-            "An account already exists for this email address";
         if ($user = Auth::register()) {
             // Generate 2FA secret for user
             Auth::twoFactorSecret($user);
