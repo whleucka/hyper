@@ -69,3 +69,8 @@
     </form>
   </main>
 {% endblock %}
+
+{% block body_scripts %}
+  {{ parent() }}
+  <script src="/assets/js/keypad.js"></script>
+{% endblock %}

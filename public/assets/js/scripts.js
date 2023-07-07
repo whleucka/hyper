@@ -1,17 +1,3 @@
-// Keypad functions
-const bs = (e) => {
-  var input = document.getElementById('two_fa');
-  if (input.value.length > 0) {
-    input.value = input.value.slice(0, -1);
-  }
-};
-const key = (e) => {
-  var input = document.getElementById('two_fa');
-  if (input.value.length < 6) {
-    input.value = input.value + e.target.value;
-  }
-};
-
 // Form validation
 const handleFormValidation = () => {
   form_elements = document.querySelectorAll('.form-control');
@@ -41,25 +27,8 @@ const handleFormValidation = () => {
   });
 }
 
-// Keypad animation
-const handleKeypadAnimation = () => {
-  const keypad_key = document.querySelectorAll(".keypad > button");
-  keypad_key.forEach(key => {
-    key.addEventListener("click", (e) => {
-      const target = e.currentTarget;
-      const classlist = target.classList;
-      return new Promise((reject, resolve) => {
-        classlist.add("active");
-        setTimeout(() => {
-          classlist.remove("active");
-          resolve();
-        }, 100)
-      });
-    })
-  })
-}
-
 document.addEventListener("DOMContentLoaded", (event) => { 
+  console.log("Hello, from nebula!");
   handleFormValidation();
 });
 
