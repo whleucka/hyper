@@ -143,7 +143,7 @@ Longest transaction:	       0.01
 Shortest transaction:	       0.00
 ```
 
-Based on this results, Nebula achieved a transaction rate of 6,951.04 trans/sec. Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec.
+Based on this result, Nebula achieved a transaction rate of 6,951.04 trans/sec. Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec.
 
 These numbers demonstrate the strong performance of Nebula and Leaf, making them excellent choices for high-traffic applications. 
 
