@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-siege -b -c 10 -t 1s http://0.0.0.0:8888/
+siege -b -c 10 -t 1s "http://${1:-0.0.0.0}:${2:-8888}/"
