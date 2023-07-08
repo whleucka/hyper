@@ -30,6 +30,9 @@ class Model
         $this->loadAttributes();
     }
 
+    /**
+     * Return the $this->primary_key value
+     */
     public function getId(): ?string
     {
         return $this->{$this->primary_key};
@@ -58,8 +61,8 @@ class Model
         $class = static::class;
         $model = new $class();
         $id = db()->selectVar(
-            "SELECT $model->primary_key 
-            FROM $model->table_name 
+            "SELECT $model->primary_key
+            FROM $model->table_name
             WHERE $attribute = ?",
             $value
         );
@@ -98,6 +101,9 @@ class Model
         }
     }
 
+    /**
+     * Return the model from the database by ID
+     */
     private function loadFromId(): void
     {
         $model = db()->selectOne(
@@ -114,6 +120,9 @@ class Model
         }
     }
 
+    /**
+     * Return the model from the database by table schema
+     */
     private function loadFromSchema(): void
     {
         $desc = db()->query("DESCRIBE $this->table_name");

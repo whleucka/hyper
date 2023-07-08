@@ -10,8 +10,7 @@ use StellarRouter\{Get, Post};
 class PasswordResetController extends Controller
 {
     #[Get("/admin/password-reset/{uuid}/{token}", "auth.password_reset")]
-    public function password_reset(string $uuid, string $token): string
-    {
+    public function password_reset(string $uuid, string $token): string {
         $user = User::findByAttribute("uuid", $uuid);
         if (!Auth::validateForgotPassword($user, $token)) {
             app()->forbidden();
@@ -21,8 +20,7 @@ class PasswordResetController extends Controller
     }
 
     #[Post("/admin/password-reset/{uuid}/{token}", "auth.password_reset_post")]
-    public function password_reset_post(string $uuid, string $token): string
-    {
+    public function password_reset_post(string $uuid, string $token): string {
         if (
             !$this->validate([
                 "password_check" => [

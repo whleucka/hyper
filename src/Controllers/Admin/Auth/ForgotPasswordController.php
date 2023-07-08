@@ -9,8 +9,7 @@ use StellarRouter\{Get, Post};
 class ForgotPasswordController extends Controller
 {
     #[Get("/admin/forgot-password", "auth.forgot_password")]
-    public function forgot_password(bool $email_sent = false): string
-    {
+    public function forgot_password(bool $email_sent = false): string {
         return twig("admin/auth/forgot-password.html", [
             "email_sent" => $email_sent,
         ]);
