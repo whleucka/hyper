@@ -64,6 +64,20 @@ function app()
     return Web::getInstance();
 }
 
+function config(string $target)
+{
+    $config_dir = __DIR__ . "/../Config/";
+    return match($target) {
+        "app" => require($config_dir.'Application.php'),
+        "auth" => require($config_dir.'Authentication.php'),
+        "container" => require($config_dir.'Container.php'),
+        "database" => require($config_dir.'Database.php'),
+        "email" => require($config_dir.'Email.php'),
+        "paths" => require($config_dir.'Paths.php'),
+        default => throw new Error("config error: target not found = $target")
+    };
+}
+
 /**
  * App request
  */
@@ -124,8 +138,7 @@ function twig($path, $data = [])
     $data["js_form_errors"] = json_encode(Validate::$errors);
 
     // Application-specific vars
-    $app = new \Nebula\Config\Application();
-    $data["app"] = $app->getConfig();
+    $data["app"] = config("app");
 
     return $twig->render($path, $data);
 }

@@ -112,8 +112,8 @@ class Web
     public function container(): Container
     {
         $container = Container::getInstance();
-        $config = new \Nebula\Config\Container();
-        $container->setDefinitions($config->getDefinitions())->build();
+        $config = config("container");
+        $container->setDefinitions($config)->build();
         return $container;
     }
 
@@ -167,9 +167,10 @@ class Web
         if ($this->router->hasRoutes()) {
             return;
         }
-        $config = new \Nebula\Config\Paths();
+        $paths = config("paths");
+        $config = $paths["controllers"];
         $controllers = array_keys(
-            ClassMapGenerator::createMap($config->getControllers())
+            ClassMapGenerator::createMap($config)
         );
         if ($controllers) {
             foreach ($controllers as $controllerClass) {
@@ -303,8 +304,7 @@ class Web
      */
     public function isDebug(): bool
     {
-        $app = new \Nebula\Config\Application();
-        $config = $app->getConfig();
+        $config = config("app");
         return $config["debug"];
     }
 
@@ -349,8 +349,7 @@ class Web
 
     public function routePathURL(string $route_path): string
     {
-        $app = new \Nebula\Config\Application();
-        $config = $app->getConfig();
+        $config = config("app");
         $url = $config["url"];
         return $url . $route_path;
     }

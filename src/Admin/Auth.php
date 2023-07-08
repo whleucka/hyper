@@ -30,8 +30,7 @@ class Auth
      */
     public static function twoFactorEnabled(): bool
     {
-        $auth = new \Nebula\Config\Authentication();
-        $config = $auth->getConfig();
+        $config = config("auth");
         return $config["two_fa_enabled"];
     }
 
@@ -52,8 +51,7 @@ class Auth
      */
     public static function getQR(User $user): string
     {
-        $app = new \Nebula\Config\Application();
-        $config = $app->getConfig();
+        $config = config("app");
         $name = $config["name"];
 
         $google2fa = new Google2FA();
