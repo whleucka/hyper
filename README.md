@@ -31,6 +31,7 @@
 - Investigate PHP logging solutions
 - Writing tests that cover various components of Nebula
 - Refactor and benchmark
+- Work on Admin backend
 
 
 ### Getting Started
