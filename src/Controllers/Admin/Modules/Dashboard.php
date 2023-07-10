@@ -6,6 +6,6 @@ class Dashboard extends Module
 {
     public function __construct()
     {
-        parent::__construct("dashboard", "Dashboard");
+        parent::__construct("dashboard", "Dashboard", "home");
     }
 }

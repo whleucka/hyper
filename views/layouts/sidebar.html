@@ -5,12 +5,14 @@
   <!--   <span class="visually-hidden">Icon-only</span> -->
   <!-- </a> -->
   <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+    {% for module in modules %}
     <li class="nav-item">
-      <a href="{{ findRoute('admin.index') }}" class="nav-link active py-3 border-bottom" aria-current="page" title=""
-        data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
-        <i data-feather="home"></i>
+      <a href="{{ moduleRoute(module.route) }}" class="nav-link active py-3 border-bottom" aria-current="page" title=""
+        data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="{{ module.title }}">
+        <i data-feather="{{ module.icon }}"></i>
       </a>
     </li>
+    {% endfor %}
     <!-- <li> -->
     <!--   <a href="{{ findRoute('admin.audit') }}" class="nav-link py-3 border-bottom" title="" data-bs-toggle="tooltip" data-bs-placement="right" -->
     <!--     data-bs-original-title="Audit"> -->
@@ -31,7 +33,7 @@
       <li>
         <hr class="dropdown-divider">
       </li>
-      <li><a class="dropdown-item" href="{{ moduleRoute('profile.index') }}">Profile</a></li>
+      <li><a class="dropdown-item" href="{{ moduleRoute('profile.index') }}"><i data-feather="user"></i> Profile</a></li>
       <li>
         <hr class="dropdown-divider">
       </li>

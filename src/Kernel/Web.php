@@ -159,12 +159,20 @@ class Web
     }
 
     /**
+     * @return array<class-string,non-empty-string>
+     */
+    public function classMap(string $path): array
+    {
+        return ClassMapGenerator::createMap($path);
+    }
+
+    /**
      * Register the routes
      */
     public function routing(): void
     {
         $config = config("paths")["controllers"];
-        $controllers = array_keys(ClassMapGenerator::createMap($config));
+        $controllers = array_keys($this->classMap($config));
         if ($controllers) {
             foreach ($controllers as $controllerClass) {
                 $this->router->registerRoutes($controllerClass);
