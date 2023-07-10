@@ -15,17 +15,17 @@ class Cookies extends Middleware
 {
     public function handle(Request $request): Request
     {
-        $this->secureCookies();
-        $this->cookiesHTTPOnly();
+        if (!app()->isDebug()) {
+            $this->secureCookies();
+            $this->cookiesHTTPOnly();
+        }
 
         return $request;
     }
 
     private function secureCookies(): void
     {
-        if (!app()->isDebug()) {
-            ini_set("session.cookie_secure", true);
-        }
+        ini_set("session.cookie_secure", true);
     }
 
     private function cookiesHTTPOnly(): void

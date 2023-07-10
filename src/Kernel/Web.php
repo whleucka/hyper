@@ -158,15 +158,9 @@ class Web
 
     /**
      * Register the routes
-     * Note: this method assumes attribute routing. If there are
-     * routes defined before routing() is called, then it will
-     * skip the attribute-based routing.
      */
     public function routing(): void
     {
-        if ($this->router->hasRoutes()) {
-            return;
-        }
         $config = config("paths")["controllers"];
         $controllers = array_keys(
             ClassMapGenerator::createMap($config)
@@ -188,11 +182,11 @@ class Web
             $this->pageNotFound();
         }
         // Store the route in the request attributes
-        $this->request->attributes->route = $this->getRoute();
+        @$this->request->attributes->route = $this->getRoute();
         // Run the middleware
         $this->runMiddleware();
         // Store the user
-        $this->request->attributes->user = $this->getUser();
+        @$this->request->attributes->user = $this->getUser();
         $this->controller = $this->controller();
         $this->response = $this->response();
         return $this;
@@ -205,10 +199,10 @@ class Web
     {
         // Middlewares order matters here
         $middlewares = [
+            \Nebula\Middleware\Session\Cookies::class,
             \Nebula\Middleware\Route\Authorize::class,
             \Nebula\Middleware\Session\Lifetime::class,
             \Nebula\Middleware\Request\CSRF::class,
-            \Nebula\Middleware\Session\Cookies::class,
             \Nebula\Middleware\Request\RateLimit::class,
         ];
         foreach ($middlewares as $i => $target_middleware) {

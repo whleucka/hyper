@@ -26,8 +26,10 @@ class Model
         $this->table_name = $table_name;
         $this->primary_key = $primary_key;
         $this->id = $id;
-        $this->loadProperties();
-        $this->loadAttributes();
+        if (config("database")["enabled"]) {
+            $this->loadProperties();
+            $this->loadAttributes();
+        }
     }
 
     /**

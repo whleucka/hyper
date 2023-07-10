@@ -11,4 +11,4 @@ require_once "bootstrap.php";
 app()->run();
 
 // Or, you can define the routes and call run
-//app()->get("/", payload: fn() => "hello, world")->run();
+//app()->get("/", payload: fn() => "hello, world")->handle()->execute();

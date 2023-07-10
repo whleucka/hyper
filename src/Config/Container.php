@@ -19,7 +19,7 @@ return [
             $config,
             $options
         );
-        $db->connect();
+        if ($config["enabled"]) $db->connect();
         return $db;
     },
     // Twig environment
