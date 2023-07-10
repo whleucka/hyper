@@ -6,7 +6,7 @@ return [
     "project_root" => __DIR__ . "/../../",
     "document_root" => __DIR__ . "/../../public",
     "controllers" => __DIR__ . "/../Controllers",
-    "modules" =>  __DIR__ . "/../Controllers/Admin/Modules",
+    "modules" => __DIR__ . "/../Controllers/Admin/Modules",
     "views" => [
         "paths" => __DIR__ . "/../../views",
         "cache" => __DIR__ . "/../../views/.cache",

@@ -4,8 +4,11 @@ namespace Nebula\Controllers\Admin\Modules;
 
 class Module
 {
-    public function __construct(private string $route, private string $title, private $icon = '')
-    {
+    public function __construct(
+        private string $route,
+        private string $title,
+        private $icon = ""
+    ) {
     }
     /**
      * Get data for the twig template
@@ -65,9 +68,9 @@ class Module
         $modules = [];
         foreach ($map as $class => $file) {
             if ($class != Module::class) {
-                $class = new $class;
+                $class = new $class();
                 $modules[] = [
-                    "route" => $class->getRoute().'.index', 
+                    "route" => $class->getRoute() . ".index",
                     "title" => $class->getTitle(),
                     "icon" => $class->getIcon(),
                 ];
