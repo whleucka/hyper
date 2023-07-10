@@ -13,12 +13,12 @@ class Auth
      */
     public static function rememberMe(User $user): bool
     {
-        $duration = time() + 30 * 24 * 60 * 60;
+        $expires = config("security")["remember_me_expires"];
         // Generate a random token for the user
         $token = bin2hex(random_bytes(16));
 
         // Store the token in a cookie that expires after $duration
-        setcookie("remember_token", $token, $duration, "/");
+        setcookie("remember_token", $token, $expires, "/");
 
         // Store the token in the user row
         $user->remember_token = md5($token);
@@ -168,7 +168,8 @@ class Auth
      */
     public static function failedAttempt(User $user): bool
     {
-        if ($user->failed_login_attempts >= 10) {
+        $max_attempts = config("security")["max_failed_login_attempts"];
+        if ($user->failed_login_attempts >= $max_attempts) {
             return true;
         }
         $user->failed_login_attempts++;
@@ -180,6 +181,7 @@ class Auth
      */
     public static function lockAccount(User $user): bool
     {
+        $lock_mins = config("security")["lock_duration_minutes"];
         mailer()
             ->setSubject("Account locked")
             ->setTo($user->email)
@@ -187,7 +189,7 @@ class Auth
                 "name" => $user->name,
             ])
             ->send();
-        $user->lock_expires_at = strtotime("+15 minute");
+        $user->lock_expires_at = strtotime("+$lock_mins minute");
         return $user->update();
     }
 
@@ -208,13 +210,14 @@ class Auth
     {
         $valid = true;
         $time = time();
+        $max_attempts = config("security")["max_failed_login_attempts"];
         if ($user->lock_expires_at) {
             if ($user->lock_expires_at > $time) {
                 $valid &= false;
             } else {
                 self::unlockAccount($user);
             }
-        } elseif ($user->failed_login_attempts >= 10) {
+        } elseif ($user->failed_login_attempts >= $max_attempts) {
             self::lockAccount($user);
             $valid &= false;
         }
@@ -255,9 +258,10 @@ class Auth
      */
     public static function forgotPassword(string $email): void
     {
+        $forgot_pass_mins = config("security")["forgot_password_duration_minutes"];
         $user = User::findByAttribute("email", $email);
         if ($user) {
-            $expires = strtotime("+ 15 minute");
+            $expires = strtotime("+$forgot_pass_mins minute");
             $token = self::generateToken();
             $user->reset_token = $token;
             $user->reset_expires_at = $expires;

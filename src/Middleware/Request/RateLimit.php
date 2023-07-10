@@ -13,15 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RateLimit extends Middleware
 {
-    private $rate_limit; // Maximum number of requests allowed per window
-    private $window_size; // Window size in seconds
-
     public function handle(Request $request): Request
     {
-        $config = config("security");
-        $this->rate_limit = $config["rate_limit"];
-        $this->window_size = $config["window_size"];
-
         $requests = session()->get("requests");
         if (is_null($requests)) {
             session()->set("requests", []);
@@ -53,8 +46,12 @@ class RateLimit extends Middleware
      */
     public function allowRequest(): bool
     {
+        $config = config("security");
+        $rate_limit = $config["rate_limit"];
+        $window_size = $config["window_size_minutes"];
+
         $currentTime = time();
-        $expires = $currentTime - $this->window_size;
+        $expires = $currentTime - $window_size;
 
         // Remove expired requests from the sliding window
         $this->clearExpiredRequests($expires);
@@ -62,7 +59,7 @@ class RateLimit extends Middleware
         // Get the requests from the session, again
         $requests = session()->get("requests");
 
-        if (count($requests) < $this->rate_limit) {
+        if (count($requests) < $rate_limit) {
             // Add the current request timestamp to the sliding window
             $requests[] = $currentTime;
             session()->set("requests", $requests);

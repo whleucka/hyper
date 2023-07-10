@@ -14,7 +14,7 @@ class Lifetime extends Middleware
 {
     public function handle(Request $request): Request
     {
-        $sessionTimeout = config("security")["session_lifetime"]; // In seconds
+        $sessionTimeout = config("security")["session_lifetime_minutes"] * 60; // in seconds
 
         $last_activity = session()->get("last_activity");
         if (
