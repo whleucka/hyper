@@ -15,9 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Authorize extends Middleware
 {
-    private $sign_in_route;
-    private $admin_route;
-
     public function handle(Request $request): Request
     {
         $middlewares = $request->attributes->route->getMiddleware();

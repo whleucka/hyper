@@ -24,8 +24,7 @@ return [
     },
     // Twig environment
     Environment::class => function () use ($env) {
-        $config = config("paths");
-        $views = $config["views"];
+        $views = config("paths")["views"];
         $loader = new FilesystemLoader($views["paths"]);
         return new Environment($loader, [
             "cache" => $views["cache"],

@@ -74,6 +74,7 @@ function config(string $target)
         "database" => require($config_dir.'Database.php'),
         "email" => require($config_dir.'Email.php'),
         "paths" => require($config_dir.'Paths.php'),
+        "security" => require ($config_dir.'Security.php'),
         default => throw new Error("config error: target not found = $target")
     };
 }

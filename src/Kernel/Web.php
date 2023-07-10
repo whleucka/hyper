@@ -167,8 +167,7 @@ class Web
         if ($this->router->hasRoutes()) {
             return;
         }
-        $paths = config("paths");
-        $config = $paths["controllers"];
+        $config = config("paths")["controllers"];
         $controllers = array_keys(
             ClassMapGenerator::createMap($config)
         );
@@ -192,6 +191,8 @@ class Web
         $this->request->attributes->route = $this->route;
         // Run the middleware
         $this->runMiddleware();
+        // Store the user
+        $this->request->attributes->user = $this->getUser();
         $this->controller = $this->controller();
         $this->response = $this->response();
         return $this;
@@ -304,8 +305,7 @@ class Web
      */
     public function isDebug(): bool
     {
-        $config = config("app");
-        return $config["debug"];
+        return config("app")["debug"];
     }
 
     /**
@@ -349,8 +349,7 @@ class Web
 
     public function routePathURL(string $route_path): string
     {
-        $config = config("app");
-        $url = $config["url"];
+        $url = config("app")["url"];
         return $url . $route_path;
     }
 
@@ -456,6 +455,7 @@ class Web
         if (!$this->isDebug()) {
             return $whoops;
         }
+        error_reporting(E_ALL);
         $whoops->allowQuit(false);
         $whoops->writeToOutput(false);
         return $whoops;

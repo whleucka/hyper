@@ -30,8 +30,7 @@ class Auth
      */
     public static function twoFactorEnabled(): bool
     {
-        $config = config("auth");
-        return $config["two_fa_enabled"];
+        return config("auth")["two_fa_enabled"];
     }
 
     /**
@@ -51,8 +50,7 @@ class Auth
      */
     public static function getQR(User $user): string
     {
-        $config = config("app");
-        $name = $config["name"];
+        $name = config("app")["name"];
 
         $google2fa = new Google2FA();
         $text = $google2fa->getQRCodeUrl(
