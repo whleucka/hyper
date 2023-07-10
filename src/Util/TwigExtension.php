@@ -17,6 +17,7 @@ class TwigExtension extends AbstractExtension implements ExtensionInterface
     {
         return [
             new \Twig\TwigFunction("csrf", [$this, "csrf"]),
+            new \Twig\TwigFunction("moduleRoute", [$this, "moduleRoute"]),
             new \Twig\TwigFunction("findRoute", [$this, "findRoute"]),
             new \Twig\TwigFunction("buildRoute", [$this, "buildRoute"]),
             new \Twig\TwigFunction("old", [$this, "old"]),
@@ -43,6 +44,21 @@ EOT;
         $route = app()->findRoute($name);
         if (!is_null($route)) {
             return $route->getPath();
+        }
+        return "";
+    }
+
+    /**
+     * Find a module route
+     */
+    public function moduleRoute(string $name, ...$args): string
+    {
+        $name_arr = explode(".", $name);
+        $first = $name_arr[0];
+        $end = end($name_arr);
+        $route = app()->findRoute("module.$end");
+        if (!is_null($route)) {
+             return $this->buildRoute($route->getName(), $first, ...$args);
         }
         return "";
     }
