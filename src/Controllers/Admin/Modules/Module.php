@@ -4,12 +4,28 @@ namespace Nebula\Controllers\Admin\Modules;
 
 class Module
 {
+    /**
+     * @param array<int,mixed> $config
+     */
     public function __construct(
-        private string $route,
-        private string $title,
-        private $icon = ""
+        protected array $config,
     ) {
     }
+
+    public function __get(string $name): mixed
+    {
+        return $this->config[$name];
+    }
+
+    /**
+     * @param mixed $name
+     * @param mixed $value
+     */
+    public function __set($name, $value): void
+    {
+        $this->config[$name] = $value;
+    }
+
     /**
      * Get data for the twig template
      * @return array<string,string>
@@ -34,33 +50,14 @@ class Module
     private function mergeData(): array
     {
         $default = [
-            "title" => $this->getTitle(),
+            "title" => $this->title,
             "modules" => $this->getModules(),
         ];
         return array_replace($default, $this->data());
     }
-
     /**
-     * Get the module route
+     * @return array<int,array>
      */
-    public function getRoute(): string
-    {
-        return $this->route;
-    }
-
-    /**
-     * Get the module title
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getIcon(): string
-    {
-        return $this->icon;
-    }
-
     public function getModules(): array
     {
         $config = config("paths")["modules"];
@@ -70,9 +67,9 @@ class Module
             if ($class != Module::class) {
                 $class = new $class();
                 $modules[] = [
-                    "route" => $class->getRoute() . ".index",
-                    "title" => $class->getTitle(),
-                    "icon" => $class->getIcon(),
+                    "route" => $class->route . ".index",
+                    "title" => $class->title,
+                    "icon" => $class->icon,
                 ];
             }
         }

@@ -6,6 +6,11 @@ class Profile extends Module
 {
     public function __construct()
     {
-        parent::__construct("profile", "Profile", "user");
+        $config = [
+            "route" => "profile",
+            "title" => "Profile",
+            "icon" => "user"
+        ];
+        parent::__construct($config);
     }
 }

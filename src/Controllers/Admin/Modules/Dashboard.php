@@ -6,6 +6,11 @@ class Dashboard extends Module
 {
     public function __construct()
     {
-        parent::__construct("dashboard", "Dashboard", "home");
+        $config = [
+            "route" => "dashboard",
+            "title" => "Dashboard",
+            "icon" => "home"
+        ];
+        parent::__construct($config);
     }
 }
