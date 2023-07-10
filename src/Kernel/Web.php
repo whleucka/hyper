@@ -188,7 +188,7 @@ class Web
             $this->pageNotFound();
         }
         // Store the route in the request attributes
-        $this->request->attributes->route = $this->route;
+        $this->request->attributes->route = $this->getRoute();
         // Run the middleware
         $this->runMiddleware();
         // Store the user
