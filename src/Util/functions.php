@@ -67,15 +67,15 @@ function app()
 function config(string $target)
 {
     $config_dir = __DIR__ . "/../Config/";
-    return match($target) {
-        "app" => require($config_dir.'Application.php'),
-        "auth" => require($config_dir.'Authentication.php'),
-        "container" => require($config_dir.'Container.php'),
-        "database" => require($config_dir.'Database.php'),
-        "email" => require($config_dir.'Email.php'),
-        "paths" => require($config_dir.'Paths.php'),
-        "security" => require ($config_dir.'Security.php'),
-        default => throw new Error("config error: target not found = $target")
+    return match ($target) {
+        "app" => require $config_dir . "Application.php",
+        "auth" => require $config_dir . "Authentication.php",
+        "container" => require $config_dir . "Container.php",
+        "database" => require $config_dir . "Database.php",
+        "email" => require $config_dir . "Email.php",
+        "paths" => require $config_dir . "Paths.php",
+        "security" => require $config_dir . "Security.php",
+        default => throw new Error("config error: target not found = $target"),
     };
 }
 

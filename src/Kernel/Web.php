@@ -152,7 +152,9 @@ class Web
      */
     public function run(): void
     {
-        $this->routing();
+        if (!$this->router->hasRoutes()) {
+            $this->routing();
+        }
         $this->handle()->execute();
     }
 
@@ -162,9 +164,7 @@ class Web
     public function routing(): void
     {
         $config = config("paths")["controllers"];
-        $controllers = array_keys(
-            ClassMapGenerator::createMap($config)
-        );
+        $controllers = array_keys(ClassMapGenerator::createMap($config));
         if ($controllers) {
             foreach ($controllers as $controllerClass) {
                 $this->router->registerRoutes($controllerClass);

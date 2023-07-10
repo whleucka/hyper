@@ -13,13 +13,16 @@ return [
     // Auto config for DB
     DB::class => function () {
         $database_config = config("database");
-        $config = array_filter($database_config, fn($key) => $key != 'options', ARRAY_FILTER_USE_KEY);
-        $options = $database_config['options'];
-        $db = new DB(
-            $config,
-            $options
+        $config = array_filter(
+            $database_config,
+            fn($key) => $key != "options",
+            ARRAY_FILTER_USE_KEY
         );
-        if ($config["enabled"]) $db->connect();
+        $options = $database_config["options"];
+        $db = new DB($config, $options);
+        if ($config["enabled"]) {
+            $db->connect();
+        }
         return $db;
     },
     // Twig environment

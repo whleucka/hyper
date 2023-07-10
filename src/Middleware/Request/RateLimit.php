@@ -19,8 +19,8 @@ class RateLimit extends Middleware
     public function handle(Request $request): Request
     {
         $config = config("security");
-        $this->rate_limit = $config['rate_limit'];
-        $this->window_size = $config['window_size'];
+        $this->rate_limit = $config["rate_limit"];
+        $this->window_size = $config["window_size"];
 
         $requests = session()->get("requests");
         if (is_null($requests)) {

@@ -9,5 +9,5 @@ return [
     "views" => [
         "paths" => __DIR__ . "/../../views",
         "cache" => __DIR__ . "/../../views/.cache",
-    ]
+    ],
 ];
