@@ -58,7 +58,7 @@ EOT;
         $end = end($name_arr);
         $route = app()->findRoute("module.$end");
         if (!is_null($route)) {
-             return $this->buildRoute($route->getName(), $first, ...$args);
+            return $this->buildRoute($route->getName(), $first, ...$args);
         }
         return "";
     }

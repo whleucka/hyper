@@ -258,7 +258,9 @@ class Auth
      */
     public static function forgotPassword(string $email): void
     {
-        $forgot_pass_mins = config("security")["forgot_password_duration_minutes"];
+        $forgot_pass_mins = config("security")[
+            "forgot_password_duration_minutes"
+        ];
         $user = User::findByAttribute("email", $email);
         if ($user) {
             $expires = strtotime("+$forgot_pass_mins minute");

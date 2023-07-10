@@ -10,7 +10,7 @@ class AdminController extends Controller
     #[Get("/admin", "admin.index", ["auth"])]
     public function index(): string
     {
-        $mc = new ModuleController;
-        return $mc->index('dashboard');
+        $mc = new ModuleController();
+        return $mc->index("dashboard");
     }
 }
