@@ -53,7 +53,7 @@ class Module
         $te = new TwigExtension();
         $default = [
             "route" => $this->route,
-            "link" => $te->moduleRoute($this->route.".index"),
+            "link" => $te->moduleRoute($this->route . ".index"),
             "parent" => $this->parent,
             "title" => $this->title,
             "modules" => $this->getModules(),
