@@ -7,9 +7,8 @@ class Module
     /**
      * @param array<int,mixed> $config
      */
-    public function __construct(
-        protected array $config,
-    ) {
+    public function __construct(protected array $config)
+    {
     }
 
     public function __get(string $name): mixed
@@ -67,7 +66,7 @@ class Module
         foreach ($map as $class => $file) {
             if ($class != Module::class) {
                 $class = new $class();
-                $modules[$class?->parent ?? 'Adminstration'][] = [
+                $modules[$class?->parent ?? "Adminstration"][] = [
                     "route" => $class->route . ".index",
                     "title" => $class->title,
                     "parent" => $class->parent,

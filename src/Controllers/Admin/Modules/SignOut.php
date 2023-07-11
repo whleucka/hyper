@@ -9,7 +9,7 @@ class SignOut extends Module
         $config = [
             "route" => "sign-out",
             "title" => "Sign out",
-            "parent" => "System"
+            "parent" => "System",
         ];
         parent::__construct($config);
     }
