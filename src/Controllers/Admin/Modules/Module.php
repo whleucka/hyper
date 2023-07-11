@@ -2,6 +2,8 @@
 
 namespace Nebula\Controllers\Admin\Modules;
 
+use Nebula\Util\TwigExtension;
+
 class Module
 {
     /**
@@ -48,7 +50,11 @@ class Module
      */
     private function mergeData(): array
     {
+        $te = new TwigExtension();
         $default = [
+            "route" => $this->route,
+            "link" => $te->moduleRoute($this->route.".index"),
+            "parent" => $this->parent,
             "title" => $this->title,
             "modules" => $this->getModules(),
         ];

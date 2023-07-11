@@ -9,8 +9,11 @@
     <nav class="h-100">
       {% include 'layouts/sidebar.html' %}
     </nav>
-    {% block main %}
-    {% endblock %}
+    <section id="right" class="w-100">
+      {% include 'layouts/top.html' %}
+      {% block main %}
+      {% endblock %}
+    </section>
 </main>
 {% endblock %}
 
