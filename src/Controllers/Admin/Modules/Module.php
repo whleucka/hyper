@@ -55,6 +55,7 @@ class Module
         ];
         return array_replace($default, $this->data());
     }
+
     /**
      * @return array<int,array>
      */
@@ -66,10 +67,10 @@ class Module
         foreach ($map as $class => $file) {
             if ($class != Module::class) {
                 $class = new $class();
-                $modules[] = [
+                $modules[$class?->parent ?? 'Adminstration'][] = [
                     "route" => $class->route . ".index",
                     "title" => $class->title,
-                    "icon" => $class->icon,
+                    "parent" => $class->parent,
                 ];
             }
         }

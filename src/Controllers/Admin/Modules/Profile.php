@@ -9,7 +9,7 @@ class Profile extends Module
         $config = [
             "route" => "profile",
             "title" => "Profile",
-            "icon" => "user"
+            "parent" => "Administration"
         ];
         parent::__construct($config);
     }

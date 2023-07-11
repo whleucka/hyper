@@ -2,14 +2,14 @@
 
 namespace Nebula\Controllers\Admin\Modules;
 
-class Dashboard extends Module
+class SignOut extends Module
 {
     public function __construct()
     {
         $config = [
-            "route" => "dashboard",
-            "title" => "Dashboard",
-            "parent" => "Administration"
+            "route" => "sign-out",
+            "title" => "Sign out",
+            "parent" => "System"
         ];
         parent::__construct($config);
     }

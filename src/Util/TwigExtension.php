@@ -53,12 +53,9 @@ EOT;
      */
     public function moduleRoute(string $name, ...$args): string
     {
-        $name_arr = explode(".", $name);
-        $first = $name_arr[0];
-        $end = end($name_arr);
-        $route = app()->findRoute("module.$end");
+        $route = app()->moduleRoute($name, ...$args);
         if (!is_null($route)) {
-            return $this->buildRoute($route->getName(), $first, ...$args);
+            return $route;
         }
         return "";
     }

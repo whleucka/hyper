@@ -1,15 +1,9 @@
 #sidebar {
-  height: 100%;
-  width: 4.5rem;
   border-right: 1px solid #ddd;
 }
 
-#sidebar .active {
-  background-color: #f5f5f5;
-}
-
-#sidebar .nav-flush .nav-link {
-  border-radius: 0;
+#sidebar .link {
+  padding: 8px 0;
 }
 
 .feather {
@@ -26,4 +20,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+#module-content {
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;``
 }

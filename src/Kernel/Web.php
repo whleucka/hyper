@@ -349,6 +349,18 @@ class Web
         return null;
     }
 
+    public function moduleRoute(string $name, ...$args): ?string
+    {
+        $name_arr = explode(".", $name);
+        $first = $name_arr[0];
+        $end = end($name_arr);
+        $route = $this->findRoute("module.$end");
+        if (!is_null($route)) {
+            return $this->buildRoute($route->getName(), $first, ...$args);
+        }
+        return null;
+    }
+
     public function routePathURL(string $route_path): string
     {
         $url = config("app")["url"];
