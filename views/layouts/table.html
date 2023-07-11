@@ -1,0 +1,20 @@
+<div class="table-responsive mt-3">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        {% for col in columns %}
+        <th>{{ col }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+          {% for col in data %}
+            <td>{{ col }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>

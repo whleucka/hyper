@@ -63,7 +63,7 @@ class ModuleController extends Controller
     #[Get("/admin/{module}/{id}/edit", "module.edit", ["auth"])]
     public function edit($module, $id): string {
         $module = $this->module($module);
-        return dd("wip: edit");
+        return twig("admin/index.html", $module->getData());
     }
 
     /**

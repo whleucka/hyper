@@ -1,18 +1,24 @@
+/**
+* Sidebar
+*/
 #sidebar {
-  width: 220px;
+  width: 170px;
   color: #fbfbfb;
   background-color: #263544;
-  border-right: 1px solid #ddd;
+}
+
+#sidebar .brand {
+  font-size: 1.6em;
 }
 
 #sidebar .btn-collapse {
-  color: #fff;
+  color: #ddd;
   outline: none;
   box-shadow:none !important;
 }
 
 #sidebar a {
-  color: #fefefe;
+  color: #fff;
   text-decoration: none;
 }
 
@@ -22,15 +28,61 @@
   line-height: 2.2em;
 }
 
-#sidebar-dropdown {
+#sidebar .link:hover {
+  font-weight: bold;
+}
+
+#sidebar #sidebar-dropdown {
   position: absolute;
   bottom: 10px;
 }
 
-#sidebar-dropdown .dropdown-item {
+#sidebar #sidebar-dropdown .dropdown-item {
   color: #222;
 }
 
+/**
+* Module top
+*/
+#module-top {
+  height: 70px;
+  border-bottom: 5px solid #eaedf1;
+}
+#module-top #top-search {
+  width: 160px;
+}
+
+
+/**
+* Module header
+*/
+#module-header .breadcrumb-item {
+  font-size: 0.8em;
+}
+
+#module-header .breadcrumb-item, .breadcrumb li a {
+  color: #aaa;
+}
+
+#module-header > div > nav > ol > li.breadcrumb-item.active a {
+  color: #555;
+}
+
+#module-header .module-title {
+  font-size: 2em;
+}
+
+/**
+* Module content
+*/
+#module-content {
+  background-color: #f2f6fc;
+  color: #333;
+}
+
+/**
+* Utility
+*/
 .feather {
   width: 24px;
   height: 24px;
@@ -47,31 +99,6 @@
   text-overflow: ellipsis;
 }
 
-#module-top {
-  height: 60px;
-  border-bottom: 5px solid #eaedf1;
-}
-
-#module-content {
-  background-color: #f2f6fc;
-  color: #333;
-}
-
-.breadcrumb-item {
-  font-size: 0.8em;
-}
-
-.breadcrumb-item, .breadcrumb li a {
-  color: #aaa;
-}
-#module-header > div > nav > ol > li.breadcrumb-item.active a {
-  color: #555;
-}
-
-#module-top #top-search {
-  width: 160px;
-} 
-
 .content-box {
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }

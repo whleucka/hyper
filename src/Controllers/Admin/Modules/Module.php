@@ -3,9 +3,13 @@
 namespace Nebula\Controllers\Admin\Modules;
 
 use Nebula\Util\TwigExtension;
+use PDO;
 
 class Module
 {
+    protected $table;
+    protected $form;
+
     /**
      * @param array<int,mixed> $config
      */
@@ -25,6 +29,18 @@ class Module
     public function __set($name, $value): void
     {
         $this->config[$name] = $value;
+    }
+
+    public function getFormattedColumns(array $columns): string
+    {
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
+        return implode(", ", $stmt);
+    }
+
+    public function tableData(string $table_name)
+    {
+        $columns = implode(", ", array_values($this->table));
+        return db()->run("SELECT $columns FROM $table_name")->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -57,6 +73,7 @@ class Module
             "parent" => $this->parent,
             "title" => $this->title,
             "modules" => $this->getModules(),
+            "content" => "",
         ];
         return array_replace($default, $this->data());
     }

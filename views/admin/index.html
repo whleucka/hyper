@@ -1,9 +1,10 @@
 {% extends "layouts/admin.html" %}
 
 {% block main %}
-  <section class="w-100">
-    <div id="module-content" class="contianer rounded p-4">
+  <div id="module-content" class="contianer rounded p-4">
     {% include 'layouts/header.html' %}
-    </div>
+    <section class="content-box my-2 rounded">
+      {{ content|raw }}
+    </section>
   </section>
 {% endblock %}
