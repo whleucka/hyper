@@ -31,5 +31,4 @@ class Users extends Module
 
         parent::__construct($config);
     }
-
 }

@@ -33,14 +33,16 @@ class Module
 
     protected function setColumns(array $columns): string
     {
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
     protected function tableData(string $table_name)
     {
         $columns = implode(", ", array_values($this->table));
-        return db()->run("SELECT $columns FROM $table_name")->fetchAll(PDO::FETCH_ASSOC);
+        return db()
+            ->run("SELECT $columns FROM $table_name")
+            ->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -57,15 +59,17 @@ class Module
         return [
             "content" => twig("layouts/table.html", [
                 "columns" => array_keys($this->table),
-                "data" => isset($this->config['table']) ? $this->tableData($this->config["table"]) : []
-            ])
+                "data" => isset($this->config["table"])
+                    ? $this->tableData($this->config["table"])
+                    : [],
+            ]),
         ];
     }
 
     protected function form(): array
     {
         return [
-            "content" => twig("layouts/form.html", [])
+            "content" => twig("layouts/form.html", []),
         ];
     }
     /**
@@ -77,7 +81,7 @@ class Module
         return match ($route->getName()) {
             "module.index" => $this->table(),
             "module.edit" => $this->form(),
-            default => throw new Error("module name doesn't exist")
+            default => throw new Error("module name doesn't exist"),
         };
     }
 
