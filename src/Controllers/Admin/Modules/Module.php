@@ -9,6 +9,9 @@ class Module
 {
     protected array $table = [];
     protected array $form = [];
+    protected bool $add_enabled = true;
+    protected bool $edit_enabled = true;
+    protected bool $delete_enabled = true;
 
     /**
      * @param array<int,mixed> $config
@@ -19,7 +22,7 @@ class Module
 
     public function __get(string $name): mixed
     {
-        return $this->config[$name];
+        return $this->config[$name] ?? null;
     }
 
     /**
@@ -31,15 +34,23 @@ class Module
         $this->config[$name] = $value;
     }
 
+    protected function selectStatement(array $columns): string
+    {
+        return implode(", ", array_values($columns));
+    }
+
     protected function setColumns(array $columns): string
     {
-        $stmt = array_map(fn($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
-    protected function tableData(string $table_name)
+    protected function tableData(string $table_name): array
     {
-        $columns = implode(", ", array_values($this->table));
+        if (empty($this->table) || !isset($this->config['table'])) {
+            return [];
+        }
+        $columns = $this->selectStatement($this->table);
         return db()
             ->run("SELECT $columns FROM $table_name")
             ->fetchAll(PDO::FETCH_ASSOC);
@@ -58,10 +69,13 @@ class Module
     {
         return [
             "content" => twig("layouts/table.html", [
+                "route" => $this->route,
+                "edit_route" => $this->route.'.edit',
+                "delete_route" => $this->route.'.delete',
                 "columns" => array_keys($this->table),
-                "data" => isset($this->config["table"])
-                    ? $this->tableData($this->config["table"])
-                    : [],
+                "data" => $this->tableData($this->config["table"]),
+                "edit_enabled" => $this->edit_enabled,
+                "delete_enabled" => $this->delete_enabled,
             ]),
         ];
     }
@@ -97,6 +111,8 @@ class Module
             "parent" => $this->parent,
             "title" => $this->title,
             "modules" => $this->getModules(),
+            "icon" => $this->icon ?? 'box',
+            "add_enabled" => $this->add_enabled,
             "content" => "",
         ];
         return array_replace($default, $this->data());
@@ -118,6 +134,7 @@ class Module
                     "route" => $class->route . ".index",
                     "title" => $class->title,
                     "parent" => $class->parent,
+                    "icon" => $class->icon ?? 'box',
                 ];
             }
         }

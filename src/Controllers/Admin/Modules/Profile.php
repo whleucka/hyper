@@ -9,8 +9,16 @@ class Profile extends Module
         $config = [
             "route" => "profile",
             "title" => "Profile",
+            "icon" => "user",
             "parent" => "Administration",
         ];
         parent::__construct($config);
+    }
+
+    protected function data(): array
+    {
+        return [
+            "content" => twig("admin/profile/index.html"),
+        ];
     }
 }

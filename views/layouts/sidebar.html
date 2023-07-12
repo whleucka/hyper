@@ -6,7 +6,9 @@
     {% for module in modules|keys %}
     <li class="my-3">
       <button class="btn-collapse btn btn-toggle align-items-center rounded collapsed p-0 fw-bold"
-        data-bs-toggle="collapse" data-bs-target="#sidebar-{{ loop.index0 }}-collapse" aria-expanded="true">{{ module }}</button>
+        data-bs-toggle="collapse" data-bs-target="#sidebar-{{ loop.index0 }}-collapse" aria-expanded="true">
+        {{ module }}
+      </button>
       <div class="collapse show" id="sidebar-{{ loop.index0 }}-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           {% for child in modules[module] %}

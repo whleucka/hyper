@@ -3,18 +3,32 @@
     <thead>
       <tr>
         {% for col in columns %}
-        <th>{{ col }}</th>
+        <th class="px-2 align-middle" nowrap>{{ col }}</th>
         {% endfor %}
+        <th></th>
       </tr>
     </thead>
     <tbody>
-        {% for item in data %}
-        <tr>
-          {% for col in item %}
-            <td>{{ col }}</td>
-          {% endfor %}
-        </tr>
+      {% for item in data %}
+      <tr>
+        {% for col in item %}
+        <td class="px-2 align-middle">{{ col }}</td>
         {% endfor %}
+        <td class="actions">
+          <div class="d-flex justify-content-end align-middle">
+            {% if edit_enabled %}
+            <a href="{{ moduleRoute(edit_route, item.id) }}" class="btn"><span data-feather='edit'></span></a>
+            {% endif %}
+            {% if delete_enabled %}
+            <form method="POST" class="d-inline d-flex align-items-center" action="{{ moduleRoute(delete_route, item.id) }}">
+              {{ csrf()|raw }}
+              <button class="btn"><span data-feather='trash'></span></button>
+            </form>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

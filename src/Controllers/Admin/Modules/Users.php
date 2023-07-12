@@ -10,6 +10,7 @@ class Users extends Module
             "table" => "users",
             "route" => "users",
             "title" => "Users",
+            "icon" => "users",
             "parent" => "Administration",
         ];
 

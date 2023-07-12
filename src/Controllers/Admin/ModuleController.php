@@ -73,6 +73,7 @@ class ModuleController extends Controller
      * @param mixed $module
      * @param mixed $id
      */
+    #[Post("/admin/{module}/{id}/update", "module.modify", ["auth"])]
     #[Patch("/admin/{module}/{id}", "module.update", ["auth"])]
     public function update($module, $id): string {
         $module = $this->module($module);
@@ -83,6 +84,7 @@ class ModuleController extends Controller
      * @param mixed $module
      * @param mixed $id
      */
+    #[Post("/admin/{module}/{id}/delete", "module.delete", ["auth"])]
     #[Delete("/admin/{module}/{id}", "module.destroy", ["auth"])]
     public function destroy($module, $id): string {
         $module = $this->module($module);

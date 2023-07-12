@@ -9,6 +9,7 @@ class Dashboard extends Module
         $config = [
             "route" => "dashboard",
             "title" => "Dashboard",
+            "icon" => "star",
             "parent" => "Administration",
         ];
         parent::__construct($config);
