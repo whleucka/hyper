@@ -2,13 +2,12 @@
 
 namespace Nebula\Controllers\Admin\Modules;
 
-use Error;
-
 class Users extends Module
 {
     public function __construct()
     {
         $config = [
+            "table" => "users",
             "route" => "users",
             "title" => "Users",
             "parent" => "Administration",
@@ -33,16 +32,4 @@ class Users extends Module
         parent::__construct($config);
     }
 
-    protected function data(): array
-    {
-        $route = app()->getRoute();
-        return match ($route->getName()) {
-            "module.index" => ["content" => twig("layouts/table.html", [
-                "columns" => array_keys($this->table),
-                "data" => $this->tableData('users'),
-            ])],
-            "module.edit" => ["content" => twig("layouts/form.html")],
-            default => throw new Error("module name doesn't exist")
-        };
-    }
 }

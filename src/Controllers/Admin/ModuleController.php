@@ -12,10 +12,13 @@ class ModuleController extends Controller
     {
         $class = "Nebula\\Controllers\\Admin\\Modules\\" . ucfirst($module);
         try {
+            if (!class_exists($class)) {
+                app()->pageNotFound();
+            }
             return new $class();
         } catch (Exception $ex) {
-            error_log("module not found: $module " . $ex->getMessage());
-            app()->pageNotFound();
+            app()->serverError();
+            error_log("module not found: $class " . $ex->getMessage());
         }
     }
 

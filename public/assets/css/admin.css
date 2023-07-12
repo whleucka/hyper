@@ -56,6 +56,9 @@
 /**
 * Module header
 */
+#module-header {
+  margin-bottom: 20px;
+}
 #module-header .breadcrumb-item {
   font-size: 0.8em;
 }
@@ -78,6 +81,7 @@
 #module-content {
   background-color: #f2f6fc;
   color: #333;
+  height: calc(100% - 70px);
 }
 
 /**

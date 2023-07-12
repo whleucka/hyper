@@ -2,13 +2,13 @@
 
 namespace Nebula\Controllers\Admin\Modules;
 
-use Nebula\Util\TwigExtension;
+use Error;
 use PDO;
 
 class Module
 {
-    protected $table;
-    protected $form;
+    protected array $table = [];
+    protected array $form = [];
 
     /**
      * @param array<int,mixed> $config
@@ -31,16 +31,16 @@ class Module
         $this->config[$name] = $value;
     }
 
-    public function getFormattedColumns(array $columns): string
+    protected function setColumns(array $columns): string
     {
-        $stmt = array_map(fn($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
-    public function tableData(string $table_name)
+    protected function tableData(string $table_name)
     {
         $columns = implode(", ", array_values($this->table));
-        return db()->run("SELECT $columns FROM $table_name")->fetch(PDO::FETCH_ASSOC);
+        return db()->run("SELECT $columns FROM $table_name")->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -52,12 +52,33 @@ class Module
         return $this->mergeData();
     }
 
+    protected function table(): array
+    {
+        return [
+            "content" => twig("layouts/table.html", [
+                "columns" => array_keys($this->table),
+                "data" => isset($this->config['table']) ? $this->tableData($this->config["table"]) : []
+            ])
+        ];
+    }
+
+    protected function form(): array
+    {
+        return [
+            "content" => twig("layouts/form.html", [])
+        ];
+    }
     /**
      * Override function for twig data
      */
     protected function data(): array
     {
-        return [];
+        $route = app()->getRoute();
+        return match ($route->getName()) {
+            "module.index" => $this->table(),
+            "module.edit" => $this->form(),
+            default => throw new Error("module name doesn't exist")
+        };
     }
 
     /**
@@ -66,10 +87,9 @@ class Module
      */
     private function mergeData(): array
     {
-        $te = new TwigExtension();
         $default = [
             "route" => $this->route,
-            "link" => $te->moduleRoute($this->route . ".index"),
+            "link" => app()->moduleRoute($this->route . ".index"),
             "parent" => $this->parent,
             "title" => $this->title,
             "modules" => $this->getModules(),
@@ -79,9 +99,10 @@ class Module
     }
 
     /**
+     * Modules for sidebar display
      * @return array<int,array>
      */
-    public function getModules(): array
+    protected function getModules(): array
     {
         $config = config("paths")["modules"];
         $map = app()->classMap($config);

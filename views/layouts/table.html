@@ -1,5 +1,5 @@
-<div class="table-responsive mt-3">
-  <table class="table table-sm">
+<div class="table-responsive mt-3 p-2">
+  <table class="table table-sm table-hover">
     <thead>
       <tr>
         {% for col in columns %}
@@ -10,7 +10,7 @@
     <tbody>
         {% for item in data %}
         <tr>
-          {% for col in data %}
+          {% for col in item %}
             <td>{{ col }}</td>
           {% endfor %}
         </tr>
