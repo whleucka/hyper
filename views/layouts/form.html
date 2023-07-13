@@ -1,3 +1,23 @@
-<form>
-  <p>hello!</p>
+<style>
+.module-form .form-floating:focus-within {
+  z-index: 2;
+}
+</style>
+ 
+<form class="module-form bg-white" method="POST" action="{{ moduleRoute(index_route) }}">
+  {{ csrf()|raw }}
+  <div class="d-flex flex-column">
+    {% for title, column in form %}
+    <div class="form-floating">
+      <input name="{{ column }}" type="input" class="form-control" id="floatingInput" value="{{ data[column] }}" placeholder=" ">
+      <label for="floatingInput">{{ title }}</label>
+      <span id="{{ column }}-errors"></span>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="p-3">
+    <button class="btn btn-outline-success">Save</button>
+    <button name="delete" value="ok" class="btn btn-outline-danger">Delete</button>
+    <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary">Cancel</a>
+  </div>
 </form>

@@ -96,6 +96,24 @@
   width: 18px;
   height: 18px;
 }
+#module-content .module-table-container {
+  padding: 10px;
+}
+#module-content .module-table {
+
+}
+#module-content .module-form {
+  padding-top: 10px;
+  border-radius: 10px;
+  
+}
+#module-content .module-form input {
+  border-radius: 0; 
+  border: 0;
+}
+#module-content .module-form input {
+  border-bottom: 1px solid #eee;
+}
 
 /**
 * Utility
@@ -118,4 +136,5 @@
 
 .content-box {
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    border-radius: 10px;
 }

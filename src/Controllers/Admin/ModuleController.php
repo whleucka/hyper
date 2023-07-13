@@ -8,14 +8,14 @@ use StellarRouter\{Get, Post, Delete, Patch};
 
 class ModuleController extends Controller
 {
-    protected function module(string $module): mixed
+    protected function module(string $module, ?string $id = null): mixed
     {
         $class = "Nebula\\Controllers\\Admin\\Modules\\" . ucfirst($module);
         try {
             if (!class_exists($class)) {
                 app()->pageNotFound();
             }
-            return new $class();
+            return new $class($id);
         } catch (Exception $ex) {
             app()->serverError();
             error_log("module not found: $class " . $ex->getMessage());
@@ -28,7 +28,10 @@ class ModuleController extends Controller
     #[Get("/admin/{module}", "module.index", ["auth"])]
     public function index($module): string {
         $module = $this->module($module);
-        return twig("admin/index.html", $module->getData());
+        return twig("admin/index.html", [
+            'mode' => 'index',
+            ...$module->getData()
+        ]);
     }
 
     /**
@@ -55,7 +58,7 @@ class ModuleController extends Controller
      */
     #[Get("/admin/{module}/{id}", "module.show", ["auth"])]
     public function show($module, $id): string {
-        $module = $this->module($module);
+        $module = $this->module($module, $id);
         return dd("wip: show");
     }
 
@@ -65,8 +68,11 @@ class ModuleController extends Controller
      */
     #[Get("/admin/{module}/{id}/edit", "module.edit", ["auth"])]
     public function edit($module, $id): string {
-        $module = $this->module($module);
-        return twig("admin/index.html", $module->getData());
+        $module = $this->module($module, $id);
+        return twig("admin/index.html", [
+            'mode' => 'edit',
+            ...$module->getData(),
+        ]);
     }
 
     /**
@@ -76,7 +82,7 @@ class ModuleController extends Controller
     #[Post("/admin/{module}/{id}/update", "module.modify", ["auth"])]
     #[Patch("/admin/{module}/{id}", "module.update", ["auth"])]
     public function update($module, $id): string {
-        $module = $this->module($module);
+        $module = $this->module($module, $id);
         return dd("wip: update");
     }
 
@@ -87,7 +93,7 @@ class ModuleController extends Controller
     #[Post("/admin/{module}/{id}/delete", "module.delete", ["auth"])]
     #[Delete("/admin/{module}/{id}", "module.destroy", ["auth"])]
     public function destroy($module, $id): string {
-        $module = $this->module($module);
+        $module = $this->module($module, $id);
         return dd("wip: destroy");
     }
 }

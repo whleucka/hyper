@@ -7,6 +7,7 @@ use PDO;
 
 class Module
 {
+    private $model_id;
     protected array $table = [];
     protected array $form = [];
     protected bool $add_enabled = true;
@@ -16,8 +17,9 @@ class Module
     /**
      * @param array<int,mixed> $config
      */
-    public function __construct(protected array $config)
+    public function __construct(protected array $config, ?string $model_id = null)
     {
+        $this->model_id = $model_id;
     }
 
     public function __get(string $name): mixed
@@ -32,6 +34,11 @@ class Module
     public function __set($name, $value): void
     {
         $this->config[$name] = $value;
+    }
+
+    protected function getPrimaryKey(): string
+    {
+        return $this->primary_key ?? 'id';
     }
 
     protected function selectStatement(array $columns): string
@@ -56,6 +63,18 @@ class Module
             ->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    protected function formData(string $table_name): array
+    {
+        if (empty($this->table) || !isset($this->config['table'])) {
+            return [];
+        }
+        $columns = $this->selectStatement($this->form);
+        $primary_key = $this->getPrimaryKey();
+        return db()
+            ->run("SELECT $columns FROM $table_name WHERE {$primary_key} = ?", [$this->model_id])
+            ->fetch(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Get data for the twig template
      * @return array<string,string>
@@ -70,6 +89,7 @@ class Module
         return [
             "content" => twig("layouts/table.html", [
                 "route" => $this->route,
+                "primary_key" => $this->getPrimaryKey(),
                 "edit_route" => $this->route.'.edit',
                 "delete_route" => $this->route.'.delete',
                 "columns" => array_keys($this->table),
@@ -83,7 +103,16 @@ class Module
     protected function form(): array
     {
         return [
-            "content" => twig("layouts/form.html", []),
+            "content" => twig("layouts/form.html", [
+                "route" => $this->route,
+                "primary_key" => $this->getPrimaryKey(),
+                "index_route" => $this->route.'.index',
+                "delete_route" => $this->route.'.delete',
+                "form" => $this->form,
+                "data" => $this->formData($this->config["table"]),
+                "edit_enabled" => $this->edit_enabled,
+                "delete_enabled" => $this->delete_enabled,
+            ]),
         ];
     }
     /**

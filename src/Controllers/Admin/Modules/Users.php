@@ -4,10 +4,11 @@ namespace Nebula\Controllers\Admin\Modules;
 
 class Users extends Module
 {
-    public function __construct()
+    public function __construct(private $module_id = null)
     {
         $config = [
             "table" => "users",
+            "primary_key" => "id",
             "route" => "users",
             "title" => "Users",
             "icon" => "users",
@@ -26,10 +27,10 @@ class Users extends Module
         $this->form = [
             "Name" => "name",
             "Email" => "email",
-            "Password" => "password",
-            "Password (again)" => "password_match",
+            "Password" => "'' as password",
+            "Password (again)" => "'' as password_match",
         ];
 
-        parent::__construct($config);
+        parent::__construct($config, $module_id);
     }
 }

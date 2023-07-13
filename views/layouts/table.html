@@ -1,5 +1,5 @@
-<div class="table-responsive mt-3 p-2">
-  <table class="table table-sm table-hover">
+<div class="table-responsive mt-3 module-table-container">
+  <table class="module-table table table-sm table-hover">
     <thead>
       <tr>
         {% for col in columns %}
@@ -20,7 +20,7 @@
             <a href="{{ moduleRoute(edit_route, item.id) }}" class="btn"><span data-feather='edit'></span></a>
             {% endif %}
             {% if delete_enabled %}
-            <form method="POST" class="d-inline d-flex align-items-center" action="{{ moduleRoute(delete_route, item.id) }}">
+            <form method="POST" class="d-inline d-flex align-items-center" action="{{ moduleRoute(delete_route, item[primary_key]) }}">
               {{ csrf()|raw }}
               <button class="btn"><span data-feather='trash'></span></button>
             </form>
