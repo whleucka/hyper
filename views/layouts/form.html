@@ -3,21 +3,37 @@
   z-index: 2;
 }
 </style>
- 
-<form class="module-form bg-white" method="POST" action="{{ moduleRoute(index_route) }}">
-  {{ csrf()|raw }}
-  <div class="d-flex flex-column">
-    {% for title, column in form %}
-    <div class="form-floating">
-      <input name="{{ column }}" type="input" class="form-control" id="floatingInput" value="{{ data[column] }}" placeholder=" ">
-      <label for="floatingInput">{{ title }}</label>
-      <span id="{{ column }}-errors"></span>
+
+<div class="module-form bg-white">
+  <div class="actions p-3 d-flex align-items-center">
+    <div class="title truncate">
+      <h3>Edit {{ model_id }}</h3>
     </div>
-    {% endfor %}
+    <div class="flex-grow-1">
+      {% if delete_enabled %}
+      <form onSumbit="return confirm('Are you sure?')" class="d-flex d-inline justify-content-end" method="POST" action="{{ moduleRoute(delete_route) }}">
+        {{ csrf()|raw }}
+        <button type="submit" class="btn btn-outline-danger">Delete</button>
+      </form>
+      {% endif %}
+    </div>
   </div>
-  <div class="p-3">
-    <button class="btn btn-outline-success">Save</button>
-    <button name="delete" value="ok" class="btn btn-outline-danger">Delete</button>
-    <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary">Cancel</a>
+  <div class="form mt-2">
+    <form method="POST" action="{{ moduleRoute(index_route) }}">
+      {{ csrf()|raw }}
+      <div class="d-flex flex-column">
+        {% for title, column in form %}
+        <div class="form-floating">
+          <input name="{{ column }}" type="input" class="form-control" id="floatingInput" value="{{ data[column] }}" placeholder=" ">
+          <label for="floatingInput">{{ title }}</label>
+          <span id="{{ column }}-errors"></span>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="p-3">
+        <button type="submit" class="btn btn-outline-success">Save</button>
+        <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary">Cancel</a>
+      </div>
+    </form>
   </div>
-</form>
+</div>

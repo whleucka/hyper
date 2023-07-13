@@ -57,6 +57,7 @@
 }
 
 #module-top a.dropdown-item svg {
+  stroke: #444;
   width: 18px;
   height: 18px;
 }
@@ -79,7 +80,9 @@
   color: #555;
 }
 
-#module-header .module-title {
+#module-header .module-title, #module-header svg {
+  stroke: #444;
+  color: #444;
   font-size: 2em;
 }
 
@@ -93,6 +96,7 @@
 }
 
 #module-content .actions svg {
+  stroke: #444;
   width: 18px;
   height: 18px;
 }
@@ -100,7 +104,10 @@
   padding: 10px;
 }
 #module-content .module-table {
-
+  font-size: 0.8em;
+}
+#module-content .module-table tbody tr:hover {
+  background-color: #fffdfa;
 }
 #module-content .module-form {
   padding-top: 10px;

@@ -112,6 +112,7 @@ class Module
                 "data" => $this->formData($this->config["table"]),
                 "edit_enabled" => $this->edit_enabled,
                 "delete_enabled" => $this->delete_enabled,
+                "model_id" => $this->model_id,
             ]),
         ];
     }
