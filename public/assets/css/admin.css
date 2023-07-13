@@ -102,12 +102,13 @@
 }
 #module-content .module-table-container {
   padding: 10px;
+  border-radius: 10px;
 }
 #module-content .module-table {
   font-size: 0.8em;
 }
 #module-content .module-table tbody tr:hover {
-  background-color: #fffdfa;
+  background-color: #f0faff;
 }
 #module-content .module-form {
   padding-top: 10px;
