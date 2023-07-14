@@ -30,7 +30,7 @@ class Authorize extends Middleware
         }
 
         // Only affects auth routes
-        if (in_array("auth", $middlewares) && !$user) {
+        if (in_array("auth", $middlewares) && is_null($user)) {
             $this->redirectSignIn();
         }
 
@@ -42,11 +42,7 @@ class Authorize extends Middleware
      */
     private function cookieAuth(string $token): ?User
     {
-        $user = User::findByAttribute("remember_token", md5($token));
-        if ($user) {
-            return new User($user->getId());
-        }
-        return null;
+        return User::findByAttribute("remember_token", md5($token));
     }
 
     /**
@@ -54,11 +50,7 @@ class Authorize extends Middleware
      */
     private function sessionAuth(?string $user_id): ?User
     {
-        $user = User::find($user_id);
-        if ($user) {
-            return new User($user_id);
-        }
-        return null;
+        return User::find($user_id);
     }
 
     private function redirectSignIn(): void
