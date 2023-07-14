@@ -53,7 +53,7 @@ class Module
 
     protected function setColumns(array $columns): string
     {
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
@@ -84,9 +84,10 @@ class Module
         $primary_key = $this->getPrimaryKey();
         try {
             $result = db()
-                ->run("SELECT $columns FROM $table_name WHERE {$primary_key} = ?", [
-                    $this->model_id,
-                ])
+                ->run(
+                    "SELECT $columns FROM $table_name WHERE {$primary_key} = ?",
+                    [$this->model_id]
+                )
                 ->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             throw new Error("form data query");

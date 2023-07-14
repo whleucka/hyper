@@ -128,8 +128,7 @@ function container()
  */
 function twig($path, $data = [])
 {
-    $twig = container()
-        ->get(Twig\Environment::class);
+    $twig = container()->get(Twig\Environment::class);
 
     // App user
     $user = user();
@@ -154,8 +153,7 @@ function twig($path, $data = [])
  */
 function mailer(): EmailerSMTP
 {
-    return container()
-        ->get(EmailerSMTP::class);
+    return container()->get(EmailerSMTP::class);
 }
 
 /**
