@@ -22,47 +22,35 @@ class ModuleController extends Controller
         }
     }
 
+    /************************************************************************
+     * VIEWS
+     ************************************************************************/
     /**
+     * Module(s) table view
      * @param mixed $module
      */
     #[Get("/admin/{module}", "module.index", ["auth"])]
     public function index($module): string {
         $module = $this->module($module);
         return twig("admin/index.html", [
-            'mode' => 'index',
-            ...$module->getData()
+            "mode" => "index",
+            ...$module->getData(),
         ]);
     }
-
     /**
+     * Create new module view
      * @param mixed $module
      */
     #[Get("/admin/{module}/create", "module.create", ["auth"])]
     public function create($module): string {
         $module = $this->module($module);
-        return dd("wip: create");
+        return twig("admin/index.html", [
+            "mode" => "create",
+            ...$module->getData(),
+        ]);
     }
-
     /**
-     * @param mixed $module
-     */
-    #[Post("/admin/{module}", "module.store", ["auth"])]
-    public function store($module): string {
-        $module = $this->module($module);
-        return dd("wip: store");
-    }
-
-    /**
-     * @param mixed $module
-     * @param mixed $id
-     */
-    #[Get("/admin/{module}/{id}", "module.show", ["auth"])]
-    public function show($module, $id): string {
-        $module = $this->module($module, $id);
-        return dd("wip: show");
-    }
-
-    /**
+     * Edit existing module view
      * @param mixed $module
      * @param mixed $id
      */
@@ -70,30 +58,91 @@ class ModuleController extends Controller
     public function edit($module, $id): string {
         $module = $this->module($module, $id);
         return twig("admin/index.html", [
-            'mode' => 'edit',
+            "mode" => "edit",
             ...$module->getData(),
         ]);
     }
 
+    /************************************************************************
+     * REQUESTS
+     ************************************************************************/
     /**
+     * POST store new module
      * @param mixed $module
-     * @param mixed $id
      */
-    #[Post("/admin/{module}/{id}/update", "module.modify", ["auth"])]
-    #[Patch("/admin/{module}/{id}", "module.update", ["auth"])]
-    public function update($module, $id): string {
-        $module = $this->module($module, $id);
-        return dd("wip: update");
+    #[Post("/admin/{module}", "module.store", ["auth"])]
+    public function store($module): string {
+        $module = $this->module($module);
+        return dd("wip: store");
     }
-
     /**
+     * POST update existing module
      * @param mixed $module
      * @param mixed $id
      */
-    #[Post("/admin/{module}/{id}/delete", "module.delete", ["auth"])]
-    #[Delete("/admin/{module}/{id}", "module.destroy", ["auth"])]
+    #[Post("/admin/{module}/{id}", "module.modify", ["auth"])]
+    public function modify($module, $id): string {
+        $module = $this->module($module, $id);
+        return dd("wip: modify");
+    }
+    /**
+     * POST delete existing module
+     * @param mixed $module
+     * @param mixed $id
+     */
+    #[Post("/admin/{module}/{id}/delete", "module.destroy", ["auth"])]
     public function destroy($module, $id): string {
         $module = $this->module($module, $id);
         return dd("wip: destroy");
+    }
+
+    /************************************************************************
+     * API ENDPOINTS
+     ************************************************************************/
+    /**
+     * API GET module(s)
+     * @param mixed $module
+     */
+    #[Get("/api/admin/{module}", "module.api.index", ["auth", "api"])]
+    public function api_index($module): array {
+        $module = $this->module($module);
+        return $module->tableData();
+    }
+    /**
+     * API POST store new module
+     * @param mixed $module
+     */
+    #[Post("/api/admin/{module}", "module.api.store", ["auth"])]
+    public function api_store($module): string {
+        die("wip api store");
+    }
+    /**
+     * API GET existing module
+     * @param mixed $module
+     * @param mixed $id
+     */
+    #[Get("/api/admin/{module}/{id}", "module.api.show", ["auth"])]
+    public function api_show($module, $id): string {
+        die("wip api show");
+    }
+    /**
+     * API PATCH update existing module
+     * @param mixed $module
+     * @param mixed $id
+     * @return void
+     */
+    #[Patch("/api/admin/{module}/{id}", "module.api.modify", ["auth"])]
+    public function api_modify($module, $id): array {
+        die("wip api modify");
+    }
+    /**
+     * API DELETE delete existing module
+     * @param mixed $module
+     * @param mixed $id
+     * @return void
+     */
+    #[Delete("/api/admin/{module}/{id}", "module.api.destroy", ["auth"])]
+    public function api_destroy($module, $id): array {
+        die("wip api destroy");
     }
 }

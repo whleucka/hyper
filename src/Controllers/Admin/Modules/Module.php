@@ -17,8 +17,10 @@ class Module
     /**
      * @param array<int,mixed> $config
      */
-    public function __construct(protected array $config, ?string $model_id = null)
-    {
+    public function __construct(
+        protected array $config,
+        ?string $model_id = null
+    ) {
         $this->model_id = $model_id;
     }
 
@@ -38,7 +40,7 @@ class Module
 
     protected function getPrimaryKey(): string
     {
-        return $this->primary_key ?? 'id';
+        return $this->primary_key ?? "id";
     }
 
     protected function selectStatement(array $columns): string
@@ -48,30 +50,34 @@ class Module
 
     protected function setColumns(array $columns): string
     {
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
-    protected function tableData(string $table_name): array
+    public function tableData(): array
     {
-        if (empty($this->table) || !isset($this->config['table'])) {
+        if (empty($this->table) || !isset($this->config["table"])) {
             return [];
         }
+        $table_name = $this->config["table"];
         $columns = $this->selectStatement($this->table);
         return db()
             ->run("SELECT $columns FROM $table_name")
             ->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    protected function formData(string $table_name): array
+    public function formData(): array
     {
-        if (empty($this->table) || !isset($this->config['table'])) {
+        if (empty($this->table) || !isset($this->config["table"])) {
             return [];
         }
+        $table_name = $this->config["table"];
         $columns = $this->selectStatement($this->form);
         $primary_key = $this->getPrimaryKey();
         return db()
-            ->run("SELECT $columns FROM $table_name WHERE {$primary_key} = ?", [$this->model_id])
+            ->run("SELECT $columns FROM $table_name WHERE {$primary_key} = ?", [
+                $this->model_id,
+            ])
             ->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -84,16 +90,21 @@ class Module
         return $this->mergeData();
     }
 
+    public function update()
+    {
+        die("wip");
+    }
+
     protected function table(): array
     {
         return [
             "content" => twig("layouts/table.html", [
                 "route" => $this->route,
                 "primary_key" => $this->getPrimaryKey(),
-                "edit_route" => $this->route.'.edit',
-                "delete_route" => $this->route.'.delete',
+                "edit_route" => $this->route . ".edit",
+                "delete_route" => $this->route . ".destroy",
                 "columns" => array_keys($this->table),
-                "data" => $this->tableData($this->config["table"]),
+                "data" => $this->tableData(),
                 "edit_enabled" => $this->edit_enabled,
                 "delete_enabled" => $this->delete_enabled,
             ]),
@@ -106,10 +117,10 @@ class Module
             "content" => twig("layouts/form.html", [
                 "route" => $this->route,
                 "primary_key" => $this->getPrimaryKey(),
-                "index_route" => $this->route.'.index',
-                "delete_route" => $this->route.'.delete',
+                "index_route" => $this->route . ".index",
+                "delete_route" => $this->route . ".destroy",
                 "form" => $this->form,
-                "data" => $this->formData($this->config["table"]),
+                "data" => $this->formData(),
                 "edit_enabled" => $this->edit_enabled,
                 "delete_enabled" => $this->delete_enabled,
                 "model_id" => $this->model_id,
@@ -141,7 +152,7 @@ class Module
             "parent" => $this->parent,
             "title" => $this->title,
             "modules" => $this->getModules(),
-            "icon" => $this->icon ?? 'box',
+            "icon" => $this->icon ?? "box",
             "add_enabled" => $this->add_enabled,
             "content" => "",
         ];
@@ -164,7 +175,7 @@ class Module
                     "route" => $class->route . ".index",
                     "title" => $class->title,
                     "parent" => $class->parent,
-                    "icon" => $class->icon ?? 'box',
+                    "icon" => $class->icon ?? "box",
                 ];
             }
         }
