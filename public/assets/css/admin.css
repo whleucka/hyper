@@ -108,7 +108,7 @@
   height: 18px;
 }
 #module-content .module-table-container {
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   border-radius: 10px;
 }
 #module-content .module-table {

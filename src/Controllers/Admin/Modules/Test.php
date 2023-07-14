@@ -13,6 +13,9 @@ class Test extends Module
             "route" => "test",
             "title" => "Test",
             "parent" => "Debug",
+            "create_enabled" => true,
+            "destroy_enabled" => true,
+            "edit_enabled" => true,
         ];
 
         $this->table = [
