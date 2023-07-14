@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="form mt-2">
-    <form method="POST" action="{{ moduleRoute(index_route) }}">
+    <form method="POST" action="{{ moduleRoute(modify_route, model_id) }}">
       {{ csrf()|raw }}
       <div class="d-flex flex-column">
         {% for title, column in form %}

@@ -34,6 +34,11 @@ class Test extends Module
             "Combo" => "combo",
         ];
 
+        $this->modify_validation = [
+            "name" => ["required"],
+            "number" => ["required"],
+        ];
+
         parent::__construct($config, $module_id);
     }
 }

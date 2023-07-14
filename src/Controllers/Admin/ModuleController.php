@@ -75,8 +75,13 @@ class ModuleController extends Controller
      */
     #[Post("/admin/{module}", "module.store", ["auth"])]
     public function store($module): string {
+        $module_name = $module;
         $module = $this->module($module);
-        return dd("wip: store");
+        if ($this->validate($module->validation('modify'))) {
+            $id = $module->insert();
+            return $this->edit($module_name, $id);
+        }
+        return $this->create($module_name);
     }
     /**
      * POST update existing module
@@ -85,8 +90,12 @@ class ModuleController extends Controller
      */
     #[Post("/admin/{module}/{id}", "module.modify", ["auth"])]
     public function modify($module, $id): string {
+        $module_name = $module;
         $module = $this->module($module, $id);
-        return dd("wip: modify");
+        if ($this->validate($module->validation('modify'))) {
+            $module->update();
+        }
+        return $this->edit($module_name, $id);
     }
     /**
      * POST delete existing module
@@ -95,8 +104,12 @@ class ModuleController extends Controller
      */
     #[Post("/admin/{module}/{id}/delete", "module.destroy", ["auth"])]
     public function destroy($module, $id): string {
+        $module_name = $module;
         $module = $this->module($module, $id);
-        return dd("wip: destroy");
+        if ($this->validate($module->validation('modify'))) {
+            $module->delete();
+        }
+        return $this->edit($module_name, $id);
     }
 
     /************************************************************************

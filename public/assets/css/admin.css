@@ -125,10 +125,12 @@
 #module-content .module-form input {
   font-size: 0.9em;
   border-radius: 0; 
-  border: 0;
 }
 #module-content .module-form input {
-  border-bottom: 1px solid #eee;
+  border: 0;
+}
+#module-content .module-form input.is-invalid {
+  border: 1px solid red;
 }
 
 /**

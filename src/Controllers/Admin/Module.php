@@ -11,6 +11,8 @@ class Module
     private $model_id;
     protected array $table = [];
     protected array $form = [];
+    protected array $create_validation = [];
+    protected array $modify_validation = [];
 
     /**
      * @param array<int,mixed> $config
@@ -39,6 +41,15 @@ class Module
     public function getRoute($name): string
     {
         return $this->route . ".$name";
+    }
+
+    public function validation(string $type): array
+    {
+        return match ($type) {
+            'create' => $this->create_validation,
+            'modify' => $this->modify_validation,
+            default => throw new Error("unknown validation type")
+        };
     }
 
     protected function getPrimaryKey(): string
@@ -107,7 +118,17 @@ class Module
 
     public function update()
     {
-        die("wip");
+        die("wip update");
+    }
+
+    public function insert(): string|false
+    {
+        die("wip insert");
+    }
+
+    public function delete(): bool
+    {
+        die("wip delete");
     }
 
     protected function table(): array
@@ -133,6 +154,8 @@ class Module
                 "route" => $this->route,
                 "primary_key" => $this->getPrimaryKey(),
                 "index_route" => $this->getRoute("index"),
+                "edit_route" => $this->getRoute("edit"),
+                "modify_route" => $this->getRoute("modify"),
                 "destroy_route" => $this->getRoute("destroy"),
                 "form" => $this->form,
                 "data" => $this->formData(),
@@ -148,11 +171,15 @@ class Module
     protected function data(): array
     {
         $route = app()->getRoute();
+        // These are for views only
         return match ($route->getName()) {
             "module.index" => $this->table(),
-            "module.edit" => $this->form(),
-            "module.create" => $this->form(),
-            default => throw new Error("module name doesn't exist"),
+            "module.edit", 
+            "module.create", 
+            "module.store", 
+            "module.modify", 
+            "module.destroy" => $this->form(),
+            default => throw new Error("module data error: route name not defined '{$route->getName()}'"),
         };
     }
 
