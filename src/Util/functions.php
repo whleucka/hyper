@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A collection of helper utility funcitons
  */
@@ -8,7 +9,6 @@
 use Nebula\Email\EmailerSMTP;
 use Nebula\Kernel\Web;
 use Nebula\Validation\Validate;
-use Nebula\Util\TwigExtension;
 
 /**
  * Debug output
@@ -117,14 +117,19 @@ function user()
 }
 
 /**
+ * App container
+ */
+function container()
+{
+    return app()->getContainer();
+}
+/**
  * Return a twig template for output
  */
 function twig($path, $data = [])
 {
-    $twig = app()
-        ->container()
+    $twig = container()
         ->get(Twig\Environment::class);
-    $twig->addExtension(new TwigExtension());
 
     // App user
     $user = user();
@@ -149,8 +154,7 @@ function twig($path, $data = [])
  */
 function mailer(): EmailerSMTP
 {
-    return app()
-        ->getContainer()
+    return container()
         ->get(EmailerSMTP::class);
 }
 

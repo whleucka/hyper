@@ -4,6 +4,7 @@ namespace Nebula\Config;
 
 use GalaxyPDO\DB;
 use Nebula\Email\EmailerSMTP;
+use Nebula\Util\TwigExtension;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Nebula\Kernel\Env;
@@ -29,10 +30,12 @@ return [
     Environment::class => function () use ($env) {
         $views = config("paths")["views"];
         $loader = new FilesystemLoader($views["paths"]);
-        return new Environment($loader, [
+        $twig = new Environment($loader, [
             "cache" => $views["cache"],
             "auto_reload" => strtolower($env["APP_DEBUG"]) === "true",
         ]);
+        $twig->addExtension(new TwigExtension());
+        return $twig;
     },
     EmailerSMTP::class => function () {
         $config = config("email");

@@ -1,6 +1,7 @@
 <?php
 
 namespace Nebula\Controllers\Admin\Modules;
+use Nebula\Controllers\Admin\Module;
 
 class Dashboard extends Module
 {

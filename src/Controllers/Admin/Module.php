@@ -1,6 +1,6 @@
 <?php
 
-namespace Nebula\Controllers\Admin\Modules;
+namespace Nebula\Controllers\Admin;
 
 use Error;
 use PDO;

@@ -23,7 +23,7 @@
             {% if delete_enabled %}
             <form method="POST" class="d-inline d-flex align-items-center" action="{{ moduleRoute(delete_route, item[primary_key]) }}">
               {{ csrf()|raw }}
-              <button title="Delete" class="btn"><span data-feather='trash'></span></button>
+              <button title="Delete" onClick="return confirm('Are you sure?')" class="btn"><span data-feather='trash'></span></button>
             </form>
             {% endif %}
           </div>

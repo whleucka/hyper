@@ -5,15 +5,15 @@
 </style>
 
 <div class="module-form bg-white">
-  <div class="p-3 d-flex align-items-center">
+  <div class="p-3 d-flex align-items-center align-middle">
     <div class="title truncate">
-      <h3>Edit {{ model_id }}</h3>
+      <h4 class="m-0">Edit {{ model_id }}</h4>
     </div>
     <div class="actions flex-grow-1">
       {% if delete_enabled %}
-      <form onSumbit="return confirm('Are you sure?')" class="d-flex d-inline justify-content-end" method="POST" action="{{ moduleRoute(delete_route) }}">
+      <form class="d-flex d-inline justify-content-end" method="POST" action="{{ moduleRoute(delete_route) }}">
         {{ csrf()|raw }}
-        <button type="submit" class="btn btn-outline-danger">Delete</button>
+        <button type="submit" onClick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
       </form>
       {% endif %}
     </div>
