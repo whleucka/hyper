@@ -12,8 +12,8 @@
       <div class="collapse show" id="sidebar-{{ loop.index0 }}-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           {% for child in modules[module] %}
-          <a href="{{ moduleRoute(child.route)}}" class="link-dark rounded">
-            <li class="ps-3 link">{{ child.title }}</li>
+          <a href="{{ moduleRoute(child.link)}}" class="link-dark rounded">
+            <li class="ps-3 truncate link"><i class="me-2" data-feather="{{ child.icon }}"></i> {{ child.title }}</li>
           </a>
           {% endfor %}
         </ul>

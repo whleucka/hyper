@@ -14,6 +14,9 @@ class Users extends Module
             "title" => "Users",
             "icon" => "users",
             "parent" => "Administration",
+            "create_enabled" => true,
+            "destroy_enabled" => true,
+            "edit_enabled" => true,
         ];
 
         $this->table = [

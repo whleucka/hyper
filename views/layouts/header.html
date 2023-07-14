@@ -1,6 +1,6 @@
 <div id="module-header" class="contianer-fluid w-100 d-flex align-items-center">
-  <div class="module-title">
-    <i data-feather="{{ icon }}" class="me-1"></i> {{ title }}
+  <div class="module-title pt-1 d-flex align-items-center">
+    <i data-feather="{{ icon }}" class="me-3"></i> {{ title }}
   </div>
   <div class="flex-grow-1 d-flex justify-content-end">
     <nav aria-label="breadcrumb">
@@ -10,4 +10,9 @@
       </ol>
     </nav>
   </div>
+</div>
+<div class="actions d-flex justify-content-start align-items-center">
+  {% if create_enabled %}
+  <a href="{{ moduleRoute(create_route) }}" class="btn btn-sm"><i data-feather="plus-square"></i> Create</a>
+  {% endif %}
 </div>

@@ -34,6 +34,8 @@ class ModuleController extends Controller
         $module = $this->module($module);
         return twig("admin/index.html", [
             "mode" => "index",
+            "create_enabled" => $module->create_enabled ?? false,
+            "create_route" => $module->getRoute("create"),
             ...$module->getData(),
         ]);
     }
@@ -59,6 +61,7 @@ class ModuleController extends Controller
         $module = $this->module($module, $id);
         return twig("admin/index.html", [
             "mode" => "edit",
+            "create_route" => "/",
             ...$module->getData(),
         ]);
     }

@@ -24,12 +24,16 @@
   color: #fff;
   text-decoration: none;
 }
-
 #sidebar .link {
   padding: 3px 0;
   margin-left: 3px;
   border-left: 3px solid rgba(117, 195, 235, 0.4);
   line-height: 2.2em;
+}
+#sidebar .link svg {
+  stroke: #fff;
+  width: 16px;
+  height: 16px;
 }
 
 #sidebar .link:hover {
@@ -44,7 +48,6 @@
 #sidebar #sidebar-dropdown .dropdown-item {
   color: #222;
 }
-
 /**
 * Module top
 */
@@ -80,10 +83,14 @@
   color: #555;
 }
 
-#module-header .module-title, #module-header svg {
-  stroke: #444;
+#module-header .module-title {
   color: #444;
-  font-size: 2em;
+  font-size: 2.2em;
+}
+#module-header svg {
+  stroke: #444;
+  width: 30px;
+  height: 30px;
 }
 
 /**

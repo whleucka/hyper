@@ -20,8 +20,8 @@
             {% if edit_enabled %}
             <a title="Edit" href="{{ moduleRoute(edit_route, item.id) }}" class="btn"><span data-feather='edit'></span></a>
             {% endif %}
-            {% if delete_enabled %}
-            <form method="POST" class="d-inline d-flex align-items-center" action="{{ moduleRoute(delete_route, item[primary_key]) }}">
+            {% if destroy_enabled %}
+            <form method="POST" class="d-inline d-flex align-items-center" action="{{ moduleRoute(destroy_route, item[primary_key]) }}">
               {{ csrf()|raw }}
               <button title="Delete" onClick="return confirm('Are you sure?')" class="btn"><span data-feather='trash'></span></button>
             </form>
