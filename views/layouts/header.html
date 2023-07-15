@@ -11,8 +11,8 @@
     </nav>
   </div>
 </div>
-<div class="actions d-flex justify-content-start align-items-center">
+<div class="actions">
   {% if create_enabled %}
-  <a href="{{ moduleRoute(create_route) }}" class="btn btn-sm"><i class="me-1" data-feather="plus-square"></i> Create</a>
+  <a href="{{ moduleRoute(create_route) }}" class="btn btn-sm d-flex"><i class="me-1" data-feather="plus-square"></i> <span style="padding-top: -1px;">Create</span></a>
   {% endif %}
 </div>

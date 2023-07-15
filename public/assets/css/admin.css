@@ -103,7 +103,7 @@
 }
 
 #module-content .actions svg {
-  stroke: #444;
+  stroke: #485563;
   width: 18px;
   height: 18px;
 }
@@ -113,6 +113,11 @@
 }
 #module-content .module-table {
   font-size: 0.8em;
+}
+#module-content .module-table .actions svg {
+  stroke: #000;
+  width: 13px;
+  height: 13px;
 }
 #module-content .module-table tbody tr:hover {
   background-color: #f0faff;
