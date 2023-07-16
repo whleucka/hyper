@@ -54,7 +54,7 @@ class Module
         return match ($route_type) {
             "create" => $this->create_validation,
             "modify" => $this->modify_validation,
-            default => throw new Error("unknown validation type"),
+            default => throw new Error("unknown validation route type"),
         };
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Nebula\Controllers\Admin\Modules;
+namespace Nebula\Admin\Modules;
 use Nebula\Admin\Module;
 
 class Dashboard extends Module
@@ -9,9 +9,7 @@ class Dashboard extends Module
     {
         $this->create_enabled = $this->destroy_enabled = $this->edit_enabled = false;
         $this->route = "dashboard";
-        $this->title = "Dashboard";
         $this->icon = "star";
-        $this->parent = "Administration";
         parent::__construct();
     }
 

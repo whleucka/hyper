@@ -1,6 +1,6 @@
 <?php
 
-namespace Nebula\Controllers\Admin\Modules;
+namespace Nebula\Admin\Modules;
 use Nebula\Admin\Module;
 
 class Profile extends Module

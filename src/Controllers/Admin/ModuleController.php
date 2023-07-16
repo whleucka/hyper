@@ -10,7 +10,7 @@ class ModuleController extends Controller
 {
     protected function module(string $module, ?string $id = null): mixed
     {
-        $class = "Nebula\\Controllers\\Admin\\Modules\\" . ucfirst($module);
+        $class = "Nebula\\Admin\\Modules\\" . ucfirst($module);
         try {
             if (!class_exists($class)) {
                 app()->pageNotFound();
