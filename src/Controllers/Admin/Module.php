@@ -38,8 +38,12 @@ class Module
         // This is the id (primary key) value for the module queries
         $this->model_id = $model_id;
         // Defaults - if these variables aren't set, then we assume route name
-        if (!$this->table_name) $this->table_name = strtolower($this->route);
-        if (!$this->title) $this->title = ucfirst($this->route);
+        if (!$this->table_name) {
+            $this->table_name = strtolower($this->route);
+        }
+        if (!$this->title) {
+            $this->title = ucfirst($this->route);
+        }
     }
 
     /**
@@ -193,7 +197,8 @@ class Module
                 "columns" => array_keys($this->table),
                 "data" => $this->tableData(),
             ]),
-            "module.edit", "module.create", "module.store", "module.modify", "module.destroy", => twig("layouts/form.html", [
+            "module.edit", "module.create", "module.store", "module.modify",
+            "module.destroy" => twig("layouts/form.html", [
                 ...$this->getDefaults(),
                 "form" => $this->form,
                 "data" => $this->formData(),
@@ -294,7 +299,7 @@ class Module
      */
     protected function placeholderColumns(array $columns): string
     {
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return $this->commaColumns($stmt);
     }
 
@@ -307,7 +312,7 @@ class Module
     {
         return array_values(
             array_map(
-                fn ($column) => request()->get($column) ?? null,
+                fn($column) => request()->get($column) ?? null,
                 $this->form
             )
         );
