@@ -7,6 +7,7 @@ class Dashboard extends Module
 {
     public function __construct()
     {
+        $this->create_enabled = $this->destroy_enabled = $this->edit_enabled = false;
         $this->route = "dashboard";
         $this->title = "Dashboard";
         $this->icon = "star";
@@ -14,10 +15,8 @@ class Dashboard extends Module
         parent::__construct();
     }
 
-    protected function getContent(): array
+    protected function view(): string
     {
-        return [
-            "content" => twig("admin/dashboard/index.html"),
-        ];
+        return twig("admin/dashboard/index.html");
     }
 }

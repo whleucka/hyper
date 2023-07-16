@@ -8,11 +8,8 @@ class Test extends Module
 {
     public function __construct(private $module_id = null)
     {
-        $this->create_enabled = $this->destroy_enabled = $this->edit_enabled = true;
         $this->route = "test";
-        $this->title = "Test";
         $this->parent = "Debug";
-        $this->table_name = "test";
 
         $this->table = [
             "ID" => "id",

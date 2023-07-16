@@ -7,12 +7,8 @@ class Users extends Module
 {
     public function __construct(private $module_id = null)
     {
-        $this->create_enabled = $this->destroy_enabled = $this->edit_enabled = true;
-        $this->table_name = "users";
         $this->route = "users";
-        $this->title = "Users";
         $this->icon = "users";
-        $this->parent = "Administration";
 
         $this->table = [
             "ID" => "id",

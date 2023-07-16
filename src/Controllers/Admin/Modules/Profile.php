@@ -7,17 +7,14 @@ class Profile extends Module
 {
     public function __construct()
     {
+        $this->create_enabled = $this->destroy_enabled = $this->edit_enabled = false;
         $this->route = "profile";
-        $this->title = "Profile";
         $this->icon = "user";
-        $this->parent = "Administration";
         parent::__construct();
     }
 
-    protected function getContent(): array
+    protected function view(): string
     {
-        return [
-            "content" => twig("admin/profile/index.html"),
-        ];
+        return twig("admin/profile/index.html");
     }
 }
