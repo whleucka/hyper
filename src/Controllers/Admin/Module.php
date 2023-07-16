@@ -148,43 +148,6 @@ class Module
     }
 
     /**
-     * Table view content
-     */
-    protected function tableContent(): array
-    {
-        return [
-            "content" => $this->view(),
-        ];
-    }
-
-    /**
-     * Form view content
-     */
-    protected function formContent(): array
-    {
-        return [
-            "content" => $this->view(),
-        ];
-    }
-
-    /**
-     * Get the module content for the view
-     */
-    protected function getContent(): array
-    {
-        $route = app()->getRoute();
-        // These are for views only
-        return match ($route->getName()) {
-            "module.index" => $this->tableContent(),
-            "module.edit", "module.create", "module.store", "module.modify",
-            "module.destroy" => $this->formContent(),
-            default => throw new Error(
-                "module data error: route name not defined '{$route->getName()}'"
-            ),
-        };
-    }
-
-    /**
      * Return a twig view for index / edit / create views
      */
     protected function view(): string
@@ -193,13 +156,13 @@ class Module
         // These are for views only
         return match ($route->getName()) {
             "module.index" => twig("layouts/table.html", [
-                ...$this->getDefaults(),
+                ...$this->sharedDefaults(),
                 "columns" => array_keys($this->table),
                 "data" => $this->tableData(),
             ]),
             "module.edit", "module.create", "module.store", "module.modify",
             "module.destroy" => twig("layouts/form.html", [
-                ...$this->getDefaults(),
+                ...$this->sharedDefaults(),
                 "form" => $this->form,
                 "data" => $this->formData(),
                 "model_id" => $this->model_id,
@@ -217,13 +180,13 @@ class Module
     public function data(): array
     {
         return [
-            ...$this->getDefaults(),
+            ...$this->sharedDefaults(),
             "link" => app()->moduleRoute($this->routeName("index")),
             "parent" => $this->parent,
             "title" => $this->title,
             "sidebar" => $this->sidebar(),
             "icon" => $this->icon ?? "box",
-            "content" => "",
+            "content" => $this->view(),
         ];
     }
 
@@ -249,10 +212,10 @@ class Module
     }
 
     /**
-     * Return the default array values for view data
+     * Return the shared default data values array
      * @return array<string,mixed>
      */
-    public function getDefaults(): array
+    public function sharedDefaults(): array
     {
         return [
             "primary_key" => $this->primary_key,
@@ -265,15 +228,6 @@ class Module
             "modify_route" => $this->routeName("modify"),
             "destroy_route" => $this->routeName("destroy"),
         ];
-    }
-
-    /**
-     * Replaces view data values by calling getContent
-     * @return array<string,string>
-     */
-    public function content(): array
-    {
-        return array_replace($this->data(), $this->getContent());
     }
 
     /**

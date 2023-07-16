@@ -36,7 +36,7 @@ class ModuleController extends Controller
             "mode" => "index",
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
-            ...$module->content(),
+            ...$module->data(),
         ]);
     }
     /**
@@ -50,7 +50,7 @@ class ModuleController extends Controller
             "mode" => "create",
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
-            ...$module->content(),
+            ...$module->data(),
         ]);
     }
     /**
@@ -67,7 +67,7 @@ class ModuleController extends Controller
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
             "edit_route" => $module->routeName("edit"),
-            ...$module->content(),
+            ...$module->data(),
         ]);
     }
 
