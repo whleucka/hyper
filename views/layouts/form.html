@@ -20,7 +20,7 @@
       {% if destroy_enabled and model_id != null %}
       <form class="d-flex d-inline justify-content-end" method="POST" action="{{ moduleRoute(destroy_route, model_id) }}">
         {{ csrf()|raw }}
-        <button type="submit" onSumbit="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
+        <button type="submit" onClick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
       </form>
       {% endif %}
     </div>
