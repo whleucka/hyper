@@ -4,7 +4,7 @@
 }
 </style>
 
-<div class="module-form bg-white">
+<div class="module-form bg-white mt-3">
   <div class="p-3 d-flex align-items-center align-middle">
     <div class="title truncate">
       <h4 class="m-0">
@@ -17,7 +17,7 @@
       </h4>
     </div>
     <div class="actions flex-grow-1">
-      {% if destroy_enabled %}
+      {% if destroy_enabled and model_id != null %}
       <form class="d-flex d-inline justify-content-end" method="POST" action="{{ moduleRoute(destroy_route, model_id) }}">
         {{ csrf()|raw }}
         <button type="submit" onSumbit="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
@@ -31,7 +31,7 @@
       <div class="d-flex flex-column">
         {% for title, column in form %}
         <div class="form-floating">
-          <input name="{{ column }}" type="input" class="form-control" id="floatingInput" value="{{ data[column] }}" placeholder=" ">
+          <input name="{{ column }}" type="input" class="form-control" id="floatingInput" value="{% if model_id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}" placeholder=" ">
           <label for="floatingInput">{{ title }}</label>
           <span id="{{ column }}-errors"></span>
         </div>
