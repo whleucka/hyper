@@ -8,15 +8,11 @@ class Test extends Module
 {
     public function __construct(private $module_id = null)
     {
-        $config = [
-            "table" => "test",
-            "route" => "test",
-            "title" => "Test",
-            "parent" => "Debug",
-            "create_enabled" => true,
-            "destroy_enabled" => true,
-            "edit_enabled" => true,
-        ];
+        $this->create_enabled = $this->destroy_enabled = $this->edit_enabled = true;
+        $this->route = "test";
+        $this->title = "Test";
+        $this->parent = "Debug";
+        $this->table_name = "test";
 
         $this->table = [
             "ID" => "id",
@@ -41,6 +37,6 @@ class Test extends Module
             "combo" => ["required", "numeric"],
         ];
 
-        parent::__construct($config, $module_id);
+        parent::__construct($module_id);
     }
 }

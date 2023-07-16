@@ -7,13 +7,11 @@ class Profile extends Module
 {
     public function __construct()
     {
-        $config = [
-            "route" => "profile",
-            "title" => "Profile",
-            "icon" => "user",
-            "parent" => "Administration",
-        ];
-        parent::__construct($config);
+        $this->route = "profile";
+        $this->title = "Profile";
+        $this->icon = "user";
+        $this->parent = "Administration";
+        parent::__construct();
     }
 
     protected function data(): array

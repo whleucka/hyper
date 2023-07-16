@@ -7,13 +7,11 @@ class Dashboard extends Module
 {
     public function __construct()
     {
-        $config = [
-            "route" => "dashboard",
-            "title" => "Dashboard",
-            "icon" => "star",
-            "parent" => "Administration",
-        ];
-        parent::__construct($config);
+        $this->route = "dashboard";
+        $this->title = "Dashboard";
+        $this->icon = "star";
+        $this->parent = "Administration";
+        parent::__construct();
     }
 
     protected function data(): array

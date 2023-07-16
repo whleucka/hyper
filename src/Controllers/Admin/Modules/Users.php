@@ -7,17 +7,12 @@ class Users extends Module
 {
     public function __construct(private $module_id = null)
     {
-        $config = [
-            "table" => "users",
-            "primary_key" => "id",
-            "route" => "users",
-            "title" => "Users",
-            "icon" => "users",
-            "parent" => "Administration",
-            "create_enabled" => true,
-            "destroy_enabled" => true,
-            "edit_enabled" => true,
-        ];
+        $this->create_enabled = $this->destroy_enabled = $this->edit_enabled = true;
+        $this->table_name = "users";
+        $this->route = "users";
+        $this->title = "Users";
+        $this->icon = "users";
+        $this->parent = "Administration";
 
         $this->table = [
             "ID" => "id",
@@ -35,6 +30,6 @@ class Users extends Module
             "Password (again)" => "'' as password_match",
         ];
 
-        parent::__construct($config, $module_id);
+        parent::__construct($module_id);
     }
 }

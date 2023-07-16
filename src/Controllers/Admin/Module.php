@@ -8,144 +8,158 @@ use PDO;
 
 class Module
 {
-    private $model_id;
-    protected array $table = [];
-    protected array $form = [];
-    protected array $create_validation = [];
-    protected array $modify_validation = [];
+    /** Queries */
+    private ?string $model_id;
+    public string $primary_key = "id";
+    public string $table_name = '';
+    public array $table = [];
+    public array $form = [];
+    /** Validation */
+    public array $create_validation = [];
+    public array $modify_validation = [];
+    /** Permissions */
+    public $create_enabled;
+    public $edit_enabled;
+    public $destroy_enabled;
+    /** Routes */
+    public $route;
+    public $index_route;
+    public $edit_route;
+    public $modify_route;
+    public $create_route;
+    public $destroy_route;
+    /** Meta */
+    public $title;
+    public $parent;
+    public $icon;
 
-    /**
-     * @param array<int,mixed> $config
-     */
     public function __construct(
-        protected array $config,
         ?string $model_id = null
     ) {
         $this->model_id = $model_id;
     }
 
-    public function __get(string $name): mixed
+    /**
+     * Build a route name by type
+     */
+    public function routeName(string $type): string
     {
-        return $this->config[$name] ?? null;
+        return $this->route . ".$type";
     }
 
     /**
-     * @param mixed $name
-     * @param mixed $value
+     * Return validation array by route type
      */
-    public function __set($name, $value): void
+    public function validationArray(string $route_type): array
     {
-        $this->config[$name] = $value;
-    }
-
-    public function getRoute($name): string
-    {
-        return $this->route . ".$name";
-    }
-
-    public function validation(string $type): array
-    {
-        return match ($type) {
+        return match ($route_type) {
             "create" => $this->create_validation,
             "modify" => $this->modify_validation,
             default => throw new Error("unknown validation type"),
         };
     }
 
-    protected function getPrimaryKey(): string
-    {
-        return $this->primary_key ?? "id";
-    }
-
-    protected function commaSep(array $columns): string
+    /**
+     * Return comma separated string of columns
+     * @param array<int,mixed> $columns
+     */
+    protected function commaColumns(array $columns): string
     {
         return implode(", ", array_values($columns));
     }
 
-    protected function setColumns(array $columns): string
+    /**
+     * Return placeholder string "column1 = ?", "column2 = ?"
+     * @param array<int,mixed> $columns
+     */
+    protected function placeholderColumns(array $columns): string
     {
-        $stmt = array_map(fn($column) => $column . " = ?", $columns);
-        return implode(", ", $stmt);
-    }
-
-    public function tableData(): array
-    {
-        if (empty($this->table) || !isset($this->config["table"])) {
-            return [];
-        }
-        $table_name = $this->config["table"];
-        $columns = $this->commaSep($this->table);
-        try {
-            $result = db()
-                ->run("SELECT $columns FROM $table_name")
-                ->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $ex) {
-            throw new Error("table data query");
-        }
-        return $result;
-    }
-
-    public function formData(): array
-    {
-        if (empty($this->table) || !isset($this->config["table"])) {
-            return [];
-        }
-        $table_name = $this->config["table"];
-        $columns = $this->commaSep($this->form);
-        $primary_key = $this->getPrimaryKey();
-        try {
-            $result = db()
-                ->run(
-                    "SELECT $columns FROM $table_name WHERE $primary_key = ?",
-                    [$this->model_id]
-                )
-                ->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $ex) {
-            throw new Error("form data query");
-        }
-        // Return an empty form if there is no result
-        return $result ? $result : [];
+        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        return $this->commaColumns($stmt);
     }
 
     /**
-     * Get data for the twig template
-     * @return array<string,string>
+     * Return array of form request vlaues
      */
-    public function getData(): array
-    {
-        return $this->mergeData();
-    }
-
-    public function formRequestValues(): array
+    protected function formRequestValues(): array
     {
         return array_values(
             array_map(
-                fn($column) => request()->get($column) ?? null,
+                fn ($column) => request()->get($column) ?? null,
                 $this->form
             )
         );
     }
 
+    /**
+     * Table data query
+     */
+    public function tableData(): array
+    {
+        $result = [];
+        try {
+            $columns = $this->commaColumns($this->table);
+            $result = db()
+                ->run("SELECT $columns FROM $this->table_name")
+                ->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $ex) {
+            if (!app()->isDebug()) {
+                app()->serverError();
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Form data query
+     * @return array|<missing>
+     */
+    public function formData(): array
+    {
+        $result = [];
+        try {
+            $columns = $this->commaColumns($this->form);
+            $result = db()
+                ->run(
+                    "SELECT $columns FROM $this->table_name WHERE $this->primary_key = ?",
+                    [$this->model_id]
+                )
+                ->fetch(PDO::FETCH_ASSOC);
+            // Return an empty form if there is no result
+            if (!$result) {
+                return [];
+            }
+        } catch (Exception $ex) {
+            if (!app()->isDebug()) {
+                app()->serverError();
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Module update method
+     */
     public function update(): bool
     {
         $values = [...$this->formRequestValues(), $this->model_id];
-        $columns = $this->setColumns($this->form);
-        $table_name = $this->config["table"];
-        $primary_key = $this->getPrimaryKey();
+        $columns = $this->placeholderColumns($this->form);
         $result = db()->query(
-            "UPDATE $table_name SET $columns WHERE $primary_key = ?",
+            "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
             ...$values
         );
         return $result ? true : false;
     }
 
+    /**
+     * Module insert method
+     */
     public function insert(): string|false
     {
         $values = $this->formRequestValues();
-        $columns = $this->setColumns($this->form);
-        $table_name = $this->config["table"];
+        $columns = $this->placeholderColumns($this->form);
         $result = db()->query(
-            "INSERT INTO $table_name SET $columns",
+            "INSERT INTO $this->table_name SET $columns",
             ...$values
         );
         if ($result) {
@@ -154,62 +168,70 @@ class Module
         return false;
     }
 
+    /**
+     * Module delete method
+     */
     public function delete(): bool
     {
-        $table_name = $this->config["table"];
-        $primary_key = $this->getPrimaryKey();
         $result = db()->query(
-            "DELETE FROM $table_name WHERE $primary_key = ?",
+            "DELETE FROM $this->table_name WHERE $this->primary_key = ?",
             $this->model_id
         );
         return $result ? true : false;
     }
 
-    protected function table(): array
+    /**
+     * Table view content
+     */
+    protected function tableContent(): array
     {
         return [
             "content" => twig("layouts/table.html", [
                 "route" => $this->route,
-                "primary_key" => $this->getPrimaryKey(),
-                "edit_route" => $this->getRoute("edit"),
-                "destroy_route" => $this->getRoute("destroy"),
+                "primary_key" => $this->primary_key,
+                "edit_route" => $this->routeName("edit"),
+                "destroy_route" => $this->routeName("destroy"),
                 "columns" => array_keys($this->table),
                 "data" => $this->tableData(),
-                "edit_enabled" => $this->edit_enabled ?? false,
-                "destroy_enabled" => $this->destroy_enabled ?? false,
+                "edit_enabled" => $this->edit_enabled,
+                "destroy_enabled" => $this->destroy_enabled,
             ]),
         ];
     }
 
-    protected function form(): array
+    /**
+     * Form view content
+     */
+    protected function formContent(): array
     {
         return [
             "content" => twig("layouts/form.html", [
                 "route" => $this->route,
-                "primary_key" => $this->getPrimaryKey(),
-                "index_route" => $this->getRoute("index"),
-                "edit_route" => $this->getRoute("edit"),
-                "modify_route" => $this->getRoute("modify"),
-                "destroy_route" => $this->getRoute("destroy"),
+                "primary_key" => $this->primary_key,
+                "index_route" => $this->routeName("index"),
+                "edit_route" => $this->routeName("edit"),
+                "modify_route" => $this->routeName("modify"),
+                "destroy_route" => $this->routeName("destroy"),
                 "form" => $this->form,
                 "data" => $this->formData(),
-                "edit_enabled" => $this->edit_enabled ?? false,
-                "destroy_enabled" => $this->destroy_enabled ?? false,
+                "edit_enabled" => $this->edit_enabled,
+                "destroy_enabled" => $this->destroy_enabled,
                 "model_id" => $this->model_id,
             ]),
         ];
     }
+
     /**
-     * Override function for twig data
+     * Get the module content for the view
      */
-    protected function data(): array
+    protected function getContent(): array
     {
         $route = app()->getRoute();
         // These are for views only
         return match ($route->getName()) {
-            "module.index" => $this->table(),
+            "module.index" => $this->tableContent(),
             "module.edit", "module.create", "module.store", "module.modify",
-            "module.destroy" => $this->form(),
+            "module.destroy" => $this->formContent(),
             default => throw new Error(
                 "module data error: route name not defined '{$route->getName()}'"
             ),
@@ -217,29 +239,28 @@ class Module
     }
 
     /**
-     * Merge default twig data and data()
+     * Replaces view content by calling getContent
      * @return array<string,string>
      */
-    private function mergeData(): array
+    public function content(): array
     {
         $default = [
             "route" => $this->route,
-            "link" => app()->moduleRoute($this->getRoute("index")),
+            "link" => app()->moduleRoute($this->routeName("index")),
             "parent" => $this->parent,
             "title" => $this->title,
-            "modules" => $this->getModules(),
+            "sidebar" => $this->sidebar(),
             "icon" => $this->icon ?? "box",
-            "add_enabled" => $this->add_enabled ?? false,
             "content" => "",
         ];
-        return array_replace($default, $this->data());
+        return array_replace($default, $this->getContent());
     }
 
     /**
-     * Modules for sidebar display
+     * Collection of modules for sidebar view
      * @return array<int,array>
      */
-    protected function getModules(): array
+    protected function sidebar(): array
     {
         $config = config("paths")["modules"];
         $map = app()->classMap($config);
@@ -247,7 +268,7 @@ class Module
         foreach ($map as $class => $file) {
             $class = new $class();
             $modules[$class?->parent ?? "Adminstration"][] = [
-                "link" => $class->getRoute("index"),
+                "link" => $class->routeName("index"),
                 "title" => $class->title,
                 "parent" => $class->parent,
                 "icon" => $class->icon ?? "box",

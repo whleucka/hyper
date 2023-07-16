@@ -34,9 +34,9 @@ class ModuleController extends Controller
         $module = $this->module($module);
         return twig("admin/index.html", [
             "mode" => "index",
-            "create_enabled" => $module->create_enabled ?? false,
-            "create_route" => $module->getRoute("create"),
-            ...$module->getData(),
+            "create_enabled" => $module->create_enabled,
+            "create_route" => $module->routeName("create"),
+            ...$module->content(),
         ]);
     }
     /**
@@ -48,9 +48,9 @@ class ModuleController extends Controller
         $module = $this->module($module);
         return twig("admin/index.html", [
             "mode" => "create",
-            "create_enabled" => $module->create_enabled ?? false,
-            "create_route" => $module->getRoute("create"),
-            ...$module->getData(),
+            "create_enabled" => $module->create_enabled,
+            "create_route" => $module->routeName("create"),
+            ...$module->content(),
         ]);
     }
     /**
@@ -64,10 +64,10 @@ class ModuleController extends Controller
         return twig("admin/index.html", [
             "mode" => "edit",
             "model_id" => $id,
-            "create_enabled" => $module->create_enabled ?? false,
-            "create_route" => $module->getRoute("create"),
-            "edit_route" => $module->getRoute("edit"),
-            ...$module->getData(),
+            "create_enabled" => $module->create_enabled,
+            "create_route" => $module->routeName("create"),
+            "edit_route" => $module->routeName("edit"),
+            ...$module->content(),
         ]);
     }
 
@@ -82,7 +82,7 @@ class ModuleController extends Controller
     public function store($module): string {
         $module_name = $module;
         $module = $this->module($module);
-        if ($this->validate($module->validation("modify"))) {
+        if ($this->validate($module->validationArray("modify"))) {
             $id = $module->insert();
             if ($id !== false) {
                 // Insert successful
@@ -100,7 +100,7 @@ class ModuleController extends Controller
     public function modify($module, $id): string {
         $module_name = $module;
         $module = $this->module($module, $id);
-        if ($this->validate($module->validation("modify"))) {
+        if ($this->validate($module->validationArray("modify"))) {
             if ($module->update()) {
                 // Update successful
             }
@@ -118,7 +118,7 @@ class ModuleController extends Controller
         $module = $this->module($module, $id);
         if ($module->delete()) {
             // Delete successful
-            app()->redirectUrl(app()->moduleRoute($module->getRoute("index")));
+            app()->redirectUrl(app()->moduleRoute($module->routeName("index")));
         }
         return $this->edit($module_name, $id);
     }
