@@ -37,6 +37,8 @@ class Test extends Module
         $this->modify_validation = [
             "name" => ["required"],
             "number" => ["required"],
+            "checkbox" => ["required", "numeric"],
+            "combo" => ["required", "numeric"],
         ];
 
         parent::__construct($config, $module_id);

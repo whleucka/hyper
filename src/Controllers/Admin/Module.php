@@ -57,7 +57,7 @@ class Module
         return $this->primary_key ?? "id";
     }
 
-    protected function selectStatement(array $columns): string
+    protected function commaSep(array $columns): string
     {
         return implode(", ", array_values($columns));
     }
@@ -74,7 +74,7 @@ class Module
             return [];
         }
         $table_name = $this->config["table"];
-        $columns = $this->selectStatement($this->table);
+        $columns = $this->commaSep($this->table);
         try {
             $result = db()
                 ->run("SELECT $columns FROM $table_name")
@@ -91,12 +91,12 @@ class Module
             return [];
         }
         $table_name = $this->config["table"];
-        $columns = $this->selectStatement($this->form);
+        $columns = $this->commaSep($this->form);
         $primary_key = $this->getPrimaryKey();
         try {
             $result = db()
                 ->run(
-                    "SELECT $columns FROM $table_name WHERE {$primary_key} = ?",
+                    "SELECT $columns FROM $table_name WHERE $primary_key = ?",
                     [$this->model_id]
                 )
                 ->fetch(PDO::FETCH_ASSOC);
@@ -116,19 +116,39 @@ class Module
         return $this->mergeData();
     }
 
-    public function update()
+    public function formRequestValues(): array
     {
-        die("wip update");
+        return array_values(array_map(fn($column) => request()->get($column) ?? null, $this->form));
+    }
+
+    public function update(): bool
+    {
+        $values = [...$this->formRequestValues(), $this->model_id]; 
+        $columns = $this->setColumns($this->form);
+        $table_name = $this->config["table"];
+        $primary_key = $this->getPrimaryKey();
+        $result = db()->query("UPDATE $table_name SET $columns WHERE $primary_key = ?", ...$values);
+        return $result ? true : false;
     }
 
     public function insert(): string|false
     {
-        die("wip insert");
+        $values = $this->formRequestValues(); 
+        $columns = $this->setColumns($this->form);
+        $table_name = $this->config["table"];
+        $result = db()->query("INSERT INTO $table_name SET $columns", ...$values);
+        if ($result) {
+            return db()->lastInsertId(); 
+        }
+        return false;
     }
 
     public function delete(): bool
     {
-        die("wip delete");
+        $table_name = $this->config["table"];
+        $primary_key = $this->getPrimaryKey();
+        $result = db()->query("DELETE FROM $table_name WHERE $primary_key = ?", $this->model_id);
+        return $result ? true : false;
     }
 
     protected function table(): array

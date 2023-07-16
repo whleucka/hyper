@@ -400,6 +400,13 @@ class Web
         exit();
     }
 
+    public function redirectUrl(string $url): void
+    {
+        $response = new RedirectResponse($url);
+        $response->send();
+        exit();
+    }
+
     /**
      * Send a page not found response
      */

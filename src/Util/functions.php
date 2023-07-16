@@ -13,7 +13,7 @@ use Nebula\Validation\Validate;
 /**
  * Debug output
  */
-function dump($o)
+function dump(...$params)
 {
     $template = <<<PRE
 <pre class='pre-debug'>
@@ -27,8 +27,10 @@ PRE;
     $line = $debug["line"];
     $file = $debug["file"];
     $function = $debug["function"];
-    $dump = print_r($o ?? "null", true);
-    printf($template, $file . ":" . $line, $function, $dump);
+    foreach ($params as $o) {
+        $dump = print_r($o ?? "null", true);
+        printf($template, $file . ":" . $line, $function, $dump);
+    }
 }
 
 /**

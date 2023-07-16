@@ -30,7 +30,8 @@ class ModuleController extends Controller
      * @param mixed $module
      */
     #[Get("/admin/{module}", "module.index", ["auth"])]
-    public function index($module): string {
+    public function index($module): string
+    {
         $module = $this->module($module);
         return twig("admin/index.html", [
             "mode" => "index",
@@ -44,7 +45,8 @@ class ModuleController extends Controller
      * @param mixed $module
      */
     #[Get("/admin/{module}/create", "module.create", ["auth"])]
-    public function create($module): string {
+    public function create($module): string
+    {
         $module = $this->module($module);
         return twig("admin/index.html", [
             "mode" => "create",
@@ -57,7 +59,8 @@ class ModuleController extends Controller
      * @param mixed $id
      */
     #[Get("/admin/{module}/{id}/edit", "module.edit", ["auth"])]
-    public function edit($module, $id): string {
+    public function edit($module, $id): string
+    {
         $module = $this->module($module, $id);
         return twig("admin/index.html", [
             "mode" => "edit",
@@ -74,12 +77,16 @@ class ModuleController extends Controller
      * @param mixed $module
      */
     #[Post("/admin/{module}", "module.store", ["auth"])]
-    public function store($module): string {
+    public function store($module): string
+    {
         $module_name = $module;
         $module = $this->module($module);
         if ($this->validate($module->validation('modify'))) {
             $id = $module->insert();
-            return $this->edit($module_name, $id);
+            if ($id !== false) {
+                // Insert successful
+                return $this->edit($module_name, $id);
+            }
         }
         return $this->create($module_name);
     }
@@ -89,11 +96,14 @@ class ModuleController extends Controller
      * @param mixed $id
      */
     #[Post("/admin/{module}/{id}", "module.modify", ["auth"])]
-    public function modify($module, $id): string {
+    public function modify($module, $id): string
+    {
         $module_name = $module;
         $module = $this->module($module, $id);
         if ($this->validate($module->validation('modify'))) {
-            $module->update();
+            if ($module->update()) {
+                // Update successful
+            }
         }
         return $this->edit($module_name, $id);
     }
@@ -103,11 +113,13 @@ class ModuleController extends Controller
      * @param mixed $id
      */
     #[Post("/admin/{module}/{id}/delete", "module.destroy", ["auth"])]
-    public function destroy($module, $id): string {
+    public function destroy($module, $id): string
+    {
         $module_name = $module;
         $module = $this->module($module, $id);
-        if ($this->validate($module->validation('modify'))) {
-            $module->delete();
+        if ($module->delete()) {
+            // Delete successful
+            app()->redirectUrl(app()->moduleRoute($module->getRoute('index')));
         }
         return $this->edit($module_name, $id);
     }
@@ -120,7 +132,8 @@ class ModuleController extends Controller
      * @param mixed $module
      */
     #[Get("/api/admin/{module}", "module.api.index", ["auth", "api"])]
-    public function api_index($module): array {
+    public function api_index($module): array
+    {
         $module = $this->module($module);
         return $module->tableData();
     }
@@ -129,7 +142,8 @@ class ModuleController extends Controller
      * @param mixed $module
      */
     #[Post("/api/admin/{module}", "module.api.store", ["auth"])]
-    public function api_store($module): string {
+    public function api_store($module): string
+    {
         die("wip api store");
     }
     /**
@@ -138,7 +152,8 @@ class ModuleController extends Controller
      * @param mixed $id
      */
     #[Get("/api/admin/{module}/{id}", "module.api.show", ["auth"])]
-    public function api_show($module, $id): string {
+    public function api_show($module, $id): string
+    {
         die("wip api show");
     }
     /**
@@ -148,7 +163,8 @@ class ModuleController extends Controller
      * @return void
      */
     #[Patch("/api/admin/{module}/{id}", "module.api.modify", ["auth"])]
-    public function api_modify($module, $id): array {
+    public function api_modify($module, $id): array
+    {
         die("wip api modify");
     }
     /**
@@ -158,7 +174,8 @@ class ModuleController extends Controller
      * @return void
      */
     #[Delete("/api/admin/{module}/{id}", "module.api.destroy", ["auth"])]
-    public function api_destroy($module, $id): array {
+    public function api_destroy($module, $id): array
+    {
         die("wip api destroy");
     }
 }

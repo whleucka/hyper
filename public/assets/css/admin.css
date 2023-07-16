@@ -1,7 +1,12 @@
+html {
+  height: 100%;
+}
+
 /**
 * Sidebar
 */
 #sidebar {
+  height: 100%;
   width: 170px;
   color: #fbfbfb;
   background: #485563;  /* fallback for old browsers */
@@ -133,9 +138,10 @@
 }
 #module-content .module-form input {
   border: 0;
+  border-bottom: 1px solid #ccc;
 }
 #module-content .module-form input.is-invalid {
-  border: 1px solid red;
+  border: 1px solid #dc3545;
 }
 
 /**
