@@ -6,7 +6,15 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">{{ parent }}</li>
-        <li class="breadcrumb-item active" aria-current="page"><a href="{{ link }}">{{ title }}</a></li>
+        {% if mode == 'create' %}
+          <li class="breadcrumb-item" aria-current="page"><a href="{{ link }}">{{ title }}</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><a href="{{ moduleRoute(create_route) }}">Create</a></li>
+        {% elseif mode == 'edit' %}
+          <li class="breadcrumb-item" aria-current="page"><a href="{{ link }}">{{ title }}</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><a href="{{ moduleRoute(edit_route, model_id) }}">{{ model_id }}</a></li>
+        {% elseif mode == 'index' %}
+          <li class="breadcrumb-item active" aria-current="page"><a href="{{ link }}">{{ title }}</a></li>
+        {% endif %}
       </ol>
     </nav>
   </div>

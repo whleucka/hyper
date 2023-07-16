@@ -247,7 +247,7 @@ class Module
         foreach ($map as $class => $file) {
             $class = new $class();
             $modules[$class?->parent ?? "Adminstration"][] = [
-                "link" => $class->route . ".index",
+                "link" => $class->getRoute("index"),
                 "title" => $class->title,
                 "parent" => $class->parent,
                 "icon" => $class->icon ?? "box",

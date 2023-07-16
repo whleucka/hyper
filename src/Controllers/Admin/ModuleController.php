@@ -63,8 +63,10 @@ class ModuleController extends Controller
         $module = $this->module($module, $id);
         return twig("admin/index.html", [
             "mode" => "edit",
+            "model_id" => $id,
             "create_enabled" => $module->create_enabled ?? false,
             "create_route" => $module->getRoute("create"),
+            "edit_route" => $module->getRoute("edit"),
             ...$module->getData(),
         ]);
     }
