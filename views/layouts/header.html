@@ -20,7 +20,7 @@
   </div>
 </div>
 <div class="actions">
-  {% if create_enabled %}
+  {% if create_enabled and (mode == 'edit' or mode == 'index') %}
   <a href="{{ moduleRoute(create_route) }}" class="btn btn-sm"><i class="me-1" data-feather="plus-square"></i> <span style="padding-top: 2px;">Create</span></a>
   {% endif %}
 </div>
