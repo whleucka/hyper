@@ -259,7 +259,7 @@ class Module
      * Collection of modules for sidebar view
      * @return array<int,array>
      */
-    protected function sidebar(): array
+    private function sidebar(): array
     {
         $config = config("paths")["modules"];
         $map = app()->classMap($config);

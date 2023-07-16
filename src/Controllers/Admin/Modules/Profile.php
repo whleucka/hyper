@@ -14,7 +14,7 @@ class Profile extends Module
         parent::__construct();
     }
 
-    protected function data(): array
+    protected function getContent(): array
     {
         return [
             "content" => twig("admin/profile/index.html"),
