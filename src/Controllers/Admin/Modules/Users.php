@@ -1,7 +1,7 @@
 <?php
 
 namespace Nebula\Controllers\Admin\Modules;
-use Nebula\Controllers\Admin\Module;
+use Nebula\Admin\Module;
 
 class Users extends Module
 {

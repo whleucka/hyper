@@ -1,6 +1,6 @@
 <?php
 
-namespace Nebula\Controllers\Admin;
+namespace Nebula\Admin;
 
 use Error;
 use Exception;
