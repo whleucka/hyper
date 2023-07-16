@@ -78,6 +78,6 @@ EOT;
      */
     public function old(?string $name): mixed
     {
-        return request()->get($name ?? '');
+        return request()->get($name ?? "");
     }
 }

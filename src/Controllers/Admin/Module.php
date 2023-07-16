@@ -46,9 +46,9 @@ class Module
     public function validation(string $type): array
     {
         return match ($type) {
-            'create' => $this->create_validation,
-            'modify' => $this->modify_validation,
-            default => throw new Error("unknown validation type")
+            "create" => $this->create_validation,
+            "modify" => $this->modify_validation,
+            default => throw new Error("unknown validation type"),
         };
     }
 
@@ -118,27 +118,38 @@ class Module
 
     public function formRequestValues(): array
     {
-        return array_values(array_map(fn($column) => request()->get($column) ?? null, $this->form));
+        return array_values(
+            array_map(
+                fn($column) => request()->get($column) ?? null,
+                $this->form
+            )
+        );
     }
 
     public function update(): bool
     {
-        $values = [...$this->formRequestValues(), $this->model_id]; 
+        $values = [...$this->formRequestValues(), $this->model_id];
         $columns = $this->setColumns($this->form);
         $table_name = $this->config["table"];
         $primary_key = $this->getPrimaryKey();
-        $result = db()->query("UPDATE $table_name SET $columns WHERE $primary_key = ?", ...$values);
+        $result = db()->query(
+            "UPDATE $table_name SET $columns WHERE $primary_key = ?",
+            ...$values
+        );
         return $result ? true : false;
     }
 
     public function insert(): string|false
     {
-        $values = $this->formRequestValues(); 
+        $values = $this->formRequestValues();
         $columns = $this->setColumns($this->form);
         $table_name = $this->config["table"];
-        $result = db()->query("INSERT INTO $table_name SET $columns", ...$values);
+        $result = db()->query(
+            "INSERT INTO $table_name SET $columns",
+            ...$values
+        );
         if ($result) {
-            return db()->lastInsertId(); 
+            return db()->lastInsertId();
         }
         return false;
     }
@@ -147,7 +158,10 @@ class Module
     {
         $table_name = $this->config["table"];
         $primary_key = $this->getPrimaryKey();
-        $result = db()->query("DELETE FROM $table_name WHERE $primary_key = ?", $this->model_id);
+        $result = db()->query(
+            "DELETE FROM $table_name WHERE $primary_key = ?",
+            $this->model_id
+        );
         return $result ? true : false;
     }
 
@@ -194,12 +208,11 @@ class Module
         // These are for views only
         return match ($route->getName()) {
             "module.index" => $this->table(),
-            "module.edit", 
-            "module.create", 
-            "module.store", 
-            "module.modify", 
+            "module.edit", "module.create", "module.store", "module.modify",
             "module.destroy" => $this->form(),
-            default => throw new Error("module data error: route name not defined '{$route->getName()}'"),
+            default => throw new Error(
+                "module data error: route name not defined '{$route->getName()}'"
+            ),
         };
     }
 

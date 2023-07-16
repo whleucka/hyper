@@ -80,7 +80,7 @@ class ModuleController extends Controller
     public function store($module): string {
         $module_name = $module;
         $module = $this->module($module);
-        if ($this->validate($module->validation('modify'))) {
+        if ($this->validate($module->validation("modify"))) {
             $id = $module->insert();
             if ($id !== false) {
                 // Insert successful
@@ -98,7 +98,7 @@ class ModuleController extends Controller
     public function modify($module, $id): string {
         $module_name = $module;
         $module = $this->module($module, $id);
-        if ($this->validate($module->validation('modify'))) {
+        if ($this->validate($module->validation("modify"))) {
             if ($module->update()) {
                 // Update successful
             }
@@ -116,7 +116,7 @@ class ModuleController extends Controller
         $module = $this->module($module, $id);
         if ($module->delete()) {
             // Delete successful
-            app()->redirectUrl(app()->moduleRoute($module->getRoute('index')));
+            app()->redirectUrl(app()->moduleRoute($module->getRoute("index")));
         }
         return $this->edit($module_name, $id);
     }
