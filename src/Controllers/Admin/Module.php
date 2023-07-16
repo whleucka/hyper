@@ -11,7 +11,7 @@ class Module
     /** Queries */
     private ?string $model_id;
     public string $primary_key = "id";
-    public string $table_name = '';
+    public string $table_name = "";
     public array $table = [];
     public array $form = [];
     /** Validation */
@@ -33,9 +33,8 @@ class Module
     public $parent;
     public $icon;
 
-    public function __construct(
-        ?string $model_id = null
-    ) {
+    public function __construct(?string $model_id = null)
+    {
         $this->model_id = $model_id;
     }
 
@@ -74,7 +73,7 @@ class Module
      */
     protected function placeholderColumns(array $columns): string
     {
-        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return $this->commaColumns($stmt);
     }
 
@@ -85,7 +84,7 @@ class Module
     {
         return array_values(
             array_map(
-                fn ($column) => request()->get($column) ?? null,
+                fn($column) => request()->get($column) ?? null,
                 $this->form
             )
         );
