@@ -29,7 +29,7 @@
     <form method="POST" action="{{ moduleRoute(modify_route, model_id) }}">
       {{ csrf()|raw }}
       <div class="d-flex flex-column">
-        {% for title, column in form %}
+        {% for column, title in form %}
         <div class="form-floating">
           <input name="{{ column }}" type="input" class="form-control" id="floatingInput" value="{% if model_id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}" placeholder=" ">
           <label for="floatingInput">{{ title }}</label>

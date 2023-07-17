@@ -65,7 +65,7 @@ class Module
     {
         $result = [];
         try {
-            $columns = $this->commaColumns($this->table);
+            $columns = $this->commaColumns(array_keys($this->table));
             $result = db()
                 ->run("SELECT $columns FROM $this->table_name")
                 ->fetchAll(PDO::FETCH_ASSOC);
@@ -85,7 +85,7 @@ class Module
     {
         $result = [];
         try {
-            $columns = $this->commaColumns($this->form);
+            $columns = $this->commaColumns(array_keys($this->form));
             $result = db()
                 ->run(
                     "SELECT $columns FROM $this->table_name WHERE $this->primary_key = ?",
@@ -110,7 +110,7 @@ class Module
     public function update(): bool
     {
         $values = [...$this->formRequestValues(), $this->model_id];
-        $columns = $this->placeholderColumns($this->form);
+        $columns = $this->placeholderColumns(array_keys($this->form));
         $result = db()->query(
             "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
             ...$values
@@ -124,7 +124,7 @@ class Module
     public function insert(): string|false
     {
         $values = $this->formRequestValues();
-        $columns = $this->placeholderColumns($this->form);
+        $columns = $this->placeholderColumns(array_keys($this->form));
         $result = db()->query(
             "INSERT INTO $this->table_name SET $columns",
             ...$values
@@ -157,7 +157,7 @@ class Module
         return match ($route->getName()) {
             "module.index" => twig("layouts/table.html", [
                 ...$this->sharedDefaults(),
-                "columns" => array_keys($this->table),
+                "columns" => array_values($this->table),
                 "data" => $this->tableData(),
             ]),
             "module.edit", "module.create", "module.store", "module.modify",
@@ -267,7 +267,7 @@ class Module
         return array_values(
             array_map(
                 fn($column) => request()->get($column) ?? null,
-                $this->form
+                array_keys($this->form)
             )
         );
     }

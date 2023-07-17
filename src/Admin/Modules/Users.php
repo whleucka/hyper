@@ -11,19 +11,19 @@ class Users extends Module
         $this->icon = "users";
 
         $this->table = [
-            "ID" => "id",
-            "UUID" => "uuid",
-            "Name" => "name",
-            "Email" => "email",
-            "Updated At" => "updated_at",
-            "Created At" => "created_at",
+            "id" => "ID",
+            "uuid" => "UUID",
+            "name" => "Name",
+            "email" => "Email",
+            "updated_at" => "Updated At",
+            "created_at" => "Created At",
         ];
 
         $this->form = [
-            "Name" => "name",
-            "Email" => "email",
-            "Password" => "'' as password",
-            "Password (again)" => "'' as password_match",
+            "name" => "Name",
+            "email" => "Email",
+            "'' as password" => "Password",
+            "'' as password_match" => "Password (again)",
         ];
 
         parent::__construct($module_id);

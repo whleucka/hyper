@@ -11,19 +11,19 @@ class Test extends Module
         $this->parent = "Debug";
 
         $this->table = [
-            "ID" => "id",
-            "Name" => "name",
-            "Updated At" => "updated_at",
-            "Created At" => "created_at",
+            "id" => "ID",
+            "name" => "Name",
+            "updated_at" => "Updated At",
+            "created_at" => "Created At",
         ];
 
         $this->form = [
-            "Name" => "name",
-            "Number" => "number",
-            "Input" => "input",
-            "Text Area" => "textarea",
-            "Checkbox" => "checkbox",
-            "Combo" => "combo",
+            "name" => "Name",
+            "number" => "Number",
+            "input" => "Input",
+            "textarea" => "Text Area",
+            "checkbox" => "Checkbox",
+            "combo" => "Combo",
         ];
 
         $this->modify_validation = [
