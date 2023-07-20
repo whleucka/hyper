@@ -109,12 +109,22 @@ class Module
      */
     public function update(): bool
     {
-        $values = [...$this->formRequestValues(), $this->model_id];
+        $request_values = $this->formRequestValues();
+        $old = db()->selectOne("SELECT * FROM $this->table_name WHERE $this->primary_key = ?", $this->model_id);
+        $values = [...$request_values, $this->model_id];
         $columns = $this->placeholderColumns(array_keys($this->form));
         $result = db()->query(
             "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
             ...$values
         );
+        // Audit the changes
+        if ($result) {
+            foreach (array_keys($this->form) as $i => $column) {
+                $new_value = $request_values[$i];
+                if ($new_value != $old->$column)
+                Audit::insert(user()->getId(), $this->table_name, $this->model_id, $column, $old->$column, $new_value, 'UPDATE');
+            }
+        }
         return $result ? true : false;
     }
 
@@ -123,14 +133,19 @@ class Module
      */
     public function insert(): string|false
     {
-        $values = $this->formRequestValues();
+        $request_values = $this->formRequestValues();
         $columns = $this->placeholderColumns(array_keys($this->form));
         $result = db()->query(
             "INSERT INTO $this->table_name SET $columns",
-            ...$values
+            ...$request_values
         );
         if ($result) {
-            return db()->lastInsertId();
+            $model_id = db()->lastInsertId();
+            foreach (array_keys($this->form) as $i => $column) {
+                $new_value = $request_values[$i];
+                Audit::insert(user()->getId(), $this->table_name, $model_id, $column, null, $new_value, 'INSERT');
+            }
+            return $model_id;
         }
         return false;
     }
@@ -144,6 +159,9 @@ class Module
             "DELETE FROM $this->table_name WHERE $this->primary_key = ?",
             $this->model_id
         );
+        if ($result) {
+            Audit::insert(user()->getId(), $this->table_name, $this->model_id, $this->primary_key, $this->model_id, null, 'DELETE');
+        }
         return $result ? true : false;
     }
 
@@ -153,7 +171,6 @@ class Module
     protected function view(): string
     {
         $route = app()->getRoute();
-        // These are for views only
         return match ($route->getName()) {
             "module.index" => twig("layouts/table.html", [
                 ...$this->sharedDefaults(),
@@ -168,7 +185,7 @@ class Module
                 "model_id" => $this->model_id,
             ]),
             default => throw new Error(
-                "module data error: view not defined '{$route->getName()}'"
+                "module data error: route name undefined '{$route->getName()}'"
             ),
         };
     }

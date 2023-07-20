@@ -1,4 +1,5 @@
 <?php
+
 namespace Nebula\Migrations;
 
 use Nebula\Database\Blueprint;
@@ -23,9 +24,10 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ); 
-*/
+ */
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): string
     {
         return Schema::create("users", function (Blueprint $table) {

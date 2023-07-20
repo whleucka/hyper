@@ -4,6 +4,7 @@ namespace Nebula\Models;
 
 use Nebula\Container\Container;
 use GalaxyPDO\DB;
+use Nebula\Admin\Audit;
 use PDO;
 
 class Model
@@ -38,6 +39,22 @@ class Model
     public function getId(): ?string
     {
         return $this->{$this->primary_key};
+    }
+
+    /**
+     * Return $this->primary_key
+     */
+    public function getPrimaryKey(): ?string
+    {
+        return $this->primary_key;
+    }
+
+    /**
+     * Return $this->table_name
+     */
+    public function getTableName(): ?string
+    {
+        return $this->table_name;
     }
 
     /**
@@ -151,13 +168,16 @@ class Model
     /**
      * Formatted columns for query
      */
-    public function getFormattedColumns(): string
+    public function getFormattedColumns($return_array = false): array|string
     {
         $columns = array_filter(
             $this->properties,
             fn($property) => key_exists($property, $this->attributes) &&
                 !in_array($property, $this->guarded)
         );
+        if ($return_array) {
+            return $columns;
+        }
         $stmt = array_map(fn($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
@@ -188,6 +208,11 @@ class Model
         );
         if ($result) {
             $id = db()->lastInsertId();
+            // Audit insert
+            foreach ($this->getFormattedColumns(true) as $i => $column) {
+                $new_value = $values[$i];
+                Audit::insert(user()?->getId(), $this->table_name, $id, $column, null, $new_value, 'INSERT');
+            }
             $class = static::class;
             return new $class($id);
         }
@@ -199,15 +224,20 @@ class Model
      */
     public function update(): bool
     {
+        $old = db()->selectOne("SELECT * FROM $this->table_name WHERE $this->primary_key = ?", $this->id);
         $columns = $this->getFormattedColumns();
-        $values = $this->attributeValues();
         // Add the id to the values array as the last entry
-        $values[] = $this->id;
+        $values = [...$this->attributeValues(), $this->id];
         $result = db()->query(
             "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
             ...array_values($values)
         );
         if ($result) {
+            foreach ($this->getFormattedColumns(true) as $i => $column) {
+                $new_value = $values[$i];
+                if ($new_value != $old->$column)
+                Audit::insert(user()?->getId(), $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
+            }
             $this->loadAttributes();
             return true;
         }
@@ -224,6 +254,7 @@ class Model
             $this->id
         );
         if ($result) {
+            Audit::insert(user()?->getId(), $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
             $this->loadAttributes();
             return true;
         }
