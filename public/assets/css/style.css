@@ -13,9 +13,9 @@ body {
 }
 
 .pre-debug {
-  overflow: auto; 
+  overflow: auto;
   margin: 3px;
-  padding: 20px; 
+  padding: 20px;
   background: #333;
   color: #fbfbfb;
   border: 4px dotted #fff;
@@ -23,7 +23,7 @@ body {
 }
 
 .pre-debug div {
-  letter-spacing: 0; 
+  letter-spacing: 0;
 }
 
 .vl {
@@ -33,9 +33,17 @@ body {
 }
 
 .bg-gradient-titanium {
-  background: #283048;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to top, #859398, #283048);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #859398, #283048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #283048; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to top,
+    #859398,
+    #283048
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to top,
+    #859398,
+    #283048
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .invalid-feedback li {
@@ -47,7 +55,7 @@ body {
 }
 
 .keypad > .btn:focus,
-.keypad > .btn:active{
+.keypad > .btn:active {
   outline: none !important;
   box-shadow: none !important;
 }
