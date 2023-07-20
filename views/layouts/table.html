@@ -12,8 +12,14 @@
     <tbody>
       {% for item in data %}
       <tr>
-        {% for col in item %}
-        <td class="px-2 align-middle">{{ col }}</td>
+        {% for col, value in item %}
+        <td class="px-2 align-middle">
+          {% if edit_enabled and col == primary_key %}
+          <a class="fw-bold" href="{{ moduleRoute(edit_route, item.id) }}" title="Edit">{{ value }}</a>
+          {% else %}
+            {{ value }}
+          {% endif %}
+        </td>
         {% endfor %}
         <td class="actions">
           <div class="d-flex justify-content-end align-middle">

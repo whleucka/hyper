@@ -59,15 +59,23 @@ class Module
     }
 
     /**
+     * Return table query
+     */
+    public function getTableQuery(): string
+    {
+        $columns = $this->commaColumns(array_keys($this->table));
+        return "SELECT $columns FROM $this->table_name";
+    }
+
+    /**
      * Table data query
      */
     public function tableData(): array
     {
         $result = [];
         try {
-            $columns = $this->commaColumns(array_keys($this->table));
             $result = db()
-                ->run("SELECT $columns FROM $this->table_name")
+                ->run($this->getTableQuery())
                 ->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             if (!app()->isDebug()) {
@@ -75,6 +83,12 @@ class Module
             }
         }
         return $result;
+    }
+
+    public function getFormQuery(): string
+    {
+        $columns = $this->commaColumns(array_keys($this->form));
+        return "SELECT $columns FROM $this->table_name WHERE $this->primary_key = ?";
     }
 
     /**
@@ -85,10 +99,9 @@ class Module
     {
         $result = [];
         try {
-            $columns = $this->commaColumns(array_keys($this->form));
             $result = db()
                 ->run(
-                    "SELECT $columns FROM $this->table_name WHERE $this->primary_key = ?",
+                    $this->getFormQuery(),
                     [$this->id]
                 )
                 ->fetch(PDO::FETCH_ASSOC);
@@ -121,7 +134,7 @@ class Module
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];
                 if ($new_value != $old->$column)
-                Audit::insert(user()->id, $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
+                    Audit::insert(user()->id, $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
             }
         }
         return $result ? true : false;
@@ -269,7 +282,7 @@ class Module
      */
     protected function placeholderColumns(array $columns): string
     {
-        $stmt = array_map(fn($column) => $column . " = ?", $columns);
+        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
         return $this->commaColumns($stmt);
     }
 
@@ -282,7 +295,7 @@ class Module
     {
         return array_values(
             array_map(
-                fn($column) => request()->get($column) ?? null,
+                fn ($column) => request()->get($column) ?? null,
                 array_keys($this->form)
             )
         );
