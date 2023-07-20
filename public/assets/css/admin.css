@@ -1,5 +1,10 @@
-html {
-  height: 100%;
+html, body {
+  height: 100% !important;
+}
+
+#right {
+  width: 100%;
+  max-width: calc(100% - 170px);
 }
 
 /**
@@ -105,6 +110,8 @@ html {
   background-color: #f2f6fc;
   color: #333;
   height: calc(100% - 70px);
+  width: 100%;
+  overflow-y: auto;
 }
 
 #module-content .actions svg {

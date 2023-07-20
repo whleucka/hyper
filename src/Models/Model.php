@@ -11,9 +11,9 @@ class Model
 {
     protected DB $db;
     protected Container $container;
-    private string $table_name;
-    private string $primary_key;
-    private ?string $id;
+    public string $table_name;
+    public string $primary_key;
+    public ?string $id;
     private bool $exists = false;
     private array $attributes = [];
     private array $properties = [];
@@ -31,30 +31,6 @@ class Model
             $this->loadProperties();
             $this->loadAttributes();
         }
-    }
-
-    /**
-     * Return the $this->primary_key value
-     */
-    public function getId(): ?string
-    {
-        return $this->{$this->primary_key};
-    }
-
-    /**
-     * Return $this->primary_key
-     */
-    public function getPrimaryKey(): ?string
-    {
-        return $this->primary_key;
-    }
-
-    /**
-     * Return $this->table_name
-     */
-    public function getTableName(): ?string
-    {
-        return $this->table_name;
     }
 
     /**
@@ -168,7 +144,7 @@ class Model
     /**
      * Formatted columns for query
      */
-    public function getFormattedColumns($return_array = false): array|string
+    public function placeholderColumns($return_array = false): array|string
     {
         $columns = array_filter(
             $this->properties,
@@ -200,7 +176,7 @@ class Model
      */
     public function insert(): ?Model
     {
-        $columns = $this->getFormattedColumns();
+        $columns = $this->placeholderColumns();
         $values = $this->attributeValues();
         $result = db()->query(
             "INSERT INTO $this->table_name SET $columns",
@@ -208,9 +184,9 @@ class Model
         );
         if ($result) {
             $id = db()->lastInsertId();
-            foreach ($this->getFormattedColumns(true) as $i => $column) {
+            foreach ($this->placeholderColumns(true) as $i => $column) {
                 $new_value = $values[$i];
-                Audit::insert(user()?->getId(), $this->table_name, $id, $column, null, $new_value, 'INSERT');
+                Audit::insert(user()?->id, $this->table_name, $id, $column, null, $new_value, 'INSERT');
             }
             $class = static::class;
             return new $class($id);
@@ -224,7 +200,7 @@ class Model
     public function update(): bool
     {
         $old = db()->selectOne("SELECT * FROM $this->table_name WHERE $this->primary_key = ?", $this->id);
-        $columns = $this->getFormattedColumns();
+        $columns = $this->placeholderColumns();
         // Add the id to the values array as the last entry
         $values = [...$this->attributeValues(), $this->id];
         $result = db()->query(

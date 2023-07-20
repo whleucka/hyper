@@ -9,7 +9,7 @@ use PDO;
 class Module
 {
     /** Queries */
-    private ?string $model_id;
+    private ?string $id;
     public string $primary_key = "id";
     public string $table_name = "";
     public array $table = [];
@@ -33,10 +33,10 @@ class Module
     public $parent;
     public $icon;
 
-    public function __construct(?string $model_id = null)
+    public function __construct(?string $id = null)
     {
         // This is the id (primary key) value for the module queries
-        $this->model_id = $model_id;
+        $this->id = $id;
         // Defaults - if these variables aren't set, then we assume route name
         if (!$this->table_name) {
             $this->table_name = strtolower($this->route);
@@ -89,7 +89,7 @@ class Module
             $result = db()
                 ->run(
                     "SELECT $columns FROM $this->table_name WHERE $this->primary_key = ?",
-                    [$this->model_id]
+                    [$this->id]
                 )
                 ->fetch(PDO::FETCH_ASSOC);
             // Return an empty form if there is no result
@@ -110,8 +110,8 @@ class Module
     public function update(): bool
     {
         $request_values = $this->formRequestValues();
-        $old = db()->selectOne("SELECT * FROM $this->table_name WHERE $this->primary_key = ?", $this->model_id);
-        $values = [...$request_values, $this->model_id];
+        $old = db()->selectOne("SELECT * FROM $this->table_name WHERE $this->primary_key = ?", $this->id);
+        $values = [...$request_values, $this->id];
         $columns = $this->placeholderColumns(array_keys($this->form));
         $result = db()->query(
             "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
@@ -121,7 +121,7 @@ class Module
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];
                 if ($new_value != $old->$column)
-                Audit::insert(user()->getId(), $this->table_name, $this->model_id, $column, $old->$column, $new_value, 'UPDATE');
+                Audit::insert(user()->id, $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
             }
         }
         return $result ? true : false;
@@ -139,12 +139,12 @@ class Module
             ...$request_values
         );
         if ($result) {
-            $model_id = db()->lastInsertId();
+            $id = db()->lastInsertId();
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];
-                Audit::insert(user()->getId(), $this->table_name, $model_id, $column, null, $new_value, 'INSERT');
+                Audit::insert(user()->id, $this->table_name, $id, $column, null, $new_value, 'INSERT');
             }
-            return $model_id;
+            return $id;
         }
         return false;
     }
@@ -156,10 +156,10 @@ class Module
     {
         $result = db()->query(
             "DELETE FROM $this->table_name WHERE $this->primary_key = ?",
-            $this->model_id
+            $this->id
         );
         if ($result) {
-            Audit::insert(user()->getId(), $this->table_name, $this->model_id, $this->primary_key, $this->model_id, null, 'DELETE');
+            Audit::insert(user()->id, $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
         }
         return $result ? true : false;
     }
@@ -181,7 +181,7 @@ class Module
                 ...$this->sharedDefaults(),
                 "form" => $this->form,
                 "data" => $this->formData(),
-                "model_id" => $this->model_id,
+                "id" => $this->id,
             ]),
             default => throw new Error(
                 "module data error: route name undefined '{$route->getName()}'"

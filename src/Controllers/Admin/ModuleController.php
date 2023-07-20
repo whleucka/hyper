@@ -63,7 +63,7 @@ class ModuleController extends Controller
         $module = $this->module($module, $id);
         return twig("admin/index.html", [
             "mode" => "edit",
-            "model_id" => $id,
+            "id" => $id,
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
             "edit_route" => $module->routeName("edit"),
@@ -86,7 +86,7 @@ class ModuleController extends Controller
             $id = $module->insert();
             if ($id !== false) {
                 // Insert successful
-                return $this->edit($module_name, $id);
+                app()->redirectUrl(app()->moduleRoute($module->routeName("edit"), $id));
             }
         }
         return $this->create($module_name);
