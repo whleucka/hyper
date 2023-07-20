@@ -120,7 +120,6 @@ body {
   background-color: #f2f6fc;
   color: #333;
   height: calc(100% - 70px);
-  width: 100%;
   overflow-y: auto;
 }
 
@@ -132,9 +131,16 @@ body {
 #module-content .module-table-container {
   padding: 10px 10px 0 10px;
   border-radius: 10px;
+  max-height: 900px;
 }
 #module-content .module-table {
   font-size: 0.8em;
+}
+#module-content .module-table {
+  margin-bottom: 4px;
+}
+#module-content .module-table tbody tr:last-child td {
+  border-bottom-width: 0;
 }
 #module-content .module-table .actions svg {
   stroke: #000;
