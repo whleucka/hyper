@@ -136,6 +136,11 @@ body {
 #module-content .module-table {
   margin-bottom: 4px;
 }
+#module-content .module-table thead th {
+  color: #485563; 
+  border-bottom-width: 2px;
+  border-bottom-color: rgba(0,0,0,0.1);
+}
 #module-content .module-table a:link {
   color: #485563; 
 }
