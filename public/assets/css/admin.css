@@ -124,28 +124,29 @@ body {
 }
 
 #module-content .actions svg {
-  stroke: #485563;
+  stroke: #485563; 
   width: 18px;
   height: 18px;
 }
 #module-content .module-table-container {
   padding: 10px 10px 0 10px;
   border-radius: 10px;
-  max-height: 900px;
-}
-#module-content .module-table {
-  font-size: 0.8em;
+  max-height: 750px;
 }
 #module-content .module-table {
   margin-bottom: 4px;
+}
+#module-content .module-table a:link {
+  color: #485563; 
 }
 #module-content .module-table tbody tr:last-child td {
   border-bottom-width: 0;
 }
 #module-content .module-table .actions svg {
-  stroke: #000;
   width: 13px;
   height: 13px;
+  stroke: #485563; 
+  color: #485563; 
 }
 #module-content .module-table tbody tr:hover {
   background-color: #f0faff;
