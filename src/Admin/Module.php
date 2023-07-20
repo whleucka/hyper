@@ -198,7 +198,7 @@ class Module
         return [
             ...$this->sharedDefaults(),
             "link" => app()->moduleRoute($this->routeName("index")),
-            "parent" => $this->parent,
+            "parent" => $this->parent ?? 'Administration',
             "title" => $this->title,
             "sidebar" => $this->sidebar(),
             "icon" => $this->icon ?? "box",
