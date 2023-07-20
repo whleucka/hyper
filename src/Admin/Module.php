@@ -117,7 +117,6 @@ class Module
             "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
             ...$values
         );
-        // Audit the changes
         if ($result) {
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];

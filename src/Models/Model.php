@@ -208,7 +208,6 @@ class Model
         );
         if ($result) {
             $id = db()->lastInsertId();
-            // Audit insert
             foreach ($this->getFormattedColumns(true) as $i => $column) {
                 $new_value = $values[$i];
                 Audit::insert(user()?->getId(), $this->table_name, $id, $column, null, $new_value, 'INSERT');
@@ -233,11 +232,11 @@ class Model
             ...array_values($values)
         );
         if ($result) {
-            foreach ($this->getFormattedColumns(true) as $i => $column) {
-                $new_value = $values[$i];
-                if ($new_value != $old->$column)
-                Audit::insert(user()?->getId(), $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
-            }
+            // foreach ($this->getFormattedColumns(true) as $i => $column) {
+            //     $new_value = $values[$i];
+            //     if ($new_value != $old->$column)
+            //     Audit::insert(user()?->getId(), $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
+            // }
             $this->loadAttributes();
             return true;
         }
@@ -254,7 +253,7 @@ class Model
             $this->id
         );
         if ($result) {
-            Audit::insert(user()?->getId(), $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
+            // Audit::insert(user()?->getId(), $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
             $this->loadAttributes();
             return true;
         }
