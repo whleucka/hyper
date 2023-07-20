@@ -1,26 +1,31 @@
 <style>
-.module-form .form-floating:focus-within {
-  z-index: 2;
-}
+  .module-form .form-floating:focus-within {
+    z-index: 2;
+  }
 </style>
 
 <div class="module-form bg-white mt-3">
   <div class="p-3 d-flex align-items-center align-middle">
     <div class="title truncate">
       <h4 class="m-0">
-        {% if id != null %}
-        Edit 
-        {% else %}
-        Create
-        {% endif %}
-        {{ id }}
+        {% if id != null %} Edit {% else %} Create {% endif %} {{ id }}
       </h4>
     </div>
     <div class="actions flex-grow-1">
       {% if destroy_enabled and id != null %}
-      <form class="d-flex d-inline justify-content-end" method="POST" action="{{ moduleRoute(destroy_route, id) }}">
+      <form
+        class="d-flex d-inline justify-content-end"
+        method="POST"
+        action="{{ moduleRoute(destroy_route, id) }}"
+      >
         {{ csrf()|raw }}
-        <button type="submit" onClick="return confirm('Are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
+        <button
+          type="submit"
+          onClick="return confirm('Are you sure?')"
+          class="btn btn-sm btn-outline-danger"
+        >
+          Delete
+        </button>
       </form>
       {% endif %}
     </div>
@@ -31,7 +36,14 @@
       <div class="d-flex flex-column">
         {% for column, title in form %}
         <div class="form-floating">
-          <input name="{{ column }}" type="input" class="form-control" id="floatingInput" value="{% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}" placeholder=" ">
+          <input
+            name="{{ column }}"
+            type="input"
+            class="form-control"
+            id="floatingInput"
+            value="{% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}"
+            placeholder=" "
+          />
           <label for="floatingInput">{{ title }}</label>
           <span id="{{ column }}-errors"></span>
         </div>
@@ -39,7 +51,9 @@
       </div>
       <div class="p-3">
         <button type="submit" class="btn btn-outline-success">Save</button>
-        <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary">Cancel</a>
+        <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary"
+          >Cancel</a
+        >
       </div>
     </form>
   </div>

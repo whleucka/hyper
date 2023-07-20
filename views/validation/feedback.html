@@ -1,7 +1,5 @@
 <div class="invalid-feedback text-start">
-  {% for error in form_errors[field] %}
-    {% if error|trim != '' %}
-    <li class="list-group-item text-danger">{{ error }}</li>
-    {% endif %}
-  {% endfor %}
+  {% for error in form_errors[field] %} {% if error|trim != '' %}
+  <li class="list-group-item text-danger">{{ error }}</li>
+  {% endif %} {% endfor %}
 </div>

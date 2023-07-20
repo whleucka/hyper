@@ -5,15 +5,25 @@
   <ul class="mt-4 ps-1 list-unstyled ps-0">
     {% for module in sidebar|keys %}
     <li class="my-3">
-      <button class="btn-collapse btn btn-toggle align-items-center rounded collapsed p-0 fw-bold"
-        data-bs-toggle="collapse" data-bs-target="#sidebar-{{ loop.index0 }}-collapse" aria-expanded="true">
+      <button
+        class="btn-collapse btn btn-toggle align-items-center rounded collapsed p-0 fw-bold"
+        data-bs-toggle="collapse"
+        data-bs-target="#sidebar-{{ loop.index0 }}-collapse"
+        aria-expanded="true"
+      >
         {{ module }}
       </button>
       <div class="collapse show" id="sidebar-{{ loop.index0 }}-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
           {% for child in sidebar[module] %}
-          <a href="{{ moduleRoute(child.link)}}" class="link-dark rounded d-flex">
-            <li class="ps-3 truncate link"><i class="me-2" data-feather="{{ child.icon }}"></i> <span style="padding-top: 5px;">{{ child.title }}</span></li>
+          <a
+            href="{{ moduleRoute(child.link)}}"
+            class="link-dark rounded d-flex"
+          >
+            <li class="ps-3 truncate link">
+              <i class="me-2" data-feather="{{ child.icon }}"></i>
+              <span style="padding-top: 5px">{{ child.title }}</span>
+            </li>
           </a>
           {% endfor %}
         </ul>

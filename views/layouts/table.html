@@ -15,21 +15,38 @@
         {% for col, value in item %}
         <td class="px-2 align-middle">
           {% if edit_enabled and col == primary_key %}
-          <a class="fw-bold" href="{{ moduleRoute(edit_route, item.id) }}" title="Edit">{{ value }}</a>
-          {% else %}
-            {{ value }}
-          {% endif %}
+          <a
+            class="fw-bold"
+            href="{{ moduleRoute(edit_route, item.id) }}"
+            title="Edit"
+            >{{ value }}</a
+          >
+          {% else %} {{ value }} {% endif %}
         </td>
         {% endfor %}
         <td class="actions">
           <div class="d-flex justify-content-end align-middle">
             {% if edit_enabled %}
-            <a title="Edit" href="{{ moduleRoute(edit_route, item.id) }}" class="btn"><span data-feather='edit'></span></a>
-            {% endif %}
-            {% if destroy_enabled %}
-            <form method="POST" class="d-inline d-flex align-items-center" action="{{ moduleRoute(destroy_route, item[primary_key]) }}">
+            <a
+              title="Edit"
+              href="{{ moduleRoute(edit_route, item.id) }}"
+              class="btn"
+              ><span data-feather="edit"></span
+            ></a>
+            {% endif %} {% if destroy_enabled %}
+            <form
+              method="POST"
+              class="d-inline d-flex align-items-center"
+              action="{{ moduleRoute(destroy_route, item[primary_key]) }}"
+            >
               {{ csrf()|raw }}
-              <button title="Delete" onClick="return confirm('Are you sure?')" class="btn"><span data-feather='trash'></span></button>
+              <button
+                title="Delete"
+                onClick="return confirm('Are you sure?')"
+                class="btn"
+              >
+                <span data-feather="trash"></span>
+              </button>
             </form>
             {% endif %}
           </div>

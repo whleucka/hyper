@@ -1,31 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <title>{% block title %}{{ app.name }}{% endblock %}</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-{% block head %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% block head %}
     <link rel="stylesheet" href="/assets/css/style.css" />
-{% endblock %}
-</head>
+    {% endblock %}
+  </head>
 
-<body>
-  <section id="content">
-{% block content %}{% endblock %}
-  </section>
-  <footer>
-{% block footer %}{% endblock %}
-  </footer>
-  <script src="/assets/js/bootstrap.bundle.min.js"></script>
-  <script src="/assets/js/validation.js"></script>
-  <script>
-  const form_errors = {{ js_form_errors|raw }};
-  </script>
-{% block body_scripts %}
-  <script src="/assets/js/scripts.js"></script>
-{% endblock %}
-</body>
-
+  <body>
+    <section id="content">{% block content %}{% endblock %}</section>
+    <footer>{% block footer %}{% endblock %}</footer>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/validation.js"></script>
+    <script>
+      const form_errors = {{ js_form_errors|raw }};
+    </script>
+    {% block body_scripts %}
+    <script src="/assets/js/scripts.js"></script>
+    {% endblock %}
+  </body>
 </html>

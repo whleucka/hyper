@@ -7,13 +7,23 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item">{{ parent }}</li>
         {% if mode == 'create' %}
-          <li class="breadcrumb-item" aria-current="page"><a href="{{ link }}">{{ title }}</a></li>
-          <li class="breadcrumb-item active" aria-current="page"><a href="{{ moduleRoute(create_route) }}">Create</a></li>
+        <li class="breadcrumb-item" aria-current="page">
+          <a href="{{ link }}">{{ title }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <a href="{{ moduleRoute(create_route) }}">Create</a>
+        </li>
         {% elseif mode == 'edit' %}
-          <li class="breadcrumb-item" aria-current="page"><a href="{{ link }}">{{ title }}</a></li>
-          <li class="breadcrumb-item active" aria-current="page"><a href="{{ moduleRoute(edit_route, id) }}">{{ id }}</a></li>
+        <li class="breadcrumb-item" aria-current="page">
+          <a href="{{ link }}">{{ title }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <a href="{{ moduleRoute(edit_route, id) }}">{{ id }}</a>
+        </li>
         {% elseif mode == 'index' %}
-          <li class="breadcrumb-item active" aria-current="page"><a href="{{ link }}">{{ title }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <a href="{{ link }}">{{ title }}</a>
+        </li>
         {% endif %}
       </ol>
     </nav>
@@ -21,6 +31,9 @@
 </div>
 <div class="actions">
   {% if create_enabled and (mode == 'edit' or mode == 'index') %}
-  <a href="{{ moduleRoute(create_route) }}" class="btn btn-sm"><i class="me-1" data-feather="plus-square"></i> <span style="padding-top: 2px;">Create</span></a>
+  <a href="{{ moduleRoute(create_route) }}" class="btn btn-sm"
+    ><i class="me-1" data-feather="plus-square"></i>
+    <span style="padding-top: 2px">Create</span></a
+  >
   {% endif %}
 </div>
