@@ -146,7 +146,7 @@ class Auth
      */
     public static function signIn(User $user): void
     {
-        session()->set("user", $user->getId());
+        session()->set("user", $user->id);
         self::clearReset($user);
         self::unlockAccount($user);
         $user->update();

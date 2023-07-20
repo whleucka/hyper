@@ -73,10 +73,10 @@ class Model
         $reflection = new \ReflectionClass($class);
         $this->properties = array_filter(
             $reflection->getProperties(),
-            fn($ref) => $ref->class === $class
+            fn ($ref) => $ref->class === $class
         );
         $this->properties = array_map(
-            fn($property) => $property->name,
+            fn ($property) => $property->name,
             $this->properties
         );
     }
@@ -141,20 +141,22 @@ class Model
         }
     }
 
+    public function filteredColumns(): array
+    {
+        return array_values(array_filter(
+            $this->properties,
+            fn ($property) => key_exists($property, $this->attributes) &&
+                !in_array($property, $this->guarded)
+        ));
+    }
+
     /**
      * Formatted columns for query
      */
-    public function placeholderColumns($return_array = false): array|string
+    public function placeholderColumns(): array|string
     {
-        $columns = array_filter(
-            $this->properties,
-            fn($property) => key_exists($property, $this->attributes) &&
-                !in_array($property, $this->guarded)
-        );
-        if ($return_array) {
-            return $columns;
-        }
-        $stmt = array_map(fn($column) => $column . " = ?", $columns);
+        $columns = $this->filteredColumns();
+        $stmt = array_map(fn ($column) => $column . " = ?", $columns);
         return implode(", ", $stmt);
     }
 
@@ -163,12 +165,8 @@ class Model
      */
     public function attributeValues(): array
     {
-        $columns = array_filter(
-            $this->properties,
-            fn($property) => key_exists($property, $this->attributes) &&
-                !in_array($property, $this->guarded)
-        );
-        return array_map(fn($property) => $this->$property ?? null, $columns);
+        $columns = $this->filteredColumns();
+        return array_map(fn ($property) => $this->$property ?? null, $columns);
     }
 
     /**
@@ -180,11 +178,11 @@ class Model
         $values = $this->attributeValues();
         $result = db()->query(
             "INSERT INTO $this->table_name SET $columns",
-            ...array_values($values)
+            ...$values
         );
         if ($result) {
             $id = db()->lastInsertId();
-            foreach ($this->placeholderColumns(true) as $i => $column) {
+            foreach ($this->filteredColumns() as $i => $column) {
                 $new_value = $values[$i];
                 Audit::insert(user()?->id, $this->table_name, $id, $column, null, $new_value, 'INSERT');
             }
@@ -199,21 +197,20 @@ class Model
      */
     public function update(): bool
     {
-        $old = db()->selectOne("SELECT * FROM $this->table_name WHERE $this->primary_key = ?", $this->id);
         $columns = $this->placeholderColumns();
         // Add the id to the values array as the last entry
         $values = [...$this->attributeValues(), $this->id];
         $result = db()->query(
             "UPDATE $this->table_name SET $columns WHERE $this->primary_key = ?",
-            ...array_values($values)
+            ...$values
         );
         if ($result) {
-            // foreach ($this->getFormattedColumns(true) as $i => $column) {
-            //     $new_value = $values[$i];
-            //     if ($new_value != $old->$column)
-            //     Audit::insert(user()?->getId(), $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
-            // }
             $this->loadAttributes();
+            foreach ($this->filteredColumns() as $i => $column) {
+                $new_value = $values[$i];
+                if ($new_value != $this->$column)
+                    Audit::insert(user()?->id, $this->table_name, $this->id, $column, $this->$column, $new_value, 'UPDATE');
+            }
             return true;
         }
         return false;
@@ -229,7 +226,7 @@ class Model
             $this->id
         );
         if ($result) {
-            // Audit::insert(user()?->getId(), $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
+            Audit::insert(user()?->id, $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
             $this->loadAttributes();
             return true;
         }
