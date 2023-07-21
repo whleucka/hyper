@@ -141,16 +141,15 @@ function twig($path, $data = [])
             "http://www.gravatar.com/avatar/" . md5($user->email) . "?s=32";
     }
 
+    // Form validation errors
+    $validation_errors = Validate::$errors;
+    $data["js_form_errors"] = json_encode($validation_errors);
+
     if ($path === 'admin/index.html') {
-        // Form validation errors
-        $validation_errors = Validate::$errors;
-        $data["js_form_errors"] = json_encode($validation_errors);
-        
         // If there are any validation errors, create a flash message
         if ($validation_errors) {
             Flash::addMessage('warning', "Validation error");
         }
-
         // Flash messages
         $data["messages"] = Flash::getMessages();
     }
