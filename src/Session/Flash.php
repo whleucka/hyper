@@ -8,7 +8,9 @@ class Flash
 
   public static function addMessage($type, $message)
   {
-    session()->set(self::$key, ['type' => $type, 'message' => $message]);
+    $messages = session()->get(self::$key);
+    $messages[] = ['type' => $type, 'message' => $message, 'ts' => date('Y-m-d H:i:s')];
+    session()->set(self::$key, $messages);
   }
 
   public static function getMessages()

@@ -43,7 +43,7 @@ class CSRF extends Middleware
     {
         if (
             in_array($request->getMethod(), ["POST", "PUT", "PATCH", "DELETE"])
-        ) {
+    ) {
             if (
                 !empty($request->get("csrf_token")) &&
                 hash_equals(

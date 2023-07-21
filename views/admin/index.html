@@ -1,10 +1,11 @@
 {% extends "layouts/admin.html" %}
 
 {% block main %}
-  <div id="module-content" class="contianer rounded p-4 w-100">
+  <div id="module-content" class="contianer rounded p-4 w-100 position-relative">
     {% include 'layouts/header.html' %}
     <section class="content-box my-2">
       {{ content|raw }}
     </section>
-  </section>
+      {% include 'flash/toast.html' %}
+  </div>
 {% endblock %}

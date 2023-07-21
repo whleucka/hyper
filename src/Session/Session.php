@@ -6,12 +6,6 @@ class Session
 {
     private $data = [];
 
-    public function __construct()
-    {
-        // Initialize flash message array
-        $this->set('flash', []);
-    }
-
     public function get(string $name)
     {
         @session_start();

@@ -4,6 +4,7 @@ namespace Nebula\Admin;
 
 use Error;
 use Exception;
+use Nebula\Session\Flash;
 use PDO;
 
 class Module
@@ -131,6 +132,7 @@ class Module
             ...$values
         );
         if ($result) {
+            Flash::addMessage('success', "Update successful");
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];
                 if ($new_value != $old->$column)
@@ -152,6 +154,7 @@ class Module
             ...$request_values
         );
         if ($result) {
+            Flash::addMessage('success', "Create successful");
             $id = db()->lastInsertId();
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];
@@ -172,6 +175,7 @@ class Module
             $this->id
         );
         if ($result) {
+            Flash::addMessage('success', "Delete successful");
             Audit::insert(user()->id, $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
         }
         return $result ? true : false;

@@ -8,6 +8,7 @@
 
 use Nebula\Email\EmailerSMTP;
 use Nebula\Kernel\Web;
+use Nebula\Session\Flash;
 use Nebula\Validation\Validate;
 
 /**
@@ -140,9 +141,12 @@ function twig($path, $data = [])
             "http://www.gravatar.com/avatar/" . md5($user->email) . "?s=32";
     }
 
-    // Form validation errors are passed directly to twig
-    //$data["form_errors"] = Validate::$errors;
-    $data["js_form_errors"] = json_encode(Validate::$errors);
+    if ($path === 'admin/index.html') {
+        // Form validation errors
+        $data["js_form_errors"] = json_encode(Validate::$errors);
+        // Flash messages
+        $data["messages"] = Flash::getMessages();
+    }
 
     // Application-specific vars
     $data["app"] = config("app");
