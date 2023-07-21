@@ -143,7 +143,14 @@ function twig($path, $data = [])
 
     if ($path === 'admin/index.html') {
         // Form validation errors
-        $data["js_form_errors"] = json_encode(Validate::$errors);
+        $validation_errors = Validate::$errors;
+        $data["js_form_errors"] = json_encode($validation_errors);
+        
+        // If there are any validation errors, create a flash message
+        if ($validation_errors) {
+            Flash::addMessage('warning', "Validation error");
+        }
+
         // Flash messages
         $data["messages"] = Flash::getMessages();
     }
