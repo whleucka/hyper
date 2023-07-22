@@ -26,6 +26,13 @@ class Users extends Module
             "'' as password_match" => "Password (again)",
         ];
 
+        $this->controls = [
+            "name" => "input",
+            "email" => "email",
+            "'' as password" => "password",
+            "'' as password_match" => "password",
+        ];
+
         parent::__construct($module_id);
     }
 }

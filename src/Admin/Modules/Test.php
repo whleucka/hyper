@@ -21,16 +21,27 @@ class Test extends Module
             "name" => "Name",
             "number" => "Number",
             "input" => "Input",
-            "textarea" => "Text Area",
             "checkbox" => "Checkbox",
             "combo" => "Combo",
+            "textarea" => "Text Area",
+        ];
+
+        $this->controls = [
+            "name" => "input",
+            "number" => "number",
+            "input" => "input",
+            "checkbox" => "input",
+            "combo" => "input",
+            "textarea" => "textarea",
         ];
 
         $this->modify_validation = [
             "name" => ["required"],
-            "number" => ["required"],
-            "checkbox" => ["required", "numeric"],
-            "combo" => ["required", "numeric"],
+            "number" => ["required", "numeric"],
+            "input" => ["required"],
+            "checkbox" => ["required"],
+            "combo" => ["required"],
+            "textarea" => ["required"],
         ];
 
         parent::__construct($module_id);

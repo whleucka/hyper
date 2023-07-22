@@ -15,6 +15,7 @@ class Module
     public string $table_name = "";
     public array $table = [];
     public array $form = [];
+    public array $controls = [];
     /** Validation */
     public array $create_validation = [];
     public array $modify_validation = [];
@@ -199,6 +200,7 @@ class Module
                 "form" => $this->form,
                 "data" => $this->formData(),
                 "id" => $this->id,
+                "controls" => $this->controls
             ]),
             default => throw new Error(
                 "module data error: route name undefined '{$route->getName()}'"

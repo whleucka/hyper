@@ -166,15 +166,15 @@ body {
   padding-top: 10px;
   border-radius: 10px;
 }
-#module-content .module-form input {
+#module-content .module-form input, #module-content .module-form textarea {
   font-size: 0.9em;
   border-radius: 0;
 }
-#module-content .module-form input {
+#module-content .module-form input, #module-content .module-form textarea {
   border: 0;
   border-bottom: 1px solid #ccc;
 }
-#module-content .module-form input.is-invalid {
+#module-content .module-form .is-invalid {
   border: 1px solid #dc3545;
 }
 
