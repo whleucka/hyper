@@ -27,16 +27,17 @@ return [
         return $db;
     },
     // Twig environment
-    Environment::class => function () use ($env) {
+    Environment::class => function () {
         $views = config("paths")["views"];
         $loader = new FilesystemLoader($views["paths"]);
         $twig = new Environment($loader, [
             "cache" => $views["cache"],
-            "auto_reload" => strtolower($env["APP_DEBUG"]) === "true",
+            "auto_reload" => app()->isDebug(),
         ]);
         $twig->addExtension(new TwigExtension());
         return $twig;
     },
+    // Mailer
     EmailerSMTP::class => function () {
         $config = config("email");
         return new EmailerSMTP($config);

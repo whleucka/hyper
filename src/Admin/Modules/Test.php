@@ -18,6 +18,7 @@ class Test extends Module
         ];
 
         $this->form = [
+            "name" =>"Name",
             "input" => "Input",
             "number" => "Number",
             "checkbox" => "Checkbox",
@@ -26,6 +27,7 @@ class Test extends Module
         ];
 
         $this->controls = [
+            "name" => "input",
             "input" => "input",
             "number" => "number",
             "checkbox" => "checkbox",
@@ -34,6 +36,7 @@ class Test extends Module
         ];
 
         $this->modify_validation = [
+            "name" => ["required"],
             "input" => ["required"],
             "number" => ["required", "numeric"],
             "combo" => ["required"],
