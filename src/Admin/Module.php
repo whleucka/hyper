@@ -189,23 +189,55 @@ class Module
     {
         $route = app()->getRoute();
         return match ($route->getName()) {
-            "module.index" => twig("layouts/table.html", [
-                ...$this->sharedDefaults(),
-                "columns" => array_values($this->table),
-                "data" => $this->tableData(),
-            ]),
+            "module.index" => $this->tableView(),
             "module.edit", "module.create", "module.store", "module.modify",
-            "module.destroy" => twig("layouts/form.html", [
-                ...$this->sharedDefaults(),
-                "form" => $this->form,
-                "data" => $this->formData(),
-                "id" => $this->id,
-                "controls" => $this->controls
-            ]),
+            "module.destroy" => $this->formView(),
             default => throw new Error(
                 "module data error: route name undefined '{$route->getName()}'"
             ),
         };
+    }
+
+    public function tableView()
+    {
+        $data = $this->tableData();
+        return twig("layouts/table.html", [
+            ...$this->sharedDefaults(),
+            "columns" => array_values($this->table),
+            "data" => $data,
+        ]);
+    }
+
+    public function  formView()
+    {
+        $data = $this->formData();
+        return twig("layouts/form.html", [
+            ...$this->sharedDefaults(),
+            "form" => $this->form,
+            "data" => $data,
+            "id" => $this->id,
+            "controls" => $this->controls($data),
+        ]);
+    }
+
+    public function controls($form_data)
+    {
+        $controls = [];
+        foreach ($this->form as $column => $title) {
+            if (isset($this->controls[$column])) {
+                $value = $form_data[$column] ?? '';
+                $controls[$column] = match ($this->controls[$column]) {
+                    "floating_input" => Controls::floatingInput($column, $title, $value),
+                    "floating_textarea" => Controls::floatingTextarea($column, $title, $value),
+                    "textarea" => Controls::textarea($column, $title, $value),
+                    "input" => Controls::input($column, $title, $value),
+                    "number" => Controls::number($column, $title, $value),
+                    "checkbox" => Controls::checkbox($column, $title, $value),
+                    default => Controls::readonly($title, $value),
+                };
+            }
+        }
+        return $controls;
     }
 
     /**

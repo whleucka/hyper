@@ -30,94 +30,15 @@
       {% endif %}
     </div>
   </div>
-  <div class="form mt-2">
+  <div class="form mt-2 p-3">
     <form method="POST" action="{{ moduleRoute(modify_route, id) }}">
       {{ csrf()|raw }}
       <div class="d-flex flex-column">
         {% for column, title in form %}
-          {% if controls[column] and controls[column] == "textarea" %}
-            <div class="form-floating">
-              <textarea class="form-control" placeholder=" " id="floatingTextarea" style="height: 100px">{% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}</textarea>
-              <label for="floatingTextarea">{{ title }}</label>
-              <span id="{{ column }}-errors"></span>
-            </div>
-          {% elseif controls[column] and controls[column] == "input" %}
-            <div class="form-floating">
-              <input
-                name="{{ column }}"
-                type="input"
-                class="form-control"
-                id="floatingInput"
-                value="{% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}"
-                placeholder=" "
-              />
-              <label for="floatingInput">{{ title }}</label>
-              <span id="{{ column }}-errors"></span>
-            </div>
-          {% elseif controls[column] and controls[column] == "number" %}
-            <div class="form-floating">
-              <input
-                name="{{ column }}"
-                type="number"
-                class="form-control"
-                id="floatingInput"
-                value="{% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}"
-                placeholder=" "
-              />
-              <label for="floatingInput">{{ title }}</label>
-              <span id="{{ column }}-errors"></span>
-            </div>
-          {% elseif controls[column] and controls[column] == "email" %}
-            <div class="form-floating">
-              <input
-                name="{{ column }}"
-                type="email"
-                class="form-control"
-                id="floatingInput"
-                value="{% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}"
-                placeholder=" "
-              />
-              <label for="floatingInput">{{ title }}</label>
-              <span id="{{ column }}-errors"></span>
-            </div>
-          {% elseif controls[column] and controls[column] == "password" %}
-            <div class="form-floating">
-              <input
-                name="{{ column }}"
-                type="password"
-                class="form-control"
-                id="floatingInput"
-                value="{% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}"
-                placeholder=" "
-              />
-              <label for="floatingInput">{{ title }}</label>
-              <span id="{{ column }}-errors"></span>
-            </div>
-          {% elseif controls[column] and controls[column] == "checkbox" %}
-            <div class="ps-2 mt-3 mb-1">
-              <div class="form-check">
-                <input class="form-check-input form-control" type="checkbox" value="" id="checkbox" {% if id != null and data[column] == 1 %}checked{% endif %}>
-                <label class="form-check-label" for="checkbox">{{ title }}</label>
-                <span id="{{ column }}-errors"></span>
-              </div>
-            </div>
-          {% elseif controls[column] and controls[column] == "select" %}
-            <div class="form-floating py-2">
-              <select class="form-select form-control" id="floatingSelect" aria-label="dropdown">
-                <option selected="">Open this select menu</option>
-              </select>
-              <label for="floatingSelect">{{ title }}</label>
-                <span id="{{ column }}-errors"></span>
-            </div>
-          {% else %}
-            <div class="ps-2 mb-1">
-              <label class="text-secondary">{{ title }}: </label>
-              {% if id != null %}{{ data[column] }}{% else %}{{ old(column) }}{% endif %}
-            </div>
-          {% endif %}
+          <div class="mb-2">{{ controls[column]|raw }}</div>
         {% endfor %}
       </div>
-      <div class="p-3">
+      <div class="bottom mt-2">
         <button type="submit" class="btn btn-outline-success">Save</button>
         <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary"
           >Cancel</a

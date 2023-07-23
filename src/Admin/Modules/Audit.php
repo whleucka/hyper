@@ -5,7 +5,7 @@ use Nebula\Admin\Module;
 
 class Audit extends Module
 {
-    public function __construct(private $module_id = null)
+    public function __construct(private $id = null)
     {
         $this->route = "audit";
         $this->parent = "Administration";
@@ -24,7 +24,7 @@ class Audit extends Module
             "created_at" => "Created At",
         ];
 
-        parent::__construct($module_id);
+        parent::__construct($id);
     }
 }
 

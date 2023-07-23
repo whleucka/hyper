@@ -5,7 +5,7 @@ use Nebula\Admin\Module;
 
 class Users extends Module
 {
-    public function __construct(private $module_id = null)
+    public function __construct(private $id = null)
     {
         $this->route = "users";
         $this->icon = "users";
@@ -33,6 +33,6 @@ class Users extends Module
             "'' as password_match" => "password",
         ];
 
-        parent::__construct($module_id);
+        parent::__construct($id);
     }
 }

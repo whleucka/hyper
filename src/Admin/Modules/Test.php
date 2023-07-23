@@ -5,7 +5,7 @@ use Nebula\Admin\Module;
 
 class Test extends Module
 {
-    public function __construct(private $module_id = null)
+    public function __construct(private $id = null)
     {
         $this->route = "test";
         $this->parent = "Debug";
@@ -18,32 +18,28 @@ class Test extends Module
         ];
 
         $this->form = [
-            "name" => "Name",
-            "number" => "Number",
             "input" => "Input",
+            "number" => "Number",
             "checkbox" => "Checkbox",
             "combo" => "Combo",
             "textarea" => "Text Area",
         ];
 
         $this->controls = [
-            "name" => "input",
-            "number" => "number",
             "input" => "input",
-            "checkbox" => "input",
+            "number" => "number",
+            "checkbox" => "checkbox",
             "combo" => "input",
             "textarea" => "textarea",
         ];
 
         $this->modify_validation = [
-            "name" => ["required"],
-            "number" => ["required", "numeric"],
             "input" => ["required"],
-            "checkbox" => ["required"],
+            "number" => ["required", "numeric"],
             "combo" => ["required"],
             "textarea" => ["required"],
         ];
 
-        parent::__construct($module_id);
+        parent::__construct($id);
     }
 }
