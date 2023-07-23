@@ -41,7 +41,7 @@ class Controls
     $checked = $value ? 'checked' : '';
     return<<<EOT
     <div class="form-check my-2">
-      <input name="$column" class="form-check-input" type="checkbox" value="" id="formCheckChecked" $checked>
+      <input name="$column" class="form-check-input" type="checkbox" value="1" id="formCheckChecked" $checked>
       <label class="form-check-label" for="formCheckChecked">$title</label>
       <span id="$column-errors"></span>
     </div>
