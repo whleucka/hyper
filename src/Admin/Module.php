@@ -233,6 +233,7 @@ class Module
                     "input" => Controls::input($column, $title, $value),
                     "number" => Controls::number($column, $title, $value),
                     "checkbox" => Controls::checkbox($column, $title, $value),
+                    "password" => Controls::password($column, $title, $value),
                     default => Controls::readonly($title, $value),
                 };
             }
