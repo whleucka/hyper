@@ -1,6 +1,7 @@
 <?php
 
 namespace Nebula\Admin\Modules;
+
 use Nebula\Admin\Module;
 
 class Test extends Module
@@ -18,12 +19,16 @@ class Test extends Module
         ];
 
         $this->form = [
-            "name" =>"Name",
+            "name" => "Name",
             "input" => "Input",
             "number" => "Number",
             "checkbox" => "Checkbox",
             "combo" => "Combo",
             "textarea" => "Text Area",
+        ];
+
+        $this->filters = [
+            "name",
         ];
 
         $this->controls = [

@@ -11,10 +11,13 @@ class Audit extends Module
         $this->parent = "Administration";
         $this->icon = "check-circle";
         $this->edit_enabled = $this->destroy_enabled = $this->create_enabled = false;
+        $this->filters = [
+           "user",
+        ];
 
         $this->table = [
             "id" => "ID",
-            "user_id" => "User",
+            "(SELECT name FROM users WHERE id = user_id) as user" => "Audit User",
             "table_name" => "Table",
             "table_id" => "Table ID",
             "field" => "Field",

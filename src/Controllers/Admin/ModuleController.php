@@ -36,6 +36,7 @@ class ModuleController extends Controller
             "mode" => "index",
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
+            "filters" => $module->filters,
             ...$module->data(),
         ]);
     }

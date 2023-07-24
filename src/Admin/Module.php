@@ -13,9 +13,11 @@ class Module
     private ?string $id;
     public string $primary_key = "id";
     public string $table_name = "";
+    /** Definitions */
     public array $table = [];
     public array $form = [];
     public array $controls = [];
+    public array $filters = [];
     /** Validation */
     public array $create_validation = [];
     public array $modify_validation = [];

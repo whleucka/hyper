@@ -21,7 +21,12 @@ class TwigExtension extends AbstractExtension implements ExtensionInterface
             new \Twig\TwigFunction("findRoute", [$this, "findRoute"]),
             new \Twig\TwigFunction("buildRoute", [$this, "buildRoute"]),
             new \Twig\TwigFunction("old", [$this, "old"]),
+            new \Twig\TwigFunction("dump", [$this, "dump"]),
         ];
+    }
+
+    public function dump(mixed $stuff) {
+        dump($stuff);
     }
 
     /**
