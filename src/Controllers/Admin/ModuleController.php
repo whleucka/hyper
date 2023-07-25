@@ -39,6 +39,7 @@ class ModuleController extends Controller
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
             "search" => $module->search,
+            "term" => $module->term,
             ...$module->data(),
         ]);
     }
@@ -55,6 +56,7 @@ class ModuleController extends Controller
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
             "search" => $module->search,
+            "term" => $module->term,
             ...$module->data(),
         ]);
     }
@@ -74,6 +76,7 @@ class ModuleController extends Controller
             "create_route" => $module->routeName("create"),
             "edit_route" => $module->routeName("edit"),
             "search" => $module->search,
+            "term" => $module->term,
             ...$module->data(),
         ]);
     }

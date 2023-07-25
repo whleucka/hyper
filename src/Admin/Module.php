@@ -25,6 +25,8 @@ class Module
     public int $offset = 0;
     public int $total_pages = 1;
     public int $total_results = 0;
+    /** Fitlers */
+    public string $term = ''; // Search term
     /** Query meta */
     public array $joins = [];
     public array $where = [];
@@ -70,19 +72,48 @@ class Module
     public function processRequest(): void
     {
         $search = request()->get("search");
-        if (!is_null($search) && trim($search) != '') {
-            $this->searchTerm(trim($search));
-        }
+        $search_clear = request()->get("search_clear");
+        if (!is_null($search_clear)) {
+            session()->set($this->route."_term", '');
+            app()->redirectUrl("?");
+        } else if (!is_null($search) && trim($search) != '') {
+            session()->set($this->route."_term", trim($search));
+            session()->set($this->route."_page", 1);
+        } 
 
         $page = request()->get("page");
         if (!is_null($page)) {
-            // Invalid page numbers are handled later on
-            $this->page = intval($page);
+            session()->set($this->route."_page", intval($page));
         }
 
         $per_page = request()->get("per_page");
         if (!is_null($per_page) && in_array($per_page, $this->per_page_options)) {
-            $this->per_page = intval($per_page);
+            session()->set($this->route."_per_page", intval($per_page));
+        }
+
+        $this->filters();
+    }
+
+    public function filters(): void
+    {
+        $per_page = session()->get($this->route."_per_page");
+        if (!is_null($per_page)) {
+            $this->per_page = $per_page > 0
+                ? $per_page
+                : 1;
+        }
+
+        $page = session()->get($this->route."_page");
+        if (!is_null($page)) {
+            $this->page = $page > 0
+                ? $page
+                : 1;
+        }
+
+        $term = session()->get($this->route."_term");
+        if (!is_null($term)) {
+            $this->term = $term;
+            $this->searchTerm($term);
         }
     }
 
