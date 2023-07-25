@@ -59,39 +59,34 @@
   {% if total_pages > 1 %}
   <div class="d-flex align-items-center bg-white p-2">
     <nav aria-label="Page navigation example">
-      <ul class="pagination pagination m-0 p-0">
+      <ul class="pagination pagination-sm m-0 p-0">
         <li class="page-item {% if page - 1 <= 0 %}disabled{% endif %}">
-          <a class="page-link p-3" href="?page={{page - 1}}" aria-label="Previous">
+          <a class="page-link" href="?page={{page - 1}}" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         {% for i in (page - 3..page)|filter(index => index > 0) %}
-        <li class="page-item{% if page == i %} active{% endif %}"><a class="page-link p-3" href="?page={{i}}">{{ i }}</a></li>
+        <li class="page-item{% if page == i %} active{% endif %}"><a class="page-link" href="?page={{i}}">{{ i }}</a></li>
         {% endfor %}
         {% for i in (page..page + 3)|filter(index => index < total_pages + 1 and index != page) %}
-          <li class="page-item{% if page == i %} active{% endif %}"><a class="page-link p-3" href="?page={{i}}">{{ i }}</a></li>
+          <li class="page-item{% if page == i %} active{% endif %}"><a class="page-link" href="?page={{i}}">{{ i }}</a></li>
           {% endfor %}
           <li class="page-item {% if page + 1 >= total_pages %}disabled{% endif %}">
-            <a class="page-link p-3" href="?page={{page + 1}}" aria-label="Next">
+            <a class="page-link" href="?page={{page + 1}}" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
       </ul>
     </nav>
     <div class="w-100 d-flex justify-content-end">
-      <span class="ps-2">
-        <form method="GET">
-          <div class="form-floating">
-            <select onChange="this.form.submit()" name="per_page" class="form-select form-select-sm" id="per-page" aria-label="Floating label select example">
-              <option disabled>Per page</option>
-              {% for value in per_page_options %}
-              <option value="{{ value }}" {% if per_page == value %}selected{% endif %}>{{ value }}</option>
-              {% endfor %}
-            </select>
-            <label for="per-page">Per page</label>
-          </div>
-        </form>
-      </span>
+      <form class="d-flex d-inline align-items-center" method="GET">
+        <label class="pe-1" style="white-space: nowrap;">Per page</label>
+        <select name="per_page" onChange="this.form.submit()" class="form-select form-select-sm" aria-label="Small select">
+          {% for value in per_page_options %}
+          <option value="{{ value }}" {% if per_page == value %}selected{% endif %}>{{ value }}</option>
+          {% endfor %}
+        </select>
+      </form>
     </div>
   </div>
   {% endif %}
