@@ -2,6 +2,7 @@
 
 namespace Nebula\Admin\Modules;
 use Nebula\Admin\Module;
+use Nebula\Controllers\Admin\Auth\RegisterController;
 
 class Users extends Module
 {
@@ -10,28 +11,30 @@ class Users extends Module
         $this->route = "users";
         $this->icon = "users";
 
-        $this->table = [
-            "id" => "ID",
-            "uuid" => "UUID",
-            "name" => "Name",
-            "email" => "Email",
-            "updated_at" => "Updated At",
-            "created_at" => "Created At",
-        ];
+        // Table columns
+        $this->column("id", "ID")
+            ->column("uuid", "UUID")
+            ->column("name", "Name")
+            ->column("email", "Email")
+            ->column("updated_at", "Update At")
+            ->column("created_at", "Created At");
 
-        $this->form = [
-            "name" => "Name",
-            "email" => "Email",
-            "'' as password" => "Password",
-            "'' as password_match" => "Password (again)",
-        ];
+        // Form controls
+        $this->control("name", "Name")
+            ->control("'' as password", "Password", "password")
+            ->control("'' as password_match", "Password (again)", "password");
 
-        $this->controls = [
-            "name" => "input",
-            "email" => "email",
-            "'' as password" => "password",
-            "'' as password_match" => "password",
-        ];
+        // Share the same validation rules as register controller
+        $password_rules = RegisterController::$password_rules;
+        $this->rule("password", $password_rules['password'])
+            ->rule("password_match", ["Password" => ['required', 'match']]);
+
+
+        // Filters
+        $this->search([
+            "name",
+            "email"
+        ]);
 
         parent::__construct($id);
     }

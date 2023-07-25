@@ -140,9 +140,13 @@ class Module
     /**
      * Add column to search array
      */
-    public function search(string $column): Module
+    public function search(array|string $column): Module
     {
-        $this->search[] = $column;
+        if (is_string($column)) {
+            $this->search[] = $column;
+        } else if (is_array($column)) {
+            $this->search = $column; // array of columns
+        }
         return $this;
     }
 
@@ -345,21 +349,27 @@ class Module
     {
         $controls = [];
         foreach ($this->form as $column => $title) {
-            if (isset($this->controls[$column])) {
-                $value = $form_data[$column] ?? '';
-                $controls[$column] = match ($this->controls[$column]) {
-                    "floating_input" => Controls::floatingInput($column, $title, $value),
-                    "floating_textarea" => Controls::floatingTextarea($column, $title, $value),
-                    "textarea" => Controls::textarea($column, $title, $value),
-                    "input" => Controls::input($column, $title, $value),
-                    "number" => Controls::number($column, $title, $value),
-                    "checkbox" => Controls::checkbox($column, $title, $value),
-                    "password" => Controls::password($column, $title, $value),
-                    default => Controls::readonly($title, $value),
-                };
-            }
+            $og_column = $column;
+            $column = $this->useAlias($column);
+            $value = $form_data[$column] ?? '';
+            $controls[$og_column] = match ($this->controls[$og_column]) {
+                "floating_input" => Controls::floatingInput($column, $title, $value),
+                "floating_textarea" => Controls::floatingTextarea($column, $title, $value),
+                "textarea" => Controls::textarea($column, $title, $value),
+                "input" => Controls::input($column, $title, $value),
+                "number" => Controls::number($column, $title, $value),
+                "checkbox" => Controls::checkbox($column, $title, $value),
+                "password" => Controls::password($column, $title, $value),
+                default => Controls::readonly($title, $value),
+            };
         }
         return $controls;
+    }
+
+    public function useAlias(string $column): string
+    {
+        $array = explode(" as ", strtolower($column));
+        return end($array);
     }
 
     /**

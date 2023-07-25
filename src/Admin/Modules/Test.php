@@ -20,7 +20,7 @@ class Test extends Module
         // Filters
         $this->search("name");
 
-        // Form
+        // Form controls
         $this->control("name", "Name")
             ->control("input", "Input")
             ->control("number", "Number", "number")
