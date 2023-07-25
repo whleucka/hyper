@@ -33,6 +33,7 @@ class ModuleController extends Controller
     #[Get("/admin/{module}", "module.index", ["auth"])]
     public function index($module): string {
         $module = $this->module($module);
+        $module->processRequest();
         return twig("admin/index.html", [
             "mode" => "index",
             "create_enabled" => $module->create_enabled,
@@ -48,6 +49,7 @@ class ModuleController extends Controller
     #[Get("/admin/{module}/create", "module.create", ["auth"])]
     public function create($module): string {
         $module = $this->module($module);
+        $module->processRequest();
         return twig("admin/index.html", [
             "mode" => "create",
             "create_enabled" => $module->create_enabled,
@@ -64,6 +66,7 @@ class ModuleController extends Controller
     #[Get("/admin/{module}/{id}/edit", "module.edit", ["auth"])]
     public function edit($module, $id): string {
         $module = $this->module($module, $id);
+        $module->processRequest();
         return twig("admin/index.html", [
             "mode" => "edit",
             "id" => $id,
@@ -87,6 +90,7 @@ class ModuleController extends Controller
         $module_name = $module;
         $module = $this->module($module);
         if ($this->validate($module->validation)) {
+            $module->processRequest();
             $id = $module->insert();
             if ($id !== false) {
                 Flash::addMessage('success', "Create successful");
@@ -105,6 +109,7 @@ class ModuleController extends Controller
         $module_name = $module;
         $module = $this->module($module, $id);
         if ($this->validate($module->validation)) {
+            $module->processRequest();
             if ($module->update()) {
                 Flash::addMessage('success', "Update successful");
             }
@@ -120,6 +125,7 @@ class ModuleController extends Controller
     public function destroy($module, $id): string {
         $module_name = $module;
         $module = $this->module($module, $id);
+        $module->processRequest();
         if ($module->delete()) {
             Flash::addMessage('success', "Delete successful");
             app()->redirectUrl(app()->moduleRoute($module->routeName("index")));

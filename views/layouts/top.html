@@ -3,18 +3,22 @@
   class="contianer-fluid bg-white rounded w-100 d-flex align-items-center p-1"
 >
   {% if search %}
+  <form method="GET">
   <div class="d-flex align-items-center">
-      <i data-feather="search" class="p-1 me-1"></i>
+      
       <div class="input-group">
         <input
           id="top-search"
           type="search"
+          name="search"
           placeholder="Search"
           class="form-control"
         />
-        <button class="btn btn-outline-secondary" type="button">Search</button>
+        <button class="btn btn-outline-secondary" type="sumbit"><i data-feather="search" class="p-1"></i></button>
+        <button class="btn btn-outline-secondary" type="clear"><i data-feather="trash" class="p-1"></i>        </button>
       </div>
   </div>
+  </form>
   {% endif %}
   <div class="flex-grow-1">
     <div id="sidebar-dropdown" class="dropdown">

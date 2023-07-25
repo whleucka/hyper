@@ -43,7 +43,7 @@ class Module
     public $modify_route;
     public $create_route;
     public $destroy_route;
-    /** Meta */
+    /** Module meta */
     public $title;
     public $parent;
     public $icon;
@@ -58,6 +58,28 @@ class Module
         }
         if (!$this->title) {
             $this->title = ucfirst($this->route);
+        }
+    }
+
+    /**
+     * Process the incoming request
+     */
+    public function processRequest(): void
+    {
+        $search = request()->get("search");
+        if (!is_null($search)) {
+            $this->searchTerm(trim($search));
+        }
+    }
+
+    public function searchTerm(string $term)
+    {
+        if (is_array($this->search)) {
+            foreach ($this->search as $column) {
+                $this->where("$column LIKE ?", "%$term%");
+            }
+        } elseif (is_string($this->search)) {
+            $this->where("$this->search LIKE ?", "%$term%");
         }
     }
 
@@ -196,6 +218,22 @@ class Module
     }
 
     /**
+     * Table value override method
+     */
+    protected function tableValueOverride(string $column, mixed $value): mixed
+    {
+        return $value;
+    }
+
+    /**
+     * Form value override method
+     */
+    protected function formValueOverride(string $column, mixed $value): mixed
+    {
+        return $value;
+    }
+
+    /**
      * Table data query
      */
     public function tableData(): array
@@ -208,6 +246,11 @@ class Module
         } catch (Exception $ex) {
             if (!app()->isDebug()) {
                 app()->serverError();
+            }
+        }
+        foreach ($result as &$datum) {
+            foreach ($datum as $column => $value) {
+                $datum[$column] = $this->tableValueOverride($column, $value);
             }
         }
         return $result;
@@ -352,6 +395,7 @@ class Module
             "controls" => $this->controls($data),
         ]);
     }
+
     /**
      * @param mixed $form_data
      */
@@ -361,7 +405,7 @@ class Module
         foreach ($this->form as $column => $title) {
             $og_column = $column;
             $column = $this->useAlias($column);
-            $value = $form_data[$column] ?? '';
+            $value = $this->formValueOverride($column, $form_data[$column] ?? '');
             if (is_callable($this->controls[$og_column])) {
                 // Closure control
                 $controls[$og_column] = $this->controls[$og_column]($column, $title, $value);
