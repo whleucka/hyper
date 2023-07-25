@@ -21,7 +21,9 @@ class Module
     /** Pagination */
     public int $per_page = 5;
     public int $page = 1;
+    public int $offset = 0;
     public int $total_pages = 1;
+    public int $total_results = 0;
     /** Query meta */
     public array $joins = [];
     public array $where = [];
@@ -69,6 +71,11 @@ class Module
         $search = request()->get("search");
         if (!is_null($search)) {
             $this->searchTerm(trim($search));
+        }
+
+        $page = request()->get("page");
+        if (!is_null($page)) {
+            $this->page = intval($page);
         }
     }
 
@@ -240,8 +247,21 @@ class Module
     {
         $result = [];
         try {
+            $stmt = db()
+                ->run($this->getTableQuery(), $this->parameters);
+            $this->total_results = $stmt->rowCount() ?? 0;
+            $this->total_pages = ceil($this->total_results / $this->per_page);
+            if ($this->page > $this->total_pages) {
+                $this->page = $this->total_pages;
+            }
+            if ($this->page < 1) {
+                $this->page = 1;
+            }
+            $this->offset = ($this->page - 1) * $this->per_page;
+            $query = $this->getTableQuery();
+            $query .= " LIMIT $this->offset, $this->per_page";
             $result = db()
-                ->run($this->getTableQuery(), $this->parameters)
+                ->run($query, $this->parameters)
                 ->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             if (!app()->isDebug()) {
