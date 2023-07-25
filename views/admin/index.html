@@ -2,10 +2,12 @@
 
 {% block main %}
   {% include 'layouts/top.html' %} 
-  <div id="module-content" class="contianer rounded p-4 w-100 position-relative">
+  <div id="module-content" class="contianer p-4 w-100 position-relative d-flex flex-column">
     {% include 'layouts/header.html' %}
-    <section class="content-box my-2">
+    <section class="my-2 flex-grow-1">
+      <div class="content-box rounded">
       {{ content|raw }}
+      </div>
     </section>
       {% include 'flash/toast.html' %}
     <footer>

@@ -20,6 +20,7 @@ class Module
     public array $search = [];
     /** Pagination */
     public int $per_page = 5;
+    public array $per_page_options = [1, 5, 10, 25, 50, 100, 200, 500, 1000];
     public int $page = 1;
     public int $offset = 0;
     public int $total_pages = 1;
@@ -69,21 +70,30 @@ class Module
     public function processRequest(): void
     {
         $search = request()->get("search");
-        if (!is_null($search)) {
+        if (!is_null($search) && trim($search) != '') {
             $this->searchTerm(trim($search));
         }
 
         $page = request()->get("page");
         if (!is_null($page)) {
+            // Invalid page numbers are handled later on
             $this->page = intval($page);
+        }
+
+        $per_page = request()->get("per_page");
+        if (!is_null($per_page) && in_array($per_page, $this->per_page_options)) {
+            $this->per_page = intval($per_page);
         }
     }
 
-    public function searchTerm(string $term)
+    public function searchTerm(string $term): void
     {
         if (is_array($this->search)) {
+            $conditions = array_map(fn($column) => "$column LIKE ?", $this->search);
+            // This must be OR
+            $this->where[] = implode(" OR ", $conditions);
             foreach ($this->search as $column) {
-                $this->where("$column LIKE ?", "%$term%");
+                $this->parameters[] = "%$term%";
             }
         } elseif (is_string($this->search)) {
             $this->where("$this->search LIKE ?", "%$term%");
@@ -398,6 +408,10 @@ class Module
             ...$this->sharedDefaults(),
             "columns" => array_values($this->table),
             "data" => $data,
+            "total_pages" => $this->total_pages,
+            "page" => $this->page,
+            "per_page" => $this->per_page,
+            "per_page_options" => $this->per_page_options,
         ]);
     }
 

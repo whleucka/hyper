@@ -4,46 +4,48 @@
   }
 </style>
 
-<div class="module-form bg-white mt-3">
-  <div class="p-3 d-flex align-items-center align-middle">
-    <div class="title truncate">
-      <h4 class="m-0">
-        {% if id != null %} Edit {% else %} Create {% endif %} {{ id }}
-      </h4>
+<section id="form">
+  <div class="module-form bg-white mt-3">
+    <div class="p-3 d-flex align-items-center align-middle">
+      <div class="title truncate">
+        <h4 class="m-0">
+          {% if id != null %} Edit {% else %} Create {% endif %} {{ id }}
+        </h4>
+      </div>
+      <div class="actions flex-grow-1">
+        {% if destroy_enabled and id != null %}
+        <form
+          class="d-flex d-inline justify-content-end"
+          method="POST"
+          action="{{ moduleRoute(destroy_route, id) }}"
+        >
+          {{ csrf()|raw }}
+          <button
+            type="submit"
+            onClick="return confirm('Are you sure?')"
+            class="btn btn-sm btn-outline-danger"
+          >
+            Delete
+          </button>
+        </form>
+        {% endif %}
+      </div>
     </div>
-    <div class="actions flex-grow-1">
-      {% if destroy_enabled and id != null %}
-      <form
-        class="d-flex d-inline justify-content-end"
-        method="POST"
-        action="{{ moduleRoute(destroy_route, id) }}"
-      >
+    <div class="form mt-2 p-3">
+      <form method="POST" action="{{ moduleRoute(modify_route, id) }}">
         {{ csrf()|raw }}
-        <button
-          type="submit"
-          onClick="return confirm('Are you sure?')"
-          class="btn btn-sm btn-outline-danger"
-        >
-          Delete
-        </button>
+        <div class="d-flex flex-column">
+          {% for column, title in form %}
+          <div class="mb-2">{{ controls[column]|raw }}</div>
+          {% endfor %}
+        </div>
+        <div class="bottom mt-2">
+          <button type="submit" class="btn btn-outline-success">Save</button>
+          <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary"
+          >Cancel</a
+          >
+        </div>
       </form>
-      {% endif %}
     </div>
   </div>
-  <div class="form mt-2 p-3">
-    <form method="POST" action="{{ moduleRoute(modify_route, id) }}">
-      {{ csrf()|raw }}
-      <div class="d-flex flex-column">
-        {% for column, title in form %}
-          <div class="mb-2">{{ controls[column]|raw }}</div>
-        {% endfor %}
-      </div>
-      <div class="bottom mt-2">
-        <button type="submit" class="btn btn-outline-success">Save</button>
-        <a href="{{ moduleRoute(index_route) }}" class="btn btn-outline-primary"
-          >Cancel</a
-        >
-      </div>
-    </form>
-  </div>
-</div>
+</section>
