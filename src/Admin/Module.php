@@ -2,6 +2,7 @@
 
 namespace Nebula\Admin;
 
+use Closure;
 use Error;
 use Exception;
 use PDO;
@@ -130,10 +131,10 @@ class Module
     /**
      * Add control to form array
      */
-    public function control(string $column, string $title, string $type = 'input'): Module
+    public function control(string $column, string $title, string|Closure $control = 'input'): Module
     {
         $this->form[$column] = $title;
-        $this->controls[$column] = $type;
+        $this->controls[$column] = $control;
         return $this;
     }
 
@@ -144,7 +145,7 @@ class Module
     {
         if (is_string($column)) {
             $this->search[] = $column;
-        } else if (is_array($column)) {
+        } elseif (is_array($column)) {
             $this->search = $column; // array of columns
         }
         return $this;
@@ -212,6 +213,9 @@ class Module
         return $result;
     }
 
+    /**
+     * Return data query
+     */
     public function getFormQuery(): string
     {
         $columns = $this->commaColumns(array_keys($this->form));
@@ -321,6 +325,9 @@ class Module
         };
     }
 
+    /**
+     * Table twig view
+     */
     public function tableView(): string
     {
         $data = $this->tableData();
@@ -331,6 +338,9 @@ class Module
         ]);
     }
 
+    /**
+     * Form twig view
+     */
     public function formView(): string
     {
         $data = $this->formData();
@@ -352,20 +362,29 @@ class Module
             $og_column = $column;
             $column = $this->useAlias($column);
             $value = $form_data[$column] ?? '';
-            $controls[$og_column] = match ($this->controls[$og_column]) {
-                "floating_input" => Controls::floatingInput($column, $title, $value),
-                "floating_textarea" => Controls::floatingTextarea($column, $title, $value),
-                "textarea" => Controls::textarea($column, $title, $value),
-                "input" => Controls::input($column, $title, $value),
-                "number" => Controls::number($column, $title, $value),
-                "checkbox" => Controls::checkbox($column, $title, $value),
-                "password" => Controls::password($column, $title, $value),
-                default => Controls::readonly($title, $value),
-            };
+            if (is_callable($this->controls[$og_column])) {
+                // Closure control
+                $controls[$og_column] = $this->controls[$og_column]($column, $title, $value);
+            } else {
+                // Get control from Controls class
+                $controls[$og_column] = match ($this->controls[$og_column]) {
+                    "floating_input" => Controls::floatingInput($column, $title, $value),
+                    "floating_textarea" => Controls::floatingTextarea($column, $title, $value),
+                    "textarea" => Controls::textarea($column, $title, $value),
+                    "input" => Controls::input($column, $title, $value),
+                    "number" => Controls::number($column, $title, $value),
+                    "checkbox" => Controls::checkbox($column, $title, $value),
+                    "password" => Controls::password($column, $title, $value),
+                    default => Controls::readonly($title, $value),
+                };
+            }
         }
         return $controls;
     }
 
+    /**
+     * Format column name to alias
+     */
     public function useAlias(string $column): string
     {
         $array = explode(" as ", strtolower($column));

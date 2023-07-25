@@ -25,14 +25,13 @@ class Test extends Module
             ->control("input", "Input")
             ->control("number", "Number", "number")
             ->control("checkbox", "Checkbox", "checkbox")
-            ->control("combo", "Select", "input")
+            ->control("combo", "Select", fn($column, $title, $value) => "<p>$column: select not yet implemented</p>")
             ->control("textarea", "Textarea", "textarea");
 
         // Validation
         $this->rule("name", ["required"])
             ->rule("input", ["required"])
             ->rule("number", ["required", "numeric"])
-            ->rule("combo", ["required"])
             ->rule("textarea", ["required"]);
 
         parent::__construct($id);
