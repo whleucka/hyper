@@ -4,7 +4,6 @@ namespace Nebula\Admin;
 
 use Error;
 use Exception;
-use Nebula\Session\Flash;
 use PDO;
 
 class Module
@@ -13,14 +12,25 @@ class Module
     private ?string $id;
     public string $primary_key = "id";
     public string $table_name = "";
-    /** Definitions */
+    /** Table/Form Meta */
     public array $table = [];
     public array $form = [];
     public array $controls = [];
-    public array $filters = [];
-    /** Validation */
-    public array $create_validation = [];
-    public array $modify_validation = [];
+    public array $search = [];
+    /** Pagination */
+    public int $per_page = 5;
+    public int $page = 1;
+    public int $total_pages = 1;
+    /** Query meta */
+    public array $joins = [];
+    public array $where = [];
+    public array $parameters = [];
+    public array $having = [];
+    public array $group_by = [];
+    public string $order_by;
+    public string $sort = "DESC";
+    /** Validation rules */
+    public array $validation = [];
     /** Permissions */
     public $create_enabled = true;
     public $edit_enabled = true;
@@ -51,15 +61,100 @@ class Module
     }
 
     /**
-     * Return validation array by route type
+     * Add to where clause
+     * @param mixed $params
      */
-    public function validationArray(string $route_type): array
+    public function where(string $condition, ...$params): Module
     {
-        return match ($route_type) {
-            "create" => $this->create_validation,
-            "modify" => $this->modify_validation,
-            default => throw new Error("unknown validation route type"),
-        };
+        $this->where[] = $condition;
+        foreach ($params as $param) {
+            $this->parameters[] = $param;
+        }
+        return $this;
+    }
+
+    /**
+     * Add join clause
+     */
+    public function join(string $clause): Module
+    {
+        $this->joins[] = $clause;
+        return $this;
+    }
+
+    /**
+     * Add having clause
+     */
+    public function having(string $clause): Module
+    {
+        $this->having[] = $clause;
+        return $this;
+    }
+
+    /**
+     * Add group by clause
+     */
+    public function groupBy(string $clause): Module
+    {
+        $this->group_by[] = $clause;
+        return $this;
+    }
+
+    /**
+     * Set order by column
+     */
+    public function orderBy(string $column): Module
+    {
+        $this->order_by = $column;
+        return $this;
+    }
+
+    /**
+     * Set sort direction
+     */
+    public function sort(string $direction): Module
+    {
+        $this->sort = $direction;
+        return $this;
+    }
+
+    /**
+     * Add column to table array
+     */
+    public function column(string $column, string $title): Module
+    {
+        $this->table[$column] = $title;
+        return $this;
+    }
+
+    /**
+     * Add control to form array
+     */
+    public function control(string $column, string $title, string $type = 'input'): Module
+    {
+        $this->form[$column] = $title;
+        $this->controls[$column] = $type;
+        return $this;
+    }
+
+    /**
+     * Add column to search array
+     */
+    public function search(string $column): Module
+    {
+        $this->search[] = $column;
+        return $this;
+    }
+
+    /**
+     * Add rule to validation array
+     * @param mixed $column
+     * @param array<int,mixed> $rule
+     */
+    public function rule($column, array $rule): Module
+    {
+        $this->validation[$column] = $rule;
+        return $this;
     }
 
     /**
@@ -68,7 +163,31 @@ class Module
     public function getTableQuery(): string
     {
         $columns = $this->commaColumns(array_keys($this->table));
-        return "SELECT $columns FROM $this->table_name";
+        $joins = implode(" ", $this->joins);
+        $query = "SELECT $columns FROM $this->table_name $joins";
+
+        // Build where clause
+        if (!empty($this->where)) {
+            $query .= 'WHERE (' . implode(") AND (", $this->where) . ') ';
+        }
+        // Build group by glause
+        if (!empty($this->group_by)) {
+            $group_by = implode(", ", $this->group_by);
+            $query .= "GROUP BY $group_by ";
+        }
+        // Build having clause
+        if (!empty($this->having)) {
+            $having = '(' . implode(") AND (", $this->having) . ')';
+            $query .= "HAVING $having ";
+        }
+        // Default order by
+        if (!isset($this->order_by)) {
+            $this->order_by = $this->primary_key;
+        }
+        // Order by clause
+        $query .= "ORDER BY $this->order_by $this->sort";
+
+        return $query;
     }
 
     /**
@@ -79,7 +198,7 @@ class Module
         $result = [];
         try {
             $result = db()
-                ->run($this->getTableQuery())
+                ->run($this->getTableQuery(), $this->parameters)
                 ->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $ex) {
             if (!app()->isDebug()) {
@@ -135,11 +254,11 @@ class Module
             ...$values
         );
         if ($result) {
-            Flash::addMessage('success', "Update successful");
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];
-                if ($new_value != $old->$column)
+                if ($new_value != $old->$column) {
                     Audit::insert(user()->id, $this->table_name, $this->id, $column, $old->$column, $new_value, 'UPDATE');
+                }
             }
         }
         return $result ? true : false;
@@ -157,7 +276,6 @@ class Module
             ...$request_values
         );
         if ($result) {
-            Flash::addMessage('success', "Create successful");
             $id = db()->lastInsertId();
             foreach (array_keys($this->form) as $i => $column) {
                 $new_value = $request_values[$i];
@@ -178,7 +296,6 @@ class Module
             $this->id
         );
         if ($result) {
-            Flash::addMessage('success', "Delete successful");
             Audit::insert(user()->id, $this->table_name, $this->id, $this->primary_key, $this->id, null, 'DELETE');
         }
         return $result ? true : false;
@@ -200,7 +317,7 @@ class Module
         };
     }
 
-    public function tableView()
+    public function tableView(): string
     {
         $data = $this->tableData();
         return twig("layouts/table.html", [
@@ -210,7 +327,7 @@ class Module
         ]);
     }
 
-    public function  formView()
+    public function formView(): string
     {
         $data = $this->formData();
         return twig("layouts/form.html", [
@@ -221,8 +338,10 @@ class Module
             "controls" => $this->controls($data),
         ]);
     }
-
-    public function controls($form_data)
+    /**
+     * @param mixed $form_data
+     */
+    public function controls($form_data): array
     {
         $controls = [];
         foreach ($this->form as $column => $title) {
@@ -320,11 +439,12 @@ class Module
     /**
      * Return placeholder string "column1 = ?", "column2 = ?"
      * @param array<int,mixed> $columns
+     * @param mixed $return_array
      */
-    protected function placeholderColumns(array $columns): string
+    protected function placeholderColumns(array $columns, $return_array = false): string|array
     {
         $stmt = array_map(fn ($column) => $column . " = ?", $columns);
-        return $this->commaColumns($stmt);
+        return $return_array ? $stmt : $this->commaColumns($stmt);
     }
 
     /**

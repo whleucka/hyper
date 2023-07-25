@@ -11,9 +11,6 @@ class Audit extends Module
         $this->parent = "Administration";
         $this->icon = "check-circle";
         $this->edit_enabled = $this->destroy_enabled = $this->create_enabled = false;
-        $this->filters = [
-           "user",
-        ];
 
         $this->table = [
             "id" => "ID",

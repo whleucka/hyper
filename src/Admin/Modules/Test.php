@@ -11,42 +11,24 @@ class Test extends Module
         $this->route = "test";
         $this->parent = "Debug";
 
-        $this->table = [
-            "id" => "ID",
-            "name" => "Name",
-            "updated_at" => "Updated At",
-            "created_at" => "Created At",
-        ];
+        $this->column("id", "ID")
+            ->column("name", "Name")
+            ->column("updated_at", "Update At")
+            ->column("created_at", "Created At");
+        
+        $this->search("name");
 
-        $this->form = [
-            "name" => "Name",
-            "input" => "Input",
-            "number" => "Number",
-            "checkbox" => "Checkbox",
-            "combo" => "Combo",
-            "textarea" => "Text Area",
-        ];
+        $this->control("name", "Name")
+            ->control("input", "Input")
+            ->control("number", "Number", "number")
+            ->control("checkbox", "Checkbox", "checkbox")
+            ->control("textarea", "Textarea", "textarea");
 
-        $this->filters = [
-            "name",
-        ];
-
-        $this->controls = [
-            "name" => "input",
-            "input" => "input",
-            "number" => "number",
-            "checkbox" => "checkbox",
-            "combo" => "input",
-            "textarea" => "textarea",
-        ];
-
-        $this->modify_validation = [
-            "name" => ["required"],
-            "input" => ["required"],
-            "number" => ["required", "numeric"],
-            "combo" => ["required"],
-            "textarea" => ["required"],
-        ];
+        $this->rule("name", ["required"])
+            ->rule("input", ["required"])
+            ->rule("number", ["required", "numeric"])
+            ->rule("combo", ["required"])
+            ->rule("textarea", ["required"]);
 
         parent::__construct($id);
     }

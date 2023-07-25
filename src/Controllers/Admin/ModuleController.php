@@ -5,6 +5,7 @@ namespace Nebula\Controllers\Admin;
 use Exception;
 use Nebula\Controllers\Controller;
 use StellarRouter\{Get, Post, Delete, Patch};
+use Nebula\Session\Flash;
 
 class ModuleController extends Controller
 {
@@ -36,7 +37,7 @@ class ModuleController extends Controller
             "mode" => "index",
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
-            "filters" => $module->filters,
+            "search" => $module->search,
             ...$module->data(),
         ]);
     }
@@ -51,6 +52,7 @@ class ModuleController extends Controller
             "mode" => "create",
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
+            "search" => $module->search,
             ...$module->data(),
         ]);
     }
@@ -68,6 +70,7 @@ class ModuleController extends Controller
             "create_enabled" => $module->create_enabled,
             "create_route" => $module->routeName("create"),
             "edit_route" => $module->routeName("edit"),
+            "search" => $module->search,
             ...$module->data(),
         ]);
     }
@@ -83,10 +86,10 @@ class ModuleController extends Controller
     public function store($module): string {
         $module_name = $module;
         $module = $this->module($module);
-        if ($this->validate($module->validationArray("modify"))) {
+        if ($this->validate($module->validation)) {
             $id = $module->insert();
             if ($id !== false) {
-                // Insert successful
+                Flash::addMessage('success', "Create successful");
                 app()->redirectUrl(app()->moduleRoute($module->routeName("edit"), $id));
             }
         }
@@ -101,9 +104,9 @@ class ModuleController extends Controller
     public function modify($module, $id): string {
         $module_name = $module;
         $module = $this->module($module, $id);
-        if ($this->validate($module->validationArray("modify"))) {
+        if ($this->validate($module->validation)) {
             if ($module->update()) {
-                // Update successful
+                Flash::addMessage('success', "Update successful");
             }
         }
         return $this->edit($module_name, $id);
@@ -118,7 +121,7 @@ class ModuleController extends Controller
         $module_name = $module;
         $module = $this->module($module, $id);
         if ($module->delete()) {
-            // Delete successful
+            Flash::addMessage('success', "Delete successful");
             app()->redirectUrl(app()->moduleRoute($module->routeName("index")));
         }
         return $this->edit($module_name, $id);
