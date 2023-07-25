@@ -60,22 +60,32 @@
   <div class="d-flex align-items-center bg-white p-2">
     <nav aria-label="Page navigation example">
       <ul class="pagination pagination-sm m-0 p-0">
-        <li class="page-item {% if page - 1 <= 0 %}disabled{% endif %}">
-          <a class="page-link" href="?page={{page - 1}}" aria-label="Previous">
+        <li class="page-item">
+          <a class="page-link" href="?page=1" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
+        <li class="page-item {% if page - 1 <= 0 %}disabled{% endif %}">
+          <a class="page-link" href="?page={{page - 1}}" aria-label="Previous">
+            <span aria-hidden="true">Previous</span>
+          </a>
+        </li>
         {% for i in (page - 3..page)|filter(index => index > 0) %}
-        <li class="page-item{% if page == i %} active{% endif %}"><a class="page-link" href="?page={{i}}">{{ i }}</a></li>
+          <li class="page-item{% if page == i %} active{% endif %}"><a class="page-link" href="?page={{i}}">{{ i }}</a></li>
         {% endfor %}
         {% for i in (page..page + 3)|filter(index => index < total_pages + 1 and index != page) %}
           <li class="page-item{% if page == i %} active{% endif %}"><a class="page-link" href="?page={{i}}">{{ i }}</a></li>
-          {% endfor %}
-          <li class="page-item {% if page + 1 >= total_pages %}disabled{% endif %}">
-            <a class="page-link" href="?page={{page + 1}}" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
+        {% endfor %}
+        <li class="page-item {% if page + 1 > total_pages %}disabled{% endif %}">
+          <a class="page-link" href="?page={{page + 1}}" aria-label="Next">
+            <span aria-hidden="true">Next</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ total_pages }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
       </ul>
     </nav>
     <div class="w-100 d-flex justify-content-end">
