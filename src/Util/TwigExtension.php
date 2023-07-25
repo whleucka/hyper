@@ -81,8 +81,8 @@ EOT;
     /**
      * Use value from request for form input, etc
      */
-    public function old(?string $name): mixed
+    public function old(?string $name, string $fallback = ""): mixed
     {
-        return request()->get($name ?? "");
+        return request()->get($name ?? $fallback);
     }
 }

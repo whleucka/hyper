@@ -10,37 +10,37 @@ use PDO;
 class Module
 {
     /** Queries */
-    private ?string $id;
-    public string $primary_key = "id";
-    public string $table_name = "";
+    private ?string $id; // The primary key value of module (edit)
+    public string $primary_key = "id"; // The query primary key
+    public string $table_name = ""; // The query table name
     /** Table/Form Meta */
-    public array $table = [];
-    public array $form = [];
-    public array $controls = [];
-    public array $search = [];
+    public array $table = []; // Array of columns and titles for table query
+    public array $form = []; // Array of columns and titles for form query
+    public array $controls = []; // Array of form controls
+    public array $search = []; // Array of columns which are searchable
     /** Pagination */
-    public int $per_page = 5;
-    public array $per_page_options = [1, 5, 10, 25, 50, 100, 200, 500, 1000];
-    public int $page = 1;
-    public int $offset = 0;
-    public int $total_pages = 1;
-    public int $total_results = 0;
+    public int $per_page = 20; // Default rows per page
+    public array $per_page_options = [1, 5, 10, 20, 50, 100, 200, 500, 1000]; // Default rows per page options
+    public int $page = 1; // The current page
+    public int $offset = 0; // Query offset
+    public int $total_pages = 1; // Total amount of pages
+    public int $total_results = 0; // Total number of results
     /** Fitlers */
     public string $term = ''; // Search term
     /** Query meta */
-    public array $joins = [];
-    public array $where = [];
-    public array $parameters = [];
-    public array $having = [];
-    public array $group_by = [];
-    public string $order_by;
-    public string $sort = "DESC";
+    public array $parameters = []; // Array of query parameter values
+    public array $joins = []; // Array of SQL joins for table query
+    public array $where = []; // Array of where clauses
+    public array $having = []; // Array of having clauses
+    public array $group_by = []; // Array of group by statements
+    public string $order_by; // Order by column
+    public string $sort = "DESC"; // Sort direction
     /** Validation rules */
-    public array $validation = [];
+    public array $validation = []; // Array of validation rules
     /** Permissions */
-    public $create_enabled = true;
-    public $edit_enabled = true;
-    public $destroy_enabled = true;
+    public bool $create_enabled = true; // Allow create new module
+    public bool $modify_enabled = true; // Allow modify module
+    public bool $destroy_enabled = true; // Allow delete module
     /** Routes */
     public $route;
     public $index_route;
@@ -75,6 +75,7 @@ class Module
         $search_clear = request()->get("search_clear");
         if (!is_null($search_clear)) {
             session()->set($this->route."_term", '');
+            session()->set($this->route."_page", 1);
             app()->redirectUrl("?");
         } else if (!is_null($search) && trim($search) != '') {
             session()->set($this->route."_term", trim($search));
@@ -122,7 +123,7 @@ class Module
         if (is_array($this->search)) {
             $conditions = array_map(fn($column) => "$column LIKE ?", $this->search);
             // This must be OR
-            $this->where[] = implode(" OR ", $conditions);
+            $this->having[] = implode(" OR ", $conditions);
             foreach ($this->search as $column) {
                 $this->parameters[] = "%$term%";
             }
@@ -340,7 +341,7 @@ class Module
                     [$this->id]
                 )
                 ->fetch(PDO::FETCH_ASSOC);
-            // Return an empty form if there is no result
+            // Returnan empty form if there is no result
             if (!$result) {
                 return [];
             }
@@ -452,6 +453,13 @@ class Module
     public function formView(): string
     {
         $data = $this->formData();
+        foreach ($this->form as $column => $title) {
+            $name = $this->useAlias($column);
+            $old = request()->get($name);
+            if ($old) {
+                $data[$column] = $old;
+            }
+        }
         return twig("layouts/form.html", [
             ...$this->sharedDefaults(),
             "form" => $this->form,
@@ -549,7 +557,7 @@ class Module
             "route" => $this->route,
             "create_enabled" => $this->create_enabled,
             "destroy_enabled" => $this->destroy_enabled,
-            "edit_enabled" => $this->edit_enabled,
+            "modify_enabled" => $this->modify_enabled,
             "index_route" => $this->routeName("index"),
             "edit_route" => $this->routeName("edit"),
             "modify_route" => $this->routeName("modify"),

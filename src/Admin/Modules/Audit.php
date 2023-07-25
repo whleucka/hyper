@@ -10,9 +10,10 @@ class Audit extends Module
         $this->route = "audit";
         $this->parent = "Administration";
         $this->icon = "check-circle";
-        $this->edit_enabled = $this->destroy_enabled = $this->create_enabled = false;
+        $this->modify_enabled = $this->destroy_enabled = $this->create_enabled = false;
 
         $this->search([
+            "user",
             "table_name", 
             "table_id", 
             "field"

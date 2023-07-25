@@ -14,9 +14,9 @@
         <tr>
           {% for col, value in item %}
           <td class="px-2 align-middle" nowrap>
-            {% if edit_enabled and col == primary_key %}
+            {% if modify_enabled and col == primary_key %}
             <a
-              class="fw-bold"
+              class="fw-bold p-0 m-0"
               href="{{ moduleRoute(edit_route, item.id) }}"
               title="Edit"
             >{{ value }}</a
@@ -24,13 +24,13 @@
             {% else %} {{ value }} {% endif %}
           </td>
           {% endfor %}
-          <td class="actions">
-            <div class="d-flex justify-content-end align-middle">
-              {% if edit_enabled %}
+          <td class="actions pe-2">
+            <div class="d-flex justify-content-end align-middle align-items-center gap-2">
+              {% if modify_enabled %}
               <a
                 title="Edit"
                 href="{{ moduleRoute(edit_route, item.id) }}"
-                class="btn"
+                class="btn p-0 m-0"
               ><span data-feather="edit"></span
                 ></a>
               {% endif %} {% if destroy_enabled %}
@@ -43,7 +43,7 @@
                 <button
                   title="Delete"
                   onClick="return confirm('Are you sure?')"
-                  class="btn"
+                  class="btn p-0 m-0"
                 >
                   <span data-feather="trash"></span>
                 </button>
