@@ -71,7 +71,7 @@ final class ContainerTest extends TestCase
   }
 }
 
-class A
+final class A
 {
   public function __construct(private B $b)
   {
@@ -83,14 +83,14 @@ class A
   }
 }
 
-class B
+final class B
 {
   public function __construct()
   {
   }
 }
 
-class C
+final class C
 {
   public function __construct(private A $a, private B $b)
   {
@@ -107,7 +107,7 @@ class C
   }
 }
 
-class D
+final class D
 {
   public function __construct(private array $config)
   {
@@ -118,7 +118,7 @@ class D
   }
 }
 
-class MySQLDatabase implements DatabaseInterface
+final class MySQLDatabase implements DatabaseInterface
 {
   public function connect(): void
   {
