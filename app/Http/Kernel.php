@@ -2,24 +2,24 @@
 
 namespace App\Http;
 
-use Nebula\Framework\Application;
+use Nebula\Interfaces\Database\Database;
 use Nebula\Interfaces\Http\{Request, Response};
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\System\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
+use App\Config\Config;
 use Throwable;
 
 final class Kernel implements NebulaKernel
 {
     private Router $router;
-    private Application $app;
+    private Database $db;
 
     /**
      * Setup the application
      */
-    public function setup(Application $app): Kernel
+    public function setup(): Kernel
     {
-        $this->app = $app;
         $this->registerInterfaces();
         $this->initRouter();
         return $this;
@@ -30,19 +30,29 @@ final class Kernel implements NebulaKernel
      */
     public function registerInterfaces(): void
     {
-        $this->app->singleton(\Nebula\Interfaces\Database\Database::class, \Nebula\Database\MySQLDatabase::class);
-        $this->app->bind(\Nebula\Interfaces\Routing\Router::class, \Nebula\Routing\Router::class);
-        $this->app->bind(\Nebula\Interfaces\Http\Response::class, \Nebula\Http\Response::class);
+        app()->singleton(\Nebula\Interfaces\Database\Database::class, \Nebula\Database\MySQLDatabase::class);
+        app()->bind(\Nebula\Interfaces\Routing\Router::class, \Nebula\Routing\Router::class);
+        app()->bind(\Nebula\Interfaces\Http\Response::class, \Nebula\Http\Response::class);
     }
 
     public function initRouter(): void
     {
-        $this->router = $this->app->get(Router::class);
+        $this->router = app()->get(Router::class);
         // Register the controller classes
         $controller_dir = __DIR__ . "/../Controllers";
         foreach ($this->classMap($controller_dir) as $class_name => $filename) {
             $this->router->registerClass($class_name);
         }
+    }
+
+    public function getDatabase(): Database
+    {
+        if (!isset($this->db)) {
+            $this->db = app()->get(Database::class);
+            $config = app()->get(Config::class)::database();
+            $this->db->connect($config);
+        }
+        return $this->db;
     }
 
     /**
@@ -61,7 +71,7 @@ final class Kernel implements NebulaKernel
      */
     public function handleRequest(Request $request): Response
     {
-        $response = $this->app->get(Response::class);
+        $response = app()->get(Response::class);
         $route = $this->router->handleRequest($request->getMethod(), $request->getUri());
 
         if ($route) {
@@ -69,7 +79,7 @@ final class Kernel implements NebulaKernel
                 $handlerClass = $route->getHandlerClass();
                 $handlerMethod = $route->getHandlerMethod();
                 $routeParameters = $route->getParameters();
-                $class = new $handlerClass($this->app);
+                $class = new $handlerClass();
 
                 $content = $class->$handlerMethod(...$routeParameters);
                 $response->setContent($content ?? '');
@@ -91,7 +101,7 @@ final class Kernel implements NebulaKernel
     public function handleException(Throwable $exception): void
     {
         // TODO deal with the exception
-        $response = $this->app->get(Response::class);
+        $response = app()->get(Response::class);
         $response->setStatusCode(404);
         $response->setContent('Server error.');
         $response->send();

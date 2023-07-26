@@ -1,5 +1,7 @@
 <?php
 
+use Nebula\Framework\Application;
+
 /**
  * This is a file that contains generic application functions
  * Do not add a namespace to this file
@@ -15,4 +17,14 @@ function dd(...$args)
 {
   dump(...$args);
   die;
+}
+
+function app()
+{
+  return Application::getInstance();
+}
+
+function db()
+{
+  return app()->use()->getDatabase();
 }
