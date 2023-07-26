@@ -14,7 +14,7 @@ $app->singleton(\Nebula\Interfaces\Http\Request::class, \Nebula\Http\Request::cl
 
 $env_path = __DIR__ . "/../";
 $dotenv = Dotenv\Dotenv::createImmutable($env_path);
-$dotenv->load();
+$dotenv->safeLoad();
 
 return $app;
 
