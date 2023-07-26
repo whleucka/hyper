@@ -1,7 +1,7 @@
 <?php
 
 use Nebula\Framework\Application;
-use Dotenv;
+use Dotenv\Dotenv;
 
 /**
  * Instantiate the application
@@ -13,7 +13,7 @@ $app->singleton(\Nebula\Interfaces\System\Kernel::class, \App\Http\Kernel::class
 $app->singleton(\Nebula\Interfaces\Http\Request::class, \Nebula\Http\Request::class);
 
 $env_path = __DIR__ . "/../";
-$dotenv = Dotenv\Dotenv::createImmutable($env_path);
+$dotenv = Dotenv::createImmutable($env_path);
 $dotenv->safeLoad();
 
 return $app;
