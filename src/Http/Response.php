@@ -8,7 +8,7 @@ class Response implements NebulaResponse
 {
     private string $content = '';
 
-    public function setStatusCode(int $statusCode): void
+    public function setStatusCode(int $statusCode = 200): void
     {
         http_response_code($statusCode);
     }
