@@ -16,7 +16,11 @@ class ModuleController extends Controller
             if (!class_exists($class)) {
                 app()->pageNotFound();
             }
-            return new $class($id);
+            $target = container()->get($class);
+            if ($id) {
+                $target->setId($id);
+            }
+            return $target;
         } catch (Exception $ex) {
             app()->serverError();
             error_log("module not found: $class " . $ex->getMessage());

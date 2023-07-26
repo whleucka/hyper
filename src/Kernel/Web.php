@@ -11,18 +11,20 @@ use Symfony\Component\HttpFoundation\{
     Request,
     Response,
     JsonResponse,
-    RedirectResponse
 };
 use Whoops;
-use Closure;
 use Error;
 use Exception;
 use GalaxyPDO\DB;
 use Nebula\Session\Session;
 use Nebula\Models\User;
 
+use Nebula\Traits\{RegisterRoute, RouterMethods};
+
 class Web
 {
+    use RegisterRoute, RouterMethods;
+
     public static $instance = null;
     private ?Route $route;
     private Container $container;
@@ -226,6 +228,14 @@ class Web
     {
         return $this->route;
     }
+    
+    /**
+     * Get the app router
+     */
+    public function getRouter(): ?Router
+    {
+        return $this->router;
+    }
 
     /**
      * Instantiate the route
@@ -254,7 +264,6 @@ class Web
     {
         $handlerMethod = $this->route->getHandlerMethod();
         $routeParameters = $this->route->getParameters();
-        //$routeMiddleware = $this->route->getMiddleware();
         $payload = $this->route->getPayload();
         $this->setupErrorHandling();
         try {
@@ -326,85 +335,18 @@ class Web
     }
 
     /**
-     * Send the response to the client
+     * Init error handling using Whoops
      */
-    public function execute(): void
+    private function whoops(): Whoops\Run
     {
-        $this->response->prepare($this->request)->send();
-        //$this->logExecutionTime();
-        exit();
-    }
-
-    /**
-     * Find a route by route name
-     */
-    public function findRoute(string $name): ?Route
-    {
-        $routes = $this->router->getRoutes();
-        $exists = array_filter($routes, fn($route) => $route["name"] === $name);
-        if (!empty($exists) && count($exists) === 1) {
-            $route = reset($exists);
-            return new Route(...$route);
+        $whoops = new Whoops\Run();
+        if (!$this->isDebug()) {
+            return $whoops;
         }
-        return null;
-    }
-
-    public function moduleRoute(string $name, ...$args): ?string
-    {
-        $name_arr = explode(".", $name);
-        $first = $name_arr[0];
-        $end = end($name_arr);
-        $route = $this->findRoute("module.$end");
-        if (!is_null($route)) {
-            return $this->buildRoute($route->getName(), $first, ...$args);
-        }
-        return null;
-    }
-
-    public function routePathURL(string $route_path): string
-    {
-        $url = config("app")["url"];
-        return $url . $route_path;
-    }
-
-    /**
-     * Build a route with params
-     */
-    public function buildRoute(string $name, ...$params): ?string
-    {
-        $route = $this->findRoute($name);
-        if (!is_null($route)) {
-            $regex = "#({[\w\?]+})#";
-            $uri = $route->getPath();
-            preg_match_all($regex, $uri, $matches);
-            if ($matches) {
-                array_walk(
-                    $matches[0],
-                    fn(&$item) => ($item =
-                        "#" . str_replace("?", "\?", $item) . "#")
-                );
-                return preg_replace($matches[0], $params, $uri);
-            }
-        }
-        return null;
-    }
-
-    public function redirect(string $route_name): void
-    {
-        $route = app()->findRoute($route_name);
-        if (!$route) {
-            throw new Error("Route cannot be found: $route_name");
-        }
-        $response = new RedirectResponse($route->getPath());
-        $response->send();
-        exit();
-    }
-
-    public function redirectUrl(string $url): void
-    {
-        $response = new RedirectResponse($url);
-        $response->send();
-        exit();
+        error_reporting(E_ALL);
+        $whoops->allowQuit(false);
+        $whoops->writeToOutput(false);
+        return $whoops;
     }
 
     /**
@@ -458,6 +400,16 @@ class Web
     }
 
     /**
+     * Send the response to the client
+     */
+    public function execute(): void
+    {
+        $this->response->prepare($this->request)->send();
+        //$this->logExecutionTime();
+        exit();
+    }
+
+    /**
      * Log the application execution time to the error log
      */
     public function logExecutionTime(): void
@@ -465,140 +417,5 @@ class Web
         $executionTime = microtime(true) - APP_START;
         $time = number_format($executionTime * 1000, 2);
         error_log("Execution time: {$time} ms");
-    }
-
-    /**
-     * Init error handling using Whoops
-     */
-    private function whoops(): Whoops\Run
-    {
-        $whoops = new Whoops\Run();
-        if (!$this->isDebug()) {
-            return $whoops;
-        }
-        error_reporting(E_ALL);
-        $whoops->allowQuit(false);
-        $whoops->writeToOutput(false);
-        return $whoops;
-    }
-
-    /**
-     * Wire up a GET route
-     * @param array<int,mixed> $middleware
-     */
-    public function get(
-        string $path,
-        string $handlerClass = "",
-        string $handlerMethod = "",
-        string $name = "",
-        array $middleware = [],
-        ?Closure $payload = null
-    ): Web {
-        $this->router->registerRoute(
-            $path,
-            "GET",
-            $name,
-            $middleware,
-            $handlerClass,
-            $handlerMethod,
-            is_callable($payload) ? $payload : null
-        );
-        return $this;
-    }
-
-    /**
-     * Wire up a POST route
-     * @param array<int,mixed> $middleware
-     */
-    public function post(
-        string $path,
-        string $handlerClass = "",
-        string $handlerMethod = "",
-        string $name = "",
-        array $middleware = [],
-        ?Closure $payload = null
-    ): Web {
-        $this->router->registerRoute(
-            $path,
-            "POST",
-            $name,
-            $middleware,
-            $handlerClass,
-            $handlerMethod,
-            is_callable($payload) ? $payload : null
-        );
-        return $this;
-    }
-
-    /**
-     * Wire up a PUT route
-     * @param array<int,mixed> $middleware
-     */
-    public function put(
-        string $path,
-        string $handlerClass = "",
-        string $handlerMethod = "",
-        string $name = "",
-        array $middleware = [],
-        ?Closure $payload = null
-    ): Web {
-        $this->router->registerRoute(
-            $path,
-            "PUT",
-            $name,
-            $middleware,
-            $handlerClass,
-            $handlerMethod,
-            is_callable($payload) ? $payload : null
-        );
-        return $this;
-    }
-
-    /**
-     * Wire up a PATCH route
-     * @param array<int,mixed> $middleware
-     */
-    public function patch(
-        string $path,
-        string $handlerClass = "",
-        string $handlerMethod = "",
-        string $name = "",
-        array $middleware = [],
-        ?Closure $payload = null
-    ): Web {
-        $this->router->registerRoute(
-            $path,
-            "PATCH",
-            $name,
-            $middleware,
-            $handlerClass,
-            $handlerMethod,
-            is_callable($payload) ? $payload : null
-        );
-        return $this;
-    }
-
-    /**
-     * Wire up a DELETE route
-     * @param array<int,mixed> $middleware
-     */
-    public function delete(
-        string $path,
-        string $handlerClass = "",
-        string $handlerMethod = "",
-        string $name = "",
-        array $middleware = [],
-        ?Closure $payload = null
-    ): Web {
-        $this->router->registerRoute(
-            $path,
-            "DELETE",
-            $name,
-            $middleware,
-            $handlerClass,
-            $handlerMethod,
-            is_callable($payload) ? $payload : null
-        );
-        return $this;
     }
 }

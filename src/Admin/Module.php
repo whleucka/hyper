@@ -55,8 +55,6 @@ class Module
 
     public function __construct(?string $id = null)
     {
-        // This is the id (primary key) value for the module queries
-        $this->id = $id;
         // Defaults - if these variables aren't set, then we assume route name
         if (!$this->table_name) {
             $this->table_name = strtolower($this->route);
@@ -64,6 +62,12 @@ class Module
         if (!$this->title) {
             $this->title = ucfirst($this->route);
         }
+    }
+
+    public function setId(string $id)
+    {
+        // This is the id (primary key) value for the module queries
+        $this->id = $id;
     }
 
     /**
@@ -535,7 +539,7 @@ class Module
         $map = app()->classMap($config);
         $modules = [];
         foreach ($map as $class => $file) {
-            $class = new $class();
+            $class = container()->get($class);
             $modules[$class?->parent ?? "Administration"][] = [
                 "link" => $class->routeName("index"),
                 "title" => $class->title,
