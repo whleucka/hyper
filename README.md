@@ -7,31 +7,7 @@
 
 👷 *Currently under development*
 
-❌ **Not ready for production use**
-
-
-### Features for v0.0.1
-- [x] Caching: Caching mechanisms to improve performance and optimize data retrieval.
-- [x] Database Abstraction: Simplified database interactions with <a href='https://github.com/libra-php/galaxy-pdo'>GalaxyPDO</a>.
-- [x] Error Handling: Comprehensive error handling and logging for efficient debugging.
-- [x] Form Handling: Convenient form handling and validation capabilities.
-- [x] Routing: <a href='https://github.com/libra-php/stellar-router'>StellarRouter</a> for handling URL mapping and request handling.
-- [x] Security: Integrated security measures to protect against common web vulnerabilities.
-- [x] Templating: Built-in template engine support for easy and flexible view rendering.
-- [x] Two-factor authentication (2FA): Adds an extra layer of security to your accounts by requiring a second form of verification. This feature is optional.
-- [ ] Admin Access Layer: wip
-- [ ] Migrations: wip
-- [ ] Logging: wip
-- [ ] Docker Environment: wip
-
-
-### TODO
-- Support for other template engines
-- Docker development environment
-- Investigate PHP logging solutions
-- Writing tests that cover various components of Nebula
-- Refactor and benchmark
-- Work on Admin backend
+❌ **Not for production use**
 
 
 ### Getting Started
@@ -59,67 +35,7 @@ chown -R www-data:www-data views/.cache
 
 - **Deployment**: Once your application is ready for deployment, configure your web server to point to the public directory as the document root.
 
-
-### Routing
-
-Routing is super easy with Nebula. Call a class method or simply define a closure that returns a payload.
-
-- With app's http method helpers, you can easily wire up the routing for your app. Here is a basic example of `/public/index.php` which creates 3 routes.
-```php
-<?php
-require_once "bootstrap.php";
-
-class TestController extends Nebula\Controllers\Controller
-{
-  public function test(): int { return 42; }
-}
-
-app()
-  ->get("/", payload: fn() => "hello, world!")
-  ->get("/view", payload: fn() => twig("home/index.html", ["msg" => "hello, world!"]))
-  ->post("/test", "TestController", "test", middleware: ["api"])
-  ->run();
-```
-
-
-###  Attribute-based Routing
-
-We also support attribute routing. You can specify the route above the target endpoint in the desired controller. All RESTful HTTP methods are supported. Awesome!
-
-- Here is an example controller located at `/src/Controllers/HomeController.php`
-```php
-<?php
-namespace Nebula\Controllers;
-
-use StellarRouter\{Get, Post};
-
-class HomeController extends Controller
-{
-    #[Get("/", "home.index")]
-    public function index(): string
-    {
-        // This is a web response
-        return "hello, world!";
-    }
-
-    #[Get("/view", "home.view")]
-    public function view(): string
-    {
-        // This is a twig web response
-        // msg is a variable that is accessible in the template
-        return twig("home/index.html", ["msg" => "hello, world!"]);
-    }
-
-    #[Post("/test", "home.test", ["api"])]
-    public function test(): int
-    {
-        // This is a JSON response (from api route middleware)
-        return 42;
-    }
-}
-```
-
-<s>For more detailed instructions and documentation, please refer to the <a href='#'>Nebula Documentation</a></s>
+- **Hold up**, there is no documentation! Check back soon!
 
 
 ### Benchmarks
