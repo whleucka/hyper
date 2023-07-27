@@ -1,14 +1,14 @@
 <?php
 /**
- * NEBULA -- a powerful PHP framework
+ * NEBULA -- a powerful PHP micro-framework
  * Github: https://github.com/libra-php/nebula
  * Created: william.hleucka@gmail.com
  * License: MIT
  */
-require_once "bootstrap.php";
 
-// Run the app using attribute-based routing
-app()->run();
+define('APP_START', microtime(true));
+require __DIR__.'/../vendor/autoload.php';
 
-// Or, you can define the routes and call run
-//app()->get("/", payload: fn() => "hello, world")->run();
+// Bootstrap & run the application
+$app = require_once __DIR__ . "/../bootstrap/app.php";
+$app->run(Nebula\Interfaces\System\Kernel::class);
