@@ -33,3 +33,9 @@ function db()
 {
   return app()->use()->getDatabase();
 }
+
+function twig(string $path, array $data = [])
+{
+  $twig = app()->get(\Twig\Environment::class);
+  return $twig->render($path, $data);
+}

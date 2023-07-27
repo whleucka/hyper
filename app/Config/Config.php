@@ -8,4 +8,14 @@ final class Config
   {
     return require __DIR__ . "/Database.php";
   }
+
+  public static function twig()
+  {
+    return require __DIR__ . "/Twig.php";
+  }
+
+  public static function paths()
+  {
+    return require __DIR__ . "/Paths.php";
+  }
 }
