@@ -101,6 +101,9 @@ class Container
         }
 
         if ($constructor->class === $reflection->name) {
+            if (!isset(self::$count[$concrete])) {
+                self::$count[$concrete] = 0;
+            }
             self::$count[$concrete]++;
             if (self::$count[$concrete] > 10) {
                 // Things are out of control, bail!
