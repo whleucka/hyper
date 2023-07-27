@@ -16,6 +16,8 @@ use Closure;
  */
 class Container
 {
+    // Keep track of dependency
+    public static $count = [];
     private $bindings = [];
     private $instances = [];
     private $currentlyResolving = [];
@@ -48,7 +50,6 @@ class Container
     {
         // Check if the class is being resolved to prevent circular dependencies.
         if (isset($this->currentlyResolving[$interface])) {
-            // TODO not sure if this is working, circular dep problems still exist
             throw new Exception("Circular dependency detected for interface $interface.");
         }
 
@@ -97,6 +98,14 @@ class Container
 
         if ($constructor === null) {
             return new $concrete();
+        }
+
+        if ($constructor->class === $reflection->name) {
+            self::$count[$concrete]++;
+            if (self::$count[$concrete] > 10) {
+                // Things are out of control, bail!
+                throw new Exception("Circular dependency detected for interface $concrete.");
+            }
         }
 
         $dependencies = [];
