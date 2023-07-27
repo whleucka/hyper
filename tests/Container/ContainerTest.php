@@ -69,6 +69,14 @@ final class ContainerTest extends TestCase
     $this->assertInstanceOf(D::class, $d);
     $this->assertSame(["test" => "OK!"], $d->getConfig());
   }
+
+  //public function test_container_circular_dependency_throws_exception(): void
+  //{
+  //  $this->expectException(\Exception::class);
+  //  $container = new Container();
+  //  $e = $container->get(E::class);
+  //  $f = $container->get(F::class);
+  //}
 }
 
 final class A
@@ -116,6 +124,16 @@ final class D
   {
     return $this->config;
   }
+}
+
+final class E
+{
+  public function __construct(private F $f) {}
+}
+
+final class F
+{
+  public function __construct(private E $e) {}
 }
 
 final class MySQLDatabase implements DatabaseInterface

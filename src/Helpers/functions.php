@@ -24,6 +24,11 @@ function app()
   return Application::getInstance();
 }
 
+function env(string $name)
+{
+  return app()->use()->getEnvironment($name);
+}
+
 function db()
 {
   return app()->use()->getDatabase();

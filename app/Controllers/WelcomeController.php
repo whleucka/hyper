@@ -10,6 +10,6 @@ final class WelcomeController extends Controller
   #[Get("/", "welcome.index")]
   public function index()
   {
-    echo "hello, world!";
+    return "hello, world!";
   }
 }

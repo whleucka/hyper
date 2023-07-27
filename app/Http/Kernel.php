@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Nebula\Interfaces\Database\Database;
+use Dotenv\Dotenv;
 use Nebula\Interfaces\Http\{Request, Response};
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\System\Kernel as NebulaKernel;
@@ -14,6 +15,7 @@ final class Kernel implements NebulaKernel
 {
     private Router $router;
     private Database $db;
+    private Dotenv $dotenv;
 
     /**
      * Setup the application
@@ -45,11 +47,25 @@ final class Kernel implements NebulaKernel
         }
     }
 
+    public function getEnvironment(string $name): ?string
+    {
+        if (!isset($this->dotenv)) {
+            // Load environment variables
+            $env_path = __DIR__ . "/../../";
+            $this->dotenv = Dotenv::createImmutable($env_path);
+            $this->dotenv->safeLoad();
+        }
+        return isset($_ENV[$name])
+            ? $_ENV[$name]
+            : null;
+    }
+
     public function getDatabase(): Database
     {
         if (!isset($this->db)) {
             $this->db = app()->get(Database::class);
             $config = app()->get(Config::class)::database();
+            dd($config);
             $this->db->connect($config);
         }
         return $this->db;
@@ -82,7 +98,13 @@ final class Kernel implements NebulaKernel
                 $class = new $handlerClass();
 
                 $content = $class->$handlerMethod(...$routeParameters);
+
+                // Set the Expires header to cache the resource for one hour (3600 seconds).
+                $expires = 3600;
+                $response->setHeader("Expires", gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+
                 $response->setContent($content ?? '');
+
             } catch (\Exception $ex) {
                 $this->handleException($ex);
             }
