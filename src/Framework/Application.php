@@ -3,8 +3,8 @@
 namespace Nebula\Framework;
 
 use Nebula\Container\Container;
-use Nebula\Interfaces\System\Kernel;
-use Nebula\Http\Request;
+use Nebula\Interfaces\Http\Kernel;
+use Nebula\Interfaces\Http\Request;
 use Nebula\Traits\SingleInstance;
 
 class Application extends Container
@@ -23,7 +23,8 @@ class Application extends Container
     public function execute(): void
     {
         $request = $this->get(Request::class);
-        $this->kernel->handleRequest($request)->send();
+        $response = $this->kernel->handleRequest($request);
+        $response->send();
         $this->kernel->terminate();
     }
 

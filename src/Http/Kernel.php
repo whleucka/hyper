@@ -2,26 +2,30 @@
 
 namespace Nebula\Http;
 
-use Nebula\Interfaces\Database\Database;
 use Dotenv\Dotenv;
 use Nebula\Interfaces\Http\{Request, Response};
+use Nebula\Interfaces\Database\Database;
 use Nebula\Interfaces\Routing\Router;
-use Nebula\Interfaces\System\Kernel as NebulaKernel;
+use Nebula\Interfaces\Http\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
-use App\Config\Config;
 use Nebula\UI\Twig\Extension;
+use App\Config\Config;
 use Throwable;
 
-class WebKernel implements NebulaKernel
+class Kernel implements NebulaKernel
 {
     private Router $router;
     private Database $db;
     private Dotenv $dotenv;
+    protected array $default_middleware = [
+        \Nebula\Middleware\Admin\Authentication::class, 
+        \Nebula\Middleware\Http\Log::class, 
+    ];
 
     /**
      * Setup the application
      */
-    public function setup(): WebKernel
+    public function setup(): Kernel
     {
         $this->registerInterfaces();
         $this->initRouter();
@@ -36,6 +40,7 @@ class WebKernel implements NebulaKernel
         app()->singleton(\Nebula\Interfaces\Database\Database::class, \Nebula\Database\MySQLDatabase::class);
         app()->bind(\Nebula\Interfaces\Routing\Router::class, \Nebula\Routing\Router::class);
         app()->bind(\Nebula\Interfaces\Http\Response::class, \Nebula\Http\Response::class);
+        app()->bind(\Nebula\Interfaces\Http\Request::class, \Nebula\Http\Request::class);
         app()->bind(\Twig\Environment::class, function() {
             $config = app()->get(Config::class)::twig();
             $loader = new \Twig\Loader\FilesystemLoader($config["view_path"]);
@@ -91,15 +96,11 @@ class WebKernel implements NebulaKernel
         }
         return ClassMapGenerator::createMap($directory);
     }
-
-    /**
-     * Handle the request and return a response
-     */
-    public function handleRequest(Request $request): Response
+    
+    public function resolveRoute(Request $request) 
     {
-        $response = app()->get(Response::class);
         $route = $this->router->handleRequest($request->getMethod(), $request->getUri());
-
+        $response = app()->get(Response::class);
         if ($route) {
             try {
                 $handlerClass = $route->getHandlerClass();
@@ -111,27 +112,35 @@ class WebKernel implements NebulaKernel
                 $response->setContent($content ?? '');
 
             } catch (\Exception $ex) {
-                $this->handleException($ex);
+                $response = $this->handleException($ex);
             }
         } else {
             // TODO 404 page
             $response->setStatusCode(404);
             $response->setContent('Page not found.');
         }
-
         return $response;
+    }
+
+    /**
+     * Handle the request and return a response
+     */
+    public function handleRequest(Request $request): Response
+    {
+        // Implement middleware here
+        return $this->resolveRoute($request);
     }
 
     /**
      * Handle any application exceptions
      */
-    public function handleException(Throwable $exception): void
+    public function handleException(Throwable $exception): Response
     {
         // TODO deal with the exception
         $response = app()->get(Response::class);
         $response->setStatusCode(404);
         $response->setContent('Server error.');
-        $response->send();
+        return $response;
     }
 
     /**

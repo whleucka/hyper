@@ -11,4 +11,4 @@ require __DIR__.'/../vendor/autoload.php';
 
 // Bootstrap & run the application
 $app = require_once __DIR__ . "/../bootstrap/app.php";
-$app->run(Nebula\Interfaces\System\Kernel::class);
+$app->run(Nebula\Interfaces\Http\Kernel::class);
