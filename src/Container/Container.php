@@ -114,7 +114,9 @@ class Container
         $dependencies = [];
 
         foreach ($constructor->getParameters() as $parameter) {
-            $dependencyInterface = $parameter->getClass();
+            $dependencyInterface = $parameter->getType() && !$parameter->getType()->isBuiltin()
+                ? new ReflectionClass($parameter->getType()->getName())
+                : null;
 
             if ($dependencyInterface === null) {
                 $dependencies[] = $this->resolveNonClass($parameter);
