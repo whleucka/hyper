@@ -1,11 +1,11 @@
 <?php
 
-namespace Nebula\Traits;
+namespace Nebula\Traits\Instance;
 
 /**
  * Singleton trait
  */
-trait SingleInstance
+trait Singleton
 {
     public static $instance;
     public static function getInstance()

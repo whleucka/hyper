@@ -5,11 +5,11 @@ namespace Nebula\Framework;
 use Nebula\Container\Container;
 use Nebula\Interfaces\Http\Kernel;
 use Nebula\Interfaces\Http\Request;
-use Nebula\Traits\SingleInstance;
+use Nebula\Traits\Instance\Singleton;
 
 class Application extends Container
 {
-    use SingleInstance;
+    use Singleton;
 
     private Kernel $kernel;
 

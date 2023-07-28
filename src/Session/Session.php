@@ -2,11 +2,11 @@
 
 namespace Nebula\Session;
 
-use Nebula\Traits\SingleInstance;
+use Nebula\Traits\Instance\Singleton;
 
 class Session
 {
-    use SingleInstance;
+    use Singleton;
 
     private $data = [];
 
