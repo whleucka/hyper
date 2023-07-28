@@ -7,7 +7,7 @@ use Nebula\Interfaces\Http\Request;
 
 class Controller implements BaseController
 {
-  public function __construct(Request $request)
+  public function __construct(protected Request $request)
   {
   }
 }
