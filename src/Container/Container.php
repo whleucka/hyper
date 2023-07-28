@@ -2,143 +2,25 @@
 
 namespace Nebula\Container;
 
-use ReflectionClass;
-use ReflectionFunction;
-use ReflectionParameter;
-use Exception;
-use Closure;
+use DI\ContainerBuilder;
+use Psr\Container\ContainerInterface;
+use App\Config\Config;
 
-/**
- * Super-simple DI container
- * Job: store service bindings and handle the resolution of
- * dependencies.
- * Issues: circular dependencies eating memory up
- */
 class Container
 {
-    // Keep track of dependency
-    public static $count = [];
-    private $bindings = [];
-    private $instances = [];
-    private $currentlyResolving = [];
+    private ?ContainerInterface $container = null;
+    private ContainerBuilder $builder;
 
-    /**
-     * Bind and interface to a concrete class or closure instantiated class
-     * Singleton classes should return the same instance.
-     */
-    public function bind(string $interface, string|Closure $concrete, bool $singleton = false): void
+    public function build(): void
     {
-        $this->bindings[$interface] = [
-            'concrete' => $concrete,
-            'singleton' => $singleton,
-            'resolved' => false,
-        ];
+        $config = new Config;
+        $this->builder = new ContainerBuilder();
+        $this->builder->addDefinitions($config->container());
+        $this->container = $this->builder->build();
     }
 
-    /**
-     * Shorthand singleton
-     */
-    public function singleton(string $interface, string|Closure $concrete): void
+    public function __call($method, $args)
     {
-        $this->bind($interface, $concrete, true);
-    }
-
-    /**
-     * Return instance of interface
-     */
-    public function get(string $interface): mixed
-    {
-        // Check if the class is being resolved to prevent circular dependencies.
-        if (isset($this->currentlyResolving[$interface])) {
-            throw new Exception("Circular dependency detected for interface $interface.");
-        }
-
-        if (isset($this->instances[$interface])) {
-            return $this->instances[$interface];
-        }
-
-        if (!isset($this->bindings[$interface])) {
-            // If the interface is not bound, attempt auto-wiring.
-            return $this->resolve($interface);
-        }
-
-        $binding = $this->bindings[$interface];
-        $concrete = $binding['concrete'];
-
-        $this->currentlyResolving[$interface] = true;
-
-        if ($binding['singleton'] && !$binding['resolved']) {
-            $this->instances[$interface] = $this->resolve($concrete);
-            $this->bindings[$interface]['resolved'] = true;
-        }
-
-        unset($this->currentlyResolving[$interface]);
-
-        return $this->instances[$interface] ?? $this->resolve($concrete);
-    }
-
-    /**
-     * Resolve a concrete class w/ dependencies
-     */
-    private function resolve(string|Closure $concrete): mixed
-    {
-        // Check for closure instantiation
-        if ($concrete instanceof Closure) {
-            $reflection = new ReflectionFunction($concrete);
-            return $concrete();
-        }
-
-        $reflection = new ReflectionClass($concrete);
-
-        if (!$reflection->isInstantiable()) {
-            throw new Exception("Class $concrete is not instantiable.");
-        }
-
-        $constructor = $reflection->getConstructor();
-
-        if ($constructor === null) {
-            return new $concrete();
-        }
-
-        if ($constructor->class === $reflection->name) {
-            if (!isset(self::$count[$concrete])) {
-                self::$count[$concrete] = 0;
-            }
-            self::$count[$concrete]++;
-            if (self::$count[$concrete] > 10) {
-                // Things are out of control, bail!
-                throw new Exception("Circular dependency detected for interface $concrete.");
-            }
-        }
-
-        $dependencies = [];
-
-        foreach ($constructor->getParameters() as $parameter) {
-            $dependencyInterface = $parameter->getType() && !$parameter->getType()->isBuiltin()
-                ? new ReflectionClass($parameter->getType()->getName())
-                : null;
-
-            if ($dependencyInterface === null) {
-                $dependencies[] = $this->resolveNonClass($parameter);
-            } else {
-                // Recursively resolve class dependencies.
-                $dependencies[] = $this->get($dependencyInterface->getName());
-            }
-        }
-
-        return $reflection->newInstanceArgs($dependencies);
-    }
-
-    /**
-     * Resolve a non-class dependencies (e.g. scalar values, etc)
-     * Use a default if available (e.g. public $bar = 1; is equal to int(1) )
-     */
-    private function resolveNonClass(ReflectionParameter $parameter): mixed
-    {
-        if ($parameter->isDefaultValueAvailable()) {
-            return $parameter->getDefaultValue();
-        }
-
-        throw new Exception("Cannot resolve non-class dependency {$parameter->name} for {$parameter->getDeclaringClass()->name}");
+      return $this->container?->$method(...$args);
     }
 }

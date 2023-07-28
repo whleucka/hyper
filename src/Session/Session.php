@@ -2,15 +2,13 @@
 
 namespace Nebula\Session;
 
-use Nebula\Traits\Instance\Singleton;
+use Nebula\Interfaces\Session\Session as NebulaSession;
 
-class Session
+class Session implements NebulaSession
 {
-    use Singleton;
-
     private $data = [];
 
-    public function get(string $name)
+    public function get(string $name): mixed
     {
         @session_start();
         session_write_close();
@@ -18,7 +16,7 @@ class Session
         return $this->data[$name] ?? null;
     }
 
-    public function set(string $name, mixed $value)
+    public function set(string $name, mixed $value): void
     {
         @session_start();
         $this->data[$name] = $value;
@@ -26,14 +24,14 @@ class Session
         session_write_close();
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         @session_start();
         session_write_close();
         return $_SESSION;
     }
 
-    public function destroy()
+    public function destroy(): void
     {
         @session_start();
         $_SESSION = $this->data = [];

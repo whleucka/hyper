@@ -1,7 +1,8 @@
 <?php
 
 use Nebula\Framework\Application;
-use Nebula\Session\Session;
+use Nebula\Interfaces\Database\Database;
+use Nebula\Interfaces\Session\Session;
 
 /**
  * This is a file that contains generic application functions
@@ -32,12 +33,12 @@ function env(string $name)
 
 function db()
 {
-  return app()->use()->getDatabase();
+  return app()->get(Database::class);
 }
 
 function session()
 {
-  return Session::getInstance();
+  return app()->get(Session::class);
 }
 
 function twig(string $path, array $data = [])

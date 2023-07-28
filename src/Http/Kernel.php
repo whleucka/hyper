@@ -8,7 +8,6 @@ use Nebula\Interfaces\Database\Database;
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\Http\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
-use Nebula\UI\Twig\Extension;
 use App\Config\Config;
 use Nebula\Middleware\Middleware;
 use Nebula\Traits\Http\Response as HttpResponse;
@@ -29,31 +28,9 @@ class Kernel implements NebulaKernel
      */
     public function setup(): Kernel
     {
-        $this->registerInterfaces();
         $this->registerMiddleware();
         $this->registerRoutes();
         return $this;
-    }
-
-    /**
-     * Register interfaces with concrete bindings
-     */
-    protected function registerInterfaces(): void
-    {
-        app()->singleton(\Nebula\Interfaces\Database\Database::class, \Nebula\Database\MySQLDatabase::class);
-        app()->bind(\Nebula\Interfaces\Routing\Router::class, \Nebula\Routing\Router::class);
-        app()->bind(\Nebula\Interfaces\Http\Response::class, \Nebula\Http\Response::class);
-        app()->bind(\Nebula\Interfaces\Http\Request::class, \Nebula\Http\Request::class);
-        app()->bind(\Twig\Environment::class, function () {
-            $config = app()->get(Config::class)::twig();
-            $loader = new \Twig\Loader\FilesystemLoader($config["view_path"]);
-            $twig = new \Twig\Environment($loader, [
-                "cache" => $config["cache_path"],
-                "auto_reload" => true,
-            ]);
-            $twig->addExtension(new Extension());
-            return $twig;
-        });
     }
 
     /**

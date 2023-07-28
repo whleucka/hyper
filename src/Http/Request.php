@@ -3,10 +3,13 @@
 namespace Nebula\Http;
 
 use Nebula\Interfaces\Http\Request as NebulaRequest;
+use Nebula\Traits\Instance\Singleton;
 use StellarRouter\Route;
 
 class Request implements NebulaRequest
 {
+    use Singleton;
+
     public ?Route $route;
 
     public function getMethod(): string

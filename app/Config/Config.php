@@ -18,4 +18,9 @@ final class Config
   {
     return require __DIR__ . "/Paths.php";
   }
+
+  public static function container()
+  {
+    return require __DIR__ . "/Container.php";
+  }
 }
