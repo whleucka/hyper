@@ -4,25 +4,24 @@ namespace Nebula\Middleware\Admin;
 
 use Nebula\Interfaces\Middleware\Middleware;
 use Nebula\Interfaces\Http\{Response, Request};
-
+use Nebula\Traits\Http\Response as HttpResponse;
+use Closure;
 
 class Authentication implements Middleware
 {
-    public function handle(Request $request, \Closure $next)
+    use HttpResponse;
+
+    public function handle(Request $request, Closure $next): Response
     {
-        // Check if the user is authenticated.
-        // TODO implement me!
-        // - If route has middleware auth and !isAuthenticated then 404?
-        if (false) {
+        $middleware = $request->route?->getMiddleware();
+        if (is_array($middleware) && in_array('auth', $middleware)) {
             // Redirect or return an error response if the user is not authenticated.
-            $response = app()->get(Response::class);
-            $response->setStatusCode(401);
-            $response->setContent('Unauthorized.');
-            return $response;
+            return $this->response(401, "Unauthorized");
         }
 
-        // If the user is authenticated, continue to the next Middleware or the core application logic.
-        return $next($request);
+        $response = $next($request);
+        
+        return $response;
     }
 
     private function isAuthenticated(Request $request): bool

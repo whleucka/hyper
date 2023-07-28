@@ -2,28 +2,29 @@
 
 namespace Nebula\Middleware\Http;
 
-use Nebula\Interfaces\Http\Request;
+use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Interfaces\Middleware\Middleware;
+use Closure;
 
 class Log implements Middleware
 {
-    public function handle(Request $request, \Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-    die("here");
-        // Log the incoming request data.
         $this->logRequest($request);
 
-        return $next($request);
+        $response = $next($request);
+
+        return $response;
     }
 
     private function logRequest(Request $request): void
     {
+        // Do something with this?
         $logMessage = sprintf(
             "[%s] %s %s",
             date('Y-m-d H:i:s'),
             $request->getMethod(),
             $request->getUri(),
         );
-        dump($logMessage);
     }
 }

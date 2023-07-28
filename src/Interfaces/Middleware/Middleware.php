@@ -2,13 +2,10 @@
 
 namespace Nebula\Interfaces\Middleware;
 
+use Nebula\Interfaces\Http\{Response, Request};
 use Closure;
-use Nebula\Interfaces\Http\Request;
 
 interface Middleware
 {
-    /**
-     * @param Closure(): void $next
-     */
-    public function handle(Request $request, \Closure $next);
+    public function handle(Request $request, Closure $next): Response;
 }
