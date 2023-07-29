@@ -15,7 +15,7 @@ class Authentication implements Middleware
     {
         $middleware = $request->route?->getMiddleware();
         if (is_array($middleware) && in_array('auth', $middleware)) {
-            // Redirect or return an error response if the user is not authenticated.
+            // Redirect or return an error response if the user is not authenticated
             return $this->response(401, "Unauthorized");
         }
 

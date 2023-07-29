@@ -21,8 +21,9 @@ class Log implements Middleware
     {
         // Do something with this?
         $logMessage = sprintf(
-            "[%s] %s %s",
+            "[%s]: %s %s %s",
             date('Y-m-d H:i:s'),
+            $_SERVER["REMOTE_ADDR"],
             $request->getMethod(),
             $request->getUri(),
         );

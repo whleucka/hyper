@@ -278,12 +278,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/libra-php/stellar-router.git",
-                "reference": "5235c90da79dafcae1f79f4aea00a31de83daa96"
+                "reference": "23792d1b490a848b32b1d5e25b565d50a35b7580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/libra-php/stellar-router/zipball/5235c90da79dafcae1f79f4aea00a31de83daa96",
-                "reference": "5235c90da79dafcae1f79f4aea00a31de83daa96",
+                "url": "https://api.github.com/repos/libra-php/stellar-router/zipball/23792d1b490a848b32b1d5e25b565d50a35b7580",
+                "reference": "23792d1b490a848b32b1d5e25b565d50a35b7580",
                 "shasum": ""
             },
             "require": {
@@ -314,7 +314,7 @@
                 "issues": "https://github.com/libra-php/stellar-router/issues",
                 "source": "https://github.com/libra-php/stellar-router/tree/main"
             },
-            "time": "2023-07-26T19:52:50+00:00"
+            "time": "2023-07-29T21:04:55+00:00"
         },
         {
             "name": "php-di/invoker",
