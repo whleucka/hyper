@@ -4,50 +4,34 @@ namespace Nebula\Http;
 
 use Nebula\Interfaces\Http\Request as NebulaRequest;
 use Nebula\Traits\Instance\Singleton;
+use Nebula\Traits\Property\PrivateData;
 use StellarRouter\Route;
 
 class Request implements NebulaRequest
 {
     use Singleton;
+    use PrivateData;
 
     public ?Route $route;
-    private array $data;
 
     public function __construct()
     {
         $this->data = $this->request() + $this->files();
     }
 
-    /**
-     * @param mixed $name
-     */
-    public function __get($name): mixed
-    {
-        return $this->data[$name] ?? null;
-    }
-
-    /**
-     * @param mixed $name
-     * @param mixed $value
-     */
-    public function __set($name, $value): void
-    {
-        $this->data[$name] = $value;
-    }
-
     public function getMethod(): string
     {
-      return $this->server("REQUEST_METHOD");
+        return $this->server("REQUEST_METHOD");
     }
 
     public function getUri(): string
     {
-      return $this->server("REQUEST_URI");
+        return $this->server("REQUEST_URI");
     }
 
     public function get(string $name): mixed
     {
-       return $this->data[$name] ?? null;
+        return $this->data[$name] ?? null;
     }
 
     public function has(string $name): bool
@@ -80,4 +64,3 @@ class Request implements NebulaRequest
         return $name ? $_FILES[$name] : $_FILES;
     }
 }
-

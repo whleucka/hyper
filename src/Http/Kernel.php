@@ -8,7 +8,6 @@ use Nebula\Interfaces\Database\Database;
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\Http\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
-use App\Config\Config;
 use Nebula\Middleware\Middleware;
 use Nebula\Traits\Http\Response as HttpResponse;
 use StellarRouter\Route;
@@ -96,7 +95,7 @@ class Kernel implements NebulaKernel
     /**
      * Resolve the route and execute controller method
      */
-    public function resolveRoute(?Route $route, Request $request): Response
+    public function resolveRoute(?Route $route): Response
     {
         $response = app()->get(Response::class);
         if ($route) {
@@ -104,7 +103,7 @@ class Kernel implements NebulaKernel
                 $handlerClass = $route->getHandlerClass();
                 $handlerMethod = $route->getHandlerMethod();
                 $routeParameters = $route->getParameters();
-                $class = new $handlerClass($request);
+                $class = app()->get($handlerClass);
 
                 $content = $class->$handlerMethod(...$routeParameters);
                 $response->setContent($content ?? '');
@@ -129,7 +128,7 @@ class Kernel implements NebulaKernel
         $runner = app()->get(Middleware::class);
         $response = $runner
             ->layer($this->middleware)
-            ->handle($request, fn() => $this->resolveRoute($route, $request));
+            ->handle($request, fn () => $this->resolveRoute($route));
         return $response;
     }
 
