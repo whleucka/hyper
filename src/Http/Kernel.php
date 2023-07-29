@@ -40,7 +40,7 @@ class Kernel implements NebulaKernel
     {
         $this->router = app()->get(Router::class);
         // Register the controller classes
-        $config = app()->get(Config::class)::paths();
+        $config = config("paths");
         foreach ($this->classMap($config['controllers']) as $class_name => $filename) {
             $this->router->registerClass($class_name);
         }
@@ -60,7 +60,7 @@ class Kernel implements NebulaKernel
     {
         if (!isset($this->dotenv)) {
             // Load environment variables
-            $config = app()->get(Config::class)::paths();
+            $config = config("paths");
             $this->dotenv = Dotenv::createImmutable($config['app_root']);
             $this->dotenv->safeLoad();
         }
@@ -76,7 +76,7 @@ class Kernel implements NebulaKernel
     {
         if (!isset($this->db)) {
             $this->db = app()->get(Database::class);
-            $config = app()->get(Config::class)::database();
+            $config = config("database");
             $this->db->connect($config);
         }
         return $this->db;

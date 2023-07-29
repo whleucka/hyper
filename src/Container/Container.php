@@ -4,7 +4,6 @@ namespace Nebula\Container;
 
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
-use App\Config\Config;
 
 class Container
 {
@@ -13,9 +12,8 @@ class Container
 
     public function build(): void
     {
-        $config = new Config;
         $this->builder = new ContainerBuilder();
-        $this->builder->addDefinitions($config->container());
+        $this->builder->addDefinitions(config("container"));
         $this->container = $this->builder->build();
     }
 

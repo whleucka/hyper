@@ -26,6 +26,11 @@ function app()
   return Application::getInstance();
 }
 
+function config(string $name)
+{
+   return method_exists(\App\Config\Config::class, $name) ? \App\Config\Config::$name() : null;
+}
+
 function env(string $name)
 {
   return app()->use()->getEnvironment($name);

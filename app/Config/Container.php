@@ -13,7 +13,7 @@ return [
   \Nebula\Interfaces\Http\Response::class => \DI\get(\Nebula\Http\Response::class),
   \Nebula\Interfaces\Routing\Router::class => \DI\get(\Nebula\Routing\Router::class),
   \Twig\Environment::class => function () {
-      $config = app()->get(Config::class)::twig();
+      $config = config("twig");
       $loader = new \Twig\Loader\FilesystemLoader($config["view_path"]);
       $twig = new \Twig\Environment($loader, [
         "cache" => $config["cache_path"],
