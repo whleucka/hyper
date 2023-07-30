@@ -4,23 +4,32 @@ namespace App\Config;
 
 final class Config
 {
-  public static function database()
+  /**
+   * Configurations are located in this namespace
+   * TODO maybe use a classmap to load configurations
+   */
+  public static function get(string $name): mixed
   {
-    return require __DIR__ . "/Database.php";
+    if (self::exists($name)) {
+      return require self::path($name);
+    }
+    throw new \Exception("Configuration doesn't exist");
   }
 
-  public static function twig()
+  /**
+   * Convert config name to path
+   */
+  private static function path(string $name): string
   {
-    return require __DIR__ . "/Twig.php";
+    return __DIR__ . "/" . ucfirst($name) . ".php";
   }
 
-  public static function paths()
+  /**
+   * Does the file exists in \App\Config namespace?
+   */
+  private static function exists(string $name): bool
   {
-    return require __DIR__ . "/Paths.php";
-  }
-
-  public static function container()
-  {
-    return require __DIR__ . "/Container.php";
+    $filepath = self::path($name);
+    return file_exists($filepath);
   }
 }

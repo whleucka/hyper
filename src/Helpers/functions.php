@@ -49,7 +49,7 @@ function request()
  */
 function config(string $name)
 {
-  return method_exists(\App\Config\Config::class, $name) ? \App\Config\Config::$name() : null;
+  return \App\Config\Config::get($name);
 }
 
 /**
