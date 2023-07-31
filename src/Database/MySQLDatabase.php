@@ -6,6 +6,7 @@ use Nebula\Interfaces\Database\Database;
 use Nebula\Traits\Instance\Singleton;
 use PDO;
 use PDOStatement;
+use stdClass;
 
 class MySQLDatabase implements Database
 {
@@ -16,6 +17,7 @@ class MySQLDatabase implements Database
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ];
+    public $fetch_type = PDO::FETCH_OBJ;
 
     public function connect(array $config): void
     {
@@ -24,11 +26,29 @@ class MySQLDatabase implements Database
         $this->connection = new PDO($dsn, $username, $password, $this->options);
     }
 
-    public function query(string $sql, ...$params): ?PDOStatement
+    public function run(string $sql, array $params = []): ?PDOStatement
     {
         $statement = $this->connection->prepare($sql);
-        $result = $statement->execute($params);
-        return $result ? $statement : null;
+        $statement->execute($params);
+        return $statement;
+    }
+
+    public function selectAll(string $sql, ...$params): ?array
+    {
+        $result = $this->run($sql, $params); 
+        return $result?->fetchAll($this->fetch_type);
+    }
+
+    public function select(string $sql, ...$params): ?stdClass
+    {
+        $result = $this->run($sql, $params); 
+        return $result?->fetch($this->fetch_type);
+    }
+
+    public function query(string $sql, ...$params): bool
+    {
+        $statement = $this->run($sql, $params); 
+        return $statement;
     }
 
     public function __call($method, $args)

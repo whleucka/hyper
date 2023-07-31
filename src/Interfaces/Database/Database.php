@@ -6,5 +6,5 @@ use PDOStatement;
 interface Database
 {
   public function connect(array $config): void;
-  public function query(string $sql, ...$params): ?PDOStatement;
+  public function run(string $sql, array $params = []): ?PDOStatement;
 }
