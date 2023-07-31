@@ -3,6 +3,7 @@
 use Nebula\Framework\Application;
 use Nebula\Http\Request;
 use Nebula\Interfaces\Database\Database;
+use Nebula\Interfaces\Framework\Environment;
 use Nebula\Interfaces\Session\Session;
 
 /**
@@ -57,7 +58,8 @@ function config(string $name)
  */
 function env(string $name)
 {
-  return app()->use()->getEnvironment($name);
+  $env = app()->get(Environment::class);
+  return $env->get($name);
 }
 
 /**

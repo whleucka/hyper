@@ -2,14 +2,23 @@
 
 namespace App\Config;
 
+use Nebula\Http\Kernel;
 use Nebula\Http\Request;
 use Nebula\UI\Twig\Extension;
 
 return [
-  \Nebula\Interfaces\Http\Kernel::class => \DI\get(\App\Http\Kernel::class),
-  \Nebula\Interfaces\Session\Session::class => app()->getInstance(),
-  \Nebula\Interfaces\Database\Database::class => \DI\get(\Nebula\Database\MySQLDatabase::class),
+  /** Singletons **/
+  \Nebula\Interfaces\Http\Kernel::class => Kernel::getInstance(),
+  \Nebula\Interfaces\Framework\Environment::class => \Nebula\Framework\Environment::getInstance(),
   \Nebula\Interfaces\Http\Request::class => Request::getInstance(),
+  \Nebula\Interfaces\Database\Database::class => function() {
+    $db = \Nebula\Database\MySQLDatabase::getInstance();
+    $config = config("database");
+    $db->connect($config);
+    return $db;
+  },
+  /** Non-Singletons **/
+  \Nebula\Interfaces\Session\Session::class => \DI\get(\Nebula\Session\Session::class),
   \Nebula\Interfaces\Http\Response::class => \DI\get(\Nebula\Http\Response::class),
   \Nebula\Interfaces\Routing\Router::class => \DI\get(\Nebula\Routing\Router::class),
   \Twig\Environment::class => function () {

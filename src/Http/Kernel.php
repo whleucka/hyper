@@ -2,25 +2,23 @@
 
 namespace Nebula\Http;
 
-use Dotenv\Dotenv;
 use Nebula\Interfaces\Http\{Request, Response};
-use Nebula\Interfaces\Database\Database;
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\Http\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
 use Nebula\Middleware\Middleware;
 use Nebula\Traits\Http\Response as HttpResponse;
+use Nebula\Traits\Instance\Singleton;
 use StellarRouter\Route;
 use Throwable;
 
 class Kernel implements NebulaKernel
 {
     use HttpResponse;
+    use Singleton;
 
     private Router $router;
-    private Database $db;
-    private Dotenv $dotenv;
-    protected array $middleware;
+    protected array $middleware = [];
 
     /**
      * Setup the application
@@ -50,35 +48,6 @@ class Kernel implements NebulaKernel
         foreach ($this->middleware as $i => $class) {
             $this->middleware[$i] = app()->get($class);
         }
-    }
-
-    /**
-     * Return the app environment variables
-     */
-    public function getEnvironment(string $name): ?string
-    {
-        if (!isset($this->dotenv)) {
-            // Load environment variables
-            $config = config("paths");
-            $this->dotenv = Dotenv::createImmutable($config['app_root']);
-            $this->dotenv->safeLoad();
-        }
-        return isset($_ENV[$name])
-            ? $_ENV[$name]
-            : null;
-    }
-
-    /**
-     * Return the app database
-     */
-    public function getDatabase(): Database
-    {
-        if (!isset($this->db)) {
-            $this->db = app()->get(Database::class);
-            $config = config("database");
-            $this->db->connect($config);
-        }
-        return $this->db;
     }
 
     /**
@@ -137,6 +106,7 @@ class Kernel implements NebulaKernel
      */
     public function handleException(Throwable $exception): Response
     {
+        error_log($exception->getMessage());
         return $this->response(500, "Server error");
     }
 

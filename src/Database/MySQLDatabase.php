@@ -3,10 +3,13 @@
 namespace Nebula\Database;
 
 use Nebula\Interfaces\Database\Database;
+use Nebula\Traits\Instance\Singleton;
 use PDO;
 
 class MySQLDatabase implements Database
 {
+    use Singleton;
+
     private PDO $connection;
     private array $options = [
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
