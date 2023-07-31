@@ -5,6 +5,7 @@ namespace Nebula\Database;
 use Nebula\Interfaces\Database\Database;
 use Nebula\Traits\Instance\Singleton;
 use PDO;
+use PDOStatement;
 
 class MySQLDatabase implements Database
 {
@@ -23,10 +24,11 @@ class MySQLDatabase implements Database
         $this->connection = new PDO($dsn, $username, $password, $this->options);
     }
 
-    public function query(string $sql, ...$params): bool
+    public function query(string $sql, ...$params): ?PDOStatement
     {
         $statement = $this->connection->prepare($sql);
-        return $statement->execute($params);
+        $result = $statement->execute($params);
+        return $result ? $statement : null;
     }
 
     public function __call($method, $args)
