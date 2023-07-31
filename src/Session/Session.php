@@ -24,6 +24,19 @@ class Session implements NebulaSession
         session_write_close();
     }
 
+    public function remove(string $name): void
+    {
+        @session_start();
+        unset($this->data[$name]);
+        $_SESSION = $this->data;
+        session_write_close();
+    }
+
+    public function has(string $name): bool
+    {
+        return isset($this->data[$name]);
+    }
+
     public function getAll(): array
     {
         @session_start();
