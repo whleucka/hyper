@@ -13,8 +13,10 @@ return [
   \Nebula\Interfaces\Http\Request::class => Request::getInstance(),
   \Nebula\Interfaces\Database\Database::class => function() {
     $db = \Nebula\Database\MySQLDatabase::getInstance();
-    $config = config("database");
-    $db->connect($config);
+    if (!$db->isConnected()) {
+      $config = config("database");
+      $db->connect($config);
+    }
     return $db;
   },
   /** Non-Singletons **/

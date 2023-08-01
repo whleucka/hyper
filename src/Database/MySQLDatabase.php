@@ -26,6 +26,11 @@ class MySQLDatabase implements Database
         $this->connection = new PDO($dsn, $username, $password, $this->options);
     }
 
+    public function isConnected()
+    {
+        return isset($this->connection);
+    }
+
     public function run(string $sql, array $params = []): ?PDOStatement
     {
         $statement = $this->connection->prepare($sql);
