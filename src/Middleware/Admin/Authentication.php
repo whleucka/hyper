@@ -14,7 +14,7 @@ class Authentication implements Middleware
     public function handle(Request $request, Closure $next): Response
     {
         $middleware = $request->route?->getMiddleware();
-        if (is_array($middleware) && in_array('auth', $middleware)) {
+        if (is_array($middleware) && in_array('auth', $middleware) && !$this->isAuthenticated()) {
             // Redirect or return an error response if the user is not authenticated
             return $this->response(401, "Unauthorized");
         }
@@ -24,7 +24,7 @@ class Authentication implements Middleware
         return $response;
     }
 
-    private function isAuthenticated(Request $request): bool
+    private function isAuthenticated(): bool
     {
         $user = session()->get("user");
         return isset($user) && !is_null($user);
