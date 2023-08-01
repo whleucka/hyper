@@ -42,7 +42,7 @@ function app()
  */
 function request()
 {
-  return Request::getInstance();
+  return app()->get(Request::class);
 }
 
 /**
