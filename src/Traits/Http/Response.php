@@ -2,7 +2,7 @@
 
 namespace Nebula\Traits\Http;
 
-use Nebula\Http\Response as HttpResponse;
+use Nebula\Interfaces\Http\Response as HttpResponse;
 
 trait Response
 {
