@@ -15,10 +15,26 @@ class RegisterController extends Controller
   }
 
   #[Post("/register", "register.post")]
-  public function post()
+  public function post(): string
   {
-    dump(request());
-    die("wip");
+    if ($this->validate([
+      "name" => ["required"],
+      "email" => ["required", "email"],
+      "password" => [
+        "required",
+        "min_length=8",
+        "uppercase=1",
+        "lowercase=1",
+        "symbol=1"
+      ],
+      // Note: you can change the label so that it 
+      // doesn't say Password_match in the UI
+      "password_match" => ["Password" => ["required", "match"]]
+    ])) {
+    } else {
+      dd($this->errors);
+    }
+    // Validation failed, show the register form
+    return $this->index();
   }
 }
-

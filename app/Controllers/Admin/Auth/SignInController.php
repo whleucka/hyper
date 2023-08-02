@@ -15,9 +15,16 @@ class SignInController extends Controller
   }
 
   #[Post("/sign-in", "sign-in.post")]
-  public function post()
+  public function post(): string
   {
-    dump(request());
-    die("wip");
+    if ($this->validate([
+      "email" => ["required", "email"],
+      "password" => ["required"],
+    ])) {
+    } else {
+      dd($this->errors);
+    }
+    // Validation failed, show the sign in form
+    return $this->index();
   }
 }
