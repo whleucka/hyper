@@ -2,9 +2,6 @@
 <?php
 
 require __DIR__.'/../vendor/autoload.php';
-
-$app = app()->build();
-
-$kernel = app()->get(\Nebula\Interfaces\Console\Kernel::class);
-
-$kernel->handle();
+logger('time', 'NebulaConsole');
+$app = require_once __DIR__ . "/../bootstrap/app.php";
+$app->run(Nebula\Interfaces\Console\Kernel::class);

@@ -23,6 +23,7 @@ class Kernel implements ConsoleKernel
 
     public function terminate(): void
     {
+        logger('timeEnd', 'NebulaConsole');
         exit;
     }
 }

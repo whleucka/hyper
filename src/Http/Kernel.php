@@ -98,7 +98,7 @@ class Kernel implements NebulaKernel
         $response = $runner
             ->layer($this->middleware)
             ->handle($request, fn () => $this->resolveRoute($route));
-        return $response;
+        $response->send();
     }
 
     /**
