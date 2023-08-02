@@ -1,7 +1,7 @@
 # Nebula
 [![PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
-⭐ Nebula is a powerful PHP web framework
+⭐ Nebula is a powerful PHP micro-framework
 
 ✅ Provides developers with a flexible and extensible architecture to build custom web applications with ease.
 
