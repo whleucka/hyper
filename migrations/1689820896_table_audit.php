@@ -2,8 +2,8 @@
 
 namespace Nebula\Migrations;
 
+use Nebula\Interfaces\Database\Migration;
 use Nebula\Database\Blueprint;
-use Nebula\Database\Migration;
 use Nebula\Database\Schema;
 
 /**

@@ -2,13 +2,13 @@
 
 namespace App\Config;
 
-use Nebula\Http\Kernel;
+use Nebula\Http\Kernel as HttpKernel;
 use Nebula\Http\Request;
 use Nebula\UI\Twig\Extension;
 
 return [
   /** Singletons **/
-  \Nebula\Interfaces\Http\Kernel::class => Kernel::getInstance(),
+  \Nebula\Interfaces\Http\Kernel::class => HttpKernel::getInstance(),
   \Nebula\Interfaces\Framework\Environment::class => \Nebula\Framework\Environment::getInstance(),
   \Nebula\Interfaces\Http\Request::class => Request::getInstance(),
   \Nebula\Interfaces\Database\Database::class => function() {
@@ -20,6 +20,7 @@ return [
     return $db;
   },
   /** Non-Singletons **/
+  \Nebula\Interfaces\Console\Kernel::class => \DI\get(\App\Console\Kernel::class),
   \Nebula\Interfaces\Session\Session::class => \DI\get(\Nebula\Session\Session::class),
   \Nebula\Interfaces\Http\Response::class => \DI\get(\Nebula\Http\Response::class),
   \Nebula\Interfaces\Routing\Router::class => \DI\get(\Nebula\Routing\Router::class),

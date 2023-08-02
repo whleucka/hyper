@@ -2,11 +2,10 @@
 
 namespace Nebula\Http;
 
-use Nebula\Interfaces\Http\{Request, Response};
+use Nebula\Interfaces\Http\Response;
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\Http\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
-use Idearia\Logger;
 use Nebula\Middleware\Middleware;
 use Nebula\Traits\Http\Response as HttpResponse;
 use Nebula\Traits\Instance\Singleton;
@@ -24,11 +23,10 @@ class Kernel implements NebulaKernel
     /**
      * Setup the application
      */
-    public function setup(): Kernel
+    public function setup(): void
     {
         $this->registerMiddleware();
         $this->registerRoutes();
-        return $this;
     }
 
     /**
@@ -89,8 +87,9 @@ class Kernel implements NebulaKernel
     /**
      * Handle the request and return a response
      */
-    public function handleRequest(Request $request): Response
+    public function handle(): Response
     {
+        $request = request();
         // Figure out the route
         $route = $this->router->handleRequest($request->getMethod(), $request->getUri());
         // Save the route to the request (e.g. use in middleware)

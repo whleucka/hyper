@@ -2,9 +2,9 @@
 
 namespace App\Http;
 
-use Nebula\Http\Kernel as WebKernel;
+use Nebula\Http\Kernel as HttpKernel;
 
-final class Kernel extends WebKernel
+final class Kernel extends HttpKernel
 {
   // Register your middleware classes here
   protected array $middleware = [
