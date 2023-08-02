@@ -6,6 +6,7 @@ use Nebula\Interfaces\Http\{Request, Response};
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\Http\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
+use Idearia\Logger;
 use Nebula\Middleware\Middleware;
 use Nebula\Traits\Http\Response as HttpResponse;
 use Nebula\Traits\Instance\Singleton;
@@ -115,6 +116,7 @@ class Kernel implements NebulaKernel
      */
     public function terminate(): void
     {
+        logger('timeEnd', 'Nebula');
         exit;
     }
 }

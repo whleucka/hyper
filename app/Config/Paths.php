@@ -6,5 +6,6 @@ $app_root = __DIR__ . "/../../";
 
 return [
   "app_root" => $app_root,
-  "controllers" => $app_root . "/app/Controllers/",
+  "logs" => $app_root . "logs/",
+  "controllers" => $app_root . "app/Controllers/",
 ];
