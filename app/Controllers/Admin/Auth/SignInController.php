@@ -17,6 +17,7 @@ class SignInController extends Controller
   #[Post("/sign-in", "sign-in.post")]
   public function post()
   {
+    dump(request());
     die("wip");
   }
 }

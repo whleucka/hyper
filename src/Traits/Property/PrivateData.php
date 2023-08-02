@@ -30,4 +30,21 @@ trait PrivateData
   {
     return isset($this->data[$name]);
   }
+
+  public function get(string $name): mixed
+  {
+    return $this->data[$name] ?? null;
+  }
+
+  public function has(string $name): bool
+  {
+    return key_exists($name, $this->data);
+  }
+
+  public function set(string $name, mixed $value): void
+  {
+    if ($this->has($name)) {
+      $this->data[$name] = $value;
+    }
+  }
 }

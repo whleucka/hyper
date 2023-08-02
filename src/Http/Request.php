@@ -29,24 +29,14 @@ class Request implements NebulaRequest
         return $this->server("REQUEST_URI");
     }
 
-    public function get(string $name): mixed
-    {
-        return $this->data[$name] ?? null;
-    }
-
-    public function has(string $name): bool
-    {
-        return key_exists($name, $this->data);
-    }
-
-    public function server(?string $name = null): string|array
+    public function server(?string $name = null): mixed
     {
         return $name ? $_SERVER[$name] : $_SERVER;
     }
 
     public function request(?string $name = null): mixed
     {
-        return $name ? $_REQUEST[$name] : $_REQUEST;
+        return $name ? $_REQUEST[$name] : array_filter($_REQUEST, fn($key) => $key != 'PHPSESSID', ARRAY_FILTER_USE_KEY);
     }
 
     public function post(?string $name = null): mixed

@@ -17,6 +17,7 @@ class RegisterController extends Controller
   #[Post("/register", "register.post")]
   public function post()
   {
+    dump(request());
     die("wip");
   }
 }
