@@ -24,6 +24,14 @@ trait PrivateData
   }
 
   /**
+   * @param array<int,mixed> $payload
+   */
+  public function load(array $payload): void
+  {
+    $this->data = $payload;
+  }
+
+  /**
    * @param mixed $name
    */
   public function __isset($name): bool

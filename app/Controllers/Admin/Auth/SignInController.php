@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin\Auth;
 
+use App\Models\User;
 use Nebula\Controller\Controller;
 use StellarRouter\{Get, Post, Group};
 
@@ -21,6 +22,8 @@ class SignInController extends Controller
       "email" => ["required", "email"],
       "password" => ["required"],
     ])) {
+      $user = User::findByAttribute('email', request()->email);
+      dd($user);
     } else {
       dd($this->errors);
     }
