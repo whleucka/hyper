@@ -3,15 +3,14 @@
 namespace Nebula\Framework;
 
 use Nebula\Container\Container;
-use Nebula\Http\Kernel as HttpKernel;
-use Nebula\Console\Kernel as ConsoleKernel;
+use Nebula\Interfaces\Framework\Kernel;
 use Nebula\Traits\Instance\Singleton;
 
 class Application extends Container
 {
     use Singleton;
 
-    private HttpKernel|ConsoleKernel $kernel;
+    private Kernel $kernel;
 
     public function run(string $class): void
     {
@@ -22,7 +21,7 @@ class Application extends Container
         $this->kernel->terminate();
     }
 
-    public function use(): HttpKernel|ConsoleKernel
+    public function use(): Kernel
     {
       return $this->kernel;
     }
