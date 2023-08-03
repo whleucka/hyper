@@ -30,7 +30,7 @@ function dd(...$args)
   die;
 }
 
-function redirect(string $url, int $code = 301, int $delay = 0)
+function redirect(string $url, int $code = 301, int $delay = 0): never
 {
   logger('timeEnd', 'Nebula');
   if ($delay > 0) {

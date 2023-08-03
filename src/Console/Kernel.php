@@ -24,7 +24,7 @@ class Kernel implements ConsoleKernel
         return "exception\n";
     }
 
-    public function terminate(): void
+    public function terminate(): never
     {
         logger('timeEnd', 'NebulaConsole');
         exit;

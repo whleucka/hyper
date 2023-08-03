@@ -120,7 +120,7 @@ class Kernel implements NebulaKernel
     /**
      * Terminate the application
      */
-    public function terminate(): void
+    public function terminate(): never
     {
         logger('timeEnd', 'Nebula');
         exit;
