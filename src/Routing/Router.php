@@ -28,4 +28,9 @@ class Router implements NebulaRouter
     {
       return $this->router->handleRequest($requestMethod, $requestUri);
     }
+
+    public function findRouteByName(string $name): ?Route
+    {
+      return $this->router->findRouteByName($name);
+    }
 }

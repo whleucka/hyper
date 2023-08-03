@@ -17,7 +17,7 @@ class Kernel implements NebulaKernel
     use HttpResponse;
     use Singleton;
 
-    private Router $router;
+    public Router $router;
     protected array $middleware = [];
 
     /**
@@ -25,16 +25,16 @@ class Kernel implements NebulaKernel
      */
     public function setup(): void
     {
+        $this->router = app()->get(Router::class);
         $this->registerMiddleware();
-        $this->registerRoutes();
+        $this->registerControllers();
     }
 
     /**
-     * Initialize the router and register classes
+     * Register the controller classes
      */
-    private function registerRoutes(): void
+    private function registerControllers(): void
     {
-        $this->router = app()->get(Router::class);
         // Register the controller classes
         $config = config("paths");
         foreach ($this->classMap($config['controllers']) as $class_name => $filename) {
@@ -42,6 +42,9 @@ class Kernel implements NebulaKernel
         }
     }
 
+    /**
+     * Register the middleware classes
+     */
     private function registerMiddleware(): void
     {
         foreach ($this->middleware as $i => $class) {
@@ -50,6 +53,7 @@ class Kernel implements NebulaKernel
     }
 
     /**
+     * Generate a class map for the given directory
      * @return array<class-string,non-empty-string>
      */
     public function classMap(string $directory): array
@@ -62,6 +66,8 @@ class Kernel implements NebulaKernel
 
     /**
      * Resolve the route and execute controller method
+     * @param Route|null $route
+     * @return Response
      */
     public function resolveRoute(?Route $route): Response
     {
@@ -86,6 +92,7 @@ class Kernel implements NebulaKernel
 
     /**
      * Handle the request and return a response
+     * @return Response
      */
     public function handle(): Response
     {

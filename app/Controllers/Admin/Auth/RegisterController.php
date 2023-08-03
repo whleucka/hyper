@@ -28,14 +28,19 @@ class RegisterController extends Controller
         "lowercase=1",
         "symbol=1"
       ],
-      // Note: you can change the label so that it 
+      // Note: you can change the label so that it
       // doesn't say Password_match in the UI
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
-      request()->set("password", password_hash(request()->password, PASSWORD_ARGON2I));
-      request()->remove("password_match");
-      $user = User::create(request()->data());
+      $user = User::create([
+        "name" => request()->name,
+        "email" => request()->email,
+        "password" => password_hash(request()->password, PASSWORD_ARGON2I),
+      ]);
       if ($user) {
+        // Set the user session
+        session()->set("user", $user->uuid);
+        // Redirect to the dashboard
         return redirectRoute("dashboard.index");
       }
     } else {

@@ -2,6 +2,7 @@
 
 namespace Nebula\Middleware\Admin;
 
+use App\Models\User;
 use Nebula\Interfaces\Middleware\Middleware;
 use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Traits\Http\Response as HttpResponse;
@@ -16,7 +17,8 @@ class Authentication implements Middleware
         $middleware = $request->route?->getMiddleware();
         if (is_array($middleware) && in_array('auth', $middleware) && !$this->isAuthenticated()) {
             // Redirect or return an error response if the user is not authenticated
-            return $this->response(401, "Unauthorized");
+            return redirectRoute("sign-in.index");
+            //return $this->response(401, "Unauthorized");
         }
 
         $response = $next($request);
@@ -26,7 +28,9 @@ class Authentication implements Middleware
 
     private function isAuthenticated(): bool
     {
-        $user = session()->get("user");
-        return isset($user) && !is_null($user);
+        $uuid = session()->get("user");
+        if (!$uuid) return false;
+        $user = User::findByAttribute("uuid", $uuid);
+        return !is_null($user);
     }
 }

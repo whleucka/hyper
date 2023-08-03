@@ -2,7 +2,7 @@
 
 namespace App\Config;
 
-use Nebula\Http\Kernel as HttpKernel;
+use App\Http\Kernel as HttpKernel;
 use Nebula\Http\Request;
 use Nebula\UI\Twig\Extension;
 

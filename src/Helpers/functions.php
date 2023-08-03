@@ -30,14 +30,22 @@ function dd(...$args)
   die;
 }
 
-function redirect()
+function redirect(string $url, int $code = 301, int $delay = 0)
 {
-  die("wip redirect");
+  logger('timeEnd', 'Nebula');
+  if ($delay > 0) {
+    header("Refresh: $delay; URL=$url", response_code: $code);
+  } else {
+    header("Location: $url", response_code: $code);
+  }
 }
 
-function redirectRoute()
+function redirectRoute(string $name, int $code = 301, int $delay = 0)
 {
-  die("wip redirectRoute");
+  $route = app()->use()->router->findRouteByName($name);
+  if ($route) {
+    redirect($route->getPath(), $code, $delay);
+  }
 }
 
 function initLogger()
@@ -45,7 +53,7 @@ function initLogger()
   $log_path = config('paths')['logs'];
   $log_name = "nebula";
   $log_ext = "log";
-  $log_file = $log_path.$log_name.'.'.$log_ext;
+  $log_file = $log_path . $log_name . '.' . $log_ext;
   if (!file_exists($log_file)) {
     touch($log_file);
   }
