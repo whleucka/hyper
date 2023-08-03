@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin\Auth;
 
-use App\Models\User;
+use App\Models\User\Factory;
 use Nebula\Controller\Controller;
 use StellarRouter\{Get, Post, Group};
 
@@ -32,11 +32,11 @@ class RegisterController extends Controller
       // doesn't say Password_match in the UI
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
-      $user = User::create([
-        "name" => request()->name,
-        "email" => request()->email,
-        "password" => password_hash(request()->password, PASSWORD_ARGON2I),
-      ]);
+      $user = Factory::create(
+        request()->name, 
+        request()->email, 
+        request()->password
+      );
       if ($user) {
         // Set the user session
         session()->set("user", $user->uuid);

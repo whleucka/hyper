@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin\Auth;
 
-use App\Models\User;
+use App\Models\User\User;
 use Nebula\Controller\Controller;
 use StellarRouter\{Get, Post, Group};
 

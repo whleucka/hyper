@@ -7,7 +7,7 @@ use StellarRouter\Get;
 use StellarRouter\Group;
 
 #[Group(prefix: "/admin", middleware: ["auth"])]
-class Dashboard extends ModuleController
+class DashboardController extends ModuleController
 {
   #[Get("/module/dashboard", "dashboard.index")]
   public function index(): string
