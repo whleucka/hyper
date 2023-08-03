@@ -2,10 +2,9 @@
 
 namespace Nebula\Interfaces\Http;
 
-interface Kernel
+use Nebula\Interfaces\Framework\Kernel as NebulaKernel;
+
+interface Kernel extends NebulaKernel
 {
-  public function handle(): Response;
-  public function setup(): void;
-  public function handleException(\Throwable $exception): Response;
-  public function terminate(): void;
+
 }

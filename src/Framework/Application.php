@@ -17,7 +17,8 @@ class Application extends Container
     {
         $this->kernel = $this->get($class);
         $this->kernel->setup($this);
-        $this->kernel->handle();
+        $response = $this->kernel->handle();
+        $response->send();
         $this->kernel->terminate();
     }
 

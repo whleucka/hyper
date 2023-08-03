@@ -4,7 +4,7 @@ namespace Nebula\Http;
 
 use Nebula\Interfaces\Http\Response;
 use Nebula\Interfaces\Routing\Router;
-use Nebula\Interfaces\Http\Kernel as NebulaKernel;
+use Nebula\Interfaces\Framework\Kernel as NebulaKernel;
 use Composer\ClassMapGenerator\ClassMapGenerator;
 use Nebula\Middleware\Middleware;
 use Nebula\Traits\Http\Response as HttpResponse;
@@ -98,7 +98,7 @@ class Kernel implements NebulaKernel
         $response = $runner
             ->layer($this->middleware)
             ->handle($request, fn () => $this->resolveRoute($route));
-        $response->send();
+        return $response;
     }
 
     /**

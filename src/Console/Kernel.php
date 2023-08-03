@@ -2,21 +2,24 @@
 
 namespace Nebula\Console;
 
-use Nebula\Interfaces\Console\Kernel as ConsoleKernel;
+use Nebula\Interfaces\Framework\Kernel as ConsoleKernel;
+use Nebula\Interfaces\Http\Response;
 use Throwable;
 
 class Kernel implements ConsoleKernel
 {
-    public function handle(): void
+    public function handle(): Response
     {
-        echo "hello, world\n";
+        $response = app()->get(Response::class);
+        $response->setContent("hello, world\n");
+        return $response;
     }
 
     public function setup(): void
     {
     }
 
-    public function handleException(Throwable $exception): string
+    public function handleException(Throwable $exception): Response
     {
         return "exception\n";
     }

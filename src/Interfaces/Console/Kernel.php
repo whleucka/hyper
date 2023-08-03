@@ -2,10 +2,9 @@
 
 namespace Nebula\Interfaces\Console;
 
-interface Kernel
+use Nebula\Interfaces\Framework\Kernel as NebulaKernel;
+
+interface Kernel extends NebulaKernel
 {
-  public function handle(): void;
-  public function setup(): void;
-  public function handleException(\Throwable $exception): string;
-  public function terminate(): void;
+
 }
