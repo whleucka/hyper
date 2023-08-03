@@ -1,12 +1,11 @@
 <?php
-
-/**
- * Instantiate the application
- */
+ // Instantiate the application
 $app = app();
 
-// Any other things that need to be done before app is initialized...
+// Initialize the container
 $app->build();
 
-return $app;
+// Initialize logger
+initLogger();
 
+return $app;

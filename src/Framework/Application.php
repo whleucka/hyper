@@ -23,6 +23,6 @@ class Application extends Container
 
     public function use(): Kernel
     {
-      return $this->kernel;
+        return $this->kernel;
     }
 }

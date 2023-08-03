@@ -30,24 +30,25 @@ function dd(...$args)
   die;
 }
 
+function initLogger()
+{
+  $log_path = config('paths')['logs'];
+  $log_name = "nebula";
+  $log_ext = "log";
+  $log_file = $log_path.$log_name.'.'.$log_ext;
+  if (!file_exists($log_file)) {
+    touch($log_file);
+  }
+  Logger::$write_log = true;
+  Logger::$log_level = 'debug';
+  Logger::$log_dir = $log_path;
+  Logger::$log_file_name = $log_name;
+  Logger::$log_file_extension = $log_ext;
+  Logger::$print_log = false;
+}
+
 function logger(string $level, string $message, string $title = '')
 {
-  if (Logger::$print_log) {
-    $log_path = config('paths')['logs'];
-    $log_name = "nebula";
-    $log_ext = "log";
-    $log_file = $log_path.$log_name.'.'.$log_ext;
-    if (!file_exists($log_file)) {
-      touch($log_file);
-    }
-    Logger::$write_log = true;
-    Logger::$log_level = 'debug';
-    Logger::$log_dir = $log_path;
-    Logger::$log_file_name = $log_name;
-    Logger::$log_file_extension = $log_ext;
-    Logger::$print_log = false;
-  }
-  
   match ($level) {
     "time" => Logger::time($message),
     "timeEnd" => Logger::timeEnd($message),
