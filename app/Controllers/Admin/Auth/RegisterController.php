@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin\Auth;
 
+use App\Models\User;
 use Nebula\Controller\Controller;
 use StellarRouter\{Get, Post, Group};
 
@@ -31,7 +32,12 @@ class RegisterController extends Controller
       // doesn't say Password_match in the UI
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
-      dd(request());
+      request()->set("password", password_hash(request()->password, PASSWORD_ARGON2I));
+      request()->remove("password_match");
+      $user = User::create(request()->data());
+      if ($user) {
+        return redirectRoute("dashboard.index");
+      }
     } else {
       dd($this->errors);
     }

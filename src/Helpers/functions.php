@@ -30,6 +30,16 @@ function dd(...$args)
   die;
 }
 
+function redirect()
+{
+  die("wip redirect");
+}
+
+function redirectRoute()
+{
+  die("wip redirectRoute");
+}
+
 function initLogger()
 {
   $log_path = config('paths')['logs'];

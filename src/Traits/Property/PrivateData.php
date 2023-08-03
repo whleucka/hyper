@@ -11,7 +11,7 @@ trait PrivateData
    */
   public function __get($name): mixed
   {
-    return $this->data[$name] ?? null;
+    return $this->get($name);
   }
 
   /**
@@ -20,7 +20,7 @@ trait PrivateData
    */
   public function __set($name, $value): void
   {
-    $this->data[$name] = $value;
+    $this->set($name, $value);
   }
 
   /**
@@ -31,6 +31,11 @@ trait PrivateData
     $this->data = $payload;
   }
 
+  public function data(): array
+  {
+    return $this->data;
+  }
+
   /**
    * @param mixed $name
    */
@@ -39,14 +44,19 @@ trait PrivateData
     return isset($this->data[$name]);
   }
 
-  public function get(string $name): mixed
-  {
-    return $this->data[$name] ?? null;
-  }
-
   public function has(string $name): bool
   {
     return key_exists($name, $this->data);
+  }
+
+  public function remove(string $name): void
+  {
+    unset($this->data[$name]);
+  }
+
+  public function get(string $name): mixed
+  {
+    return $this->data[$name] ?? null;
   }
 
   public function set(string $name, mixed $value): void

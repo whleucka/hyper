@@ -16,7 +16,7 @@ class Request implements NebulaRequest
 
     public function __construct()
     {
-        $this->data = $this->request() + $this->files();
+        $this->load($this->request() + $this->files());
     }
 
     public function getMethod(): string

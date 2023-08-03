@@ -27,13 +27,13 @@ class Model implements NebulaModel
     return $class;
   }
 
-  private function mapToString(array $data, Closure $fn, $separator = ", "): string
+  private static function mapToString(array $data, Closure $fn, $separator = ", "): string
   {
     $columns = array_map($fn, $data);
     return implode($separator, $columns);
   }
 
-  private function values(array $data): array
+  private static function values(array $data): array
   {
     return array_values($data);
   }
@@ -59,17 +59,17 @@ class Model implements NebulaModel
     return $model;
   }
 
-  public function create(array $data)
+  public static function create(array $data): ?self
   {
     $class = self::staticClass();
     // Build the sql query
-    $columns = $this->mapToString(array_keys($data), fn($key) => "$key = ?");
-    $values = $this->values($data);
+    $columns = self::mapToString(array_keys($data), fn($key) => "$key = ?");
+    $values = self::values($data);
     $sql = "INSERT INTO $class->table_name SET $columns";
     $result = db()->run($sql, $values);
     if (!$result) return null;
     $id = db()->lastInsertId();
-    return $this->find($id);
+    return self::find($id);
   }
 
   public function update(array $data)
