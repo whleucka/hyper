@@ -2,6 +2,7 @@
 
 namespace Nebula\Model;
 
+use Closure;
 use Nebula\Interfaces\Model\Model as NebulaModel;
 use Nebula\Traits\Instance\Singleton;
 use Nebula\Traits\Property\PrivateData;
@@ -12,6 +13,31 @@ class Model implements NebulaModel
   use Singleton;
   use PrivateData;
 
+  private static function staticClass(): self
+  {
+    // Get the static class (e.g. User)
+    $class = app()->get(static::class);  
+    // Table name and primary key should be defined, otherwise throw error
+    if (!property_exists($class, 'table_name')) {
+      throw new \Error("table_name must be defined for " . static::class);
+    }
+    if (!property_exists($class, 'primary_key')) {
+      throw new \Error("primary_key must be defined for " . static::class);
+    }
+    return $class;
+  }
+
+  private function mapToString(array $data, Closure $fn, $separator = ", "): string
+  {
+    $columns = array_map($fn, $data);
+    return implode($separator, $columns);
+  }
+
+  private function values(array $data): array
+  {
+    return array_values($data);
+  }
+
   public static function find(mixed $id): ?self
   {
     $model = app()->get(static::class);
@@ -20,15 +46,7 @@ class Model implements NebulaModel
 
   public static function findByAttribute(string $attribute, mixed $value): ?self
   {
-    // Get the static class (e.g. User)
-    $class = app()->get(static::class);
-    // Table name and primary key should be defined, otherwise throw error
-    if (!property_exists($class, 'table_name')) {
-      throw new \Error("table_name must be defined for " . static::class);
-    }
-    if (!property_exists($class, 'primary_key')) {
-      throw new \Error("primary_key must be defined for " . static::class);
-    }
+    $class = self::staticClass();
     // Build the sql query
     $sql = "SELECT * FROM $class->table_name WHERE $attribute = ?";
     // Select one item from the db
@@ -41,11 +59,20 @@ class Model implements NebulaModel
     return $model;
   }
 
-  public function create()
+  public function create(array $data)
   {
+    $class = self::staticClass();
+    // Build the sql query
+    $columns = $this->mapToString(array_keys($data), fn($key) => "$key = ?");
+    $values = $this->values($data);
+    $sql = "INSERT INTO $class->table_name SET $columns";
+    $result = db()->run($sql, $values);
+    if (!$result) return null;
+    $id = db()->lastInsertId();
+    return $this->find($id);
   }
 
-  public function update()
+  public function update(array $data)
   {
   }
 

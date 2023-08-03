@@ -44,13 +44,13 @@ class MySQLDatabase implements Database
         return $result?->fetchAll($this->fetch_type);
     }
 
-    public function select(string $sql, ...$params): ?stdClass
+    public function select(string $sql, ...$params): mixed
     {
         $result = $this->run($sql, $params); 
         return $result?->fetch($this->fetch_type);
     }
 
-    public function query(string $sql, ...$params): bool
+    public function query(string $sql, ...$params): ?PDOStatement
     {
         $statement = $this->run($sql, $params); 
         return $statement;

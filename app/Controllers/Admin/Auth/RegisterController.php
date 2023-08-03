@@ -19,7 +19,7 @@ class RegisterController extends Controller
   {
     if ($this->validate([
       "name" => ["required"],
-      "email" => ["required", "email"],
+      "email" => ["required", "unique=users", "email"],
       "password" => [
         "required",
         "min_length=8",
@@ -31,6 +31,7 @@ class RegisterController extends Controller
       // doesn't say Password_match in the UI
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
+      dd(request());
     } else {
       dd($this->errors);
     }
