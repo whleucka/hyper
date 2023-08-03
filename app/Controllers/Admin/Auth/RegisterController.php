@@ -32,6 +32,7 @@ class RegisterController extends Controller
       // doesn't say Password_match in the UI
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
+      // TODO refactor this
       $user = Factory::create(
         request()->name, 
         request()->email, 

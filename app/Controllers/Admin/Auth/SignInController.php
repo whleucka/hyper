@@ -22,7 +22,14 @@ class SignInController extends Controller
       "email" => ["required", "email"],
       "password" => ["required"],
     ])) {
+      // TODO refactor this
       $user = User::findByAttribute('email', request()->email);
+      if ($user && password_verify(request()->password, $user->password)) {
+        // Set the user session
+        session()->set("user", $user->uuid);
+        // Redirect to the dashboard
+        return redirectRoute("dashboard.index");
+      }
       dd($user);
     } else {
       dd($this->errors);
