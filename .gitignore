@@ -1,6 +1,6 @@
 /vendor/
 node_modules/
 .env
-.phpunit.cache/test-results
 .php-cs-fixer.cache
+.phpunit.cache
 /logs/nebula.log
