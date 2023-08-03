@@ -5,7 +5,7 @@ use Nebula\Interfaces\Database\Migration;
 use Nebula\Database\Blueprint;
 use Nebula\Database\Schema;
 
-return new class extends Migration {
+return new class implements Migration {
     public function up(): string
     {
         return Schema::create("migrations", function (Blueprint $table) {

@@ -26,7 +26,7 @@ CREATE TABLE `users` (
 ); 
  */
 
-return new class extends Migration
+return new class implements Migration
 {
     public function up(): string
     {
