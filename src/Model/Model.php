@@ -93,9 +93,9 @@ class Model implements NebulaModel
    */
   public static function findByAttribute(string $attribute, mixed $value): ?self
   {
-    $class = self::staticClass();
+    $model = self::staticClass();
     // Build the sql query
-    $sql = "SELECT * FROM $class->table_name WHERE $attribute = ?";
+    $sql = "SELECT * FROM $model->table_name WHERE $attribute = ?";
     // Select one item from the db
     $result = db()->run($sql, [$value])->fetch(PDO::FETCH_ASSOC);
     // Bail if it is bunk
@@ -103,7 +103,7 @@ class Model implements NebulaModel
       return null;
     }
     // Create a model and load result
-    $model = new $class($result[$class->primary_key]);
+    $model = new $model($result[$model->primary_key]);
     $model->load($result);
     return $model;
   }
