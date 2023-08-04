@@ -6,7 +6,7 @@ interface Model
 {
   public static function find(mixed $id): ?self;
   public static function findByAttribute(string $attribute, mixed $value): ?self;
-  public static function create(array $data): ?self;
-  public function update(array $data);
-  public function delete();
+  public function save(): ?self;
+  public function update(): void;
+  public function delete(): void;
 }

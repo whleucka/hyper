@@ -5,16 +5,17 @@ namespace Nebula\Model;
 use Closure;
 use Nebula\Interfaces\Model\Model as NebulaModel;
 use Nebula\Traits\Instance\Singleton;
-use Nebula\Traits\Property\PrivateData;
+use Nebula\Traits\Property\ProtectedData;
 use PDO;
 
 class Model implements NebulaModel
 {
   use Singleton;
-  use PrivateData;
+  use ProtectedData;
 
   /**
    * Return the static class
+   * @throws \Error if table_name or primary_key is not defined
    */
   private static function staticClass(): self
   {
@@ -28,6 +29,15 @@ class Model implements NebulaModel
       throw new \Error("primary_key must be defined for " . static::class);
     }
     return $class;
+  }
+
+  /**
+   * Get the table columns
+   * @return array
+   */
+  private function getTableColumns(string $table_name): array
+  {
+    return db()->query("DESCRIBE $table_name")->fetchAll(PDO::FETCH_COLUMN);
   }
 
   /**
@@ -89,12 +99,26 @@ class Model implements NebulaModel
 
   /**
    * Create a new model
-   * @return array
+   * @throws \Error if no data is present
    */
-  public static function create(array $data): ?self
+  public function save(): ?self
   {
     $class = self::staticClass();
-    // Build the sql query
+
+    // A new model will not have data, so we will fill it in
+    $table_columns = $this->getTableColumns($class->table_name);
+    $diff_columns = array_diff($table_columns, $class->guarded);
+    $update_columns = [];
+    foreach ($diff_columns as $column) {
+      $update_columns[$column] = $class->$column ?? null;
+    }
+    $class->load($update_columns);
+    
+    // Get the data from the model 
+    $data = $class->data();
+    if (!$data) throw new \Error("No data to save");
+
+    // Build the sql query and insert to the database
     $columns = self::mapToString(array_keys($data), fn ($key) => "$key = ?");
     $values = self::values($data);
     $sql = "INSERT INTO $class->table_name SET $columns";
@@ -103,22 +127,20 @@ class Model implements NebulaModel
       return null;
     }
     $id = db()->lastInsertId();
-    return self::find($id);
+    return $class::find($id);
   }
 
   /**
    * Update a model
-   * @return array
    */
-  public function update(array $data)
+  public function update(): void
   {
   }
 
   /**
    * Delete a model
-   * @return array
    */
-  public function delete()
+  public function delete(): void
   {
   }
 }

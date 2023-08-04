@@ -2,8 +2,9 @@
 
 namespace Nebula\Traits\Property;
 
-trait PrivateData
+trait ProtectedData
 {
   use CommonData;
-  private array $data = [];
+  protected array $data = [];
 }
+

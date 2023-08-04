@@ -33,7 +33,8 @@ final class RegisterController extends Controller
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
       // TODO refactor this
-      $user = app()->get(UserFactory::class)->create(
+      $factory = app()->get(UserFactory::class);
+      $user = $factory->create(
         request()->name,
         request()->email,
         request()->password

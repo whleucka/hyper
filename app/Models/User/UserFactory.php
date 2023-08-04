@@ -13,12 +13,12 @@ class UserFactory extends Factory
    * @param string $password
    * @return User|null
    */
-  function create(string $name, string $email, string $password): ?User
+  public function create(string $name, string $email, string $password): ?User
   {
-    return User::create([
-      "name" => $name,
-      "email" => $email,
-      "password" => password_hash($password, PASSWORD_ARGON2I),
-    ]);
+    $user = app()->get(User::class);
+    $user->name = $name;
+    $user->email = $email;
+    $user->password = password_hash($password, PASSWORD_ARGON2I);
+    return $user->save();
   }
 }
