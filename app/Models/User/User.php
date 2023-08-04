@@ -4,7 +4,7 @@ namespace App\Models\User;
 
 use Nebula\Model\Model;
 
-class User extends Model
+final class User extends Model
 {
   protected string $table_name = "users";
   protected string $primary_key = "id";

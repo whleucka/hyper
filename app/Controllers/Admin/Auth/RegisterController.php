@@ -2,12 +2,12 @@
 
 namespace App\Controllers\Admin\Auth;
 
-use App\Models\User\Factory;
+use App\Models\User\UserFactory;
 use Nebula\Controller\Controller;
 use StellarRouter\{Get, Post, Group};
 
 #[Group(prefix: "/admin")]
-class RegisterController extends Controller
+final class RegisterController extends Controller
 {
   #[Get("/register", "register.index")]
   public function index(): string
@@ -33,9 +33,9 @@ class RegisterController extends Controller
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
       // TODO refactor this
-      $user = Factory::create(
-        request()->name, 
-        request()->email, 
+      $user = app()->get(UserFactory::class)->create(
+        request()->name,
+        request()->email,
         request()->password
       );
       if ($user) {

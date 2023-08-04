@@ -7,7 +7,7 @@ use Nebula\Controller\Controller;
 use StellarRouter\{Get, Post, Group};
 
 #[Group(prefix: "/admin")]
-class SignInController extends Controller
+final class SignInController extends Controller
 {
   #[Get("/sign-in", "sign-in.index")]
   public function index(): string
