@@ -30,7 +30,7 @@ class Authentication implements Middleware
     {
         $uuid = session()->get("user");
         if (!$uuid) return false;
-        $user = User::findByAttribute("uuid", $uuid);
+        $user = User::search(["uuid" => $uuid]);
         return !is_null($user);
     }
 }

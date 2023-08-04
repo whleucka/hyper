@@ -82,30 +82,44 @@ class Model implements NebulaModel
   public static function find(mixed $id): ?self
   {
     $model = app()->get(static::class);
-    return self::findByAttribute($model->primary_key, $id);
+    return self::search([$model->primary_key => $id]);
   }
 
   /**
    * Find a model by an attribute
-   * @param string $attribute
-   * @param mixed $value
-   * @return self|null
    */
-  public static function findByAttribute(string $attribute, mixed $value): ?self
+  public static function search(array $where, string $operator = "=", ?int $limit = null): mixed
   {
     $model = self::staticClass();
     // Build the sql query
-    $sql = "SELECT * FROM $model->table_name WHERE $attribute = ?";
+    $columns = implode(', ', $model->getTableColumns($model->table_name));
+    $where_clause = $model->mapToString(array_keys($where), fn ($key) => "$key $operator ?", ", ");
+    $sql = "SELECT $columns FROM $model->table_name WHERE $where_clause";
+    if (!is_null($limit)) {
+      $sql .= " LIMIT $limit";
+    }
+    $values = array_values($where);
     // Select one item from the db
-    $result = db()->run($sql, [$value])->fetch(PDO::FETCH_ASSOC);
+    $result = db()->run($sql, $values)->fetchAll(PDO::FETCH_ASSOC);
     // Bail if it is bunk
     if (!$result) {
       return null;
     }
-    // Create a model and load result
-    $model = new $model($result[$model->primary_key]);
-    $model->load($result);
-    return $model;
+    if (count($result) ===  1) {
+      $result = $result[0];  
+      // Create a model and load result
+      $model = new $model($result[$model->primary_key]);
+      $model->load($result);
+      return $model;
+    }
+    // If there are multiple results, return an array of models
+    $models = [];
+    foreach ($result as $data) {
+      $model = new $model($data[$model->primary_key]);
+      $model->load($data);
+      $models[] = $model;
+    }
+    return $models;
   }
 
   /**
