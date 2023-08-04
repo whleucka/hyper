@@ -4,6 +4,9 @@ namespace Nebula\Database;
 
 use Closure;
 
+/**
+ * Schema
+ */
 class Schema
 {
     /**

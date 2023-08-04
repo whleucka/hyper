@@ -4,17 +4,16 @@ namespace Nebula\Model;
 
 use Closure;
 use Nebula\Interfaces\Model\Model as NebulaModel;
-use Nebula\Traits\Instance\Singleton;
 use Nebula\Traits\Property\ProtectedData;
 use PDO;
 
 class Model implements NebulaModel
 {
-  use Singleton;
   use ProtectedData;
 
   /**
    * Return the static class
+   * @return self
    * @throws \Error if table_name or primary_key is not defined
    */
   private static function staticClass(): self
@@ -45,7 +44,7 @@ class Model implements NebulaModel
    * @param array $data
    * @param Closure(): void $fn
    * @param mixed $separator
-   * @return void
+   * @return string
    */
   private static function mapToString(array $data, Closure $fn, $separator = ", "): string
   {
@@ -66,7 +65,7 @@ class Model implements NebulaModel
   /**
    * Find a model from the database
    * @param array $data
-   * @return array
+   * @return self|null
    */
   public static function find(mixed $id): ?self
   {
@@ -98,36 +97,60 @@ class Model implements NebulaModel
   }
 
   /**
+   * Setup the model with initial table columns
+   * @return self
+   */
+  public function setup(): self
+  {
+    // A new model will not have data, so we
+    // will fill it in with table columns
+    $table_columns = $this->getTableColumns($this->table_name);
+    $diff_columns = array_diff($table_columns, $this->guarded);
+    $update_columns = [];
+    foreach ($diff_columns as $column) {
+      $update_columns[$column] = $this->$column ?? null;
+    }
+    // Load the data into the model
+    $this->load($update_columns);
+    return $this;
+  }
+
+  public function refresh(): void
+  {
+    $model = self::find($this->id);
+    $this->load($model->data());
+  }
+
+  /**
    * Create a new model
+   * @return self|null
    * @throws \Error if no data is present
    */
   public function save(): ?self
   {
-    $class = self::staticClass();
+    $model = self::staticClass();
+    $model->setup();
+    // Get the data from the model
+    $data = $model->data();
 
-    // A new model will not have data, so we will fill it in
-    $table_columns = $this->getTableColumns($class->table_name);
-    $diff_columns = array_diff($table_columns, $class->guarded);
-    $update_columns = [];
-    foreach ($diff_columns as $column) {
-      $update_columns[$column] = $class->$column ?? null;
+    // Bail if there is no data
+    if (!$data) {
+      throw new \Error("No data to save");
     }
-    $class->load($update_columns);
-    
-    // Get the data from the model 
-    $data = $class->data();
-    if (!$data) throw new \Error("No data to save");
 
     // Build the sql query and insert to the database
     $columns = self::mapToString(array_keys($data), fn ($key) => "$key = ?");
     $values = self::values($data);
-    $sql = "INSERT INTO $class->table_name SET $columns";
+    $sql = "INSERT INTO $model->table_name SET $columns";
     $result = db()->run($sql, $values);
     if (!$result) {
       return null;
     }
-    $id = db()->lastInsertId();
-    return $class::find($id);
+    // Set the id and reload the model
+    $model->id = db()->lastInsertId();
+    // Refresh the model
+    $model->refresh();
+    return $model;
   }
 
   /**

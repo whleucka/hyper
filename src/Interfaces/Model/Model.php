@@ -8,5 +8,6 @@ interface Model
   public static function findByAttribute(string $attribute, mixed $value): ?self;
   public function save(): ?self;
   public function update(): void;
+  public function refresh(): void;
   public function delete(): void;
 }

@@ -2,6 +2,9 @@
 
 namespace Nebula\Database;
 
+/**
+ * Blueprint
+ */
 class Blueprint
 {
     private array $definitions = [];
