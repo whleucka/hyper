@@ -46,20 +46,32 @@ class Model implements NebulaModel
    * @param mixed $separator
    * @return string
    */
-  private static function mapToString(array $data, Closure $fn, $separator = ", "): string
+  private function mapToString(array $data, Closure $fn, $separator = ", "): string
   {
     $columns = array_map($fn, $data);
     return implode($separator, $columns);
   }
 
   /**
-   * Get the values from an array
-   * @param array $data
-   * @return array
+   * Get the insert query and values
+   * @return array [sql, values]
+   * @throws \Error if no data is present
    */
-  private static function values(array $data): array
+  private function getInsertQuery(): array
   {
-    return array_values($data);
+    // Get the data from the model
+    $data = $this->data();
+
+    // Bail if there is no data
+    if (!$data) {
+      throw new \Error("No data to save");
+    }
+
+    // Build the sql query and insert to the database
+    $columns = $this->mapToString(array_keys($data), fn ($key) => "$key = ?");
+    $values = array_values($data);
+    $sql = "INSERT INTO $this->table_name SET $columns";
+    return [$sql, $values];
   }
 
   /**
@@ -98,9 +110,9 @@ class Model implements NebulaModel
 
   /**
    * Setup the model with initial table columns
-   * @return self
+   * @return void
    */
-  public function setup(): self
+  private function setup(): void
   {
     // A new model will not have data, so we
     // will fill it in with table columns
@@ -112,7 +124,6 @@ class Model implements NebulaModel
     }
     // Load the data into the model
     $this->load($update_columns);
-    return $this;
   }
 
   public function refresh(): void
@@ -124,24 +135,12 @@ class Model implements NebulaModel
   /**
    * Create a new model
    * @return self|null
-   * @throws \Error if no data is present
    */
   public function save(): ?self
   {
     $model = self::staticClass();
     $model->setup();
-    // Get the data from the model
-    $data = $model->data();
-
-    // Bail if there is no data
-    if (!$data) {
-      throw new \Error("No data to save");
-    }
-
-    // Build the sql query and insert to the database
-    $columns = self::mapToString(array_keys($data), fn ($key) => "$key = ?");
-    $values = self::values($data);
-    $sql = "INSERT INTO $model->table_name SET $columns";
+    list($sql, $values) = $model->getInsertQuery();
     $result = db()->run($sql, $values);
     if (!$result) {
       return null;
