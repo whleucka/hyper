@@ -9,7 +9,7 @@ final class User extends Model
   protected string $table_name = "users";
   protected string $primary_key = "id";
 
-  // Columns that are read-only
+  // Columns won't be inserted/updated
   protected array $guarded = [
     "id",
     "uuid",
