@@ -2,7 +2,7 @@
 
 namespace Nebula\Middleware\Admin;
 
-use App\Models\User\User;
+use App\Models\User;
 use Nebula\Interfaces\Middleware\Middleware;
 use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Traits\Http\Response as HttpResponse;
