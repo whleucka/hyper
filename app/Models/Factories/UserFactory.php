@@ -7,7 +7,7 @@ use App\Models\User;
 
 class UserFactory extends Factory
 {
-  protected string $model_class = User::class;
+  protected string $model = User::class;
 
   /**
    * Create a new user model
@@ -18,7 +18,7 @@ class UserFactory extends Factory
    */
   public function create(string $name, string $email, string $password): ?User
   {
-    $user = app()->get($this->model_class);
+    $user = app()->get($this->model);
     $user->name = $name;
     $user->email = $email;
     $user->password = password_hash($password, PASSWORD_ARGON2I);
