@@ -12,15 +12,15 @@ final class QueryBuilderTest extends TestCase
 {
   public function test_select_query(): void
   {
-    $sql = QueryBuilder::select(new User)
+    $qb = QueryBuilder::select(new User)
     ->columns(["id", "email", "username"])
     ->where(["id" => 1, "username" => "test"])
     ->having(["id" => 2, "username" => "blue"])
     ->groupBy(["id", "username"])
     ->orderBy(["id" => "ASC", "username" => "DESC"])
     ->limit(1)
-    ->offset(2)
-    ->build();
-    $this->assertSame("SELECT id, email, username FROM users WHERE (id = ?) AND (username = ?) HAVING (id = ?) AND (username = ?) GROUP BY id, username ORDER BY id ASC, username DESC LIMIT 1, 2", $sql);
+    ->offset(2);
+    $this->assertSame($qb->values(), [1, "test", 2, "blue"]);
+    $this->assertSame("SELECT id, email, username FROM users WHERE (id = ?) AND (username = ?) HAVING (id = ?) AND (username = ?) GROUP BY id, username ORDER BY id ASC, username DESC LIMIT 1, 2", $qb->build());
   }
 }
