@@ -2,7 +2,7 @@
 
 namespace Nebula\Model;
 
-use Closure;
+use Nebula\Database\QueryBuilder;
 use Nebula\Interfaces\Model\Model as NebulaModel;
 use Nebula\Traits\Property\ProtectedData;
 use PDO;
@@ -37,44 +37,11 @@ class Model implements NebulaModel
    * Get the table columns
    * @return array
    */
-  private function getTableColumns(string $table_name): array
+  private function getTableColumns(): array
   {
-    return db()->query("DESCRIBE $table_name")->fetchAll(PDO::FETCH_COLUMN);
-  }
-
-  /**
-   * Load data into the model
-   * @param array $data
-   * @param Closure(): void $fn
-   * @param mixed $separator
-   * @return string
-   */
-  private function mapToString(array $data, Closure $fn, $separator = ", "): string
-  {
-    $columns = array_map($fn, $data);
-    return implode($separator, $columns);
-  }
-
-  /**
-   * Get the insert query and values
-   * @return array [sql, values]
-   * @throws \Error if no data is present
-   */
-  private function getInsertQuery(): array
-  {
-    // Get the data from the model
-    $data = $this->data();
-
-    // Bail if there is no data
-    if (!$data) {
-      throw new \Error("No data to save");
-    }
-
-    // Build the sql query and insert to the database
-    $columns = $this->mapToString(array_keys($data), fn ($key) => "$key = ?");
-    $values = array_values($data);
-    $sql = "INSERT INTO $this->table_name SET $columns";
-    return [$sql, $values];
+    return db()
+      ->query("DESCRIBE $this->table_name")
+      ->fetchAll(PDO::FETCH_COLUMN);
   }
 
   /**
@@ -91,26 +58,25 @@ class Model implements NebulaModel
   /**
    * Find a model by an attribute
    */
-  public static function search(array $where, string $operator = "=", ?int $limit = null): mixed
+  public static function search(array $where, ?int $limit = null): mixed
   {
     $model = self::staticClass();
     // Build the sql query
-    $columns = implode(', ', $model->getTableColumns($model->table_name));
-    $where_clause = $model->mapToString(array_keys($where), fn ($key) => "$key $operator ?", ", ");
-    $sql = "SELECT $columns FROM $model->table_name WHERE $where_clause";
-    if (!is_null($limit)) {
-      $sql .= " LIMIT $limit";
-    }
-    $values = array_values($where);
+    $qb = QueryBuilder::select($model->table_name)
+      ->columns($model->getTableColumns())
+      ->where($where)
+      ->limit($limit);
     // Select one item from the db
-    $result = db()->run($sql, $values)->fetchAll(PDO::FETCH_ASSOC);
+    $result = db()
+      ->run($qb->build(), $qb->values())
+      ->fetchAll(PDO::FETCH_ASSOC);
     // Bail if it is bunk
     if (!$result) {
       return null;
     }
     // If there is only one result, return a model
     if (count($result) ===  1) {
-      $result = $result[0];  
+      $result = $result[0];
       // Create a model and load result
       $model = new $model($result[$model->primary_key]);
       $model->load($result);
@@ -158,8 +124,9 @@ class Model implements NebulaModel
   {
     $model = self::staticClass();
     $model->setup();
-    list($sql, $values) = $model->getInsertQuery();
-    $result = db()->run($sql, $values);
+    $qb = QueryBuilder::insert($model->table_name)
+      ->columns($model->data());
+    $result = db()->run($qb->build(), $qb->values());
     if (!$result) {
       return null;
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nebula\Tests\Database;
 
-use App\Models\User;
 use PHPUnit\Framework\TestCase;
 use Nebula\Database\QueryBuilder;
 
@@ -12,7 +11,7 @@ final class QueryBuilderTest extends TestCase
 {
   public function test_select_query(): void
   {
-    $qb = QueryBuilder::select(new User)
+    $qb = QueryBuilder::select('users')
     ->columns(["id", "email", "name"])
     ->where(["id" => 1, "name" => "test"])
     ->groupBy(["id", "name"])
@@ -26,7 +25,7 @@ final class QueryBuilderTest extends TestCase
 
   public function test_insert_query(): void
   {
-    $qb = QueryBuilder::insert(new User)
+    $qb = QueryBuilder::insert('users')
     ->columns(["name" => "test", "email" => "test@test.com"]);
     $this->assertSame($qb->values(), ["test", "test@test.com"]);
     $this->assertSame("INSERT INTO users SET name = ?, email = ?", $qb->build());
@@ -34,7 +33,7 @@ final class QueryBuilderTest extends TestCase
 
   public function test_update_query(): void
   {
-    $qb = QueryBuilder::update(new User)
+    $qb = QueryBuilder::update('users')
     ->columns(["name" => "test", "email" => "test@test.com"])
     ->where(["id" => 1]);
     $this->assertSame($qb->values(), ["test", "test@test.com", 1]);
@@ -43,7 +42,7 @@ final class QueryBuilderTest extends TestCase
 
   public function test_delete_query(): void
   {
-    $qb = QueryBuilder::delete(new User)
+    $qb = QueryBuilder::delete('users')
     ->where(["id" => 1]);
     $this->assertSame($qb->values(), [1]);
     $this->assertSame("DELETE FROM users WHERE (id = ?)", $qb->build());

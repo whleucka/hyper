@@ -4,8 +4,11 @@ namespace Nebula\Database;
 
 use Closure;
 use Nebula\Interfaces\Database\QueryBuilder as QueryBuilderInterface;
-use Nebula\Interfaces\Model\Model;
 
+/**
+ * Class QueryBuilder
+ * Creates a predictable query string for the database.
+ */
 class QueryBuilder implements QueryBuilderInterface
 {
     private $mode = "select";
@@ -19,6 +22,10 @@ class QueryBuilder implements QueryBuilderInterface
     private ?int $limit = null;
     private ?int $offset = null;
 
+    /**
+     * Return query values (for prepared statements)
+     * @return array<int,mixed>
+     */
     public function values(): array
     {
         return $this->values;
@@ -35,39 +42,56 @@ class QueryBuilder implements QueryBuilderInterface
         return implode($separator, $columns);
     }
 
-    public static function select(Model $model): self
+    /**
+     * Construct a select sql query
+     * @param Model $model
+     */
+    public static function select(string $table_name): self
     {
         $qb = new QueryBuilder();
-        $qb->table_name = $model->table_name;
+        $qb->table_name = $table_name;
         $qb->mode = "select";
         return $qb;
     }
 
-    public static function insert(Model $model): self
+    /**
+     * Construct an insert sql query
+     * @param Model $model
+     */
+    public static function insert(string $table_name): self
     {
         $qb = new QueryBuilder();
-        $qb->table_name = $model->table_name;
+        $qb->table_name = $table_name;
         $qb->mode = "insert";
         return $qb;
     }
 
-    public static function update(Model $model): self
+    /**
+     * Construct an update sql query
+     * @param Model $model
+     */
+    public static function update(string $table_name): self
     {
         $qb = new QueryBuilder();
-        $qb->table_name = $model->table_name;
+        $qb->table_name = $table_name;
         $qb->mode = "update";
         return $qb;
     }
 
-    public static function delete(Model $model): self
+    /**
+     * Construct a delete sql query
+     * @param Model $model
+     */
+    public static function delete(string $table_name): self
     {
         $qb = new QueryBuilder();
-        $qb->table_name = $model->table_name;
+        $qb->table_name = $table_name;
         $qb->mode = "delete";
         return $qb;
     }
 
     /**
+     * Add columns to the query
      * @param array<int,mixed> $columns
      */
     public function columns(array $columns): self
@@ -79,6 +103,10 @@ class QueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    /**
+     * Add a where clause to the query
+     * @param array<int,mixed> $where
+     */
     public function where(array $where): self
     {
         $this->where = $where;
@@ -86,12 +114,20 @@ class QueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    /**
+     * Add a group by clause to the query
+     * @param array<int,mixed> $group_by
+     */
     public function groupBy(array $group_by): self
     {
         $this->group_by = $group_by;
         return $this;
     }
 
+    /**
+     * Add a having by clause to the query
+     * @param array<int,mixed> $having
+     */
     public function having(array $having): self
     {
         $this->having = $having;
@@ -99,25 +135,43 @@ class QueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-
+    /**
+     * Add an order by clause to the query
+     * @param array<int,mixed> $order_by
+     * @return QueryBuilder
+     */
     public function orderBy(array $order_by): self
     {
         $this->order_by = $order_by;
         return $this;
     }
 
-    public function limit(int $limit): self
+    /**
+     * Add a limit to the query
+     * @param int|null $limit
+     * @return QueryBuilder
+     */
+    public function limit(?int $limit): self
     {
         $this->limit = $limit;
         return $this;
     }
 
-    public function offset(int $offset): self
+    /**
+     * Add an offset to the query
+     * @param int|null $offset
+     * @return QueryBuilder
+     */
+    public function offset(?int $offset): self
     {
         $this->offset = $offset;
         return $this;
     }
 
+    /**
+     * Return the sql string
+     * @return string
+     */
     public function build(): string
     {
         $sql = match ($this->mode) {

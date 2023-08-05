@@ -21,11 +21,11 @@ return [
   },
   /** Non-Singletons **/
   \Nebula\Interfaces\Console\Kernel::class => \DI\get(\App\Console\Kernel::class),
-  \Nebula\Interfaces\Database\QueryBuilder::class => \DI\get(\Nebula\Database\QueryBuilder::class),
   \Nebula\Interfaces\Session\Session::class => \DI\get(\Nebula\Session\Session::class),
   \Nebula\Interfaces\Http\Response::class => \DI\get(\Nebula\Http\Response::class),
   \Nebula\Interfaces\Routing\Router::class => \DI\get(\Nebula\Routing\Router::class),
   \Nebula\Interfaces\Model\Model::class => \DI\get(\Nebula\Model\Model::class),
+  \Nebula\Interfaces\Database\QueryBuilder::class => \DI\get(\Nebula\Database\QueryBuilder::class),
   \Twig\Environment::class => function () {
       $config = config("twig");
       $loader = new \Twig\Loader\FilesystemLoader($config["view_path"]);

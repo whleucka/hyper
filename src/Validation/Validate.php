@@ -2,6 +2,8 @@
 
 namespace Nebula\Validation;
 
+use Nebula\Database\QueryBuilder;
+
 class Validate
 {
     /**
@@ -231,12 +233,8 @@ class Validate
     public static function unique($value, $table, $column): bool
     {
         if (!$table) throw new \Error("unique requires a table name");
-        $result = db()->select(
-            "SELECT $column 
-            FROM $table 
-            WHERE $column = ?",
-            $value
-        );
+        $qb = QueryBuilder::select($table)->where([$column => $value]);
+        $result = db()->select($qb->build(), ...$qb->values());
         return !$result;
     }
 }
