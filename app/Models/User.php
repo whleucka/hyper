@@ -6,8 +6,8 @@ use Nebula\Model\Model;
 
 final class User extends Model
 {
-  protected string $table_name = "users";
-  protected string $primary_key = "id";
+  public string $table_name = "users";
+  public string $primary_key = "id";
 
   // Columns won't be inserted/updated
   protected array $guarded = [

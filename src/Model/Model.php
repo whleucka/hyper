@@ -11,6 +11,9 @@ class Model implements NebulaModel
 {
   use ProtectedData;
 
+  public string $table_name;
+  public string $primary_key;
+
   /**
    * Return the static class
    * @return self
@@ -105,6 +108,7 @@ class Model implements NebulaModel
     if (!$result) {
       return null;
     }
+    // If there is only one result, return a model
     if (count($result) ===  1) {
       $result = $result[0];  
       // Create a model and load result
