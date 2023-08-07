@@ -9,15 +9,23 @@ use Throwable;
 class Kernel implements ConsoleKernel
 {
     protected Response $response;
+    protected array $paths;
     protected string $output = '';
-    protected array $option_desc = [
-        'h' => 'print help and exit',
-        '-help' => 'print help and exit',
+    protected array $opts = [
+        'short' => [
+            'h' => 'Print help and exit.',
+        ],
+        'long' => [
+            'help' => 'Print help and exit.',
+            'migration-up:' => 'Run migration up on file. Usage: --migration-up=filename.php',
+            'migration-down:' => 'Run migration down on file. Usage: --migration-down=filename.php',
+        ],
     ];
 
     public function setup(): void
     {
         $this->response = app()->get(Response::class);
+        $this->paths = config('paths');
     }
 
     public function handle(): Response
@@ -50,8 +58,90 @@ class Kernel implements ConsoleKernel
 
     protected function run(): void
     {
+        $longopts = array_keys($this->opts['long']);
+        $shortopts = implode('', array_keys($this->opts['short']));
+        $options = getopt($shortopts, $longopts);
+        if (empty($options)) {
+            $this->write("Unknown option(s) provided. Use -h or --help for help.");
+        }
+        foreach ($options as $opt => $value) {
+            match ($opt) {
+                'h', 'help' => $this->displayHelp(),
+                'migration-up' => $this->migration($value, true),
+                'migration-down' => $this->migration($value, false),
+                default => $this->displayUnknownOption($value),
+            };
+        }
+    }
+
+    protected function displayUnknownOption(string $option): void
+    {
+        $this->write("\nUnknown option: " . $option);
+    }
+
+    protected function displayHelp(): void
+    {
         $this->write($this->banner());
         $this->write($this->help());
+    }
+
+    protected function migration(string $file, bool $up): void
+    {
+        $this->checkMigrationTable();
+        $filename = $this->paths['migrations'] . $file;
+        $migration = $this->getMigrationClass($filename);
+        if ($up && $this->migrationExists($filename)) {
+            $this->write("Migration already exists: {$file}");
+            return;
+        }
+        $query = $up ? $migration->up() : $migration->down();
+        $word = $up ? "up" : "down";
+        $this->write("Running migration $word on {$file}");
+        $result = db()->query($query);
+        if ($result) {
+            if ($up) $this->recordMigration($filename);
+            else $this->deleteMigration($filename);
+            $this->write("Migration $word successful!");
+        } else {
+            $this->write("Migration $word failed!");
+        }
+    }
+
+    protected function checkMigrationTable(): void
+    {
+        $query = "CREATE TABLE IF NOT EXISTS migrations (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+        migration_hash VARCHAR(32) NOT NULL,
+        ts TIMESTAMP(0) NOT NULL DEFAULT NOW(), 
+        PRIMARY KEY (id))";
+        $result = db()->query($query);
+        if (!$result) {
+            throw new \Exception("Failed to create migrations table!");
+        }
+    }
+
+    protected function migrationExists($file): bool
+    {
+        $result = db()->select("SELECT * FROM migrations WHERE migration_hash = ?", md5_file($file));
+        return !is_null($result) && $result !== false;
+    }
+
+    protected function recordMigration($file): void
+    {
+        db()->query("INSERT IGNORE INTO migrations SET migration_hash = ?", md5_file($file));
+    }
+
+    protected function deleteMigration($file): void
+    {
+        db()->query("DELETE FROM migrations WHERE migration_hash = ?", md5_file($file));
+    }
+
+    protected function getMigrationClass(string $file): mixed
+    {
+        if (!file_exists($file)) {
+            throw new \Exception("Migration file not found: {$file}");
+        }
+        return require $file;
     }
 
     protected function banner(): string
@@ -74,9 +164,16 @@ Usage:   nebula [options]
 Basic options:
 EOT;
         $help .= PHP_EOL;
-        foreach ($this->option_desc as $opt => $desc) {
-            $help .= " -{$opt}\t\t\t\t\t{$desc}" . PHP_EOL;
+        foreach ($this->opts as $type => $opts) {
+            foreach ($opts as $opt => $desc) {
+                $opt = str_replace(':', '', $opt);
+                $opt = $type === 'short' ? '-' . $opt : '--' . $opt;
+                $spacer = floor(strlen($opt) / 6);
+                $offset = 3;
+                $spacer = str_repeat("\t", $offset - $spacer);
+                $help .= "  {$opt}{$spacer}{$desc}" . PHP_EOL;
+            }
         }
-        return $help;
+        return "\n".$help;
     }
 }

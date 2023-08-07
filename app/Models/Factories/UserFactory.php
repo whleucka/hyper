@@ -32,7 +32,7 @@ class UserFactory extends Factory
   {
     return [
       'name' => 'Administrator',
-      'email' => 'admin@example.com',
+      'email' => 'admin@nebula.dev',
       'password' => password_hash('admin', PASSWORD_ARGON2I)
     ];
   }

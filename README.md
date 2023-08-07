@@ -42,28 +42,7 @@ chown -R www-data:www-data views/.cache
 
 Here are a few sample test results using the `siege` tool. Our team is dedicated to optimizing Nebula to deliver exceptional performance, striving to position it among the top-performing PHP frameworks available 🚀 
 
-Nebula dev:
-```
-Lifting the server siege...
-Transactions:		      13346 hits
-Availability:		     100.00 %
-Elapsed time:		       1.92 secs
-Data transferred:	       0.17 MB
-Response time:		       0.00 secs
-Transaction rate:	    6951.04 trans/sec
-Throughput:		       0.09 MB/sec
-Concurrency:		       9.77
-Successful transactions:       13346
-Failed transactions:	          0
-Longest transaction:	       0.01
-Shortest transaction:	       0.00
-```
-
-Based on this result, Nebula achieved a transaction rate of 6,951.04 trans/sec. Leaf achieved 7,204.38 trans/sec, and Laravel achieved 632.77 trans/sec.
-
-These numbers demonstrate the strong performance of Nebula and Leaf, making them excellent choices for high-traffic applications. 
-
-While considering these numbers, it's important to approach them with caution. Benchmarking frameworks on my personal network and hardware may not yield an entirely accurate measure of requests per second (RPS). Nonetheless, based on my own tests, this type of benchmarking does reveal a noticeable latency.
+**Coming soon**
 
 - *Command: `siege -b -c 10 -t 1s $APP_URL`*
 - *Server is on LAN*

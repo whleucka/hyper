@@ -8,4 +8,5 @@ return [
   "app_root" => $app_root,
   "logs" => $app_root . "logs/",
   "controllers" => $app_root . "app/Controllers/",
+  "migrations" => $app_root . "migrations/",
 ];
