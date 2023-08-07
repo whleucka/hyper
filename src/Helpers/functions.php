@@ -67,15 +67,17 @@ function initLogger()
 
 function logger(string $level, string $message, string $title = '')
 {
-  match ($level) {
-    "time" => Logger::time($message),
-    "timeEnd" => Logger::timeEnd($message),
-    "debug" => Logger::debug($message, $title),
-    "info" => Logger::info($message, $title),
-    "warning" => Logger::warning($message, $title),
-    "error" => Logger::error($message, $title),
-    default => throw new \Exception("unknown log level"),
-  };
+  if (env("LOG_ENABLED") == 'true') {
+    match ($level) {
+      "time" => Logger::time($message),
+      "timeEnd" => Logger::timeEnd($message),
+      "debug" => Logger::debug($message, $title),
+      "info" => Logger::info($message, $title),
+      "warning" => Logger::warning($message, $title),
+      "error" => Logger::error($message, $title),
+      default => throw new \Exception("unknown log level"),
+    };
+  }
 }
 
 function requestIp()

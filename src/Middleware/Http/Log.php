@@ -15,9 +15,7 @@ class Log implements Middleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (env("LOG_ENABLED")) {
-            $this->logRequest($request);
-        }
+        $this->logRequest($request);
 
         $response = $next($request);
 
@@ -26,7 +24,6 @@ class Log implements Middleware
 
     private function logRequest(Request $request): void
     {
-        // Do something with this?
         $logMessage = sprintf(
             "%s %s %s",
             $request->server("REMOTE_ADDR"),
