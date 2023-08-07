@@ -22,7 +22,6 @@ final class SignInController extends Controller
       "email" => ["required", "email"],
       "password" => ["required"],
     ])) {
-      // TODO refactor this
       $user = User::search(['email' => request()->email]);
       if ($user && password_verify(request()->password, $user->password)) {
         // Set the user session
