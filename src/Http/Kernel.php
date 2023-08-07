@@ -80,7 +80,11 @@ class Kernel implements NebulaKernel
                 $class = app()->get($handlerClass);
 
                 $content = $class->$handlerMethod(...$routeParameters);
+                $response->setStatusCode(200);
                 $response->setContent($content ?? '');
+                $response->setHeader('X-Powered-By', 'Nebula');
+                $response->setHeader('Content-Type', 'text/html');
+                $response->setHeader('Cache-Control', 'max-age=604800, must-revalidate');
             } catch (\Exception $ex) {
                 return $this->handleException($ex);
             }
@@ -105,7 +109,6 @@ class Kernel implements NebulaKernel
         $response = $runner
             ->layer($this->middleware)
             ->handle($request, fn () => $this->resolveRoute($route));
-        $response->setHeader('X-Powered-By', 'Nebula');
         return $response;
     }
 

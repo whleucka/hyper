@@ -29,7 +29,7 @@ class CachedResponse implements Middleware
 
       // Cache the response if it's cacheable (e.g., successful responses with cache-control headers)
       if ($response->getStatusCode() === 200 && $response->hasHeader('Cache-Control')) {
-        $cacheDuration = 1200; // 20 min
+        $cacheDuration = 604800; // Default cache duration is 7 days
         $serializedResponse = serialize($response);
 
         // Store the response in Redis with the specified cache duration
