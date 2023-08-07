@@ -19,7 +19,7 @@ class CachedResponse implements Middleware
       // Attempt to retrieve the cached response from Redis
       $cachedResponse = $client->get($cacheKey);
 
-      if (!is_null($cachedResponse)) {
+      if (!is_null($cachedResponse) && empty($request->request())) {
         // If cached response exists, return it immediately
         return unserialize($cachedResponse);
       }
