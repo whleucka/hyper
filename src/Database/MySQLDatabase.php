@@ -63,6 +63,10 @@ class MySQLDatabase implements Database
      */
     public function run(string $sql, array $params = []): ?PDOStatement
     {
+        $enabled = config("database")["enabled"];
+        if (!$enabled) {
+            throw new \Exception("Database is not enabled");
+        }
         $statement = $this->connection->prepare($sql);
         $statement->execute($params);
         return $statement;

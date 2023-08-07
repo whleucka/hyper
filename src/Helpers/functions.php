@@ -67,7 +67,8 @@ function initLogger()
 
 function logger(string $level, string $message, string $title = '')
 {
-  if (env("LOG_ENABLED") == 'true') {
+  $enabled = config("application")['logging'];
+  if ($enabled) {
     match ($level) {
       "time" => Logger::time($message),
       "timeEnd" => Logger::timeEnd($message),
