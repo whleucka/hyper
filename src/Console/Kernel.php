@@ -98,7 +98,7 @@ EOT;
 
     public function terminate(): never
     {
-        logger('timeEnd', 'NebulaConsole');
+        logger('timeEnd', 'Nebula');
         exit;
     }
 
@@ -169,20 +169,25 @@ EOT;
         }
     }
 
+    public function getFileHash(string $file): string
+    {
+        return md5($file);
+    }
+
     protected function migrationExists($file): bool
     {
-        $result = db()->select("SELECT * FROM migrations WHERE migration_hash = ?", md5_file($file));
+        $result = db()->select("SELECT * FROM migrations WHERE migration_hash = ?", $this->getFileHash($file));
         return !is_null($result) && $result !== false;
     }
 
     protected function recordMigration($file): void
     {
-        db()->query("INSERT IGNORE INTO migrations SET migration_hash = ?", md5_file($file));
+        db()->query("INSERT IGNORE INTO migrations SET migration_hash = ?", $this->getFileHash($file));
     }
 
     protected function deleteMigration($file): void
     {
-        db()->query("DELETE FROM migrations WHERE migration_hash = ?", md5_file($file));
+        db()->query("DELETE FROM migrations WHERE migration_hash = ?", $this->getFileHash($file));
     }
 
 }
