@@ -84,7 +84,7 @@ class Kernel implements NebulaKernel
                 $response->setContent($content ?? '');
                 $response->setHeader('X-Powered-By', 'Nebula');
                 $response->setHeader('Content-Type', 'text/html');
-                $response->setHeader('Cache-Control', 'max-age=604800, must-revalidate');
+                $response->setHeader('Cache-Control', 'no-store, no-cache');
             } catch (\Exception $ex) {
                 return $this->handleException($ex);
             }

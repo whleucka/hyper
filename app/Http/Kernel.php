@@ -7,6 +7,9 @@ use Nebula\Http\Kernel as HttpKernel;
 final class Kernel extends HttpKernel
 {
   // Register your application middleware classes
+  // Middleware classes are executed in the order 
+  // they are defined (top to bottom for request, 
+  // bottom to top for response)
   protected array $middleware = [
     \Nebula\Middleware\Http\CSRF::class, 
     \Nebula\Middleware\Http\RateLimit::class, 

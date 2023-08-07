@@ -6,11 +6,18 @@ use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Interfaces\Middleware\Middleware;
 use Closure;
 
+/**
+ * This middleware caches responses in Redis
+ * Route must have "cached" middleware defined
+ * 
+ * @package Nebula\Middleware\Http
+ */
 class CachedResponse implements Middleware
 {
   public function handle(Request $request, Closure $next): Response
   {
-    if (env("REDIS_ENABLED")) {
+    $route_middleware = $request->route->getMiddleware();
+    if (env("REDIS_ENABLED") && in_array("cached", $route_middleware)) {
       $config = config('redis');
       $client = new \Predis\Client($config);
 
@@ -19,7 +26,7 @@ class CachedResponse implements Middleware
       // Attempt to retrieve the cached response from Redis
       $cachedResponse = $client->get($cacheKey);
 
-      if (!is_null($cachedResponse) && empty($request->request())) {
+      if (!is_null($cachedResponse)) {
         // If cached response exists, return it immediately
         return unserialize($cachedResponse);
       }
@@ -29,7 +36,7 @@ class CachedResponse implements Middleware
 
       // Cache the response if it's cacheable (e.g., successful responses with cache-control headers)
       if ($response->getStatusCode() === 200 && $response->hasHeader('Cache-Control')) {
-        $cacheDuration = 604800; // Default cache duration is 7 days
+        $cacheDuration = 60 * 15; // Default cache duration is 15 minutes
         $serializedResponse = serialize($response);
 
         // Store the response in Redis with the specified cache duration

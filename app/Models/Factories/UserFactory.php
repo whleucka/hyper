@@ -24,4 +24,17 @@ class UserFactory extends Factory
     $user->password = password_hash($password, PASSWORD_ARGON2I);
     return $user->save();
   }
+
+  /**
+   * @return array<string,string>
+   */
+  public function mock(): array
+  {
+    $faker = \Faker\Factory::create();
+    return [
+      'name' => $faker->name,
+      'email' => $faker->email,
+      'password' => $faker->password
+    ];
+  }
 }

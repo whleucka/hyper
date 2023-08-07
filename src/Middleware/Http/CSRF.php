@@ -6,6 +6,11 @@ use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Interfaces\Middleware\Middleware;
 use Closure;
 
+/**
+ * This middleware provides CSRF protection
+ *
+ * @package Nebula\Middleware\Http
+ */
 class CSRF implements Middleware
 {
   public function handle(Request $request, Closure $next): Response

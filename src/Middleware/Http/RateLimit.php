@@ -5,18 +5,24 @@ namespace Nebula\Middleware\Http;
 use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Interfaces\Middleware\Middleware;
 use Closure;
+use Nebula\Traits\Http\Response as NebulaResponse;
 
+/**
+ * This middleware provides rate limiting
+ *
+ * @package Nebula\Middleware\Http
+ */
 class RateLimit implements Middleware
 {
+  use NebulaResponse;
+
   public function handle(Request $request, Closure $next): Response
   {
-    if (env("REDIS_ENABLED")) {
+    $route_middleware = $request->route->getMiddleware();
+    if (env("REDIS_ENABLED") && in_array("rate_limit", $route_middleware)) {
       $result = $this->rateLimit();
       if (!$result) {
-        $response = app()->get(Response::class);
-        $response->setStatusCode(429);
-        $response->setContent('Rate limit exceeded');
-        return $response;
+        return $this->response(429, "Too many requests");
       }
     }
     $response = $next($request);
@@ -31,7 +37,7 @@ class RateLimit implements Middleware
 
     $ipAddress = requestIp();
 
-    $rateLimit = 25; // Number of requests allowed per minute
+    $rateLimit = $config['requests_per'] ?? 25; // Number of requests allowed per minute
     $ipKey = "ip:$ipAddress";
 
     // Add the current timestamp to the Redis Sorted Set
@@ -39,7 +45,7 @@ class RateLimit implements Middleware
     $client->zadd($ipKey, $timestamp, $timestamp);
 
     // Remove any timestamps that exceed the rate limit window
-    $windowStart = $timestamp - 60; // 60 seconds = 1 minute window
+    $windowStart = $timestamp - $config['rate_limit_seconds'] ?? 60;
     $client->zremrangebyscore($ipKey, 0, $windowStart);
 
     // Get the number of requests made from the IP address in the window
