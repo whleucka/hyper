@@ -30,6 +30,23 @@ class Kernel implements NebulaKernel
         $this->registerControllers();
     }
 
+    private function checkCache(Request $request): ?Response
+    {
+        $config = config('redis');
+        $client = new \Predis\Client($config);
+
+        $cacheKey = 'cache:' . $request->getUri(); // Generate a unique cache key based on the request URI
+
+        // Attempt to retrieve the cached response from Redis
+        $cachedResponse = $client->get($cacheKey);
+
+        if (!is_null($cachedResponse)) {
+            // If cached response exists, return it immediately
+            return unserialize($cachedResponse);
+        }
+        return null;
+    }
+
     /**
      * Register the controller classes
      */
@@ -101,6 +118,10 @@ class Kernel implements NebulaKernel
     public function handle(): Response
     {
         $request = request();
+        $response = $this->checkCache($request);
+        if (!is_null($response)) {
+            return $response;
+        }
         // Figure out the route
         $route = $this->router->handleRequest($request->getMethod(), $request->getUri());
         // Save the route to the request (e.g. use in middleware)
