@@ -28,6 +28,18 @@ class UserFactory extends Factory
   /**
    * @return array<string,string>
    */
+  public function default(): array
+  {
+    return [
+      'name' => 'Administrator',
+      'email' => 'admin@example.com',
+      'password' => password_hash('admin', PASSWORD_ARGON2I)
+    ];
+  }
+
+  /**
+   * @return array<string,string>
+   */
   public function mock(): array
   {
     $faker = \Faker\Factory::create();

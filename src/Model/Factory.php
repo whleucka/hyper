@@ -9,11 +9,14 @@ class Factory implements NebulaFactory
   protected string $model = Model::class;
 
   /**
+   * Make a single model or an array of models
    * @param array<int,mixed> $data
    */
-  public function make(?array $data = null, int $n = 1, bool $save = true): mixed
+  public function make(?array $data = null, int $n = 1, bool $save = false, bool $mock = false): mixed
   {
-    $mock = empty($data) || is_null($data);
+    if (empty($data) || is_null($data)) {
+      $data = $this->default();
+    }
     $models = [];
     for ($i = 0; $i < $n; $i++) {
       $model = $this->new($data, $mock);
@@ -26,6 +29,7 @@ class Factory implements NebulaFactory
   }
 
   /**
+   * Create a single model
    * @param array<int,mixed> $data
    */
   public function new(?array $data, bool $mock = false): Model
@@ -33,7 +37,7 @@ class Factory implements NebulaFactory
     $model = new $this->model();
     if ($mock) {
       $data = $this->mock();
-    } else if (is_null($data)) {
+    } elseif (is_null($data)) {
       $data = [];
     }
     foreach ($data as $key => $value) {
@@ -42,6 +46,17 @@ class Factory implements NebulaFactory
     return $model;
   }
 
+  /**
+   * Default model implementation
+   */
+  public function default(): array
+  {
+    return [];
+  }
+
+  /**
+   * Mock model implementation
+   */
   public function mock(): array
   {
     return [];
