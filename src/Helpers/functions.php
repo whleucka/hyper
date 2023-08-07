@@ -78,6 +78,18 @@ function logger(string $level, string $message, string $title = '')
   };
 }
 
+function requestIp()
+{
+  if (!empty(request()->server()['HTTP_CLIENT_IP'])) {
+    $ip = request()->server()['HTTP_CLIENT_IP'];
+  } elseif (!empty(request()->server()['HTTP_X_FORWARDED_FOR'])) {
+    $ip = request()->server()['HTTP_X_FORWARDED_FOR'];
+  } else {
+    $ip = request()->server()['REMOTE_ADDR'];
+  }
+  return $ip;
+}
+
 /**
  * Return the application singleton
  */
