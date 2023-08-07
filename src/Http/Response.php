@@ -13,19 +13,33 @@ class Response implements NebulaResponse
         http_response_code($statusCode);
     }
 
+    public function getHeader(string $name): string
+    {
+        return getallheaders()[$name];
+    }
+
     public function setHeader(string $name, string $value): void
     {
-      header("$name: $value");
+        header("$name: $value");
     }
 
     public function setContent(string $content): void
     {
-      $this->content = $content;
+        $this->content = $content;
     }
 
     public function send(): void
     {
-      echo $this->content;
+        echo $this->content;
+    }
+
+    public function getStatusCode(): int
+    {
+        return http_response_code();
+    }
+
+    public function hasHeader(string $name): bool
+    {
+        return preg_match("/$name/", implode(';', headers_list()));
     }
 }
-

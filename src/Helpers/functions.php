@@ -105,10 +105,10 @@ function config(string $name)
 /**
  * Return the application environment variable by name
  */
-function env(string $name)
+function env(string $name, ?string $default = null)
 {
   $env = app()->get(Environment::class);
-  return $env->get($name);
+  return $env->get($name) ?? $default;
 }
 
 /**
