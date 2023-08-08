@@ -10,4 +10,5 @@ interface Router
   public function registerRoute(Route $route): void;
   public function handleRequest(string $requestMethod, string $requestUri): ?Route;
   public function findRouteByName(string $name): ?Route;
+  public function hasRoutes(): bool;
 }

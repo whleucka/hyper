@@ -3,7 +3,7 @@
 namespace App\Config;
 
 return [
-  'enabled' => true,
+  'enabled' => false,
   'scheme' => env("REDIS_SCHEME"),
   'host' => env('REDIS_HOST'),
   'port' => env('REDIS_PORT'),
