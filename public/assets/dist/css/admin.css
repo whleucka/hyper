@@ -583,6 +583,10 @@ video {
   height: 2rem;
 }
 
+.h-screen {
+  height: 100vh;
+}
+
 .w-4 {
   width: 1rem;
 }
