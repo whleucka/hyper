@@ -78,6 +78,11 @@ class Kernel implements NebulaKernel
                 $handlerMethod = $route->getHandlerMethod();
                 $routeParameters = $route->getParameters();
                 $routePayload = $route->getPayload();
+                ob_clean();
+                $response->setStatusCode(200);
+                $response->setHeader('X-Powered-By', 'Nebula');
+                $response->setHeader('Content-Type', 'text/html');
+                $response->setHeader('Cache-Control', 'no-store, no-cache');
                 if ($handlerClass) {
                     $class = app()->get($handlerClass);
                     $content = $class->$handlerMethod(...$routeParameters);
@@ -86,10 +91,6 @@ class Kernel implements NebulaKernel
                     $content = $routePayload(...$routeParameters);
                     $response->setContent($content ?? '');
                 }
-                $response->setStatusCode(200);
-                $response->setHeader('X-Powered-By', 'Nebula');
-                $response->setHeader('Content-Type', 'text/html');
-                $response->setHeader('Cache-Control', 'no-store, no-cache');
             } catch (\Exception $ex) {
                 return $this->handleException($ex);
             }
