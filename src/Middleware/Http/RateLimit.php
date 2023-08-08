@@ -19,7 +19,7 @@ class RateLimit implements Middleware
   public function handle(Request $request, Closure $next): Response
   {
     $route_middleware = $request->route?->getMiddleware();
-    if (env("REDIS_ENABLED") && in_array("rate_limit", $route_middleware)) {
+    if (env("REDIS_ENABLED") && $route_middleware && in_array("rate_limit", $route_middleware)) {
       $result = $this->rateLimit();
       if (!$result) {
         return $this->response(429, "Too many requests");
