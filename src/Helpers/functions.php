@@ -39,6 +39,7 @@ function redirect(string $url, int $code = 301, int $delay = 0): never
   } else {
     header("Location: $url", response_code: $code);
   }
+  exit;
 }
 
 function redirectRoute(string $name, int $code = 301, int $delay = 0)
