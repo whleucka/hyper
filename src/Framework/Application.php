@@ -12,7 +12,7 @@ class Application extends Container
     use Singleton;
 
     private Kernel $kernel;
-    private string $class;
+    private ?string $class = null;
 
     /**
      * Initialize the kernel

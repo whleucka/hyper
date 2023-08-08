@@ -16,7 +16,7 @@ class CachedResponse implements Middleware
 {
   public function handle(Request $request, Closure $next): Response
   {
-    $route_middleware = $request->route->getMiddleware();
+    $route_middleware = $request->route?->getMiddleware();
     $enabled = config('redis')['enabled'];
     if ($enabled && in_array("cached", $route_middleware)) {
       $config = config('redis');

@@ -20,7 +20,7 @@ class Response implements NebulaResponse
 
     public function setHeader(string $name, string $value): void
     {
-        @header("$name: $value");
+        header("$name: $value");
     }
 
     public function setContent(string $content): void
