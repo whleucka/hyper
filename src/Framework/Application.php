@@ -12,14 +12,15 @@ class Application extends Container
     use Singleton;
 
     private Kernel $kernel;
+    private string $class;
 
     /**
      * Initialize the kernel
      */
-    public function init(?string $class = null): void
+    public function init(): void
     {
         if (!isset($this->kernel)) {
-            $this->kernel = $this->get($class ?? \Nebula\Interfaces\Http\Kernel::class);
+            $this->kernel = $this->get($this->class ?? \Nebula\Interfaces\Http\Kernel::class);
             $this->kernel->setup($this);
         }
     }
@@ -29,6 +30,7 @@ class Application extends Container
      */
     public function run(?string $class = null): void
     {
+        $this->class = $class;
         $this->init($class);
         $response = $this->kernel->handle();
         $response->send();
@@ -38,10 +40,18 @@ class Application extends Container
     /**
      * Register a route
      */
-    public function route(string $method, string $path, \Closure $payload, ?string $name = null, array $middleware = []): Application
+    public function route(string $method, string $path, \Closure $payload, ?string $handlerClass = null, ?string $handlerMethod = null, ?string $name = null, array $middleware = []): Application
     {
         $this->init();
-        $route = new Route($path, $method, $name, $middleware, payload: $payload);
+        $route = new Route(
+            path: $path, 
+            method: $method, 
+            name: $name, 
+            middleware: $middleware, 
+            handlerClass: $handlerClass, 
+            handlerMethod: $handlerMethod, 
+            payload: $payload
+        );
         $this->kernel->router->registerRoute($route);
         return $this;
     }
