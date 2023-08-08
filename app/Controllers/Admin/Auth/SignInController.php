@@ -4,6 +4,7 @@ namespace App\Controllers\Admin\Auth;
 
 use App\Models\User;
 use Nebula\Controller\Controller;
+use Nebula\Validation\Validate;
 use StellarRouter\{Get, Post, Group};
 
 #[Group(prefix: "/admin")]
@@ -28,10 +29,12 @@ final class SignInController extends Controller
         session()->set("user", $user->uuid);
         // Redirect to the dashboard
         return redirectRoute("dashboard.index");
+      } else {
+        // Trigger some errors
+         Validate::addError("email");
+         Validate::addError("password", "Bad email or password");
       }
-    } else {
-      dd($this->errors);
-    }
+    } 
     // Validation failed, show the sign in form
     return $this->index();
   }

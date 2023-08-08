@@ -4,6 +4,7 @@ namespace App\Controllers\Admin\Auth;
 
 use App\Models\Factories\UserFactory;
 use Nebula\Controller\Controller;
+use Nebula\Validation\Validate;
 use StellarRouter\{Get, Post, Group};
 
 #[Group(prefix: "/admin")]
@@ -18,6 +19,8 @@ final class RegisterController extends Controller
   #[Post("/register", "register.post")]
   public function post(): string
   {
+    // Provide a custom message for the unique rule
+    Validate::$messages["unique"] = "An account already exists for this email address";
     if ($this->validate([
       "name" => ["required"],
       "email" => ["required", "unique=users", "email"],
@@ -32,7 +35,6 @@ final class RegisterController extends Controller
       // doesn't say Password_match in the UI
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
-      // TODO refactor this
       $factory = app()->get(UserFactory::class);
       $user = $factory->create(
         request()->name,
@@ -45,9 +47,7 @@ final class RegisterController extends Controller
         // Redirect to the dashboard
         return redirectRoute("dashboard.index");
       }
-    } else {
-      dd($this->errors);
-    }
+    } 
     // Validation failed, show the register form
     return $this->index();
   }

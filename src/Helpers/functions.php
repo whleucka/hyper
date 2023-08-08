@@ -6,6 +6,7 @@ use Nebula\Http\Request;
 use Nebula\Interfaces\Database\Database;
 use Nebula\Interfaces\Framework\Environment;
 use Nebula\Interfaces\Session\Session;
+use Nebula\Validation\Validate;
 
 /**
  * This is a file that contains generic application functions
@@ -148,5 +149,8 @@ function session()
 function twig(string $path, array $data = []): string
 {
   $twig = app()->get(\Twig\Environment::class);
+  $form_errors = Validate::$errors;
+  $data['has_form_errors'] = !empty($form_errors);
+  $data['form_errors'] = $form_errors;
   return $twig->render($path, $data);
 }
