@@ -13,11 +13,8 @@ $app = require_once __DIR__ . "/../bootstrap/app.php";
 // Attribute-based-routing is enabled by default
 // However, you can still register non-attribute-based 
 $app
-  ->route('GET', '/hello/{var}', function($var) {
-    return "Hello {$var}!";
-  }, middleware: ['cached'])
-  ->route('GET', '/my/{var}', function($var) {
-    return "Your {$var}!";
+  ->route('GET', '/test', function() {
+    return "Hello from test!";
   }, middleware: ['cached']);
 
 

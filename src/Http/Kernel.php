@@ -78,7 +78,6 @@ class Kernel implements NebulaKernel
                 $handlerMethod = $route->getHandlerMethod();
                 $routeParameters = $route->getParameters();
                 $routePayload = $route->getPayload();
-                ob_clean();
                 $response->setStatusCode(200);
                 $content = '';
                 if ($handlerClass) {
