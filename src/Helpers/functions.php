@@ -89,7 +89,7 @@ function logger(string $level, string $message, string $title = '')
   }
 }
 
-function requestIp()
+function ip()
 {
   if (!empty(request()->server()['HTTP_CLIENT_IP'])) {
     $ip = request()->server()['HTTP_CLIENT_IP'];

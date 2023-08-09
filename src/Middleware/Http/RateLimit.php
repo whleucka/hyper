@@ -19,7 +19,7 @@ class RateLimit implements Middleware
   public function handle(Request $request, Closure $next): Response
   {
     $route_middleware = $request->route?->getMiddleware();
-    if (env("REDIS_ENABLED") && $route_middleware && in_array("rate_limit", $route_middleware)) {
+    if (env("REDIS_ENABLED") && $route_middleware && (in_array("rate_limit", $route_middleware) || in_array("api", $route_middleware))) {
       $result = $this->rateLimit();
       if (!$result) {
         return $this->response(429, "Too many requests");
@@ -35,7 +35,7 @@ class RateLimit implements Middleware
     $config = config('redis');
     $client = new \Predis\Client($config);
 
-    $ipAddress = requestIp();
+    $ipAddress = ip();
 
     $rateLimit = $config['requests_per_second'] ?? 25; // Number of requests allowed per window
     $ipKey = "ip:$ipAddress";
