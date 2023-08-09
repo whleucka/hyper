@@ -12,10 +12,9 @@ $app = require_once __DIR__ . "/../bootstrap/app.php";
 // Routes
 // Attribute-based-routing is enabled by default
 // However, you can still register non-attribute-based 
-$app
-  ->route('GET', '/test', function() {
+$app->route('GET', '/test', function() {
     return "Hello from test!";
-  }, middleware: ['cached']);
+}, middleware: ['cached']);
 
 
 $app->run(Nebula\Interfaces\Http\Kernel::class);
