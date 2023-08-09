@@ -38,7 +38,7 @@ The `new` method creates a single model instance with optional data. You can pro
 use Nebula\Model\Factory;
 
 $factory = new Factory();
-$model = $factory->new(['key' => 'value'], false);
+$model = $factory->new(['key' => 'value']);
 ```
 
 ## Example: UserFactory
