@@ -33,6 +33,7 @@ chown -R www-data:www-data views/.cache
 
 
 ### Documentation
+- [Console](/docs/CONSOLE.md)
 - [Routing](/docs/ROUTING.md)
 - [Controllers](/docs/CONTROLLERS.md)
 - [Models](/docs/MODELS.md)
