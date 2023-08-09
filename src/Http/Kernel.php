@@ -74,6 +74,9 @@ class Kernel implements NebulaKernel
         $response = app()->get(Response::class);
         if ($route) {
             try {
+                $response->setHeader('X-Powered-By', 'Nebula');
+                $response->setHeader('Content-Type', 'text/html');
+                $response->setHeader('Cache-Control', 'no-store, no-cache');
                 $handlerClass = $route->getHandlerClass();
                 $handlerMethod = $route->getHandlerMethod();
                 $routeParameters = $route->getParameters();
@@ -83,12 +86,9 @@ class Kernel implements NebulaKernel
                 if ($handlerClass) {
                     $class = app()->get($handlerClass);
                     $content = $class->$handlerMethod(...$routeParameters);
-                } else if ($routePayload) {
+                } elseif ($routePayload) {
                     $content = $routePayload(...$routeParameters);
                 }
-                $response->setHeader('X-Powered-By', 'Nebula');
-                $response->setHeader('Content-Type', 'text/html');
-                $response->setHeader('Cache-Control', 'no-store, no-cache');
                 $response->setContent($content);
             } catch (\Exception $ex) {
                 return $this->handleException($ex);
@@ -122,8 +122,25 @@ class Kernel implements NebulaKernel
      */
     public function handleException(Throwable $exception): Response
     {
-        error_log($exception->getMessage());
-        return $this->response(500, "Server error");
+        $config = config("application");
+        error_log("\n");
+        error_log("Nebula Exception" . PHP_EOL);
+        error_log("File: " . $exception->getFile() . ":" . $exception->getLine() . PHP_EOL);
+        error_log("Message: " . $exception->getMessage() . PHP_EOL);
+        error_log("Trace: " . $exception->getTraceAsString() . PHP_EOL);
+        return $config['debug'] ? $this->whoops($exception) : $this->response(500, "Server error");
+    }
+
+    /**
+     * Return a nice error page
+     */
+    private function whoops(Throwable $exception)
+    {
+        $whoops = new \Whoops\Run();
+        $whoops->allowQuit(false);
+        $whoops->writeToOutput(false);
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
+        return $this->response(500, $whoops->handleException($exception));
     }
 
     /**

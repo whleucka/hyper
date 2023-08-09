@@ -11,7 +11,7 @@ class Application extends Container
 {
     use Singleton;
 
-    private Kernel $kernel;
+    private ?Kernel $kernel = null;
     private ?string $class = null;
 
     /**
@@ -19,7 +19,7 @@ class Application extends Container
      */
     public function init(): void
     {
-        if (!isset($this->kernel)) {
+        if (is_null($this->kernel)) {
             $this->kernel = $this->get($this->class ?? \Nebula\Interfaces\Http\Kernel::class);
             $this->kernel->setup($this);
         }
