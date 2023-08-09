@@ -139,6 +139,6 @@ final class User extends Model
 
 Models play a vital role in managing database interactions and organizing data-related logic in your Nebula PHP application. This documentation provides you with the necessary information to create, use, and interact with models effectively.
 
-For more advanced model techniques and integrations, please consult the official Nebula documentation.
+For more advanced model techniques and integrations, please consult the <s>official Nebula documentation</s>.
 
 Feel free to reach out if you have any questions or need further assistance!
