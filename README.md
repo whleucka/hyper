@@ -44,6 +44,7 @@ Hint: You can start a local development server by running `./nebula -s`
 - [Routing](docs/ROUTING.md)
 - [Controllers](docs/CONTROLLERS.md)
 - [Models](docs/MODELS.md)
+- [Factory](docs/FACTORY.md)
 - [Middleware](docs/MIDDLEWARE.md)
 - [Views](docs/VIEWS.md)
 - **Additional information coming soon!**

@@ -17,7 +17,6 @@ Controllers are responsible for processing user requests, managing application l
 
 The controller files are stored in `/app/Controllers` directory.
 
-
 ## Creating Controllers
 
 To create a controller in Nebula, follow these steps:
@@ -65,7 +64,7 @@ class YourController extends Controller
             // Valid data, perform actions
         } else {
             // Validation failed, handle errors
-            $form_errors = Validate::$errors;
+            $errors = Validate::$errors;
             // Handle errors, redirect, or display messages
         }
     }
@@ -100,7 +99,7 @@ class SignInController extends Controller
             // Valid data, perform authentication and redirection
         } else {
             // Validation failed, handle errors and return to the form
-            $errors = $this->getValidationErrors();
+            $errors = Validate::$errors;
             // Display errors and show the sign-in form again
         }
     }
