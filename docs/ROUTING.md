@@ -31,7 +31,7 @@ $router->registerRoute($route);
 There is a helper method included for adding routes quickly:
 
 ```php
-$app->route('GET', '/', function() {
+app()->route('GET', '/', function() {
     return "Hello, world!";
 }, middleware: ['cached']);
 ```
