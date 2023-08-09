@@ -17,7 +17,6 @@ Controllers are responsible for processing user requests, managing application l
 
 The controller files are stored in `/app/Controllers` directory.
 
-
 ## Creating Controllers
 
 To create a controller in Nebula, follow these steps:

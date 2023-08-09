@@ -15,6 +15,10 @@ Welcome to the Factory documentation for the Nebula PHP Framework. This guide wi
 
 The Factory class in the Nebula PHP Framework provides a convenient way to create model instances with default or mock data. This is especially useful for generating test data, seeding databases, or quickly creating instances during development.
 
+## Factory Path
+
+The factory files are stored in `/app/Models/Factories` directory.
+
 ## Using the Factory Class
 
 The Factory class provides methods for creating and configuring model instances. Here are the key methods available:
