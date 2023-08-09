@@ -17,10 +17,34 @@ class Kernel implements ConsoleKernel
         ],
         'long' => [
             'help' => 'Print help and exit.',
+            'migration-list' => 'List all migrations and their status.',
+            'migration-run' => 'Run all migrations that have not been run yet.',
             'migration-up:' => 'Run migration up on file. Usage: --migration-up=filename.php',
             'migration-down:' => 'Run migration down on file. Usage: --migration-down=filename.php',
+            'migration-fresh' => 'Create new database and run all migrations. Be careful!',
         ],
     ];
+
+    protected function run(): void
+    {
+        $longopts = array_keys($this->opts['long']);
+        $shortopts = implode('', array_keys($this->opts['short']));
+        $options = getopt($shortopts, $longopts);
+        if (empty($options)) {
+            $this->write("Unknown option(s) provided. Use -h or --help for help.");
+        }
+        foreach ($options as $opt => $value) {
+            match ($opt) {
+                'h', 'help' => $this->displayHelp(),
+                'migration-run' => $this->runMigrations(),
+                'migration-list' => $this->migrationList(),
+                'migration-up' => $this->migration($value, true),
+                'migration-down' => $this->migration($value, false),
+                'migration-fresh' => $this->migrationFresh(),
+                default => $this->displayUnknownOption($value),
+            };
+        }
+    }
 
     protected function banner(): string
     {
@@ -72,24 +96,6 @@ EOT;
         return $this->response;
     }
 
-    protected function run(): void
-    {
-        $longopts = array_keys($this->opts['long']);
-        $shortopts = implode('', array_keys($this->opts['short']));
-        $options = getopt($shortopts, $longopts);
-        if (empty($options)) {
-            $this->write("Unknown option(s) provided. Use -h or --help for help.");
-        }
-        foreach ($options as $opt => $value) {
-            match ($opt) {
-                'h', 'help' => $this->displayHelp(),
-                'migration-up' => $this->migration($value, true),
-                'migration-down' => $this->migration($value, false),
-                default => $this->displayUnknownOption($value),
-            };
-        }
-    }
-
     public function handleException(Throwable $exception): Response
     {
         $this->response->setContent("Nebula console error!" . PHP_EOL . $exception->getMessage() . PHP_EOL);
@@ -126,24 +132,41 @@ EOT;
         return require $file;
     }
 
-    protected function migration(string $file, bool $up): void
+    protected function migrationList(): void
     {
-        $filename = $this->paths['migrations'] . $file;
+        $this->checkMigrationTable();
+        $migrations = db()->query("SELECT migration_hash FROM migrations")->fetchAll(\PDO::FETCH_COLUMN);
+        $files = $this->getMigrationFiles();
+        foreach ($files as $file) {
+            $base = basename($file);
+            $hash = $this->getFileHash($file);
+            $run = in_array($hash, $migrations);
+            $this->write(($run ? "[OK]" : "[PENDING]") . " {$base}");
+        }
+    }
+
+    protected function migration(string $file, bool $up, $skip = false): void
+    {
+        $base = basename($file);
+        $filename = $this->paths['migrations'] . $base;
         $migration = $this->getMigrationClass($filename);
         $query = $up ? $migration->up() : $migration->down();
         $word = $up ? "up" : "down";
 
-        $input = readline("Are you sure you want to run this migration [$word]? (y/n): ");
-        if (strtolower($input) !== 'y') {
-            $this->write("Migration cancelled!");
-            return;
+        if (!$skip) {
+            $input = readline("Run $base migration [$word]? (y/n): ");
+            if (strtolower($input) !== 'y') {
+                $this->write("Migration cancelled!");
+                return;
+            }
         }
+
         if ($up && $this->migrationExists($filename)) {
-            $this->write("Migration already exists: {$file}");
+            $this->write("Migration already exists, skipping: {$file}");
             return;
         }
 
-        $this->write("Running migration $word on {$file}");
+        $this->write("Running migration $word on {$base}");
         $result = db()->query($query);
 
         if ($result) {
@@ -172,6 +195,50 @@ EOT;
     public function getFileHash(string $file): string
     {
         return md5($file);
+    }
+
+    protected function migrationFresh(): void
+    {
+        $input = readline("Are you sure you want to create a new database and run all migrations? (y/n): ");
+        if (strtolower($input) !== 'y') {
+            $this->write("Migration cancelled!");
+            return;
+        }
+        $this->dropDatabase();
+        $this->createDatabase();
+        $this->checkMigrationTable();
+        $this->runMigrations(true);
+    }
+
+    protected function getMigrationFiles(): array|bool
+    {
+        return glob($this->paths['migrations'] . '*.php');
+    }
+
+    protected function runMigrations($skip = false): void
+    {
+        $this->write("Running migrations...");
+        $files = $this->getMigrationFiles();
+        foreach ($files as $file) {
+            if (!$this->migrationExists($file)) {
+                $this->migration($file, true, $skip);
+            }
+        }
+        $this->write("Migrations complete!");
+    }
+
+    protected function dropDatabase()
+    {
+        $db_name = config('database')['name']; 
+        db()->query("DROP DATABASE IF EXISTS " . $db_name);
+    }
+
+    protected function createDatabase()
+    {
+        $db_name = config('database')['name']; 
+        db()->query("CREATE DATABASE IF NOT EXISTS " . $db_name);
+        db()->query("USE " . $db_name);
+        $this->write("Database created!");
     }
 
     protected function migrationExists($file): bool
