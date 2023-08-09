@@ -122,7 +122,7 @@ EOT;
 
     public function terminate(): never
     {
-        logger('timeEnd', 'Nebula');
+        //logger('timeEnd', 'Nebula');
         exit;
     }
 
