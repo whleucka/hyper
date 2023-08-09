@@ -3,10 +3,12 @@
 namespace App\Config;
 
 return [
+  // Redis configuration
   'enabled' => true,
   'scheme' => env("REDIS_SCHEME"),
   'host' => env('REDIS_HOST'),
   'port' => env('REDIS_PORT'),
-  'requests_per' => 25,
-  'rate_limit_seconds' => 60,
+  // Request rate limiting configuration
+  'requests_per_second' => 25,
+  'rps_window_seconds' => 60,
 ];
