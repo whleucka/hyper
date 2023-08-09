@@ -9,12 +9,10 @@
 require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__ . "/../bootstrap/app.php";
 
-// Routes
 // Attribute-based-routing is enabled by default
-// However, you can still register non-attribute-based 
+// However, you can also use the $app->route() method
 $app->route('GET', '/test', function() {
     return "Hello from test!";
 }, middleware: ['cached']);
-
 
 $app->run(Nebula\Interfaces\Http\Kernel::class);
