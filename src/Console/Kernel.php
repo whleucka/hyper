@@ -14,6 +14,8 @@ class Kernel implements ConsoleKernel
     protected array $opts = [
         'short' => [
             'h' => 'Print help and exit.',
+            's' => 'Start development server.',
+            't' => 'Run tests.',
         ],
         'long' => [
             'help' => 'Print help and exit.',
@@ -35,6 +37,8 @@ class Kernel implements ConsoleKernel
         }
         foreach ($options as $opt => $value) {
             match ($opt) {
+                's' => $this->startServer(),
+                't' => $this->runTests(),
                 'h', 'help' => $this->displayHelp(),
                 'migration-run' => $this->runMigrations(),
                 'migration-list' => $this->migrationList(),
@@ -77,6 +81,20 @@ EOT;
             }
         }
         return "\n".$help;
+    }
+
+    protected function runTests(): void
+    {
+        $this->write("Running tests...");
+        `./bin/test`;
+        $this->terminate();
+    }
+
+    protected function startServer(): void
+    {
+        $this->write("Starting server...");
+        `./bin/serve`;
+        $this->terminate();
     }
 
     public function setup(): void

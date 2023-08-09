@@ -52,34 +52,41 @@ function redirectRoute(string $name, int $code = 301, int $delay = 0)
 
 function initLogger()
 {
-  $log_path = config('paths')['logs'];
-  $log_name = "nebula";
-  $log_ext = "log";
-  $log_file = $log_path . $log_name . '.' . $log_ext;
-  if (!file_exists($log_file)) {
-    touch($log_file);
+  try {
+    $log_path = config('paths')['logs'];
+    $log_name = "nebula";
+    $log_ext = "log";
+    $log_file = $log_path . $log_name . '.' . $log_ext;
+    if (!file_exists($log_file)) {
+      touch($log_file);
+    }
+    chown($log_file, 'www-data');
+    Logger::$write_log = true;
+    Logger::$log_level = 'debug';
+    Logger::$log_dir = $log_path;
+    Logger::$log_file_name = $log_name;
+    Logger::$log_file_extension = $log_ext;
+    Logger::$print_log = false;
+  } catch (\Exception $ex) {
   }
-  Logger::$write_log = true;
-  Logger::$log_level = 'debug';
-  Logger::$log_dir = $log_path;
-  Logger::$log_file_name = $log_name;
-  Logger::$log_file_extension = $log_ext;
-  Logger::$print_log = false;
 }
 
 function logger(string $level, string $message, string $title = '')
 {
   $enabled = config("application")['logging'];
   if ($enabled) {
-    match ($level) {
-      "time" => Logger::time($message),
-      "timeEnd" => Logger::timeEnd($message),
-      "debug" => Logger::debug($message, $title),
-      "info" => Logger::info($message, $title),
-      "warning" => Logger::warning($message, $title),
-      "error" => Logger::error($message, $title),
-      default => throw new \Exception("unknown log level"),
-    };
+    try {
+      match ($level) {
+        "time" => Logger::time($message),
+        "timeEnd" => Logger::timeEnd($message),
+        "debug" => Logger::debug($message, $title),
+        "info" => Logger::info($message, $title),
+        "warning" => Logger::warning($message, $title),
+        "error" => Logger::error($message, $title),
+        default => throw new \Exception("unknown log level"),
+      };
+    } catch (\Exception $ex) {
+    }
   }
 }
 
