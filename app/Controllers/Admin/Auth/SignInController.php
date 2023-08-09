@@ -31,10 +31,10 @@ final class SignInController extends Controller
         return redirectRoute("dashboard.index");
       } else {
         // Trigger some errors
-         Validate::addError("email");
-         Validate::addError("password", "Bad email or password");
+        Validate::addError("email");
+        Validate::addError("password", "Bad email or password");
       }
-    } 
+    }
     // Validation failed, show the sign in form
     return $this->index();
   }
