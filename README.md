@@ -37,7 +37,7 @@ chown -R www-data:www-data views/.cache
 - [Controllers](/docs/CONTROLLERS.md)
 - [Models](/docs/MODELS.md)
 - [Middleware](/docs/MIDDLEWARE.md)
-- **More information coming soon!**
+- **Additional information coming soon!**
 
 
 ### Benchmarks
