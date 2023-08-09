@@ -13,6 +13,11 @@ Welcome to the documentation for controllers in the Nebula PHP Framework. This g
 
 Controllers are responsible for processing user requests, managing application logic, and generating responses. In Nebula, controllers help you separate concerns by encapsulating related actions and behavior in individual classes.
 
+## Controller Path
+
+The controller files are stored in `/app/Controllers` directory.
+
+
 ## Creating Controllers
 
 To create a controller in Nebula, follow these steps:

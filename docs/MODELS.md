@@ -18,6 +18,10 @@ Welcome to the documentation for models in the Nebula PHP Framework. This guide 
 
 Models are essential components in the Nebula PHP Framework that enable you to interact with your application's database tables. Models encapsulate the data and logic associated with a specific database table, providing an organized and efficient way to handle data operations.
 
+## Models Path
+
+The model files are stored in `/app/Models` directory.
+
 ## Model Interface
 
 The `Model` interface defines the contract that all Nebula models must adhere to. It includes methods for finding, searching, saving, updating, refreshing, and deleting models.

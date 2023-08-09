@@ -16,7 +16,7 @@ Welcome to the views documentation for the Nebula PHP Framework. This guide will
 
 Views are a crucial part of web development as they allow you to display dynamic content to users. In the Nebula PHP Framework, you have the flexibility to render both HTML templates using the Twig template engine and plain text responses.
 
-## Template directory
+## Template Path
 
 View templates are stored in the `/views` directory.
 
