@@ -22,9 +22,8 @@ cd nebula
 composer install
 ```
 
-- **Configuration**: Customize the configuration files according to your project requirements, including database settings and configurations.
+- **Configuration**: Customize the configuration files according to your project requirements, including database settings and configurations. If you're starting a new project, then copy the example env configuration.
 
-Copy the default env settings
 ```bash
 cp .env.example .env
 ```
