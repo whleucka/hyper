@@ -35,6 +35,7 @@ chown -R www-data:www-data views/.cache
 ### Documentation
 - [Routing](/docs/ROUTING.md)
 - [Controllers](/docs/CONTROLLERS.md)
+- [Models](/docs/MODELS.md)
 
 
 ### Benchmarks
