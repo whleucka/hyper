@@ -10,13 +10,21 @@ use StellarRouter\{Get, Post, Group};
 #[Group(prefix: "/admin")]
 final class RegisterController extends Controller
 {
+  public function __construct()
+  {
+    // Disable registration if the config is set to false
+    if (!config("admin")["register_enabled"]) {
+      redirectRoute("sign-in.index");
+    }
+  }
+
   #[Get("/register", "register.index")]
   public function index(): string
   {
     return twig("admin/auth/register.html", []);
   }
 
-  #[Post("/register", "register.post")]
+  #[Post("/register", "register.post", ["rate_limit"])]
   public function post(): string
   {
     // Provide a custom message for the unique rule

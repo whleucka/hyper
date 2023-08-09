@@ -16,7 +16,7 @@ final class SignInController extends Controller
     return twig("admin/auth/sign-in.html", []);
   }
 
-  #[Post("/sign-in", "sign-in.post")]
+  #[Post("/sign-in", "sign-in.post", ["rate_limit"])]
   public function post(): string
   {
     if ($this->validate([
