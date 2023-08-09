@@ -43,10 +43,10 @@ Attribute-based routing simplifies route definition using attributes directly in
 1. Import necessary namespaces:
 
 ```php
-use StellarRouter\Get;
-use StellarRouter\Post;
-use StellarRouter\Group;
+use StellarRouter\{Get, Group, Post};
 ```
+- Note: HTTP methods supported: (GET, POST, PUT, PATCH, DELETE)
+
 
 2. Attach attributes to controller methods:
 
