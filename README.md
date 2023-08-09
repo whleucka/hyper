@@ -14,6 +14,7 @@
 
 To get started with Nebula, follow these steps:
 
+
 - **Installation**: Clone the repository and install dependencies using Composer.
 ```bash
 git clone https://github.com/libra-php/nebula.git
@@ -21,15 +22,20 @@ cd nebula
 composer install
 ```
 
-- **Configuration**: Customize the configuration files according to your project requirements, including database settings and routes.
-```
-# Copy the example settings
+- **Configuration**: Customize the configuration files according to your project requirements, including database settings and configurations.
+Copy the default env settings
+```bash
 cp .env.example .env
-# Change ownership of the view cache
-chown -R www-data:www-data views/.cache
 ```
 
-- **Development**: Start building your application by creating controllers, views, and models within the `src` directory. You can start a local development server by running `./nebula -s`
+- **Dependencies**: The application has the following dependencies:
+Redis: caching, rate limiting
+MySQL: database
+
+**Note**: you may enable/disable application behaviour in `/app/Config`
+
+- **Development**: Start building your application by creating controllers, views, and models within the `src` directory. 
+Hint: You can start a local development server by running `./nebula -s`
 
 
 ### Documentation
