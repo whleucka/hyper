@@ -60,7 +60,6 @@ function initLogger()
     if (!file_exists($log_file)) {
       touch($log_file);
     }
-    chown($log_file, 'www-data');
     Logger::$write_log = true;
     Logger::$log_level = 'debug';
     Logger::$log_dir = $log_path;
