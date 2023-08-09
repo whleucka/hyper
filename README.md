@@ -29,8 +29,9 @@ cp .env.example .env
 ```
 
 - **Dependencies**: The application has the following dependencies:
-Redis: caching, rate limiting
-MySQL: database
+
+    - Redis: caching, rate limiting
+    - MySQL: database
 
 **Note**: you may enable/disable application behaviour in `/app/Config`
 
