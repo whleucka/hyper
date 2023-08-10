@@ -67,6 +67,11 @@ A convenient helper function `config()` is provided to access configuration sett
  */
 function config(string $name)
 {
+  $name_split = explode('.', $name);
+  if (count($name_split) > 1) {
+    $config = \App\Config\Config::get($name_split[0]);
+    return $config[$name_split[1]] ?? null;
+  }
   return \App\Config\Config::get($name);
 }
 ```
