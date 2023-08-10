@@ -13,7 +13,7 @@ final class RegisterController extends Controller
   public function __construct()
   {
     // Disable registration if the config is set to false
-    if (!config("admin")["register_enabled"]) {
+    if (!config("admin.register_enabled")) {
       redirectRoute("sign-in.index");
     }
   }

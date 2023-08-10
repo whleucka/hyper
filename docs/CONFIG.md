@@ -74,8 +74,9 @@ function config(string $name)
 You can use this helper function to retrieve configuration settings throughout your application. For example:
 
 ```php
-$databaseName = config('database')['name']; // .env DB_NAME
-$isEnabled = config('database')['enabled']; // .env DB_ENABLED
+$databaseConfig = config('database'); // Database config as array
+$databaseName = config('database.name'); // 'name' from database config array
+$isEnabled = config('database.enabled'); // 'enabled' from database config array
 ```
 
 ## Conclusion

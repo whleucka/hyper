@@ -247,13 +247,13 @@ EOT;
 
     protected function dropDatabase()
     {
-        $db_name = config('database')['name']; 
+        $db_name = config('database.name'); 
         db()->query("DROP DATABASE IF EXISTS " . $db_name);
     }
 
     protected function createDatabase()
     {
-        $db_name = config('database')['name']; 
+        $db_name = config('database.name'); 
         db()->query("CREATE DATABASE IF NOT EXISTS " . $db_name);
         db()->query("USE " . $db_name);
         $this->write("Database created!");

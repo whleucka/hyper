@@ -53,7 +53,7 @@ function redirectRoute(string $name, int $code = 301, int $delay = 0)
 function initLogger()
 {
   try {
-    $log_path = config('paths')['logs'];
+    $log_path = config('paths.logs');
     $log_name = "nebula";
     $log_ext = "log";
     $log_file = $log_path . $log_name . '.' . $log_ext;
@@ -72,7 +72,7 @@ function initLogger()
 
 function logger(string $level, string $message, string $title = '')
 {
-  $enabled = config("application")['logging'];
+  $enabled = config("application.logging");
   if ($enabled) {
     try {
       match ($level) {
@@ -122,6 +122,11 @@ function request()
  */
 function config(string $name)
 {
+  $name_split = explode('.', $name);
+  if (count($name_split) > 1) {
+    $config = \App\Config\Config::get($name_split[0]);
+    return $config[$name_split[1]] ?? null;
+  }
   return \App\Config\Config::get($name);
 }
 

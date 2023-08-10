@@ -13,9 +13,9 @@ return [
   \Nebula\Interfaces\Http\Request::class => Request::getInstance(),
   \Nebula\Interfaces\Database\Database::class => function() {
     $db = \Nebula\Database\MySQLDatabase::getInstance();
-    $enabled = config("database")["enabled"];
+    $config = config("database");
+    $enabled = $config["enabled"];
     if ($enabled && !$db->isConnected()) {
-      $config = config("database");
       $db->connect($config);
     }
     return $db;

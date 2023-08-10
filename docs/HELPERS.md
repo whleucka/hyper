@@ -58,7 +58,7 @@ The helper functions are located at `/src/Helpers/functions.php`. This file is g
 
 ### Configuration Access
 
-- `config(string $name)`: Access application configuration by name.
+- `config(string $name)`: Access application configuration by name. You may access config("database") for configuration array, or config("database.enabled") for enabled setting of database configuration array.
 
 ### Environment Access
 

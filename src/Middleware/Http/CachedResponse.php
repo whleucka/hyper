@@ -17,9 +17,9 @@ class CachedResponse implements Middleware
   public function handle(Request $request, Closure $next): Response
   {
     $route_middleware = $request->route?->getMiddleware();
-    $enabled = config('redis')['enabled'];
+    $config = config('redis');
+    $enabled = $config['enabled'];
     if ($enabled && $route_middleware && in_array("cached", $route_middleware)) {
-      $config = config('redis');
       $client = new \Predis\Client($config);
 
       $cacheKey = 'cache:' . $request->getUri(); // Generate a unique cache key based on the request URI
