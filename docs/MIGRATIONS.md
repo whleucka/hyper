@@ -73,6 +73,21 @@ To drop a table, you can use the `Schema::drop()` method within the `down()` met
 return Schema::drop("users");
 ```
 
+## List Migrations and Statuses
+
+To show all migration files and their statuses, you can use the Nebula command-line interface (CLI). Run the following command:
+
+```
+./nebula migration-list
+```
+
+Example:
+```bash
+❯ ./nebula --migration-list
+[PENDING] 1688141260_table_users.php
+[PENDING] 1689820896_table_audit.php
+```
+
 ## Running Migrations
 
 To apply the defined migrations and update the database schema, you can use the Nebula command-line interface (CLI). Run the following command:
@@ -91,7 +106,17 @@ If you need to undo a migration, you can use the rollback command:
 ./nebula migration-down=<file>
 ```
 
-This will undo the last batch of migrations.
+This will undo a previous migration.
+
+## Create Database and Run Migrations
+
+To create a new database schema and run all migrations, you can use the Nebula command-line interface (CLI). Run the following command:
+
+**Note**: This will drop the current database and run all migration files. Please be careful!
+
+```
+./nebula migration-fresh
+```
 
 ## Conclusion
 
