@@ -43,6 +43,7 @@ Hint: You can start a local development server by running `./nebula -s`
 WIP: Nebula comes fully equipped with a sophisticated admin backend, easily accessible through the `/admin/sign-in` route. The power to enable or disable user registration rests in your hands, effortlessly adjustable within the `.env` configuration using the `ADMIN_REGISTER_ENABLED=true` toggle. Once authentication is successfully established, users are seamlessly guided to the `/admin/module/dashboard` destination. Nevertheless, this behaviour can be modified to match your application's unique specifications.
 
 ### Documentation
+- [Helpers](docs/HELPERS.md)
 - [Console](docs/CONSOLE.md)
 - [Routing](docs/ROUTING.md)
 - [Controllers](docs/CONTROLLERS.md)
