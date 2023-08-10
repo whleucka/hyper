@@ -4,7 +4,7 @@ namespace App\Config;
 
 return [
   // Redis configuration
-  'enabled' => env("REDIS_ENABLED", false),
+  'enabled' => env("REDIS_ENABLED", "false") == "true",
   'scheme' => env("REDIS_SCHEME"),
   'host' => env('REDIS_HOST'),
   'port' => env('REDIS_PORT'),
