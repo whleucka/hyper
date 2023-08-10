@@ -34,7 +34,7 @@ use App\Config\Config;
 $configValue = Config::get('config_name');
 ```
 
-Where `'config_name'` represents the configuration setting you want to retrieve - the name file name in `/app/Config`. For example, the /app/Config/Database.php array is fetched from config('database');
+Where `'config_name'` represents the configuration setting you want to retrieve - the name file name in `/app/Config`. For example, the `/app/Config/Database.php` array is fetched from `config('database')`;
 
 ### Example Database Config
 
