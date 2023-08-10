@@ -89,24 +89,7 @@ if ($this->validate([
 
 ## Custom Validation Rules
 
-Nebula allows you to define custom validation rules to cater to specific validation requirements. The `Validate` class provides a method called `registerError()` that you can use to add custom error messages.
-
-```php
-// Custom validation rule
-self::registerError("custom_rule", [
-  "%rule" => "custom_rule",
-  "%field" => $request_item,
-  "%value" => $value,
-  "%label" => $label,
-]);
-```
-
-You can also create a custom validation rule using the `addError()` method. This can be useful when you want to provide a custom error message for a specific validation rule.
-
-```php
-// Custom validation rule with custom error message
-self::addError("custom_rule", "Custom validation failed for this field");
-```
+WIP
 
 ## Conclusion
 
