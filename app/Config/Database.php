@@ -3,7 +3,7 @@
 namespace App\Config;
 
 return [
-  "enabled" => true,
+  "enabled" => env('DB_ENABLED', "true") == "true",
   "mode" => env('DB_MODE'),
   "name" => env('DB_NAME'),
   "host" => env('DB_HOST'),

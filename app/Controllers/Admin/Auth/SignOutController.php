@@ -8,7 +8,7 @@ use StellarRouter\{Get, Group};
 #[Group(prefix: "/admin")]
 final class SignOutController extends Controller
 {
-  #[Get("/sign-out", "sign-in.index")]
+  #[Get("/sign-out", "sign-out.index")]
   public function index(): mixed
   {
     session()->destroy();
