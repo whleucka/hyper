@@ -25,7 +25,7 @@ Helpers are globally accessible utility functions provided by the Nebula PHP Fra
 
 ## Helpers Path
 
-The helper functions are located at `/src/Helpers/functions.php`. This file is globally accessible.
+The helper functions are located at `/src/Helpers/functions.php`. This file is globally accessible and is already included.
 
 ## Available Helper Functions
 
