@@ -30,8 +30,8 @@ cp .env.example .env
 
 - **Dependencies**: The application has the following dependencies:
 
-    - Redis: caching, rate limiting
-    - MySQL: database
+    - Redis: caching, rate limiting - disabled by default.
+    - MySQL: database - enabled by default.
 
 - **Note**: you may enable/disable application behaviour in `/app/Config`
 
@@ -51,6 +51,7 @@ WIP: Nebula comes fully equipped with a sophisticated admin backend, easily acce
 - [Routing](docs/ROUTING.md)
 - [Middleware](docs/MIDDLEWARE.md)
 - [Controllers](docs/CONTROLLERS.md)
+    - [Validation](docs/VALIDATION.md)
 - [Views](docs/VIEWS.md)
 - [Models](docs/MODELS.md)
     - [Factory](docs/FACTORY.md)

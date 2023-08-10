@@ -64,7 +64,7 @@ class YourController extends Controller
             // Valid data, perform actions
         } else {
             // Validation failed, handle errors
-            $errors = Validate::$errors;
+            $errors = $this->errors;
             // Handle errors, redirect, or display messages
         }
     }
@@ -99,7 +99,7 @@ class SignInController extends Controller
             // Valid data, perform authentication and redirection
         } else {
             // Validation failed, handle errors and return to the form
-            $errors = Validate::$errors;
+            $errors = $this->errors;
             // Display errors and show the sign-in form again
         }
     }
