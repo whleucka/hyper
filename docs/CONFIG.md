@@ -31,10 +31,10 @@ To access configuration settings, use the `Config` class as follows:
 ```php
 use App\Config\Config;
 
-$configValue = Config::get('config_name.key');
+$configValue = Config::get('config_name');
 ```
 
-Where `'config_name.key'` represents the configuration setting you want to retrieve. This approach ensures that your configuration settings are organized and can be accessed using a dot-separated notation.
+Where `'config_name'` represents the configuration setting you want to retrieve - the name file name in `/app/Config`. For example, the /app/Config/Database.php array is fetched from config('database');
 
 ### Example Database Config
 
