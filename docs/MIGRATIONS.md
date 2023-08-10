@@ -78,7 +78,7 @@ return Schema::drop("users");
 To apply the defined migrations and update the database schema, you can use the Nebula command-line interface (CLI). Run the following command:
 
 ```
-php nebula migrate:up
+./nebula migration-up=<file>
 ```
 
 This command will run all pending migrations that haven't been applied yet.
@@ -88,7 +88,7 @@ This command will run all pending migrations that haven't been applied yet.
 If you need to undo a migration, you can use the rollback command:
 
 ```
-php nebula migrate:down
+./nebula migration-down=<file>
 ```
 
 This will undo the last batch of migrations.
