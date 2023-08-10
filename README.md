@@ -46,6 +46,7 @@ WIP: Nebula comes fully equipped with a sophisticated admin backend, easily acce
 - [Helpers](docs/HELPERS.md)
 - [Console](docs/CONSOLE.md)
 - [Routing](docs/ROUTING.md)
+- [Migrations](docs/MIGRATIONS.md)
 - [Controllers](docs/CONTROLLERS.md)
 - [Models](docs/MODELS.md)
     - [Factory](docs/FACTORY.md)
