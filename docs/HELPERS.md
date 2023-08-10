@@ -23,6 +23,10 @@ Welcome to the Helpers documentation for the Nebula PHP Framework. This guide wi
 
 Helpers are globally accessible utility functions provided by the Nebula PHP Framework. These functions are intended to streamline common tasks, improve development efficiency, and enhance code readability.
 
+## Helpers Path
+
+The helper functions are located at `/src/Helpers/functions.php`. This file is included on every route.
+
 ## Available Helper Functions
 
 ### Debugging
