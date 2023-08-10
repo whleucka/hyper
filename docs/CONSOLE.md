@@ -25,16 +25,20 @@ The `Kernel` class is the entry point for running console commands in the Nebula
 
 ### Basic Commands
 
+**Note**: There is a symlink to nebula console in the application root. This file points to to `/bin/nebula`
+
 The Nebula CLI supports a few basic commands that can be executed using short or long options. The basic commands include:
 
 - `-h` or `--help`: Print help and exit.
 - `-s`: Start the development server.
 - `-t`: Run tests.
 
+*Additional commands coming soon*
+
 To run a basic command, use the following syntax:
 
 ```bash
-nebula [command]
+./nebula [command]
 ```
 
 ### Running Tests
@@ -42,7 +46,7 @@ nebula [command]
 To run tests for your Nebula application, use the following command:
 
 ```bash
-nebula -t
+./nebula -t
 ```
 
 This command will execute the tests using the `./bin/test` script.
@@ -52,7 +56,7 @@ This command will execute the tests using the `./bin/test` script.
 To start the development server for your Nebula application, use the following command:
 
 ```bash
-nebula -s
+./nebula -s
 ```
 
 This command will execute the development server using the `./bin/serve` script.
@@ -70,7 +74,7 @@ Nebula CLI allows you to manage database migrations efficiently. The available m
 To use migration commands, use the following syntax:
 
 ```bash
-nebula [migration-command]
+./nebula [migration-command]
 ```
 
 ## Conclusion
