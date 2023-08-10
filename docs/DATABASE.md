@@ -28,7 +28,7 @@ Here's an example of a database configuration file:
 namespace App\Config;
 
 return [
-  "enabled" => true,
+  "enabled" => env('DB_ENABLED', "true") == "true",
   "mode" => env('DB_MODE'),
   "name" => env('DB_NAME'),
   "host" => env('DB_HOST'),
@@ -62,7 +62,7 @@ The `run()` method is used to run queries on the connected database:
 
 ```php
 $sql = "INSERT INTO users (name, email) VALUES (?, ?)";
-$params = ['John Doe', 'john@example.com'];
+$params = ['Satoshi Nakamoto', 'bitcoin@example.com'];
 db()->run($sql, $params); // Execute the query
 ```
 
