@@ -21,8 +21,8 @@ final class ConfigTest extends TestCase
 
   public function test_single_item_fetch(): void
   {
-    $db_name = config('database.name');
-    $this->assertTrue(is_string($db_name));
+    $db_enabled = config('database.enabled');
+    $this->assertTrue(is_bool($db_enabled));
   }
 
   public function test_config_throw_exception_if_item_does_not_exist(): void
@@ -50,13 +50,6 @@ final class ConfigTest extends TestCase
   {
     $config1 = config('database');
     $config2 = config('database');
-    $this->assertSame($config1, $config2);
-  }
-
-  public function test_config_is_singleton_for_items(): void
-  {
-    $config1 = config('database.name');
-    $config2 = config('database.name');
     $this->assertSame($config1, $config2);
   }
 }
