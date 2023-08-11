@@ -1,5 +1,5 @@
 # Nebula
-![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
+![Discord Shield](https://discordapp.com/api/guilds/1139362100821626890/widget.png?style=shield)
 [![PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
 ⭐ Nebula is a powerful PHP micro-framework
