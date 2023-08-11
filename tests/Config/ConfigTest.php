@@ -14,6 +14,7 @@ final class ConfigTest extends TestCase
     $this->app = require_once __DIR__ . "/../../bootstrap/app.php";
     parent::setUp();
   }
+
   public function test_array_fetch(): void
   {
     $db_config = config('database');
