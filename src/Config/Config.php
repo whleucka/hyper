@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Config;
+namespace Nebula\Config;
 
 final class Config
 {
@@ -21,7 +21,8 @@ final class Config
    */
   private static function path(string $name): string
   {
-    return __DIR__ . "/" . ucfirst($name) . ".php";
+    $config_path = __DIR__ . "/../../app/Config/";
+    return $config_path . ucfirst($name) . ".php";
   }
 
   /**

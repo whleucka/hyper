@@ -29,7 +29,7 @@ The `Config` class is responsible for loading configuration settings from the co
 To access configuration settings, use the `Config` class as follows:
 
 ```php
-use App\Config\Config;
+use Nebula\Config\Config;
 
 $configValue = Config::get('config_name');
 ```
@@ -69,10 +69,10 @@ function config(string $name)
 {
   $name_split = explode('.', $name);
   if (count($name_split) > 1) {
-    $config = \App\Config\Config::get($name_split[0]);
+    $config = \Nebula\Config\Config::get($name_split[0]);
     return $config[$name_split[1]] ?? null;
   }
-  return \App\Config\Config::get($name);
+  return \Nebula\Config\Config::get($name);
 }
 ```
 

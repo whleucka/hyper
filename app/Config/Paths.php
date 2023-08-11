@@ -9,4 +9,5 @@ return [
   "logs" => $app_root . "logs/",
   "controllers" => $app_root . "app/Controllers/",
   "migrations" => $app_root . "migrations/",
+  "config" => $app_root . "app/Config/",
 ];

@@ -3,6 +3,7 @@
 namespace Nebula\Tests\Config;
 
 use PHPUnit\Framework\TestCase;
+use Nebula\Config\Config;
 
 final class ConfigTest extends TestCase
 {
@@ -29,7 +30,7 @@ final class ConfigTest extends TestCase
   {
     $this->expectException(\Exception::class);
     $this->expectExceptionMessage("Configuration doesn't exist");
-    $test = \App\Config\Config::get('nonexistent');
+    $test = Config::get('nonexistent');
   }
 
   public function test_throw_exception_if_config_does_not_exist(): void

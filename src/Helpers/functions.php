@@ -72,7 +72,7 @@ function initLogger()
 
 function logger(string $level, string $message, string $title = '')
 {
-  $enabled = config("application.logging");
+  $enabled =config("application.logging");
   if ($enabled) {
     try {
       match ($level) {
@@ -124,10 +124,10 @@ function config(string $name)
 {
   $name_split = explode('.', $name);
   if (count($name_split) > 1) {
-    $config = \App\Config\Config::get($name_split[0]);
+    $config = \Nebula\Config\Config::get($name_split[0]);
     return $config[$name_split[1]] ?? throw new \Exception("Configuration item doesn't exist");
   }
-  return \App\Config\Config::get($name);
+  return \Nebula\Config\Config::get($name);
 }
 
 /**
