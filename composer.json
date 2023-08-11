@@ -1,6 +1,6 @@
 {
     "name": "libra-php/nebula",
-    "description": "Nebula - a powerful PHP micro-framework inspired by the cosmos.",
+    "description": "Nebula - a powerful PHP framework",
     "type": "project",
     "license": "MIT",
     "autoload": {
