@@ -86,7 +86,7 @@ EOT;
     protected function runTests(): void
     {
         $this->write("Running tests...");
-        `./bin/test`;
+        echo `./bin/test`;
         $this->terminate();
     }
 
