@@ -23,7 +23,7 @@ In the traditional approach, register routes using the `registerRoute` method in
 use Nebula\Interfaces\Routing\Router;
 use StellarRouter\Route;
 
-$router = app()->get(router::class);
+$router = app()->get(Router::class);
 $route = new Route('GET', '/home', 'HomeController', 'index');
 $router->registerRoute($route);
 ```
