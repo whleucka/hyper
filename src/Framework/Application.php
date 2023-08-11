@@ -42,6 +42,7 @@ class Application extends Container
      */
     public function route(string $method, string $path, \Closure|string $payload = null, ?string $name = null, array $middleware = []): Application
     {
+        $handlerClass = $handlerMethod = null;
         if (is_string($payload)) {
             $controllers_path = config("paths.controllers");
             $classMap = classMap($controllers_path);
