@@ -2,7 +2,7 @@
 [![Discord Shield](https://discordapp.com/api/guilds/1139362100821626890/widget.png?style=shield)](https://discord.gg/RMhUmHmNak)
 [![PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
-⭐ Nebula is a powerful PHP micro-framework
+⭐ Nebula is a powerful PHP framework
 
 ✅ Provides developers with a flexible and extensible architecture to build custom web applications with ease.
 
