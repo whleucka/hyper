@@ -40,16 +40,35 @@ class Application extends Container
     /**
      * Register a route
      */
-    public function route(string $method, string $path, \Closure $payload, ?string $handlerClass = null, ?string $handlerMethod = null, ?string $name = null, array $middleware = []): Application
+    public function route(string $method, string $path, \Closure|string $payload = null, ?string $name = null, array $middleware = []): Application
     {
+        if (is_string($payload)) {
+            $controllers_path = config("paths.controllers");
+            $classMap = classMap($controllers_path);
+            // Parse the payload
+            if (!is_null($payload) && strpos($payload, '@') !== false) {
+                [$handlerClass, $handlerMethod] = explode('@', $payload);
+            } else if (!is_null($payload) && strpos($payload, '@') === false) {
+                $handlerClass = $payload;
+                $handlerMethod = 'index';
+            } 
+            // Verify that the controller class exists
+            $found = array_filter($classMap, fn ($class) => str_contains($class, $handlerClass));
+            if ($found) {
+                $handlerClass = array_key_first($found);
+            } else {
+                throw new \Exception("Controller class not found: {$handlerClass}");
+            }
+        } 
+
         $this->init();
         $route = new Route(
-            path: $path, 
-            method: $method, 
-            name: $name, 
-            middleware: $middleware, 
-            handlerClass: $handlerClass, 
-            handlerMethod: $handlerMethod, 
+            path: $path,
+            method: $method,
+            name: $name,
+            middleware: $middleware,
+            handlerClass: $handlerClass,
+            handlerMethod: $handlerMethod,
             payload: $payload
         );
         $this->kernel->router->registerRoute($route);

@@ -5,7 +5,6 @@ namespace Nebula\Http;
 use Nebula\Interfaces\Http\Response;
 use Nebula\Interfaces\Routing\Router;
 use Nebula\Interfaces\Framework\Kernel as NebulaKernel;
-use Composer\ClassMapGenerator\ClassMapGenerator;
 use Nebula\Middleware\Middleware;
 use Nebula\Traits\Http\Response as HttpResponse;
 use Nebula\Traits\Instance\Singleton;
@@ -36,8 +35,8 @@ class Kernel implements NebulaKernel
     private function registerControllers(): void
     {
         // Register the controller classes
-        $config = config("paths");
-        foreach ($this->classMap($config['controllers']) as $class_name => $filename) {
+        $controllers_path = config("paths.controllers");
+        foreach (classMap($controllers_path) as $class_name => $filename) {
             $this->router->registerClass($class_name);
         }
     }
@@ -50,18 +49,6 @@ class Kernel implements NebulaKernel
         foreach ($this->middleware as $i => $class) {
             $this->middleware[$i] = app()->get($class);
         }
-    }
-
-    /**
-     * Generate a class map for the given directory
-     * @return array<class-string,non-empty-string>
-     */
-    public function classMap(string $directory): array
-    {
-        if (!file_exists($directory)) {
-            throw new \Exception("class map directory doesn't exist");
-        }
-        return ClassMapGenerator::createMap($directory);
     }
 
     /**

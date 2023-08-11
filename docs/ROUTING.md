@@ -31,12 +31,16 @@ $router->registerRoute($route);
 There is a helper method included for adding routes quickly:
 
 ```php
+// Using a payload closure
 app()->route('GET', '/', function() {
     return "Hello, world!";
 }, middleware: ['cached']);
+
+// Using a controller endpoint
+app()->route('GET', '/', 'SomeController@index', middleware: ['auth']);
 ```
 
-## Attribute-Based Routing
+## Attribute-Based Routing ⭐
 
 Attribute-based routing simplifies route definition using attributes directly in your controller methods. Here's how it works:
 
