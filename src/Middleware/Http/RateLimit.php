@@ -37,7 +37,7 @@ class RateLimit implements Middleware
 
     $ipAddress = ip();
 
-    $rateLimit = $config['requests_per_second'] ?? 25; // Number of requests allowed per window
+    $rateLimit = intval($config['requests_per_second']) ?? 25; // Number of requests allowed per window
     $ipKey = "ip:$ipAddress";
 
     // Add the current timestamp to the Redis Sorted Set

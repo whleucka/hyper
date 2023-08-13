@@ -9,7 +9,7 @@ use Closure;
 /**
  * This middleware caches responses in Redis
  * Route must have "cached" middleware defined
- * 
+ *
  * @package Nebula\Middleware\Http
  */
 class CachedResponse implements Middleware

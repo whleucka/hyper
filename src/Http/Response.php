@@ -6,7 +6,7 @@ use Nebula\Interfaces\Http\Response as NebulaResponse;
 
 class Response implements NebulaResponse
 {
-    private string $content = '';
+    private mixed $content = '';
 
     public function setStatusCode(int $statusCode = 200): void
     {
@@ -23,9 +23,14 @@ class Response implements NebulaResponse
         header("$name: $value");
     }
 
-    public function setContent(string $content): void
+    public function setContent(mixed $content): void
     {
         $this->content = $content;
+    }
+
+    public function getContent(): mixed
+    {
+        return $this->content;
     }
 
     public function send(): void
