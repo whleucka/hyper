@@ -11,4 +11,6 @@ return [
   // Request rate limiting configuration
   'requests_per_second' => 25,
   'rps_window_seconds' => 60,
+  // Cache configuration
+  'cache_default_ttl' => 60 * 15, // 15 minutes
 ];

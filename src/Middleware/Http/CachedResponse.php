@@ -19,9 +19,15 @@ class CachedResponse implements Middleware
     $route_middleware = $request->route?->getMiddleware();
     $config = config('redis');
     $enabled = $config['enabled'];
-    if ($enabled && $route_middleware && in_array("cached", $route_middleware)) {
+    if ($enabled && $route_middleware && preg_grep("/cache/", $route_middleware)) {
+      // Create a new Redis client
       $client = new \Predis\Client($config);
+      // Get the cache duration from the route middleware
+      $ttl = str_replace('cache=', '', $route_middleware[0]);
+      // Convert the cache duration to an integer
+      $cacheDuration = $ttl !== 'cache' ? intval($ttl) : $config['cache_default_ttl'];
 
+      // Generate a unique cache key based on the request URI
       $cacheKey = 'cache:' . $request->getUri(); // Generate a unique cache key based on the request URI
 
       // Attempt to retrieve the cached response from Redis
@@ -29,15 +35,16 @@ class CachedResponse implements Middleware
 
       if (!is_null($cachedResponse)) {
         // If cached response exists, return it immediately
-        return unserialize($cachedResponse);
+        $cachedResponse = unserialize($cachedResponse);
+        $cachedResponse->setHeader('Cache-Control', 'max-age=' . $cacheDuration . ', public');
+        return $cachedResponse;
       }
 
       // If the response is not cached, proceed to the next middleware to generate the response
       $response = $next($request);
 
-      // Cache the response if it's cacheable (e.g., successful responses with cache-control headers)
-      if ($response->getStatusCode() === 200 && $response->hasHeader('Cache-Control')) {
-        $cacheDuration = 60 * 15; // Default cache duration is 15 minutes
+      // Cache the response
+      if ($response->getStatusCode() === 200) {
         $serializedResponse = serialize($response);
 
         // Store the response in Redis with the specified cache duration

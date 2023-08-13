@@ -14,6 +14,6 @@ $app = require_once __DIR__ . "/../bootstrap/app.php";
 // Attribute-based-routing
 $app->route('GET', '/', function() {
     return "Hello, world!";
-}, middleware: ['cached']);
+}, middleware: ['cache=1440']);
 
 $app->run(Nebula\Interfaces\Http\Kernel::class);
