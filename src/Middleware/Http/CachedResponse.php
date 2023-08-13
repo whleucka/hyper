@@ -36,6 +36,7 @@ class CachedResponse implements Middleware
       if (!is_null($cachedResponse)) {
         // If cached response exists, return it immediately
         $cachedResponse = unserialize($cachedResponse);
+        $cachedResponse->setHeader('Cache-Control', 'max-age=' . $cacheDuration . ', public');
         return $cachedResponse;
       }
 
