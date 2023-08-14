@@ -23,10 +23,14 @@ class RateLimit implements Middleware
     $config = config('redis');
     if ($config['enabled'] && $route_middleware && (preg_grep("/rate_limit/", $route_middleware) || in_array("api", $route_middleware))) {
       $index = middlewareIndex($route_middleware, 'rate_limit');
-      $route_setting = str_replace('rate_limit=', '', $route_middleware[$index]);
       $default = $config['requests_per_second'];
-      $rps = $route_setting && $route_setting !== 'rate_limit' ? intval($route_setting) : $default;
-      $result = $this->rateLimit($rps);
+      if (preg_grep("/rate_limit/", $route_middleware)) {
+        $route_setting = str_replace('rate_limit=', '', $route_middleware[$index]);
+        $rps = $route_setting && $route_setting !== 'rate_limit' ? intval($route_setting) : $default;
+        $result = $this->rateLimit($rps);
+      } else {
+        $result = $this->rateLimit($default);
+      }
       if (!$result) {
         return $this->response(429, "Too many requests");
       }
