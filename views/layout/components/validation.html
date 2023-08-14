@@ -1,0 +1,9 @@
+{% if name in form_errors|keys %}
+  <div class="d-flex flex-column py-2">
+  {% for error in form_errors[name] %}
+    {% if error|trim != '' %}
+      <p class="p-0 m-0 text-danger align-items-center"><small>⚠️ </small>{{ error }}</p>
+    {% endif %}
+  {% endfor %}
+  </div>
+{% endif %}

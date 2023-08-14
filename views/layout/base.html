@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Nebula</title>
+    <title>{% block title %}Nebula{% endblock %}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block head %} 
+      <link href="/assets/css/style.css" rel="stylesheet">
+    {% endblock %}
   </head>
   <body>
   {% block body %} 
+  {% endblock %}
+  {% block body_scripts %} 
   {% endblock %}
   </body>
 </html>

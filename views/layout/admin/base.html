@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>{% block title %}Admin{% endblock %}</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/assets/dist/css/admin.css" rel="stylesheet">
-    {% block head %} 
-    {% endblock %}
-  </head>
-  <body>
-  {% block body %} 
-  {% endblock %}
-  {% block body_scripts %} 
-  {% endblock %}
-  </body>
-</html>
+{% extends "layout/base.html" %}
+
+{% block title %}Admin{% endblock %}
+
+{% block head %} 
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+{{ parent() }}
+{% endblock %}
+
+{% block body_scripts %} 
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

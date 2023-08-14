@@ -3,43 +3,38 @@
 {% block title %}{{parent()}} - Register{% endblock %}
 
 {% block body %}
-  <section class="bg-gray-50 dark:bg-gray-900">
-    <form id="form-register" action="/admin/register" method="POST">
+  <section id="admin-register" class="form-admin">
+    <form action="/admin/register" method="POST">
       {{ csrf()|raw }}
-      <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
-        <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-          <img class="w-8 h-8 mr-2 rounded-lg" src="/assets/img/nebula.jpeg" alt="logo">
-            Nebula
-        </a>
-        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white text-center">
-              Create new account
-            </h1>
-            <form class="space-y-4 md:space-y-6" action="#">
-              {% include 'layout/components/input.html' with { 'label': 'Name', 'name': 'name', 'placeholder': 'First and Last Name', 'required': true } %}
-              {% include 'layout/components/input.html' with { 'label': 'Email', 'name': 'email', 'type': 'email', 'placeholder': 'you@company.com', 'required': true } %}
-              {% include 'layout/components/input.html' with { 'label': 'Password', 'name': 'password', 'type': 'password', 'placeholder': '••••••••', 'required': true } %}
-              {% include 'layout/components/input.html' with { 'label': 'Confirm Password', 'name': 'password_match', 'type': 'password', 'placeholder': '••••••••', 'required': true } %}
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <input id="terms" aria-describedby="terms" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="">
-                </div>
-                <div class="ml-3 text-sm">
-                  <label for="terms" class="font-light text-gray-500 dark:text-gray-300">I accept the <a class="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">terms and conditions</a></label>
-                </div>
-              </div>
-              <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Register</button>
-              <p class="text-sm font-light text-gray-500 dark:text-gray-400 flex justify-center">
-                Already have an account? <a href="/admin/sign-in" class="ps-2 font-medium text-primary-600 hover:underline dark:text-primary-500">Sign in</a>
-              </p>
-              <p class="flex justify-center content-center text-sm font-light text-gray-500">
-                <img src="/assets/img/lock.png" alt="lock" style="height: 17px;"> <span class="ps-2">256-Bit SSL Encryption (AES-256)</span>
-              </p>
-            </form>
-          </div>
-        </div>
+      <h1 class="h3 mb-3 fw-normal">Create new account</h1>
+
+      <div class="form-floating">
+        <input name="name" type="name" class="form-control" id="floatingInput" placeholder="Your name">
+        <label for="floatingInput">Full name</label>
+        {% include 'layout/components/validation.html' with { 'name': 'name' } %}
       </div>
+      <div class="form-floating mt-2">
+        <input name="email" type="email" class="form-control" id="floatingPassword" placeholder="name@example.com">
+        <label for="floatingInput">Email</label>
+        {% include 'layout/components/validation.html' with { 'name': 'email' } %}
+      </div>
+      <div class="form-floating mt-2">
+        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+        {% include 'layout/components/validation.html' with { 'name': 'password' } %}
+      </div>
+      <div class="form-floating mt-2">
+        <input name="password_match" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Password (agian)</label>
+        {% include 'layout/components/validation.html' with { 'name': 'password_match' } %}
+      </div>
+
+      <p><a href="/admin/sign-in">Already have an account?</a></p>
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+      <p class="mt-3 mb-3 text-muted text-center">
+        <img class="rounded" title="Nebula" src="/assets/img/nebula.jpeg" alt="" height="17" width="17">
+        <img src="/assets/img/lock.png" alt="lock" height="17" width="17"> <span class="ps-2">256-Bit SSL Encryption (AES-256)</span>
+      </p>
     </form>
   </section>
 {% endblock %}
