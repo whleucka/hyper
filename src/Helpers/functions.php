@@ -33,6 +33,18 @@ function dd(...$args)
 }
 
 /**
+ * Get the middleware index of a given middleware name
+ */
+function middlewareIndex(array $middleware, string $name)
+{
+    foreach ($middleware as $key => $one) {
+        if (preg_match("/$name/", $one)) {
+            return $key;
+        }
+    }
+}
+
+/**
  * Generate a class map for the given directory
  * @return array<class-string,non-empty-string>
  */

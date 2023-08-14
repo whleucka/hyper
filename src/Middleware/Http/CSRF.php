@@ -16,8 +16,10 @@ class CSRF implements Middleware
   public function handle(Request $request, Closure $next): Response
   {
     $this->token();
+    $route_middleware = $request->route?->getMiddleware();
 
-    if (!$this->validate($request)) {
+    // API endpoints are not CSRF protected
+    if (!$this->validate($request) && $route_middleware && !in_array("api", $route_middleware)) {
       $response = app()->get(Response::class);
       $response->setStatusCode(403);
       $response->setContent('Invalid CSRF token');

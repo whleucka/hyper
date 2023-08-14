@@ -16,11 +16,17 @@ class RateLimit implements Middleware
 {
   use NebulaResponse;
 
+
   public function handle(Request $request, Closure $next): Response
   {
     $route_middleware = $request->route?->getMiddleware();
-    if (env("REDIS_ENABLED") && $route_middleware && (in_array("rate_limit", $route_middleware) || in_array("api", $route_middleware))) {
-      $result = $this->rateLimit();
+    $config = config('redis');
+    if ($config['enabled'] && $route_middleware && (preg_grep("/rate_limit/", $route_middleware) || in_array("api", $route_middleware))) {
+      $index = middlewareIndex($route_middleware, 'rate_limit');
+      $route_setting = str_replace('rate_limit=', '', $route_middleware[$index]);
+      $default = $config['requests_per_second'];
+      $rps = $route_setting && $route_setting !== 'rate_limit' ? intval($route_setting) : $default;
+      $result = $this->rateLimit($rps);
       if (!$result) {
         return $this->response(429, "Too many requests");
       }
@@ -30,14 +36,14 @@ class RateLimit implements Middleware
     return $response;
   }
 
-  private function rateLimit(): bool
+  private function rateLimit(int $rps): bool
   {
     $config = config('redis');
     $client = new \Predis\Client($config);
 
     $ipAddress = ip();
 
-    $rateLimit = intval($config['requests_per_second']) ?? 25; // Number of requests allowed per window
+    $rateLimit = intval($rps); // Number of requests allowed per window
     $ipKey = "ip:$ipAddress";
 
     // Add the current timestamp to the Redis Sorted Set

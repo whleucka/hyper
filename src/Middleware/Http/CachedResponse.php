@@ -23,7 +23,8 @@ class CachedResponse implements Middleware
       // Create a new Redis client
       $client = new \Predis\Client($config);
       // Get the cache duration from the route middleware
-      $ttl = str_replace('cache=', '', $route_middleware[0]);
+      $index = middlewareIndex($route_middleware, 'cache');
+      $ttl = str_replace('cache=', '', $route_middleware[$index]);
       // Convert the cache duration to an integer
       $cacheDuration = $ttl !== 'cache' ? intval($ttl) : $config['cache_default_ttl'];
 
