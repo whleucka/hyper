@@ -11,6 +11,10 @@ use Nebula\Traits\Instance\Singleton;
 use StellarRouter\Route;
 use Throwable;
 
+/**
+ * Class Kernel
+ * @package Nebula\Http
+ */
 class Kernel implements NebulaKernel
 {
     use HttpResponse;
@@ -130,7 +134,7 @@ class Kernel implements NebulaKernel
     /**
      * Return a nice error page
      */
-    private function whoops(Throwable $exception)
+    private function whoops(Throwable $exception): Response
     {
         $whoops = new \Whoops\Run();
         $whoops->allowQuit(false);

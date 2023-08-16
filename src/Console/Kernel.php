@@ -6,6 +6,10 @@ use Nebula\Interfaces\Framework\Kernel as ConsoleKernel;
 use Nebula\Interfaces\Http\Response;
 use Throwable;
 
+/**
+ * Class Kernel
+ * @package Nebula\Console
+ */
 class Kernel implements ConsoleKernel
 {
     protected Response $response;
@@ -175,7 +179,7 @@ EOT;
         }
     }
 
-    protected function migration(string $file, bool $up, $skip = false): void
+    protected function migration(string $file, bool $up, bool $skip = false): void
     {
         $base = basename($file);
         $filename = $this->paths["migrations"] . $base;
@@ -250,7 +254,7 @@ EOT;
         return glob($this->paths["migrations"] . "*.php");
     }
 
-    protected function runMigrations($skip = false): void
+    protected function runMigrations(bool $skip = false): void
     {
         $this->write("Running migrations...");
         $files = $this->getMigrationFiles();
@@ -262,13 +266,13 @@ EOT;
         $this->write("Migrations complete!");
     }
 
-    protected function dropDatabase()
+    protected function dropDatabase(): void
     {
         $db_name = config("database.name");
         db()->query("DROP DATABASE IF EXISTS " . $db_name);
     }
 
-    protected function createDatabase()
+    protected function createDatabase(): void
     {
         $db_name = config("database.name");
         db()->query("CREATE DATABASE IF NOT EXISTS " . $db_name);
@@ -276,7 +280,7 @@ EOT;
         $this->write("Database created!");
     }
 
-    protected function migrationExists($file): bool
+    protected function migrationExists(string $file): bool
     {
         $result = db()->select(
             "SELECT * FROM migrations WHERE migration_hash = ?",
@@ -285,7 +289,7 @@ EOT;
         return !is_null($result) && $result !== false;
     }
 
-    protected function recordMigration($file): void
+    protected function recordMigration(string $file): void
     {
         db()->query(
             "INSERT IGNORE INTO migrations SET migration_hash = ?",
@@ -293,7 +297,7 @@ EOT;
         );
     }
 
-    protected function deleteMigration($file): void
+    protected function deleteMigration(string $file): void
     {
         db()->query(
             "DELETE FROM migrations WHERE migration_hash = ?",
