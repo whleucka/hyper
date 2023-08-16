@@ -179,8 +179,11 @@ EOT;
         }
     }
 
-    protected function migration(string $file, bool $up, bool $skip = false): void
-    {
+    protected function migration(
+        string $file,
+        bool $up,
+        bool $skip = false
+    ): void {
         $base = basename($file);
         $filename = $this->paths["migrations"] . $base;
         $migration = $this->getMigrationClass($filename);
