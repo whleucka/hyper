@@ -65,6 +65,18 @@ return Schema::create("users", function (Blueprint $table) {
 });
 ```
 
+⭐ There is a build in command for creating a new table migration file:
+
+```bash
+❯ ./nebula --migration-table=<table_name>
+```
+
+If you want to create an empty migration file, then run:
+
+```bash
+❯ ./nebula --migration-create=<migration_name>
+```
+
 ### Dropping Tables
 
 To drop a table, you can use the `Schema::drop()` method within the `down()` method of your migration. Simply pass the table name as a parameter.
@@ -93,7 +105,7 @@ Example:
 To apply the defined migrations and update the database schema, you can use the Nebula command-line interface (CLI). Run the following command:
 
 ```
-./nebula migration-up=<file>
+./nebula migration-up=<filename>.php
 ```
 
 This command will run all pending migrations that haven't been applied yet.
@@ -103,7 +115,7 @@ This command will run all pending migrations that haven't been applied yet.
 If you need to undo a migration, you can use the rollback command:
 
 ```
-./nebula migration-down=<file>
+./nebula migration-down=<filename>.php
 ```
 
 This will undo a previous migration.

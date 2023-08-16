@@ -23,12 +23,14 @@ class Kernel implements ConsoleKernel
         ],
         "long" => [
             "help" => "Print help and exit.",
+            "migration-table:" => "Create new table migration. Usage: --migration-table=<table_name>",
+            "migration-create:" => "Create new empty migration. Usage: --migration-create=<migration_name>",
             "migration-list" => "List all migrations and their status.",
             "migration-run" => "Run all migrations that have not been run yet.",
             "migration-up:" =>
-                "Run migration up on file. Usage: --migration-up=filename.php",
+                "Run migration up on file. Usage: --migration-up=<filename>.php",
             "migration-down:" =>
-                "Run migration down on file. Usage: --migration-down=filename.php",
+                "Run migration down on file. Usage: --migration-down=<filename>.php",
             "migration-fresh" =>
                 "Create new database and run all migrations. Be careful!",
         ],
@@ -49,6 +51,8 @@ class Kernel implements ConsoleKernel
                 "s" => $this->startServer(),
                 "t" => $this->runTests(),
                 "h", "help" => $this->displayHelp(),
+                "migration-table" => $this->migrationCreate($value, '_table'),
+                "migration-create" => $this->migrationCreate($value),
                 "migration-run" => $this->runMigrations(),
                 "migration-list" => $this->migrationList(),
                 "migration-up" => $this->migration($value, true),
@@ -83,13 +87,64 @@ EOT;
             foreach ($opts as $opt => $desc) {
                 $opt = str_replace(":", "", $opt);
                 $opt = $type === "short" ? "-" . $opt : "--" . $opt;
-                $spacer = floor(strlen($opt) / 6);
-                $offset = 3;
+                $spacer = round(strlen($opt) / 8);
+                $offset = 4;
                 $spacer = str_repeat("\t", $offset - $spacer);
                 $help .= "  {$opt}{$spacer}{$desc}" . PHP_EOL;
             }
         }
         return "\n" . $help;
+    }
+
+    protected function migrationCreate(string $table_name, string $prefix = ''): void
+    {
+        $table_name = strtolower($table_name);
+        $table_name = str_replace(" ", "_", $table_name);
+        $table_name = str_replace("-", "_", $table_name);
+        $table_name = str_replace(".", "_", $table_name);
+
+        $table_up = <<<EOT
+return Schema::create("%s", function (Blueprint \$table) {
+        });
+EOT;
+        $table_down = <<<EOT
+return Schema::drop("%s");
+EOT;
+
+        $template = <<<EOT
+<?php
+
+namespace Nebula\Migrations;
+
+use Nebula\Interfaces\Database\Migration;
+use Nebula\Database\Blueprint;
+use Nebula\Database\Schema;
+
+return new class implements Migration
+{
+    public function up(): string
+    {
+        %s
+    }
+
+    public function down(): string
+    {
+        %s
+    }
+};
+EOT;
+        if ($prefix === '_table') {
+            $template = sprintf($template, sprintf($table_up, $table_name), sprintf($table_down, $table_name));
+        } else {
+            $template = sprintf($template, 'return "";', 'return "";');
+        }
+
+        $filename = $this->paths["migrations"] . time() . "{$prefix}_{$table_name}.php";
+        if (file_put_contents($filename, $template)) {
+            $this->write("Migration created: {$filename}");
+        } else {
+            $this->write("Failed to create migration!");
+        }
     }
 
     protected function runTests(): void
