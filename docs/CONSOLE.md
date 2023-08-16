@@ -1,7 +1,7 @@
 # Nebula PHP Framework - Console (CLI) Documentation
 
 ```bash
-❯ ./nebula -h
+./nebula -h
   _   _      _           _
  | \ | | ___| |__  _   _| | __ _
  |  \| |/ _ \ '_ \| | | | |/ _` |

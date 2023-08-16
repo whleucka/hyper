@@ -68,13 +68,13 @@ return Schema::create("users", function (Blueprint $table) {
 ⭐ There is a build in command for creating a new table migration file:
 
 ```bash
-❯ ./nebula --migration-table=<table_name>
+./nebula --migration-table=<table_name>
 ```
 
 If you want to create an empty migration file, then run:
 
 ```bash
-❯ ./nebula --migration-create=<migration_name>
+./nebula --migration-create=<migration_name>
 ```
 
 ### Dropping Tables
@@ -95,7 +95,7 @@ To show all migration files and their statuses, you can use the Nebula command-l
 
 Example:
 ```bash
-❯ ./nebula --migration-list
+./nebula --migration-list
 [PENDING] 1688141260_table_users.php
 [PENDING] 1689820896_table_audit.php
 ```
