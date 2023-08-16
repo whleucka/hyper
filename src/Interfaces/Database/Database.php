@@ -5,6 +5,6 @@ use PDOStatement;
 
 interface Database
 {
-  public function connect(array $config): void;
-  public function run(string $sql, array $params = []): ?PDOStatement;
+    public function connect(array $config): void;
+    public function run(string $sql, array $params = []): ?PDOStatement;
 }

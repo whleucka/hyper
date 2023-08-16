@@ -14,17 +14,17 @@ use Closure;
  */
 class JsonResponse implements Middleware
 {
-  public function handle(Request $request, Closure $next): Response
-  {
-    $response = $next($request);
+    public function handle(Request $request, Closure $next): Response
+    {
+        $response = $next($request);
 
-    $content = $response->getContent();
+        $content = $response->getContent();
 
-    if (is_array($content)) {
-      $response->setHeader('Content-Type', 'application/json');
-      $response->setContent(json_encode($content));
+        if (is_array($content)) {
+            $response->setHeader("Content-Type", "application/json");
+            $response->setContent(json_encode($content));
+        }
+
+        return $response;
     }
-
-    return $response;
-  }
 }

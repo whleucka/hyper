@@ -13,23 +13,23 @@ use Closure;
  */
 class Log implements Middleware
 {
-  public function handle(Request $request, Closure $next): Response
-  {
-    $this->logRequest($request);
+    public function handle(Request $request, Closure $next): Response
+    {
+        $this->logRequest($request);
 
-    $response = $next($request);
+        $response = $next($request);
 
-    return $response;
-  }
+        return $response;
+    }
 
-  private function logRequest(Request $request): void
-  {
-    $logMessage = sprintf(
-      "%s %s %s",
-      $request->server("REMOTE_ADDR"),
-      $request->getMethod(),
-      $request->getUri(),
-    );
-    logger("debug", $logMessage);
-  }
+    private function logRequest(Request $request): void
+    {
+        $logMessage = sprintf(
+            "%s %s %s",
+            $request->server("REMOTE_ADDR"),
+            $request->getMethod(),
+            $request->getUri()
+        );
+        logger("debug", $logMessage);
+    }
 }

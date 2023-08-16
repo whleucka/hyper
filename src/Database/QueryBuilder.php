@@ -36,8 +36,11 @@ class QueryBuilder implements QueryBuilderInterface
      * @param Closure(): void $fn
      * @param string $separator
      */
-    private function mapToString(array $data, \Closure $fn, string $separator = ", "): string
-    {
+    private function mapToString(
+        array $data,
+        \Closure $fn,
+        string $separator = ", "
+    ): string {
         $columns = array_map($fn, $data);
         return implode($separator, $columns);
     }
@@ -182,23 +185,42 @@ class QueryBuilder implements QueryBuilderInterface
         };
         if ($this->mode === "select") {
             if (!empty($this->columns)) {
-                $select_stmt = implode(', ', $this->columns);
-                $sql = str_replace('*', $select_stmt, $sql);
+                $select_stmt = implode(", ", $this->columns);
+                $sql = str_replace("*", $select_stmt, $sql);
             }
             if (!empty($this->where)) {
-                $where_clause = $this->mapToString(array_keys($this->where), fn ($key) => "($key = ?)", " AND ");
+                $where_clause = $this->mapToString(
+                    array_keys($this->where),
+                    fn($key) => "($key = ?)",
+                    " AND "
+                );
                 $sql .= "WHERE $where_clause ";
             }
             if (!empty($this->group_by)) {
-                $group_by_clause = $this->mapToString($this->group_by, fn ($column) => $column, ", ");
+                $group_by_clause = $this->mapToString(
+                    $this->group_by,
+                    fn($column) => $column,
+                    ", "
+                );
                 $sql .= "GROUP BY $group_by_clause ";
             }
             if (!empty($this->having)) {
-                $having_clause = $this->mapToString(array_values($this->group_by), fn ($key) => "($key = ?)", " AND ");
+                $having_clause = $this->mapToString(
+                    array_values($this->group_by),
+                    fn($key) => "($key = ?)",
+                    " AND "
+                );
                 $sql .= "HAVING $having_clause ";
             }
             if (!empty($this->order_by)) {
-                $order_by_clause = implode(", ", array_map(fn ($key, $value) => "$key $value", array_keys($this->order_by), array_values($this->order_by)));
+                $order_by_clause = implode(
+                    ", ",
+                    array_map(
+                        fn($key, $value) => "$key $value",
+                        array_keys($this->order_by),
+                        array_values($this->order_by)
+                    )
+                );
                 $sql .= "ORDER BY $order_by_clause ";
             }
             if (!is_null($this->limit)) {
@@ -209,13 +231,21 @@ class QueryBuilder implements QueryBuilderInterface
             }
         } else {
             if (!empty($this->columns)) {
-                $columns = $this->mapToString(array_keys($this->columns), fn ($key) => "$key = ?", ", ");
+                $columns = $this->mapToString(
+                    array_keys($this->columns),
+                    fn($key) => "$key = ?",
+                    ", "
+                );
                 $sql .= "$columns ";
             }
         }
         if ($this->mode === "update" || $this->mode === "delete") {
             if (!empty($this->where)) {
-                $where_clause = $this->mapToString(array_keys($this->where), fn ($key) => "($key = ?)", " AND ");
+                $where_clause = $this->mapToString(
+                    array_keys($this->where),
+                    fn($key) => "($key = ?)",
+                    " AND "
+                );
                 $sql .= "WHERE $where_clause ";
             }
         }

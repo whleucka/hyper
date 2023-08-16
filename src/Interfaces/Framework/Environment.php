@@ -4,5 +4,5 @@ namespace Nebula\Interfaces\Framework;
 
 interface Environment
 {
-  public function get(string $name): mixed;
+    public function get(string $name): mixed;
 }

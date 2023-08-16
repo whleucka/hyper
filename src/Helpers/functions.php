@@ -19,7 +19,7 @@ use Composer\ClassMapGenerator\ClassMapGenerator;
  */
 function dump(...$args)
 {
-    $out = array_map(fn ($arg) => print_r($arg, true), $args);
+    $out = array_map(fn($arg) => print_r($arg, true), $args);
     printf("<pre>%s</pre>", implode("\n\n", $out));
 }
 
@@ -29,7 +29,7 @@ function dump(...$args)
 function dd(...$args)
 {
     dump(...$args);
-    die;
+    die();
 }
 
 /**
@@ -58,18 +58,20 @@ function classMap(string $directory): array
 
 function redirect(string $url, int $code = 301, int $delay = 0): never
 {
-    logger('timeEnd', 'Nebula');
+    logger("timeEnd", "Nebula");
     if ($delay > 0) {
         header("Refresh: $delay; URL=$url", response_code: $code);
     } else {
         header("Location: $url", response_code: $code);
     }
-    exit;
+    exit();
 }
 
 function redirectRoute(string $name, int $code = 301, int $delay = 0)
 {
-    $route = app()->use()->router->findRouteByName($name);
+    $route = app()
+        ->use()
+        ->router->findRouteByName($name);
     if ($route) {
         redirect($route->getPath(), $code, $delay);
     }
@@ -78,15 +80,15 @@ function redirectRoute(string $name, int $code = 301, int $delay = 0)
 function initLogger()
 {
     try {
-        $log_path = config('paths.logs');
+        $log_path = config("paths.logs");
         $log_name = "nebula";
         $log_ext = "log";
-        $log_file = $log_path . $log_name . '.' . $log_ext;
+        $log_file = $log_path . $log_name . "." . $log_ext;
         if (!file_exists($log_file)) {
             touch($log_file);
         }
         Logger::$write_log = true;
-        Logger::$log_level = 'debug';
+        Logger::$log_level = "debug";
         Logger::$log_dir = $log_path;
         Logger::$log_file_name = $log_name;
         Logger::$log_file_extension = $log_ext;
@@ -95,7 +97,7 @@ function initLogger()
     }
 }
 
-function logger(string $level, string $message, string $title = '')
+function logger(string $level, string $message, string $title = "")
 {
     $enabled = config("application.logging");
     if ($enabled) {
@@ -116,12 +118,12 @@ function logger(string $level, string $message, string $title = '')
 
 function ip()
 {
-    if (!empty(request()->server()['HTTP_CLIENT_IP'])) {
-        $ip = request()->server()['HTTP_CLIENT_IP'];
-    } elseif (!empty(request()->server()['HTTP_X_FORWARDED_FOR'])) {
-        $ip = request()->server()['HTTP_X_FORWARDED_FOR'];
+    if (!empty(request()->server()["HTTP_CLIENT_IP"])) {
+        $ip = request()->server()["HTTP_CLIENT_IP"];
+    } elseif (!empty(request()->server()["HTTP_X_FORWARDED_FOR"])) {
+        $ip = request()->server()["HTTP_X_FORWARDED_FOR"];
     } else {
-        $ip = request()->server()['REMOTE_ADDR'];
+        $ip = request()->server()["REMOTE_ADDR"];
     }
     return $ip;
 }
@@ -147,10 +149,11 @@ function request()
  */
 function config(string $name)
 {
-    $name_split = explode('.', $name);
+    $name_split = explode(".", $name);
     if (count($name_split) > 1) {
         $config = \Nebula\Config\Config::get($name_split[0]);
-        return $config[$name_split[1]] ?? throw new \Exception("Configuration item doesn't exist");
+        return $config[$name_split[1]] ??
+            throw new \Exception("Configuration item doesn't exist");
     }
     return \Nebula\Config\Config::get($name);
 }
@@ -187,7 +190,7 @@ function twig(string $path, array $data = []): string
 {
     $twig = app()->get(\Twig\Environment::class);
     $form_errors = Validate::$errors;
-    $data['has_form_errors'] = !empty($form_errors);
-    $data['form_errors'] = $form_errors;
+    $data["has_form_errors"] = !empty($form_errors);
+    $data["form_errors"] = $form_errors;
     return $twig->render($path, $data);
 }

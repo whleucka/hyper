@@ -6,7 +6,7 @@ use Nebula\Interfaces\Http\Response as NebulaResponse;
 
 class Response implements NebulaResponse
 {
-    private mixed $content = '';
+    private mixed $content = "";
 
     public function setStatusCode(int $statusCode = 200): void
     {
@@ -45,6 +45,6 @@ class Response implements NebulaResponse
 
     public function hasHeader(string $name): bool
     {
-        return preg_match("/$name/", implode(';', headers_list()));
+        return preg_match("/$name/", implode(";", headers_list()));
     }
 }

@@ -36,7 +36,13 @@ class Request implements NebulaRequest
 
     public function request(?string $name = null): mixed
     {
-        return $name ? $_REQUEST[$name] : array_filter($_REQUEST, fn($key) => $key != 'PHPSESSID', ARRAY_FILTER_USE_KEY);
+        return $name
+            ? $_REQUEST[$name]
+            : array_filter(
+                $_REQUEST,
+                fn($key) => $key != "PHPSESSID",
+                ARRAY_FILTER_USE_KEY
+            );
     }
 
     public function post(?string $name = null): mixed

@@ -232,7 +232,9 @@ class Validate
      */
     public static function unique($value, $table, $column): bool
     {
-        if (!$table) throw new \Error("unique requires a table name");
+        if (!$table) {
+            throw new \Error("unique requires a table name");
+        }
         $qb = QueryBuilder::select($table)->where([$column => $value]);
         $result = db()->select($qb->build(), ...$qb->values());
         return !$result;

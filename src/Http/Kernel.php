@@ -61,13 +61,13 @@ class Kernel implements NebulaKernel
         $response = app()->get(Response::class);
         if ($route) {
             try {
-                $response->setHeader('X-Powered-By', 'Nebula');
+                $response->setHeader("X-Powered-By", "Nebula");
                 $handlerClass = $route->getHandlerClass();
                 $handlerMethod = $route->getHandlerMethod();
                 $routeParameters = $route->getParameters();
                 $routePayload = $route->getPayload();
                 $response->setStatusCode(200);
-                $content = '';
+                $content = "";
                 if ($handlerClass) {
                     $class = app()->get($handlerClass);
                     $content = $class->$handlerMethod(...$routeParameters);
@@ -92,13 +92,16 @@ class Kernel implements NebulaKernel
     {
         $request = request();
         // Figure out the route
-        $route = $this->router->handleRequest($request->getMethod(), $request->getUri());
+        $route = $this->router->handleRequest(
+            $request->getMethod(),
+            $request->getUri()
+        );
         // Save the route to the request (e.g. use in middleware)
         $request->route = $route;
         $runner = app()->get(Middleware::class);
         $response = $runner
             ->layer($this->middleware)
-            ->handle($request, fn () => $this->resolveRoute($route));
+            ->handle($request, fn() => $this->resolveRoute($route));
         return $response;
     }
 
@@ -110,10 +113,18 @@ class Kernel implements NebulaKernel
         $config = config("application");
         error_log("\n");
         error_log("Nebula Exception" . PHP_EOL);
-        error_log("File: " . $exception->getFile() . ":" . $exception->getLine() . PHP_EOL);
+        error_log(
+            "File: " .
+                $exception->getFile() .
+                ":" .
+                $exception->getLine() .
+                PHP_EOL
+        );
         error_log("Message: " . $exception->getMessage() . PHP_EOL);
         error_log("Trace: " . $exception->getTraceAsString() . PHP_EOL);
-        return $config['debug'] ? $this->whoops($exception) : $this->response(500, "Server error");
+        return $config["debug"]
+            ? $this->whoops($exception)
+            : $this->response(500, "Server error");
     }
 
     /**
@@ -133,7 +144,7 @@ class Kernel implements NebulaKernel
      */
     public function terminate(): never
     {
-        logger('timeEnd', 'Nebula');
-        exit;
+        logger("timeEnd", "Nebula");
+        exit();
     }
 }

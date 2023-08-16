@@ -19,6 +19,6 @@ class Container
 
     public function __call($method, $args)
     {
-      return $this->container?->$method(...$args);
+        return $this->container?->$method(...$args);
     }
 }

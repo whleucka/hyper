@@ -20,7 +20,9 @@ class Application extends Container
     public function init(): void
     {
         if (is_null($this->kernel)) {
-            $this->kernel = $this->get($this->class ?? \Nebula\Interfaces\Http\Kernel::class);
+            $this->kernel = $this->get(
+                $this->class ?? \Nebula\Interfaces\Http\Kernel::class
+            );
             $this->kernel->setup($this);
         }
     }
@@ -40,27 +42,37 @@ class Application extends Container
     /**
      * Register a route
      */
-    public function route(string $method, string $path, \Closure|string $payload = null, ?string $name = null, array $middleware = []): Application
-    {
+    public function route(
+        string $method,
+        string $path,
+        \Closure|string $payload = null,
+        ?string $name = null,
+        array $middleware = []
+    ): Application {
         $handlerClass = $handlerMethod = null;
         if (is_string($payload)) {
             $controllers_path = config("paths.controllers");
             $classMap = classMap($controllers_path);
             // Parse the payload
-            if (!is_null($payload) && strpos($payload, '@') !== false) {
-                [$handlerClass, $handlerMethod] = explode('@', $payload);
-            } else if (!is_null($payload) && strpos($payload, '@') === false) {
+            if (!is_null($payload) && strpos($payload, "@") !== false) {
+                [$handlerClass, $handlerMethod] = explode("@", $payload);
+            } elseif (!is_null($payload) && strpos($payload, "@") === false) {
                 $handlerClass = $payload;
-                $handlerMethod = 'index';
-            } 
+                $handlerMethod = "index";
+            }
             // Verify that the controller class exists
-            $found = array_filter($classMap, fn ($class) => str_contains($class, $handlerClass));
+            $found = array_filter(
+                $classMap,
+                fn($class) => str_contains($class, $handlerClass)
+            );
             if ($found) {
                 $handlerClass = array_key_first($found);
             } else {
-                throw new \Exception("Controller class not found: {$handlerClass}");
+                throw new \Exception(
+                    "Controller class not found: {$handlerClass}"
+                );
             }
-        } 
+        }
 
         $this->init();
         $route = new Route(
