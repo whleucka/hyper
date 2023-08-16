@@ -11,17 +11,17 @@
 Usage:   nebula [options]
 
 Basic options:
-  -h			              Print help and exit.
-  -s			              Start development server.
-  -t			              Run tests.
-  --help	              Print help and exit.
-  --migration-table		  Create new table migration. Usage: --migration-table=<table_name>
+  -h				Print help and exit.
+  -s				Start development server.
+  -t				Run tests.
+  --help			Print help and exit.
+  --migration-table		Create new table migration. Usage: --migration-table=<table_name>
   --migration-create		Create new empty migration. Usage: --migration-create=<migration_name>
-  --migration-list		  List all migrations and their status.
-  --migration-run		    Run all migrations that have not been run yet.
-  --migration-up		    Run migration up on file. Usage: --migration-up=<filename>.php
-  --migration-down		  Run migration down on file. Usage: --migration-down=<filename>.php
-  --migration-fresh		  Create new database and run all migrations. Be careful!
+  --migration-list		List all migrations and their status.
+  --migration-run		Run all migrations that have not been run yet.
+  --migration-up		Run migration up on file. Usage: --migration-up=<filename>.php
+  --migration-down		Run migration down on file. Usage: --migration-down=<filename>.php
+  --migration-fresh		Create new database and run all migrations. Be careful!
 ```
 
 Welcome to the console (CLI) documentation for the Nebula PHP Framework. This guide will introduce you to the Nebula console capabilities, how to use the `Kernel` class to execute various commands, and provide insights into some of the available commands.
