@@ -8,6 +8,11 @@ use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Traits\Http\Response as HttpResponse;
 use Closure;
 
+/**
+ * This middleware provides authentication
+ *
+ * @package Nebula\Middleware\Admin
+ */
 class Authentication implements Middleware
 {
     use HttpResponse;

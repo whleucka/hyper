@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Idearia\Logger;
 use Nebula\Framework\Application;
 use Nebula\Http\Request;
@@ -156,6 +157,18 @@ function config(string $name)
             throw new \Exception("Configuration item doesn't exist");
     }
     return \Nebula\Config\Config::get($name);
+}
+
+function user(): ?User
+{
+    $uuid = session()->get("user");
+    if ($uuid) {
+        $user = User::search(["uuid" => $uuid]);
+        if ($user) {
+            return $user;
+        }
+    }
+    return null;
 }
 
 /**
