@@ -23,8 +23,10 @@ class Kernel implements ConsoleKernel
         ],
         "long" => [
             "help" => "Print help and exit.",
-            "migration-table:" => "Create new table migration. Usage: --migration-table=<table_name>",
-            "migration-create:" => "Create new empty migration. Usage: --migration-create=<migration_name>",
+            "migration-table:" =>
+                "Create new table migration. Usage: --migration-table=<table_name>",
+            "migration-create:" =>
+                "Create new empty migration. Usage: --migration-create=<migration_name>",
             "migration-list" => "List all migrations and their status.",
             "migration-run" => "Run all migrations that have not been run yet.",
             "migration-up:" =>
@@ -51,7 +53,7 @@ class Kernel implements ConsoleKernel
                 "s" => $this->startServer(),
                 "t" => $this->runTests(),
                 "h", "help" => $this->displayHelp(),
-                "migration-table" => $this->migrationCreate($value, '_table'),
+                "migration-table" => $this->migrationCreate($value, "_table"),
                 "migration-create" => $this->migrationCreate($value),
                 "migration-run" => $this->runMigrations(),
                 "migration-list" => $this->migrationList(),
@@ -96,8 +98,10 @@ EOT;
         return "\n" . $help;
     }
 
-    protected function migrationCreate(string $table_name, string $prefix = ''): void
-    {
+    protected function migrationCreate(
+        string $table_name,
+        string $prefix = ""
+    ): void {
         $table_name = strtolower($table_name);
         $table_name = str_replace(" ", "_", $table_name);
         $table_name = str_replace("-", "_", $table_name);
@@ -133,13 +137,18 @@ return new class implements Migration
     }
 };
 EOT;
-        if ($prefix === '_table') {
-            $template = sprintf($template, sprintf($table_up, $table_name), sprintf($table_down, $table_name));
+        if ($prefix === "_table") {
+            $template = sprintf(
+                $template,
+                sprintf($table_up, $table_name),
+                sprintf($table_down, $table_name)
+            );
         } else {
             $template = sprintf($template, 'return "";', 'return "";');
         }
 
-        $filename = $this->paths["migrations"] . time() . "{$prefix}_{$table_name}.php";
+        $filename =
+            $this->paths["migrations"] . time() . "{$prefix}_{$table_name}.php";
         if (file_put_contents($filename, $template)) {
             $this->write("Migration created: {$filename}");
         } else {
