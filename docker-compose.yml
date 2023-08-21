@@ -1,0 +1,54 @@
+version: '3.8'
+
+networks:
+  app-network:
+
+volumes:
+  mysql-data:
+
+services:
+  php-app:
+    image: php:8.1-fpm
+    container_name: php-app
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+      - redis
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-server
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx-config:/etc/nginx/conf.d
+      - ./:/var/www/html
+    networks:
+      - app-network
+    depends_on:
+      - php-app
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env.docker
+    volumes:
+      - ./docker/mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env.docker
+

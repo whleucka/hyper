@@ -39,6 +39,26 @@ cp .env.example .env
 - **Development**: Start building your application by creating controllers, views, and models within the `src` directory. 
 Hint: You can start a local development server by running `./nebula -s`
 
+- **Docker**: If you prefer to develop in a docker environment, then we got you covered! We ship with PHP 8.1, MySQL 8, and Redis
+
+Bring up the application:
+```bash
+docker-compose up --build -d
+```
+
+Bring down the application:
+```bash
+docker-compose down
+```
+
+**NOTE**: You may have to fix the permissions for logs & view cache. Execute these commands to fix that up.
+```bash
+docker-compose exec php-app sh
+chown -R www-data:www-data logs/
+chown -R www-data:www-data views/.cache
+```
+
+
 ### Admin Backend
 
 WIP: Nebula comes fully equipped with a sophisticated admin backend, easily accessible through the `/admin/sign-in` route. The power to enable or disable user registration rests in your hands, effortlessly adjustable within the `.env` configuration using the `ADMIN_REGISTER_ENABLED=true` toggle. Once authentication is successfully established, users are seamlessly guided to the `/admin/module/dashboard` destination. Nevertheless, this behaviour can be modified to match your application's unique specifications.
