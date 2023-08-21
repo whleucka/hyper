@@ -23,7 +23,7 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: nginx-server
+    container_name: nginx
     ports:
       - "80:80"
     volumes:
@@ -36,19 +36,23 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: mysql-db
+    container_name: mysql
     ports:
       - "3306:3306"
     env_file:
       - .env.docker
     volumes:
       - ./docker/mysql-data:/var/lib/mysql
+    networks:
+      - app-network
 
   redis:
     image: redis:latest
-    container_name: redis-server
+    container_name: redis
     ports:
       - "6379:6379"
     env_file:
       - .env.docker
+    networks:
+      - app-network
 
