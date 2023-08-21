@@ -39,7 +39,10 @@ cp .env.example .env
 - **Development**: Start building your application by creating controllers, views, and models within the `src` directory. 
 Hint: You can start a local development server by running `./nebula -s`
 
-- **Docker**: If you prefer to develop in a docker environment, then we got you covered! We ship with PHP 8.1, MySQL 8, and Redis
+
+### Docker
+
+If you prefer to develop in a docker environment, then we got you covered! We ship with PHP 8.1, MySQL 8, and Redis
 
 Bring up the application:
 ```bash
