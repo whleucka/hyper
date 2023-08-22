@@ -1,42 +1,42 @@
 version: '3.8'
 
 networks:
-  app-network:
+  network:
 
 volumes:
   mysql-data:
 
 services:
-  php-app:
+  nebula-app:
     image: php:8.1-fpm
-    container_name: php-app
+    container_name: nebula-app
     build:
       context: .
       dockerfile: ./docker/php/Dockerfile
     volumes:
       - ./:/var/www/html
     networks:
-      - app-network
+      - network
     depends_on:
-      - mysql
-      - redis
+      - nebula-mysql
+      - nebula-redis
 
-  nginx:
+  nebula-nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: nebula-nginx
     ports:
       - "80:80"
     volumes:
       - ./docker/nginx-config:/etc/nginx/conf.d
       - ./:/var/www/html
     networks:
-      - app-network
+      - network
     depends_on:
-      - php-app
+      - nebula-app
 
-  mysql:
+  nebula-mysql:
     image: mysql:8.0
-    container_name: mysql
+    container_name: nebula-mysql
     ports:
       - "3306:3306"
     env_file:
@@ -44,15 +44,15 @@ services:
     volumes:
       - ./docker/mysql-data:/var/lib/mysql
     networks:
-      - app-network
+      - network
 
-  redis:
+  nebula-redis:
     image: redis:latest
-    container_name: redis
+    container_name: nebula-redis
     ports:
       - "6379:6379"
     env_file:
       - .env.docker
     networks:
-      - app-network
+      - network
 
