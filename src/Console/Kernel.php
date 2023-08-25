@@ -24,24 +24,40 @@ class Kernel implements ConsoleKernel
         "long" => [
             "help" => "Print help and exit.",
             "migration-table:" =>
-                "Create new table migration. Usage: --migration-table=<table_name>",
+            "Create new table migration. Usage: --migration-table=<table_name>",
             "migration-create:" =>
-                "Create new empty migration. Usage: --migration-create=<migration_name>",
+            "Create new empty migration. Usage: --migration-create=<migration_name>",
             "migration-list" => "List all migrations and their status.",
             "migration-run" => "Run all migrations that have not been run yet.",
             "migration-up:" =>
-                "Run migration up on file. Usage: --migration-up=<filename>.php",
+            "Run migration up on file. Usage: --migration-up=<filename>.php",
             "migration-down:" =>
-                "Run migration down on file. Usage: --migration-down=<filename>.php",
+            "Run migration down on file. Usage: --migration-down=<filename>.php",
             "migration-fresh" =>
-                "Create new database and run all migrations. Be careful!",
+            "Create new database and run all migrations. Be careful!",
         ],
     ];
+    protected array $commands = [];
+
+    protected function registerCommand(string $type, string $command, string $description, callable $callback): void
+    {
+        if (!in_array($type, ["short", "long"])) {
+            throw new \Exception("Invalid command type!");
+        }
+        if (isset($this->opts[$type][$command])) {
+            throw new \Exception("Command already registered!");
+        }
+        $this->opts[$type][$command] = $description;
+        $this->commands[$command] = $callback;
+    }
 
     protected function run(): void
     {
-        $longopts = array_keys($this->opts["long"]);
-        $shortopts = implode("", array_keys($this->opts["short"]));
+        $long_opts = $this->opts["long"];
+        $short_opts = $this->opts["short"];
+
+        $longopts = array_keys($long_opts);
+        $shortopts = implode("", array_keys($short_opts));
         $options = getopt($shortopts, $longopts);
         if (empty($options)) {
             $this->write(
@@ -60,9 +76,18 @@ class Kernel implements ConsoleKernel
                 "migration-up" => $this->migration($value, true),
                 "migration-down" => $this->migration($value, false),
                 "migration-fresh" => $this->migrationFresh(),
-                default => $this->displayUnknownOption($value),
+                default => $this->tryCommand($opt, $value), 
             };
         }
+    }
+
+    protected function tryCommand(string $command, string $value)
+    {
+        if (isset($this->commands[$command])) {
+            $this->commands[$command]($value);
+            return;
+        }
+        $this->displayUnknownOption($value);
     }
 
     protected function banner(): string
