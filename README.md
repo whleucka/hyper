@@ -16,7 +16,7 @@ If you ❤️ docker, then we got you covered! The entire stack is ready to go! 
 
 #### Default containers:
 - neubla-app (php 8.2)
-- nebula-nginx (web server)
+- nebula-nginx (nginx web server)
 - nebula-redis (redis store)
 - nebula-mysql (mysql 8.0)
 
