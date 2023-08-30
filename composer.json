@@ -29,7 +29,6 @@
         "fakerphp/faker": "^1.23",
         "filp/whoops": "^2.15",
         "idearia/php-logger": "^1.5",
-        "james-heinrich/getid3": "^1.9",
         "libra-php/stellar-router": "@dev",
         "php-di/php-di": "^7.0",
         "predis/predis": "^2.2",
