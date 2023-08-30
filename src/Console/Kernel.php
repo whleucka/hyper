@@ -39,16 +39,17 @@ class Kernel implements ConsoleKernel
     ];
     protected array $commands = [];
 
-    protected function registerCommand(string $type, string $command, string $description, callable $callback): void
+    protected function registerCommand(string $type, string $option, string $description, callable $callback): void
     {
         if (!in_array($type, ["short", "long"])) {
             throw new \Exception("Invalid command type!");
         }
-        if (isset($this->opts[$type][$command])) {
+        if (isset($this->opts[$type][$option])) {
             throw new \Exception("Command already registered!");
         }
-        $this->opts[$type][$command] = $description;
-        $this->commands[$command] = $callback;
+        $this->opts[$type][$option] = $description;
+        $option = str_replace(":", "", $option);
+        $this->commands[$option] = $callback;
     }
 
     protected function run(): void
@@ -59,6 +60,7 @@ class Kernel implements ConsoleKernel
         $longopts = array_keys($long_opts);
         $shortopts = implode("", array_keys($short_opts));
         $options = getopt($shortopts, $longopts);
+
         if (empty($options)) {
             $this->write(
                 "Unknown option(s) provided. Use -h or --help for help."
@@ -81,10 +83,10 @@ class Kernel implements ConsoleKernel
         }
     }
 
-    protected function tryCommand(string $command, string $value)
+    protected function tryCommand(string $option, string $value)
     {
-        if (isset($this->commands[$command])) {
-            $this->commands[$command]($value);
+        if (isset($this->commands[$option])) {
+            $this->commands[$option]($value);
             return;
         }
         $this->displayUnknownOption($value);
