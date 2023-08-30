@@ -89,7 +89,7 @@ class Kernel implements ConsoleKernel
             $this->commands[$option]($value);
             return;
         }
-        $this->displayUnknownOption($value);
+        $this->displayUnknownOption($option);
     }
 
     protected function banner(): string
