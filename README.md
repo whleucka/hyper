@@ -10,8 +10,27 @@
 
 ❌ **Not for production use**
 
+### Docker
 
-### Getting Started
+If you ❤️ docker, then we got you covered! The entire stack is ready to go! 🚀 
+
+#### Default containers:
+- neubla-app (php 8.2)
+- nebula-nginx (web server)
+- nebula-redis (redis store)
+- nebula-mysql (mysql 8.0)
+
+Bring up the application:
+```bash
+docker-compose up --build -d
+```
+
+Bring down the application:
+```bash
+docker-compose down
+```
+
+### Manual Setup
 
 To get started with Nebula, follow these steps:
 
@@ -34,32 +53,14 @@ cp .env.example .env
     - Redis: caching, rate limiting - disabled by default.
     - MySQL: database - enabled by default.
 
-- **Note**: you may enable/disable application behaviour in `/app/Config`
-
-- **Development**: Start building your application by creating controllers, views, and models within the `src` directory. 
-Hint: You can start a local development server by running `./nebula -s`
-
-
-### Docker
-
-If you prefer to develop in a docker environment, then we got you covered! We ship with PHP 8.1, MySQL 8, and Redis
-
-Bring up the application:
+- **NOTE**: You may have to fix the permissions for logs & view cache. For example, if your web user is www-data:
 ```bash
-docker-compose up --build -d
-```
-
-Bring down the application:
-```bash
-docker-compose down
-```
-
-**NOTE**: You may have to fix the permissions for logs & view cache. Execute these commands to fix that up.
-```bash
-docker-compose exec nebula-app sh
 chown -R www-data:www-data logs/
 chown -R www-data:www-data views/.cache
 ```
+
+- **Development**: Start building your application by creating controllers, views, and models within the `src` directory. 
+Hint: You can start a local development server by running `./nebula -s`
 
 
 ### Admin Backend
