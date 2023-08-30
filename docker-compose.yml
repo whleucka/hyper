@@ -8,13 +8,15 @@ volumes:
 
 services:
   nebula-app:
-    image: php:8.1-fpm
     container_name: nebula-app
     build:
       context: .
       dockerfile: ./docker/php/Dockerfile
     volumes:
-      - ./:/var/www/html
+      - ./docker/php/nebula.ini:/etc/php-custom.d/nebula.ini
+      - ./:/shared/httpd
+      # This is the music directory
+      - $HOME/Music:/music
     networks:
       - network
     depends_on:
@@ -28,7 +30,7 @@ services:
       - "80:80"
     volumes:
       - ./docker/nginx-config:/etc/nginx/conf.d
-      - ./:/var/www/html
+      - ./:/shared/httpd
     networks:
       - network
     depends_on:

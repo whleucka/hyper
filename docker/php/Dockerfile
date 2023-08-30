@@ -1,4 +1,7 @@
-FROM php:8.1-fpm
+FROM devilbox/php-fpm:8.2-work
 
-# Install required PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
+# Copy your application code to the container
+COPY --chown=devilbox:devilbox [^docker]* /var/www/html
+
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
