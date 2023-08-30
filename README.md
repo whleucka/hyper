@@ -56,7 +56,7 @@ docker-compose down
 
 **NOTE**: You may have to fix the permissions for logs & view cache. Execute these commands to fix that up.
 ```bash
-docker-compose exec php-app sh
+docker-compose exec nebula-app sh
 chown -R www-data:www-data logs/
 chown -R www-data:www-data views/.cache
 ```
