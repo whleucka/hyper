@@ -14,7 +14,7 @@ final class Kernel extends ConsoleKernel
     // can read more about it here: 
     // https://www.php.net/manual/en/function.getopt.php
     $this->registerCommand('short', 'v', "Display version", fn() => $this->version());
-    $this->registerCommand('long', 'verson', "Display version", fn() => $this->version());
+    $this->registerCommand('long', 'version', "Display version", fn() => $this->version());
   }
 
   public function version(): void
