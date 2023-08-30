@@ -17,7 +17,7 @@ final class Kernel extends ConsoleKernel
     $this->registerCommand('long', 'version', "Display version", fn() => $this->version());
   }
 
-  public function version(): void
+  protected function version(): void
   {
     $this->write("v0.0.1");
   }
