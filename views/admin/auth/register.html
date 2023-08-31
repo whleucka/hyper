@@ -9,12 +9,12 @@
       <h1 class="h3 mb-3 fw-normal">Create new account</h1>
 
       <div class="form-floating">
-        <input name="name" type="name" class="form-control" id="name" placeholder="Your name" value="{{ name }}">
+        <input name="name" type="name" class="form-control" id="name" placeholder="Your name" autocomplete="on" value="{{ name }}">
         <label for="name">Full name</label>
         {% include 'layout/components/validation.html' with { 'name': 'name' } %}
       </div>
       <div class="form-floating mt-2">
-        <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
+        <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on">
         <label for="email">Email</label>
         {% include 'layout/components/validation.html' with { 'name': 'email' } %}
       </div>
