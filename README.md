@@ -53,10 +53,6 @@ Follow these steps to kickstart your Nebula journey:
    ./nebula -s
    ```
 
-## Admin Backend (WIP)
-
-Nebula includes a comprehensive admin backend accessible via `/admin/sign-in`. Tailor user registration through the `.env` configuration, and adjust authentication routes as needed.
-
 ## Documentation
 - [Config](docs/CONFIG.md)
 - [Console](docs/CONSOLE.md)
@@ -88,6 +84,4 @@ This project is licensed under the [MIT License](https://github.com/libra-php/ne
 
 Nebula draws inspiration from leading open-source projects including Symfony, Slim Framework, Leaf, and Laravel.
 
-## Contact
-
-For inquiries, please reach out to william.hleucka@gmail.com.
+✌️
