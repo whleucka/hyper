@@ -21,7 +21,9 @@ final class RegisterController extends Controller
   #[Get("/register", "register.index")]
   public function index(): string
   {
-    return twig("admin/auth/register.html", []);
+    return twig("admin/auth/register.html", [
+      "name" => request()->get("name"),
+    ]);
   }
 
   #[Post("/register", "register.post", ["rate_limit"])]

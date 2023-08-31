@@ -13,7 +13,9 @@ final class SignInController extends Controller
   #[Get("/sign-in", "sign-in.index")]
   public function index(): string
   {
-    return twig("admin/auth/sign-in.html", []);
+    return twig("admin/auth/sign-in.html", [
+      'email' => request()->get("email"),
+    ]);
   }
 
   #[Post("/sign-in", "sign-in.post", ["rate_limit"])]
