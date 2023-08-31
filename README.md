@@ -1,4 +1,4 @@
-# Nebula: A High-Performance PHP Framework
+# ![image](https://avatars.githubusercontent.com/u/99982570?s=28&v=4) Nebula: A High-Performance PHP Framework
 
 [![Discord Community](https://discordapp.com/api/guilds/1139362100821626890/widget.png?style=shield)](https://discord.gg/RMhUmHmNak)
 [![Powered by PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
