@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block head %} 
       <link href="/assets/css/style.css" rel="stylesheet">
+      <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     {% endblock %}
   </head>
   <body>
   {% block body %} 
   {% endblock %}
   {% block body_scripts %} 
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
   {% endblock %}
   </body>
 </html>

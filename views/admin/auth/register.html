@@ -1,10 +1,10 @@
-{% extends "layout/admin/base.html" %}
+{% extends "layout/base.html" %}
 
 {% block title %}{{parent()}} - Register{% endblock %}
 
 {% block body %}
   <section id="admin-register" class="form-admin">
-    <form action="/admin/register" method="POST">
+    <form hx-post="/admin/register" hx-boost="true" hx-target="body" hx-url-push="true">
       {{ csrf()|raw }}
       <h1 class="h3 mb-3 fw-normal">Create new account</h1>
 

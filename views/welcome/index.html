@@ -1,5 +1,9 @@
 {% extends "layout/base.html" %}
 
 {% block body %}
-  <span>Hello, world!</span>
+<h2 class="d-flex align-items-center">Hello, world! <button class="ms-2 btn btn-sm btn-primary" type='submit' hx-post='/api/count'>{{ count }}</button></h2>
+  <div class="mt-2 d-flex">
+    <button hx-get="/admin/sign-in" hx-target="body" hx-push-url="true" class="m-1">Sign In</button>
+    <button hx-get="/admin/register" hx-target="body" hx-push-url="true" class="m-1">Register</button>
+  </div>
 {% endblock %}
