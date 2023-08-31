@@ -1,71 +1,67 @@
-# Welcome to Nebula: Your PHP Framework for Modern Web Magic!
+Certainly, here's a more professional version of your README:
+
+```markdown
+# Nebula: A High-Performance PHP Framework
 
 [![Discord Community](https://discordapp.com/api/guilds/1139362100821626890/widget.png?style=shield)](https://discord.gg/RMhUmHmNak)
 [![Powered by PHP Composer](https://github.com/libra-php/nebula/actions/workflows/php.yml/badge.svg?branch=main)](https://github.com/libra-php/nebula/actions/workflows/php.yml)
 
-🚀 **Unleash the Power of Nebula**: Your Passport to Effortless Web Development!
+## Introduction
 
-🔥 **Supercharge Your Website**: Experience Hyperspeed with HTMX - Faster, Smoother, Cooler.
+Welcome to Nebula, an advanced PHP framework designed to elevate your web development projects to new heights 🚀
 
-✅ **Craft Your Dreams**: Nebula is Your Creative Canvas - Design, Build, and Shape Your Web Apps with Confidence.
+## Features
 
-👷 **Work in Progress**: We're Busy Polishing Nebula, So Hang Tight for the Grand Launch!
+- 🔥 **Blazing Speed**: Leverage Nebula's **HTMX** capabilities for lightning-fast user experiences.
+- 🥷 **Flexibility**: Craft custom web applications effortlessly with Nebula's extensible architecture.
+- 👷 **Under Development**: Nebula is actively evolving to offer the best in class features.
+- ❌ **Not for Production**: Please note that Nebula is currently not recommended for production use.
 
-❌ **A Sneak Peek**: While Nebula is Cosmic, It's Not Ready for Galactic Adventures Just Yet.
+## Docker Integration
 
-## Effortless Launch with Docker
+Simplify your deployment process with Docker:
 
-If You Love Docker, Nebula Loves You Back! Launch the Nebula Universe in a Snap! 🚀 
+1. Launch the Nebula stack:
+   ```bash
+   docker-compose up --build -d
+   ```
 
-#### Ready-to-Use Containers:
-- **nebula-app** (PHP 8.2)
-- **nebula-nginx** (Nginx Web Server)
-- **nebula-redis** (Redis Store)
-- **nebula-mysql** (MySQL 8.0)
+2. Shut down the stack:
+   ```bash
+   docker-compose down
+   ```
 
-Ready to Blast Off:
-```bash
-docker-compose up --build -d
-```
+## Getting Started
 
-Time to Land:
-```bash
-docker-compose down
-```
+Follow these steps to kickstart your Nebula journey:
 
-## Quick Start Guide
+1. **Installation**: Clone the repository and install dependencies using Composer:
+   ```bash
+   git clone https://github.com/libra-php/nebula.git
+   cd nebula
+   composer install
+   ```
 
-Begin Your Nebula Journey with These Simple Steps:
+2. **Configuration**: Customize your project by editing configuration files, including database settings. Copy the example environment configuration:
+   ```bash
+   cp .env.example .env
+   ```
 
-1. **Installation**: Get Started by Cloning the Nebula Repository and Installing Dependencies Using Composer.
-```bash
-git clone https://github.com/libra-php/nebula.git
-cd nebula
-composer install
-```
+3. **Dependencies**: Nebula integrates essential dependencies such as Redis (caching, rate limiting) and MySQL (database).
 
-2. **Configuration**: Customize Nebula to Suit Your Needs. Adjust Database Settings, Configurations - Your Web Universe, Your Rules!
-```bash
-cp .env.example .env
-```
+4. **Development**: Begin building your application by creating controllers, views, and models within the `src` directory. Start a local development server with:
+   ```bash
+   ./nebula -s
+   ```
 
-3. **Dependencies**: Nebula Relies on Key Helpers:
-    - Redis: Boost Speed (Off by Default).
-    - MySQL: For Storing Your Galactic Data (On by Default).
+## Admin Backend (WIP)
 
-4. **NOTE**: To Avoid Glitches, Align Permissions for Logs & Cache, e.g., `chown -R www-data:www-data logs/`.
+Nebula includes a comprehensive admin backend accessible via `/admin/sign-in`. Tailor user registration through the `.env` configuration, and adjust authentication routes as needed.
 
-5. **Embark on the Cosmic Voyage**: Develop Controllers, Views, Models in the `src` Universe. Test Locally with `./nebula -s`.
-
-### Discover the Admin Backend
-
-Coming Soon: Nebula's Cosmic Admin Backstage Pass! Accessible via `/admin/sign-in`. Control User Registration with Ease - Update the `.env` Console with `ADMIN_REGISTER_ENABLED=true`. More to come soon! 
-
-### Explore the Documentation Hub
-
-- [Configuration Guide](docs/CONFIG.md)
-- [Command Console Manual](docs/CONSOLE.md)
-- [Helpers Handbook](docs/HELPERS.md)
+## Documentation
+- [Config](docs/CONFIG.md)
+- [Console](docs/CONSOLE.md)
+- [Helpers](docs/HELPERS.md)
 - [Database](docs/DATABASE.md)
     - [Migrations](docs/MIGRATIONS.md)
 - [Routing](docs/ROUTING.md)
@@ -74,28 +70,27 @@ Coming Soon: Nebula's Cosmic Admin Backstage Pass! Accessible via `/admin/sign-i
     - [Validation](docs/VALIDATION.md)
 - [Views](docs/VIEWS.md)
 - [Models](docs/MODELS.md)
-    - [Factories](docs/FACTORY.md)
+    - [Factory](docs/FACTORY.md)
 
-**More Insights Coming Soon!**
 
-**Note**: This AI-Powered Documentation Might Have Hiccups. Give Us a Shout for Corrections!
+## Benchmarks
 
-### Measure the Impact
+We are committed to optimizing Nebula for top-tier performance. Stay tuned for benchmark updates.
 
-We're Tweaking Nebula for Peak Performance. Stay Tuned!
+## Contributing
 
-- *Try It: `siege -b -c 10 -t 1s $APP_URL`*
+Contributions to Nebula are appreciated. If you encounter issues or have enhancement suggestions, open an issue or submit a pull request.
 
-### Join the Nebula Crew
+## License
 
-We Welcome Contributions! If You Find Glitches or Have Ideas, Raise an Issue or Share a Pull Request.
+This project is licensed under the [MIT License](https://github.com/libra-php/nebula/blob/main/LICENSE).
 
-### License to Shine
+## Acknowledgements
 
-This Project Is Under the <a href='https://github.com/libra-php/nebula/blob/main/LICENSE'>MIT License</a>.
+Nebula draws inspiration from leading open-source projects including Symfony, Slim Framework, Leaf, and Laravel.
 
-### Cheers to Cosmic Allies
+## Contact
 
-Thanks to Symfony, Slim Framework, Leaf, and Laravel for Guiding Nebula's Path!
+For inquiries, please reach out to william.hleucka@gmail.com.
 
-🇨🇦 Crafted in Canada
+🇨🇦 Proudly made in Canada
