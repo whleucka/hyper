@@ -1,6 +1,3 @@
-Certainly, here's a more professional version of your README:
-
-```markdown
 # Nebula: A High-Performance PHP Framework
 
 [![Discord Community](https://discordapp.com/api/guilds/1139362100821626890/widget.png?style=shield)](https://discord.gg/RMhUmHmNak)
