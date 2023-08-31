@@ -9,23 +9,23 @@
       <h1 class="h3 mb-3 fw-normal">Create new account</h1>
 
       <div class="form-floating">
-        <input name="name" type="name" class="form-control" id="floatingInput" placeholder="Your name" value="{{ name }}">
-        <label for="floatingInput">Full name</label>
+        <input name="name" type="name" class="form-control" id="name" placeholder="Your name" value="{{ name }}">
+        <label for="name">Full name</label>
         {% include 'layout/components/validation.html' with { 'name': 'name' } %}
       </div>
       <div class="form-floating mt-2">
-        <input name="email" type="email" class="form-control" id="floatingPassword" placeholder="name@example.com">
-        <label for="floatingInput">Email</label>
+        <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
+        <label for="email">Email</label>
         {% include 'layout/components/validation.html' with { 'name': 'email' } %}
       </div>
       <div class="form-floating mt-2">
-        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" autocomplete="off">
-        <label for="floatingPassword">Password</label>
+        <input name="password" type="password" class="form-control" id="password" placeholder="Password" autocomplete="off">
+        <label for="password">Password</label>
         {% include 'layout/components/validation.html' with { 'name': 'password' } %}
       </div>
       <div class="form-floating mt-2">
-        <input name="password_match" type="password" class="form-control" id="floatingPassword" placeholder="Password" autocomplete="off">
-        <label for="floatingPassword">Password (agian)</label>
+        <input name="password_match" type="password" class="form-control" id="password-match" placeholder="Password" autocomplete="off">
+        <label for="password-match">Password (agian)</label>
         {% include 'layout/components/validation.html' with { 'name': 'password_match' } %}
       </div>
 
