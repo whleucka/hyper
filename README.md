@@ -59,7 +59,7 @@ cp .env.example .env
 
 ### Discover the Admin Backend
 
-Coming Soon: Nebula's Cosmic Admin Backstage Pass! Accessible via `/admin/sign-in`. Control User Registration with Ease - Update the `.env` Console with `ADMIN_REGISTER_ENABLED=true`. After Logging In, Journey to `/admin/module/dashboard`. Need Different Paths? Customize It!
+Coming Soon: Nebula's Cosmic Admin Backstage Pass! Accessible via `/admin/sign-in`. Control User Registration with Ease - Update the `.env` Console with `ADMIN_REGISTER_ENABLED=true`. More to come soon! 
 
 ### Explore the Documentation Hub
 
