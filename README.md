@@ -66,15 +66,15 @@ Coming Soon: Nebula's Cosmic Admin Backstage Pass! Accessible via `/admin/sign-i
 - [Configuration Guide](docs/CONFIG.md)
 - [Command Console Manual](docs/CONSOLE.md)
 - [Helpers Handbook](docs/HELPERS.md)
-- [Database Journey](docs/DATABASE.md)
-    - [Migrations Guide](docs/MIGRATIONS.md)
-- [Routing Roadmap](docs/ROUTING.md)
-- [Middleware Insights](docs/MIDDLEWARE.md)
-- [Controllers Demystified](docs/CONTROLLERS.md)
-    - [Validation 101](docs/VALIDATION.md)
-- [Views Vision](docs/VIEWS.md)
-- [Models Unveiled](docs/MODELS.md)
-    - [Factory Insights](docs/FACTORY.md)
+- [Database](docs/DATABASE.md)
+    - [Migrations](docs/MIGRATIONS.md)
+- [Routing](docs/ROUTING.md)
+- [Middleware](docs/MIDDLEWARE.md)
+- [Controllers](docs/CONTROLLERS.md)
+    - [Validation](docs/VALIDATION.md)
+- [Views](docs/VIEWS.md)
+- [Models](docs/MODELS.md)
+    - [Factories](docs/FACTORY.md)
 
 **More Insights Coming Soon!**
 
@@ -97,9 +97,5 @@ This Project Is Under the <a href='https://github.com/libra-php/nebula/blob/main
 ### Cheers to Cosmic Allies
 
 Thanks to Symfony, Slim Framework, Leaf, and Laravel for Guiding Nebula's Path!
-
-### Reach Out to Us
-
-Questions? Reach Us at william.hleucka@gmail.com.
 
 🇨🇦 Crafted in Canada
