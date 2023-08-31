@@ -24,23 +24,27 @@ class Kernel implements ConsoleKernel
         "long" => [
             "help" => "Print help and exit.",
             "migration-table:" =>
-            "Create new table migration. Usage: --migration-table=<table_name>",
+                "Create new table migration. Usage: --migration-table=<table_name>",
             "migration-create:" =>
-            "Create new empty migration. Usage: --migration-create=<migration_name>",
+                "Create new empty migration. Usage: --migration-create=<migration_name>",
             "migration-list" => "List all migrations and their status.",
             "migration-run" => "Run all migrations that have not been run yet.",
             "migration-up:" =>
-            "Run migration up on file. Usage: --migration-up=<filename>.php",
+                "Run migration up on file. Usage: --migration-up=<filename>.php",
             "migration-down:" =>
-            "Run migration down on file. Usage: --migration-down=<filename>.php",
+                "Run migration down on file. Usage: --migration-down=<filename>.php",
             "migration-fresh" =>
-            "Create new database and run all migrations. Be careful!",
+                "Create new database and run all migrations. Be careful!",
         ],
     ];
     protected array $commands = [];
 
-    protected function registerCommand(string $type, string $option, string $description, callable $callback): void
-    {
+    protected function registerCommand(
+        string $type,
+        string $option,
+        string $description,
+        callable $callback
+    ): void {
         if (!in_array($type, ["short", "long"])) {
             throw new \Exception("Invalid command type!");
         }
@@ -78,7 +82,7 @@ class Kernel implements ConsoleKernel
                 "migration-up" => $this->migration($value, true),
                 "migration-down" => $this->migration($value, false),
                 "migration-fresh" => $this->migrationFresh(),
-                default => $this->tryCommand($opt, $value), 
+                default => $this->tryCommand($opt, $value),
             };
         }
     }
