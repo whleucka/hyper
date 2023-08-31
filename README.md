@@ -11,7 +11,7 @@ Welcome to Nebula, an advanced PHP framework designed to elevate your web develo
 
 ## Features
 
-- 🔥 **Blazing Speed**: Leverage Nebula's **HTMX** capabilities for lightning-fast user experiences.
+- 🔥 **Blazing Speed**: Leverage Nebula's **htmx** capabilities for lightning-fast user experiences.
 - 🥷 **Flexibility**: Craft custom web applications effortlessly with Nebula's extensible architecture.
 - 👷 **Under Development**: Nebula is actively evolving to offer the best in class features.
 - ❌ **Not for Production**: Please note that Nebula is currently not recommended for production use.
