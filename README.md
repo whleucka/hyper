@@ -91,5 +91,3 @@ Nebula draws inspiration from leading open-source projects including Symfony, Sl
 ## Contact
 
 For inquiries, please reach out to william.hleucka@gmail.com.
-
-🇨🇦 Proudly made in Canada
