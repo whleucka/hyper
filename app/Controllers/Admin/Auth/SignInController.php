@@ -18,6 +18,12 @@ final class SignInController extends Controller
     ]);
   }
 
+  #[Get("/sign-in/part", "sign-in.part")]
+  public function index_part(): string
+  {
+    return twig("admin/auth/part/sign-in.html");
+  }
+
   #[Post("/sign-in", "sign-in.post", ["rate_limit"])]
   public function post(): string
   {
@@ -38,6 +44,6 @@ final class SignInController extends Controller
       }
     }
     // Validation failed, show the sign in form
-    return $this->index();
+    return $this->index_part();
   }
 }

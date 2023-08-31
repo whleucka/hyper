@@ -26,6 +26,12 @@ final class RegisterController extends Controller
     ]);
   }
 
+  #[Get("/register/part", "register.part")]
+  public function index_part(): string
+  {
+    return twig("admin/auth/part/register.html");
+  }
+
   #[Post("/register", "register.post", ["rate_limit"])]
   public function post(): string
   {
@@ -59,6 +65,6 @@ final class RegisterController extends Controller
       }
     } 
     // Validation failed, show the register form
-    return $this->index();
+    return $this->index_part();
   }
 }

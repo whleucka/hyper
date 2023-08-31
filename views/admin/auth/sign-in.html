@@ -3,33 +3,5 @@
 {% block title %}{{parent()}} - Sign In{% endblock %}
 
 {% block body %}
-  <section id="admin-sign-in" class="form-admin d-flex justify-content-center">
-    <form hx-post="/admin/sign-in" hx-boost="true" hx-target="#body" hx-url-push="true">
-      {{ csrf()|raw }}
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-      <div class="form-floating">
-        <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on" value="{{ email }}">
-        <label for="email">Email address</label>
-        {% include 'layout/components/validation.html' with { 'name': 'email' } %}
-      </div>
-      <div class="form-floating mt-2">
-        <input name="password" type="password" class="form-control" id="password" placeholder="Password" autocomplete="off">
-        <label for="password">Password</label>
-        {% include 'layout/components/validation.html' with { 'name': 'password' } %}
-      </div>
-
-      <div class="checkbox my-3">
-        <label>
-          <input type="checkbox" name="remember_me" value="remember-me"> Remember me
-        </label>
-      </div>
-      <p><a href="/admin/register" hx-select=".form-admin">Don't have an account?</a></p>
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-      <p class="mt-3 mb-3 text-muted text-center">
-        <img class="rounded" title="Nebula" src="/assets/img/nebula.jpeg" alt="" height="17" width="17">
-        <img src="/assets/img/lock.png" alt="lock" height="17" width="17"> <span class="ps-2">256-Bit SSL Encryption (AES-256)</span>
-      </p>
-    </form>
-  </section>
+  {% include "admin/auth/part/sign-in.html" %}
 {% endblock %}
