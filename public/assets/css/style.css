@@ -12,11 +12,15 @@ body {
 .form-admin {
   width: 100%;
   height: 100%;
-  max-width: 330px;
+  max-width: 370px;
   display: flex;
   align-items: center;
   padding: 40px 0;
   margin: auto;
+}
+
+.form-admin form {
+  width: 100%;
 }
 
 .form-admin .checkbox {
@@ -25,16 +29,4 @@ body {
 
 .form-admin .form-floating:focus-within {
   z-index: 2;
-}
-
-.form-admin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.form-admin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
 }
