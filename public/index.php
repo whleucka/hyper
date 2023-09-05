@@ -14,7 +14,7 @@ $app = require_once __DIR__ . "/../bootstrap/app.php";
 // Attribute-based-routing
 // Example / web endpoint
 $app->route('GET', '/', function() {
-    return twig('welcome/index.html');
+    return latte('welcome/index.latte');
 });
 
 $app->run(Nebula\Interfaces\Http\Kernel::class);

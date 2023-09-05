@@ -17,11 +17,7 @@ class Extension extends AbstractExtension implements ExtensionInterface
 
     public function csrf(): string
     {
-        $token = session()->get("csrf_token");
-        $input = <<<EOT
-      <input type="hidden" name="csrf_token" value="$token">
-EOT;
-        return $input;
+        return csrf();
     }
 
     public function dump(...$args): void

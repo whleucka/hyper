@@ -37,4 +37,12 @@ return [
       $twig->addExtension(new Extension());
       return $twig;
   },
+  \Latte\Engine::class => function () {
+    $config = config("latte");
+    $latte = new \Latte\Engine;
+    $latte->setLoader(new \Latte\Loaders\FileLoader($config["view_path"]));
+    $latte->setTempDirectory($config["cache_path"]);
+    $latte->addFunction('csrf', fn() => csrf());
+    return $latte;
+  },
 ];

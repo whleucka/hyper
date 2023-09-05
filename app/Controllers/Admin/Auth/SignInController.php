@@ -13,15 +13,15 @@ final class SignInController extends Controller
   #[Get("/sign-in", "sign-in.index")]
   public function index(): string
   {
-    return twig("admin/auth/sign-in.html");
+    return latte("admin/auth/sign-in.latte");
   }
 
   #[Get("/sign-in/part", "sign-in.part")]
   public function index_part(): string
   {
-    return twig("admin/auth/part/sign-in.html", [
+    return latte("admin/auth/sign-in.latte", [
       'email' => request()->get("email"),
-    ]);
+    ], "body");
   }
 
   #[Post("/sign-in", "sign-in.post", ["rate_limit"])]
@@ -39,7 +39,6 @@ final class SignInController extends Controller
         return redirectRoute("dashboard.index");
       } else {
         // Trigger some errors
-        Validate::addError("email");
         Validate::addError("password", "Bad email or password");
       }
     }

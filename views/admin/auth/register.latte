@@ -1,30 +1,35 @@
+{layout "../../layout/base.latte"}
+
+{block title}Register{/block}
+
+{block body}
 <section id="admin-register" class="form-admin d-flex justify-content-center">
   <form hx-post="/admin/register" hx-boost="true" hx-target="#body" hx-url-push="true">
-    {{ csrf()|raw }}
+    {csrf()|noescape}
     <h1 class="h3 mb-3 fw-normal">Create new account</h1>
 
     <div class="form-floating">
       <input name="name" type="name" class="form-control" id="name" placeholder="Your name" autocomplete="on"
-        value="{{ name }}">
+        value="">
       <label for="name">Full name</label>
-      {% include 'layout/components/validation.html' with { 'name': 'name' } %}
+      {include '../../layout/components/validation.latte', name: 'name'}
     </div>
     <div class="form-floating mt-2">
       <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on">
       <label for="email">Email</label>
-      {% include 'layout/components/validation.html' with { 'name': 'email' } %}
+      {include '../../layout/components/validation.latte', name: 'email'}
     </div>
     <div class="form-floating mt-2">
       <input name="password" type="password" class="form-control" id="password" placeholder="Password"
         autocomplete="off">
       <label for="password">Password</label>
-      {% include 'layout/components/validation.html' with { 'name': 'password' } %}
+      {include '../../layout/components/validation.latte', name: 'password'}
     </div>
     <div class="form-floating mt-2">
       <input name="password_match" type="password" class="form-control" id="password-match" placeholder="Password"
         autocomplete="off">
       <label for="password-match">Password (agian)</label>
-      {% include 'layout/components/validation.html' with { 'name': 'password_match' } %}
+      {include '../../layout/components/validation.latte', name: 'password_match'}
     </div>
     <p class="mt-3"><a href="/admin/sign-in/part" hx-replace-url="/admin/sign-in">Already have an account?</a></p>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
@@ -35,3 +40,4 @@
     </p>
   </form>
 </section>
+{/block}

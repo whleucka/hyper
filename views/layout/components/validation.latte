@@ -1,0 +1,5 @@
+  <div n:if="($name|trim) in $form_error_keys" class="d-flex flex-column py-2">
+    <p n:foreach="$form_errors[$name] as $error" n:if="($error|trim) != ''" class="p-0 m-0 text-danger align-items-center">
+      <small>⚠️ </small>{$error}
+    </p>
+  </div>

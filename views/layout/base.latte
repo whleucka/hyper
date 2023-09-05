@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>{% block title %}Nebula{% endblock %}</title>
+    <title>{block title}Nebula{/block}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'" />
-    {% block head %} 
+    {block head} 
       <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
       <link href="/assets/css/style.css" rel="stylesheet">
       <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    {% endblock %}
+    {/block}
   </head>
   <body id="body">
-  {% block body %} 
-  {% endblock %}
-  {% block body_scripts %} 
+  {block body} 
+  {/block}
+  {block body_scripts} 
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/htmx.min.js"></script>
-  {% endblock %}
+  {/block}
   </body>
 </html>

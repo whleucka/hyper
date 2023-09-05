@@ -1,19 +1,23 @@
+{layout "../../layout/base.latte"}
+
+{block title}Sign In{/block}
+
+{block body}
 <section id="admin-sign-in" class="form-admin d-flex justify-content-center">
   <form hx-post="/admin/sign-in" hx-boost="true" hx-target="#body" hx-url-push="true">
-    {{ csrf()|raw }}
+    {csrf()|noescape}
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">
-      <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on"
-        value="{{ email }}">
+      <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on">
       <label for="email">Email address</label>
-      {% include 'layout/components/validation.html' with { 'name': 'email' } %}
+      {include '../../layout/components/validation.latte', name: 'email'}
     </div>
     <div class="form-floating mt-2">
       <input name="password" type="password" class="form-control" id="password" placeholder="Password"
         autocomplete="off">
       <label for="password">Password</label>
-      {% include 'layout/components/validation.html' with { 'name': 'password' } %}
+      {include '../../layout/components/validation.latte', name: 'password'}
     </div>
 
     <div class="checkbox my-3">
@@ -30,3 +34,4 @@
     </p>
   </form>
 </section>
+{/block}

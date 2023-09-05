@@ -188,6 +188,15 @@ function db()
     return app()->get(Database::class);
 }
 
+function csrf(): string
+{
+    $token = session()->get("csrf_token");
+    $input = <<<EOT
+  <input type="hidden" name="csrf_token" value="$token">
+EOT;
+    return $input;
+}
+
 /**
  * Return the application session class
  */
@@ -203,7 +212,15 @@ function twig(string $path, array $data = []): string
 {
     $twig = app()->get(\Twig\Environment::class);
     $form_errors = Validate::$errors;
-    $data["has_form_errors"] = !empty($form_errors);
     $data["form_errors"] = $form_errors;
     return $twig->render($path, $data);
+}
+
+function latte(string $path, array $data = [], ?string $block = null): string
+{
+    $latte = app()->get(\Latte\Engine::class);
+    $form_errors = Validate::$errors;
+    $data["form_errors"] = $form_errors;
+    $data["form_error_keys"] = array_keys($form_errors);
+    return $latte->renderToString($path, $data, $block);
 }

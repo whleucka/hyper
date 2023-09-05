@@ -97,8 +97,8 @@ class Validate
                 }
                 foreach (self::$custom as $custom_rule => $callback) {
                     if ($custom_rule === $rule) {
-                        $result = $callback($rule, $value);
-                        if (!is_null($result)) {
+                        $result = trim($callback($rule, $value));
+                        if (!is_null($result) && $result != '') {
                             self::$errors[$rule][] = $result;
                         }
                     }
