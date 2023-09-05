@@ -20,7 +20,7 @@ use Composer\ClassMapGenerator\ClassMapGenerator;
  */
 function dump(...$args)
 {
-    $out = array_map(fn($arg) => print_r($arg, true), $args);
+    $out = array_map(fn ($arg) => print_r($arg, true), $args);
     printf("<pre>%s</pre>", implode("\n\n", $out));
 }
 

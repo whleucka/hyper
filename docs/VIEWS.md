@@ -8,6 +8,7 @@ Welcome to the views documentation for the Nebula PHP Framework. This guide will
 - [Rendering Twig Views](#rendering-twig-views)
   - [Using the `twig` Helper Function](#using-the-twig-helper-function)
   - [Example: Rendering a Twig View in a Controller](#example-rendering-a-twig-view-in-a-controller)
+- [Rendering Latte Views](#rendering-latte-views)
 - [Rendering Plain Text Responses](#rendering-plain-text-responses)
   - [Example: Rendering Plain Text in a Route](#example-rendering-plain-text-in-a-route)
 - [Conclusion](#conclusion)
@@ -34,8 +35,7 @@ function twig(string $path, array $data = []): string
 {
   $twig = app()->get(\Twig\Environment::class);
   $form_errors = Validate::$errors;
-  $data['has_form_errors'] = !empty($form_errors);
-  $data['form_errors'] = $form_errors;
+  $data["form_errors"] = $form_errors;
   return $twig->render($path, $data);
 }
 ```
@@ -54,6 +54,43 @@ public function index(): string
   return twig("admin/auth/sign-in.html", []);
 }
 ```
+
+
+## Rendering Latte Views
+
+### Using the `latte` Helper Function
+
+Nebula also provides a convenient `latte` helper function to render Latte templates.
+
+```php
+/**
+ * Return a latte rendered string
+ */
+function latte(string $path, array $data = [], ?string $block = null): string
+{
+  $latte = app()->get(\Latte\Engine::class);
+  $form_errors = Validate::$errors;
+  $data["form_errors"] = $form_errors;
+  $data["form_error_keys"] = array_keys($form_errors);
+  return $latte->renderToString($path, $data, $block);
+}
+```
+
+### Example: Rendering a Latte View in a Controller
+
+You can also use the `latte` helper function in your controllers to render Latte views. 
+
+```php
+use Nebula\Controller\Controller;
+use StellarRouter\Get;
+
+#[Get("/sign-in", "sign-in.index")]
+public function index(): string
+{
+  return latte("admin/auth/sign-in.latte");
+}
+```
+
 
 ## Rendering Plain Text Responses
 
