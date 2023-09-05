@@ -12,6 +12,6 @@ class DashboardController extends ModuleController
   #[Get("/module/dashboard", "dashboard.index")]
   public function index(): string
   {
-    return twig("admin/dashboard.html", []);
+    return latte("admin/dashboard.latte");
   }
 }

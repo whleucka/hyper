@@ -1,10 +1,10 @@
-{% extends "layout/base.html" %}
+{layout "../layout/base.latte"}
 
-{% block title %}{{parent()}} - Dashboard{% endblock %}
+{block title}Dashboard{/block}
 
-{% block body %}
+{block body}
 <p>You are now signed in.</p>
 <div class="mt-2">
     <button hx-get="/admin/sign-out" hx-url-push="true" hx-target="body">Sign out</button>
 </div>
-{% endblock %}
+{/block}
