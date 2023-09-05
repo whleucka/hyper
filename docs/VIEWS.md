@@ -9,6 +9,8 @@ Welcome to the views documentation for the Nebula PHP Framework. This guide will
   - [Using the `twig` Helper Function](#using-the-twig-helper-function)
   - [Example: Rendering a Twig View in a Controller](#example-rendering-a-twig-view-in-a-controller)
 - [Rendering Latte Views](#rendering-latte-views)
+  - [Using the `latte` Helper Function](#using-the-latte-helper-function)
+  - [Example: Rendering a Latte View in a Controller](#example-rendering-a-latte-view-in-a-controller)
 - [Rendering Plain Text Responses](#rendering-plain-text-responses)
   - [Example: Rendering Plain Text in a Route](#example-rendering-plain-text-in-a-route)
 - [Conclusion](#conclusion)
