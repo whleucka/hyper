@@ -1,6 +1,6 @@
 # Nebula PHP Framework - Views Documentation
 
-Welcome to the views documentation for the Nebula PHP Framework. This guide will introduce you to the concept of views, how to render them using the Twig template engine, and provide examples of rendering both HTML templates and plain text responses.
+Welcome to the views documentation for the Nebula PHP Framework. This guide will introduce you to the concept of views, how to render them using the Latte/Twig template engine, and provide examples of rendering both HTML templates and plain text responses.
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@ Welcome to the views documentation for the Nebula PHP Framework. This guide will
 
 ## Introduction to Views
 
-Views are a crucial part of web development as they allow you to display dynamic content to users. In the Nebula PHP Framework, you have the flexibility to render both HTML templates using the Twig template engine and plain text responses.
+Views are a crucial part of web development as they allow you to display dynamic content to users. In the Nebula PHP Framework, you have the flexibility to render both HTML templates using the Latte/Twig template engine and plain text responses.
 
 ## Template Path
 
