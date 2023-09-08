@@ -18,7 +18,4 @@ $app->route('GET', '/', function() {
     return latte('welcome/index.latte');
 });
 
-$emailer = emailer();
-$template = latte('email/test.latte', ['var' => 'yarrrrrr!']);
-$result = $emailer->send('test', $template, to_addresses: ['william.hleucka@gmail.com']);
 $app->run(Nebula\Interfaces\Http\Kernel::class);
