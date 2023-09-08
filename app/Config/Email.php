@@ -9,5 +9,7 @@ return [
   "username" => env("EMAIL_USERNAME"),
   "password" => env("EMAIL_PASSWORD"),
   "from" => env("EMAIL_FROM"),
+  "from_name" => env("EMAIL_FROM_NAME"),
   "reply_to" => env("EMAIL_REPLY_TO"),
+  "reply_to_name" => env("EMAIL_REPLY_TO_NAME"),
 ];

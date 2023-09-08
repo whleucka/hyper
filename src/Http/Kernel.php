@@ -114,7 +114,7 @@ class Kernel implements NebulaKernel
      */
     public function handleException(Throwable $exception): Response
     {
-        $config = config("application");
+        $config = config("app");
         error_log("\n");
         error_log("Nebula Exception" . PHP_EOL);
         error_log(

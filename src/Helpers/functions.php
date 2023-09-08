@@ -100,7 +100,7 @@ function initLogger()
 
 function logger(string $level, string $message, string $title = "")
 {
-    $enabled = config("application.logging");
+    $enabled = config("app.logging");
     if ($enabled) {
         try {
             match ($level) {
