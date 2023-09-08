@@ -26,7 +26,7 @@ return [
   \Nebula\Interfaces\Http\Response::class => \DI\get(\Nebula\Http\Response::class),
   \Nebula\Interfaces\Routing\Router::class => \DI\get(\Nebula\Routing\Router::class),
   \Nebula\Interfaces\Model\Model::class => \DI\get(\Nebula\Model\Model::class),
-  \Nebula\Interfaces\Mail\Email::class => \DI\get(\Nebula\Mail\Email::class),
+  \Nebula\Interfaces\Mail\Email::class => \DI\get(\Nebula\Mail\EmailSMTP::class),
   \Nebula\Interfaces\Database\QueryBuilder::class => \DI\get(\Nebula\Database\QueryBuilder::class),
   \Twig\Environment::class => function () {
       $config = config("twig");

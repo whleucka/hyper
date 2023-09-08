@@ -9,7 +9,7 @@ use Nebula\Interfaces\Framework\Environment;
 use Nebula\Interfaces\Session\Session;
 use Nebula\Validation\Validate;
 use Composer\ClassMapGenerator\ClassMapGenerator;
-use Nebula\Mail\Email;
+use Nebula\Mail\EmailSMTP;
 
 /**
  * This is a file that contains generic application functions
@@ -121,10 +121,10 @@ function logger(string $level, string $message, string $title = "")
 /**
  * Return the SMTP emailer
  */
-function emailer(): Email
+function smtp(): EmailSMTP
 {
-    $emailer = app()->get(Email::class);
-    $emailer->smtp();
+    $emailer = app()->get(EmailSMTP::class);
+    $emailer->init();
     return $emailer;
 }
 

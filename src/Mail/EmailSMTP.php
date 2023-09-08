@@ -5,9 +5,9 @@ namespace Nebula\Mail;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-use Nebula\Interfaces\Mail\Email as NebulaEmail;
+use Nebula\Interfaces\Mail\Email;
 
-class Email implements NebulaEmail
+class EmailSMTP implements Email
 {
     private $mailer;
 
@@ -16,7 +16,7 @@ class Email implements NebulaEmail
         $this->mailer = new PHPMailer();
     }
 
-    public function smtp(): void
+    public function init(): void
     {
         $config = config("email");
         //Server settings
@@ -75,7 +75,7 @@ class Email implements NebulaEmail
             return $this->mailer->send();
         } catch (Exception) {
             error_log(
-                "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}"
+                "Message could not be sent. Error: {$this->mailer->ErrorInfo}"
             );
         }
     }

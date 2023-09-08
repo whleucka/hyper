@@ -4,7 +4,7 @@ namespace Nebula\Interfaces\Mail;
 
 interface Email
 {
-    public function smtp(): void;
+    public function init(): void;
     public function send(
         string $subject,
         string $body,

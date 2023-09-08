@@ -57,6 +57,7 @@ Follow these steps to kickstart your Nebula journey:
 - [Config](docs/CONFIG.md)
 - [Console](docs/CONSOLE.md)
 - [Helpers](docs/HELPERS.md)
+- [Email](docs/EMAIL.md)
 - [Database](docs/DATABASE.md)
     - [Migrations](docs/MIGRATIONS.md)
 - [Routing](docs/ROUTING.md)
