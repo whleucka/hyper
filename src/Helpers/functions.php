@@ -9,6 +9,7 @@ use Nebula\Interfaces\Framework\Environment;
 use Nebula\Interfaces\Session\Session;
 use Nebula\Validation\Validate;
 use Composer\ClassMapGenerator\ClassMapGenerator;
+use Nebula\Mail\Email;
 
 /**
  * This is a file that contains generic application functions
@@ -94,7 +95,7 @@ function initLogger()
         Logger::$log_file_name = $log_name;
         Logger::$log_file_extension = $log_ext;
         Logger::$print_log = false;
-    } catch (\Exception $ex) {
+    } catch (\Exception) {
     }
 }
 
@@ -112,12 +113,25 @@ function logger(string $level, string $message, string $title = "")
                 "error" => Logger::error($message, $title),
                 default => throw new \Exception("unknown log level"),
             };
-        } catch (\Exception $ex) {
+        } catch (\Exception) {
         }
     }
 }
 
-function ip()
+/**
+ * Return the SMTP emailer
+ */
+function emailer(): Email
+{
+    $emailer = app()->get(Email::class);
+    $emailer->smtp();
+    return $emailer;
+}
+
+/**
+ * Return client IP
+ */
+function ip(): string
 {
     if (!empty(request()->server()["HTTP_CLIENT_IP"])) {
         $ip = request()->server()["HTTP_CLIENT_IP"];
@@ -132,7 +146,7 @@ function ip()
 /**
  * Return the application singleton
  */
-function app()
+function app(): Application
 {
     return Application::getInstance();
 }
@@ -140,7 +154,7 @@ function app()
 /**
  * Returns the application request singleton
  */
-function request()
+function request(): Request
 {
     return app()->get(Request::class);
 }
@@ -159,6 +173,9 @@ function config(string $name)
     return \Nebula\Config\Config::get($name);
 }
 
+/**
+ * Return the app user
+ */
 function user(): ?User
 {
     $uuid = session()->get("user");
@@ -183,7 +200,7 @@ function env(string $name, ?string $default = null)
 /**
  * Return the application database
  */
-function db()
+function db(): Database
 {
     return app()->get(Database::class);
 }
@@ -200,7 +217,7 @@ EOT;
 /**
  * Return the application session class
  */
-function session()
+function session(): Session
 {
     return app()->get(Session::class);
 }
@@ -216,6 +233,9 @@ function twig(string $path, array $data = []): string
     return $twig->render($path, $data);
 }
 
+/**
+ * Return a latte rendered string
+ */
 function latte(string $path, array $data = [], ?string $block = null): string
 {
     $latte = app()->get(\Latte\Engine::class);

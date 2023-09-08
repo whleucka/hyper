@@ -4,6 +4,7 @@ namespace App\Config;
 
 return [
   "enabled" => env("EMAIL_ENABLED", "true") == "true",
+  "debug" => env("EMAIL_DEBUG", "true") == "true",
   "host" => env("EMAIL_HOST"),
   "port" => env("EMAIL_PORT"),
   "username" => env("EMAIL_USERNAME"),

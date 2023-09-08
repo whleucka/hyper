@@ -5,6 +5,7 @@
  * Created: william.hleucka@gmail.com
  * License: MIT
  */
+
 require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__ . "/../bootstrap/app.php";
 
@@ -17,4 +18,7 @@ $app->route('GET', '/', function() {
     return latte('welcome/index.latte');
 });
 
+$emailer = emailer();
+$template = latte('email/test.latte', ['var' => 'yarrrrrr!']);
+$result = $emailer->send('test', $template, to_addresses: ['william.hleucka@gmail.com']);
 $app->run(Nebula\Interfaces\Http\Kernel::class);
