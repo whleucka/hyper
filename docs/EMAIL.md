@@ -20,10 +20,11 @@ $emailer = new EmailSMTP();
 // Initialize the emailer (optional, if not already initialized)
 $emailer->init();
 
-// You can send template mail by passing the view string as the body parameter.
-// Latte template example)
-// $template = latte('/my/email/template', ['var' => "Hello, world!"]);
-// Twig template example)
+// You can send template mail by passing the 
+view string as the body parameter.
+$template = latte('/my/email/template', ['var' => "Hello, world!"]);
+
+// or Twig template
 // $template = twig('/my/email/template', ['var' => "Hello, world!"]);
 
 // Send an email
