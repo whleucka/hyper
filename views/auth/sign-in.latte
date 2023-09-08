@@ -1,0 +1,38 @@
+{layout "../layout/base.latte"}
+
+{block title}Sign In{/block}
+
+{block body}
+<section id="admin-sign-in" class="form-admin d-flex justify-content-center">
+  <form hx-post="/sign-in" hx-boost="true" hx-target="#body" hx-url-push="true">
+    {csrf()|noescape}
+    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+    <div class="form-floating">
+      <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" autocomplete="on">
+      <label for="email">Email address</label>
+      {include '../layout/components/validation.latte', name: 'email'}
+    </div>
+    <div class="form-floating mt-2">
+      <input name="password" type="password" class="form-control" id="password" placeholder="Password"
+        autocomplete="off">
+      <label for="password">Password</label>
+      {include '../layout/components/validation.latte', name: 'email'}
+    </div>
+
+    <div class="checkbox my-3">
+      <label>
+        <input type="checkbox" name="remember_me" value="remember-me"> Remember me
+      </label>
+    </div>
+    <p><a href="/register/part" hx-replace-url="/register">Don't have an account?</a></p>
+    <p><a href="/forgot-password/part" hx-replace-url="/forgot-password">Forgot password?</a></p>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <p class="mt-3 mb-3 text-muted text-center">
+      <img class="rounded" title="Nebula" src="/assets/img/nebula.jpeg" alt="" height="17" width="17">
+      <img src="/assets/img/lock.png" alt="lock" height="17" width="17"> <span class="ps-2">256-Bit SSL Encryption
+        (AES-256)</span>
+    </p>
+  </form>
+</section>
+{/block}

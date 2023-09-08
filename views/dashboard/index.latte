@@ -1,0 +1,10 @@
+{layout "layout/base.latte"}
+
+{block title}Dashboard{/block}
+
+{block body}
+<p>You are now signed in.</p>
+<div class="mt-2">
+    <button hx-get="/sign-out" hx-url-push="true" hx-target="body">Sign out</button>
+</div>
+{/block}
