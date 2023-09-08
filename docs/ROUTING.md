@@ -61,13 +61,13 @@ class SignInController extends Controller
     #[Get("/sign-in", "sign-in.index")]
     public function index(): string
     {
-        // Controller logic for handling GET request to '/admin/sign-in'
+        // Controller logic for handling GET request to '/sign-in'
     }
 
     #[Post("/sign-in", "sign-in.post", ["rate_limit"])]
     public function post(): string
     {
-        // Controller logic for handling POST request to '/admin/sign-in'
+        // Controller logic for handling POST request to '/sign-in'
     }
 }
 ```

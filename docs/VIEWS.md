@@ -55,7 +55,7 @@ use StellarRouter\Get;
 #[Get("/sign-in", "sign-in.index")]
 public function index(): string
 {
-  return latte("admin/auth/sign-in.latte");
+  return latte("auth/sign-in.latte");
 }
 ```
 
@@ -90,7 +90,7 @@ use StellarRouter\Get;
 #[Get("/sign-in", "sign-in.index")]
 public function index(): string
 {
-  return twig("admin/auth/sign-in.html", []);
+  return twig("auth/sign-in.html", []);
 }
 ```
 
