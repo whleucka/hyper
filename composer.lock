@@ -456,16 +456,16 @@
         },
         {
             "name": "latte/latte",
-            "version": "v3.0.8",
+            "version": "v3.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/latte.git",
-                "reference": "57dcce388efe1a074993bca629741e42ed2bd41f"
+                "reference": "e24c4123659d0177bf28561827e117fe7453c355"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/latte/zipball/57dcce388efe1a074993bca629741e42ed2bd41f",
-                "reference": "57dcce388efe1a074993bca629741e42ed2bd41f",
+                "url": "https://api.github.com/repos/nette/latte/zipball/e24c4123659d0177bf28561827e117fe7453c355",
+                "reference": "e24c4123659d0177bf28561827e117fe7453c355",
                 "shasum": ""
             },
             "require": {
@@ -535,9 +535,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/latte/issues",
-                "source": "https://github.com/nette/latte/tree/v3.0.8"
+                "source": "https://github.com/nette/latte/tree/v3.0.9"
             },
-            "time": "2023-08-27T00:32:02+00:00"
+            "time": "2023-09-08T10:05:30+00:00"
         },
         {
             "name": "libra-php/stellar-router",
@@ -545,12 +545,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/libra-php/stellar-router.git",
-                "reference": "20be041a30973feddfbb1bc62dd21f42398095a3"
+                "reference": "826d9b3997da1eebefd2519caf91a2b194bd88d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/libra-php/stellar-router/zipball/20be041a30973feddfbb1bc62dd21f42398095a3",
-                "reference": "20be041a30973feddfbb1bc62dd21f42398095a3",
+                "url": "https://api.github.com/repos/libra-php/stellar-router/zipball/826d9b3997da1eebefd2519caf91a2b194bd88d4",
+                "reference": "826d9b3997da1eebefd2519caf91a2b194bd88d4",
                 "shasum": ""
             },
             "require": {
@@ -581,20 +581,20 @@
                 "issues": "https://github.com/libra-php/stellar-router/issues",
                 "source": "https://github.com/libra-php/stellar-router/tree/main"
             },
-            "time": "2023-08-31T23:43:08+00:00"
+            "time": "2023-09-08T15:59:11+00:00"
         },
         {
             "name": "php-di/invoker",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/Invoker.git",
-                "reference": "cd6d9f267d1a3474bdddf1be1da079f01b942786"
+                "reference": "33234b32dafa8eb69202f950a1fc92055ed76a86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/Invoker/zipball/cd6d9f267d1a3474bdddf1be1da079f01b942786",
-                "reference": "cd6d9f267d1a3474bdddf1be1da079f01b942786",
+                "url": "https://api.github.com/repos/PHP-DI/Invoker/zipball/33234b32dafa8eb69202f950a1fc92055ed76a86",
+                "reference": "33234b32dafa8eb69202f950a1fc92055ed76a86",
                 "shasum": ""
             },
             "require": {
@@ -628,7 +628,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-DI/Invoker/issues",
-                "source": "https://github.com/PHP-DI/Invoker/tree/2.3.3"
+                "source": "https://github.com/PHP-DI/Invoker/tree/2.3.4"
             },
             "funding": [
                 {
@@ -636,7 +636,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-13T09:22:56+00:00"
+            "time": "2023-09-08T09:24:21+00:00"
         },
         {
             "name": "php-di/php-di",
@@ -2649,16 +2649,16 @@
         },
         {
             "name": "sebastian/exporter",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "f3ec4bf931c0b31e5b413f5b4fc970a7d03338c0"
+                "reference": "32ff03d078fed1279c4ec9a407d08c5e9febb480"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/f3ec4bf931c0b31e5b413f5b4fc970a7d03338c0",
-                "reference": "f3ec4bf931c0b31e5b413f5b4fc970a7d03338c0",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/32ff03d078fed1279c4ec9a407d08c5e9febb480",
+                "reference": "32ff03d078fed1279c4ec9a407d08c5e9febb480",
                 "shasum": ""
             },
             "require": {
@@ -2714,7 +2714,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/exporter/issues",
-                "source": "https://github.com/sebastianbergmann/exporter/tree/5.0.0"
+                "security": "https://github.com/sebastianbergmann/exporter/security/policy",
+                "source": "https://github.com/sebastianbergmann/exporter/tree/5.0.1"
             },
             "funding": [
                 {
@@ -2722,7 +2723,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-03T07:06:49+00:00"
+            "time": "2023-09-08T04:46:58+00:00"
         },
         {
             "name": "sebastian/global-state",
