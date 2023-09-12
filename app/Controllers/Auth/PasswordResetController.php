@@ -40,6 +40,10 @@ class PasswordResetController extends Controller
   #[Post("/password-reset/{uuid}/{token}", "password-reset.post")]
   public function post($uuid, $token): string
   {
+    $user = User::search(["uuid" => $uuid, "reset_token" => $token]);
+    if (!$user) {
+      return $this->response(403, "Invalid token");
+    }
     if ($this->validate([
       "password" => [
         "required",
@@ -50,7 +54,16 @@ class PasswordResetController extends Controller
       ],
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
-      die("wip");
+      // Update the user password
+      $user->update([
+        'reset_token' => null,
+        'reset_expires_at' => null,
+        'password' => password_hash(request()->password, PASSWORD_ARGON2I)
+      ]);
+      // Set the user session
+      session()->set("user", $user->uuid);
+      // Return to the dashboard
+      return redirectRoute("dashboard.index");
     }
     return $this->index_part($uuid, $token);
   }
