@@ -17,8 +17,8 @@ return new class implements Migration
         $table->varchar("email");
         $table->binary("password", 96);
         $table->char("two_fa_secret", 16)->nullable();
-        $table->char('remember_token', 32)->nullable();
-        $table->char('reset_token', 32)->nullable();
+        $table->char("remember_token", 64)->nullable();
+        $table->char("reset_token", 64)->nullable();
         $table->unsignedBigInteger('reset_expires_at')->nullable();
         $table->unsignedTinyInteger('failed_login_attempts')->default(0);
         $table->unsignedBigInteger('lock_expires_at')->nullable();

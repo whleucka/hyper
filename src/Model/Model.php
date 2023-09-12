@@ -141,8 +141,16 @@ class Model implements NebulaModel
     /**
      * Update a model
      */
-    public function update(): void
+    public function update(array $data): bool
     {
+        $model = self::staticClass();
+        $model->setup();
+        // Note: we use $this->id to refer to the current model
+        $qb = QueryBuilder::update($model->table_name)
+            ->columns($data)
+            ->where([$model->primary_key => $this->id]);
+        $result = db()->run($qb->build(), $qb->values());
+        return (bool)$model;
     }
 
     /**
