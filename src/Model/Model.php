@@ -150,7 +150,7 @@ class Model implements NebulaModel
             ->columns($data)
             ->where([$model->primary_key => $this->id]);
         $result = db()->run($qb->build(), $qb->values());
-        return (bool)$model;
+        return (bool) $model;
     }
 
     /**
