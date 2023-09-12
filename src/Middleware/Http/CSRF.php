@@ -4,6 +4,7 @@ namespace Nebula\Middleware\Http;
 
 use Nebula\Interfaces\Http\{Response, Request};
 use Nebula\Interfaces\Middleware\Middleware;
+use Nebula\Traits\Http\Response as NebulaResponse;
 use Closure;
 
 /**
@@ -13,6 +14,8 @@ use Closure;
  */
 class CSRF implements Middleware
 {
+    use NebulaResponse;
+
     public function handle(Request $request, Closure $next): Response
     {
         $this->token();
@@ -24,10 +27,7 @@ class CSRF implements Middleware
             $route_middleware &&
             !in_array("api", $route_middleware)
         ) {
-            $response = app()->get(Response::class);
-            $response->setStatusCode(403);
-            $response->setContent("Invalid CSRF token");
-            return $response;
+            return $this->response(403, "Invalid CSRF token");
         }
 
         $response = $next($request);

@@ -35,7 +35,6 @@ class ForgotPasswordController extends Controller
         if (is_null($user->reset_token) || time() > $user->reset_expires_at) {
           // New token
           $token = bin2hex(random_bytes(32));
-          $hashed_token = md5($token);
           // TODO move to config
           $expires = strtotime("+ 15 minute");
           $user->update([
@@ -44,7 +43,7 @@ class ForgotPasswordController extends Controller
           ]);
           $template = latte("auth/mail/forgot-password.latte", [
             'name' => $user->name,
-            'link' => config("app.url") . "/password-reset/{$user->uuid}/{$hashed_token}/",
+            'link' => config("app.url") . "/password-reset/{$user->uuid}/{$token}/",
             'project' => config("app.name")
           ]);
           smtp()->send("Password reset", $template, to_addresses: [$user->email]);
