@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Auth;
 
+use App\Auth;
 use App\Models\User;
 use StellarRouter\{Get, Post};
 use Nebula\Controller\Controller;
@@ -58,7 +59,7 @@ class PasswordResetController extends Controller
       $user->update([
         'reset_token' => null,
         'reset_expires_at' => null,
-        'password' => password_hash(request()->password, PASSWORD_ARGON2I)
+        'password' => Auth::hashPassword(request()->password),
       ]);
       // Set the user session
       session()->set("user", $user->uuid);

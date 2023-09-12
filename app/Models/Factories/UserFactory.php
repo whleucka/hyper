@@ -4,6 +4,7 @@ namespace App\Models\Factories;
 
 use Nebula\Model\Factory;
 use App\Models\User;
+use App\Auth;
 
 class UserFactory extends Factory
 {
@@ -21,7 +22,7 @@ class UserFactory extends Factory
     $user = app()->get($this->model);
     $user->name = $name;
     $user->email = $email;
-    $user->password = password_hash($password, PASSWORD_ARGON2I);
+    $user->password = Auth::hashPassword($password);
     return $user->save();
   }
 
@@ -33,7 +34,7 @@ class UserFactory extends Factory
     return [
       'name' => 'Administrator',
       'email' => 'admin@nebula.dev',
-      'password' => password_hash('admin', PASSWORD_ARGON2I)
+      'password' => Auth::hashPassword("admin"), 
     ];
   }
 
