@@ -39,7 +39,7 @@ class CSRF implements Middleware
     {
         $token = session()->get("csrf_token");
         if (is_null($token)) {
-            $token = $this->newToken();
+            $token = token();
             session()->set("csrf_token", $token);
         }
         $this->track();
@@ -49,7 +49,7 @@ class CSRF implements Middleware
     {
         $token_ts = session()->get("csrf_token_ts");
         if (is_null($token_ts) || $token_ts + 3600 < time()) {
-            $token = $this->newToken();
+            $token = token();
             $token_ts = time();
             session()->set("csrf_token", $token);
             session()->set("csrf_token_ts", $token_ts);
@@ -72,11 +72,5 @@ class CSRF implements Middleware
         }
 
         return false;
-    }
-
-    public function newToken(): string
-    {
-        $token = bin2hex(random_bytes(32));
-        return $token;
     }
 }

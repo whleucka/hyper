@@ -34,7 +34,7 @@ class ForgotPasswordController extends Controller
         // Only set the token if the token doesn't exist or it is expired
         if (is_null($user->reset_token) || time() > $user->reset_expires_at) {
           // New token
-          $token = bin2hex(random_bytes(32));
+          $token = token();
           // TODO move to config
           $expires = strtotime("+ 15 minute");
           $user->update([

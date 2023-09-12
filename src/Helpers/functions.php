@@ -47,6 +47,14 @@ function middlewareIndex(array $middleware, string $name)
 }
 
 /**
+ * Return a token string
+ */
+function token(): string
+{
+    return bin2hex(random_bytes(32));
+}
+
+/**
  * Generate a class map for the given directory
  * @return array<class-string,non-empty-string>
  */
