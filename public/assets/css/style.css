@@ -30,3 +30,13 @@ body {
 .form-admin .form-floating:focus-within {
   z-index: 2;
 }
+
+#keypad {
+  padding: 4px;
+}
+
+#keypad > .btn {
+  padding: 20px;
+  margin: 3px;
+  flex-basis: 30%;
+}
