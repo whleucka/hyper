@@ -8,7 +8,7 @@ use StellarRouter\{Get, Post};
 use Nebula\Controller\Controller;
 use Nebula\Traits\Http\Response as NebulaResponse;
 
-class PasswordResetController extends Controller
+final class PasswordResetController extends Controller
 {
   use NebulaResponse;
 

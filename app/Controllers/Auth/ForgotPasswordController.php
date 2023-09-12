@@ -6,7 +6,7 @@ use App\Models\User;
 use StellarRouter\{Get, Post};
 use Nebula\Controller\Controller;
 
-class ForgotPasswordController extends Controller
+final class ForgotPasswordController extends Controller
 {
   #[Get("/forgot-password", "forgot-password.index")]
   public function index(): string

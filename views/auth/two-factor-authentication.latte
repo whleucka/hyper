@@ -1,0 +1,13 @@
+{layout "../layout/base.latte"}
+
+{block title}Two Factor Authentication{/block}
+
+{block body}
+<section id="auth-two-factor-authentication" class="form-admin d-flex justify-content-center">
+  <form hx-post="/two-factor-authentication" hx-boost="true" hx-target="#body" hx-url-push="true">
+    {csrf()|noescape}
+    <h1 class="h3 mb-3 fw-normal">Two factor authentication</h1>
+  </form>
+</section>
+{/block}
+
