@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Auth;
 
-use App\Models\Factories\UserFactory;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
 use App\Auth;
@@ -54,12 +53,7 @@ final class RegisterController extends Controller
       // doesn't say Password_match in the UI
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
-      $factory = app()->get(UserFactory::class);
-      $user = $factory->create(
-        request()->name,
-        request()->email,
-        request()->password
-      );
+      $user = Auth::registerUser(request()->email, request()->name, request()->password);
       if ($user) {
         if (config("auth.two_fa_enabled")) {
           return Auth::twoFactorRegister($user);
@@ -67,7 +61,7 @@ final class RegisterController extends Controller
           return Auth::signIn($user);
         }
       }
-    } 
+    }
     return $this->index_part();
   }
 }
