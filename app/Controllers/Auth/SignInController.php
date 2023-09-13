@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Auth;
 
+use App\Auth;
 use App\Models\User;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
@@ -31,11 +32,12 @@ final class SignInController extends Controller
       "password" => ["required"],
     ])) {
       $user = User::search(['email' => request()->email]);
-      if ($user && password_verify(request()->password, $user->password)) {
-        // Set the user session
-        session()->set("user", $user->uuid);
-        // Redirect to the dashboard
-        return redirectRoute("dashboard.index");
+      if ($user && Auth::validatePassword($user, request()->password)) {
+        if (config("auth.two_fa_enabled")) {
+          return Auth::twoFactorAuthentication($user);
+        } else {
+          return Auth::signIn($user);
+        }
       } else {
         // Trigger some errors
         Validate::addError("password", "Bad email or password");

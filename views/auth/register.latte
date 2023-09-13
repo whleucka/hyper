@@ -6,7 +6,7 @@
 <section id="auth-register" class="form-admin d-flex justify-content-center">
   <form hx-post="/register" hx-boost="true" hx-target="#body" hx-url-push="true">
     {csrf()|noescape}
-    <h1 class="h3 mb-3 fw-normal">Create new account</h1>
+    <h1 class="h3 mb-3 fw-normal text-center">Create new account</h1>
 
     <div class="form-floating">
       <input name="name" type="name" class="form-control" id="name" placeholder="Your name" autocomplete="on"

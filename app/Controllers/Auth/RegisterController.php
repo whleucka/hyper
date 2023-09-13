@@ -5,6 +5,7 @@ namespace App\Controllers\Auth;
 use App\Models\Factories\UserFactory;
 use Nebula\Controller\Controller;
 use Nebula\Validation\Validate;
+use App\Auth;
 use StellarRouter\{Get, Post};
 
 final class RegisterController extends Controller
@@ -57,10 +58,11 @@ final class RegisterController extends Controller
         request()->password
       );
       if ($user) {
-        // Set the user session
-        session()->set("user", $user->uuid);
-        // Redirect to the dashboard
-        return redirectRoute("dashboard.index");
+        if (config("auth.two_fa_enabled")) {
+          return Auth::twoFactorRegister($user);
+        } else {
+          return Auth::signIn($user);
+        }
       }
     } 
     // Validation failed, show the register form

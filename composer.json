@@ -34,6 +34,7 @@
         "php-di/php-di": "^7.0",
         "phpmailer/phpmailer": "^6.8",
         "predis/predis": "^2.2",
+        "sonata-project/google-authenticator": "^2.3",
         "twig/twig": "^3.0",
         "vlucas/phpdotenv": "^5.5"
     },

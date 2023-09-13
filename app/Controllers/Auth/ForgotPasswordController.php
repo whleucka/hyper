@@ -18,7 +18,7 @@ final class ForgotPasswordController extends Controller
   public function index_part($show_success = false): string
   {
     return latte("auth/forgot-password.latte", [
-      'show_message' => $show_success,
+      'show_success_message' => $show_success,
     ], "body");
   }
 
