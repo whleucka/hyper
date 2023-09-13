@@ -3,8 +3,8 @@
 {block title}Sign In{/block}
 
 {block body}
-<section id="auth-sign-in" class="form-admin d-flex justify-content-center">
-  <form hx-post="/sign-in" hx-boost="true" hx-target="#body" {if $two_fa_enabled}hx-replace-url="/two-factor-authentication"{else}hx-replace-url="/module/dashboard"{/if} hx-url-push="true">
+<section id="auth-sign-in" class="form-auth d-flex justify-content-center">
+  <form hx-post="/sign-in" hx-boost="true" hx-target="#body" hx-url-push="true">
     {csrf()|noescape}
     <h1 class="h3 mb-3 fw-normal text-center">Please sign in</h1>
 
