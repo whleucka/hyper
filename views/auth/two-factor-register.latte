@@ -1,0 +1,42 @@
+{layout "../layout/base.latte"}
+
+{block title}Two Factor Authentication{/block}
+
+{block body}
+<section id="auth-two-factor-register" class="form-admin d-flex justify-content-center">
+  <form hx-post="/two-factor-authentication/register" hx-boost="true" hx-target="#body" hx-url-push="true">
+    {csrf()|noescape}
+    <h1 class="h3 mb-3 fw-normal text-center">Two factor authentication</h1>
+    <div class="d-flex justify-content-center p-2">
+      <img src="{$url}" alt="QR code" title="QR Code">
+    </div>
+    <p class="lead"><small>Open your authenticator app on your mobile device and scan the QR code above with your app's camera. Enter the verification code to complete registration.</small></p>
+    <div class="two-fa-control">
+      <div class="form-floating mt-2">
+        <input id="code" type="text" inputmode="numeric" maxlength="6" minlength="6" pattern="[0-9]*" class="form-control" id="code" name="code" placeholder="******" autocomplete="off" title="Please insert your 6 digit code">
+        <label for="password">Code</label>
+        {include '../layout/components/validation.latte', name: 'code'}
+      </div>
+      <div class="d-flex flex-wrap justify-content-center mt-2" id="keypad">
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="1">1</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="2">2</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="3">3</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="4">4</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="5">5</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="6">6</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="7">7</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="8">8</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="9">9</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="bs">⌫</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="0">0</button>
+        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="ent">⏎</button>
+      </div>
+    </div>
+    <div class="mt-2">
+      <button id="two-factor-submit" class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+    </div>
+  </form>
+</section>
+{/block}
+
+
