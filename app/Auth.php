@@ -22,9 +22,9 @@ class Auth
   {
     $factory = app()->get(UserFactory::class);
     $user = $factory->create(
-      request()->name,
-      request()->email,
-      request()->password
+      $name,
+      $email,
+      $password
     );
     return $user;
   }
@@ -51,6 +51,13 @@ class Auth
     }
     sleep(2);
     return false;
+  }
+
+  public static function changePassword(User $user, string $password): bool
+  {
+      return $user->update([
+        'password' => Auth::hashPassword($password),
+      ]);
   }
 
   public static function signIn(User $user)

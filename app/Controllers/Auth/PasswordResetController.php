@@ -55,16 +55,8 @@ final class PasswordResetController extends Controller
       ],
       "password_match" => ["Password" => ["required", "match"]]
     ])) {
-      // Update the user password
-      $user->update([
-        'reset_token' => null,
-        'reset_expires_at' => null,
-        'password' => Auth::hashPassword(request()->password),
-      ]);
-      // Set the user session
-      session()->set("user", $user->uuid);
-      // Return to the dashboard
-      return redirectRoute("dashboard.index");
+      Auth::changePassword($user, request()->password);
+      return Auth::signIn($user);
     }
     return $this->index_part($uuid, $token);
   }
