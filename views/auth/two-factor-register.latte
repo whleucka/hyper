@@ -4,7 +4,7 @@
 
 {block body}
 <section id="auth-two-factor-register" class="form-admin d-flex justify-content-center">
-  <form hx-post="/two-factor-authentication/register" hx-boost="true" hx-target="#body" hx-url-push="true">
+  <form hx-post="/two-factor-authentication/register" hx-boost="true" hx-target="#body" hx-replace-url="/module/dashboard" hx-url-push="true">
     {csrf()|noescape}
     <h1 class="h3 mb-3 fw-normal text-center">Two factor authentication</h1>
     <div class="d-flex justify-content-center p-2">
@@ -17,20 +17,7 @@
         <label for="password">Code</label>
         {include '../layout/components/validation.latte', name: 'code'}
       </div>
-      <div class="d-flex flex-wrap justify-content-center mt-2" id="keypad">
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="1">1</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="2">2</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="3">3</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="4">4</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="5">5</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="6">6</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="7">7</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="8">8</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="9">9</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="bs">⌫</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="0">0</button>
-        <button onClick="keypadClick(event)" class="btn btn-light" type="button" value="ent">⏎</button>
-      </div>
+      {include "./keypad.latte" }
     </div>
     <div class="mt-2">
       <button id="two-factor-submit" class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>

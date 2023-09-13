@@ -20,6 +20,7 @@ class Auth
   public static function signIn(User $user)
   {
       session()->set("user", $user->uuid);
+      session()->set("two_fa", null);
       return redirectRoute("dashboard.index");
   }
 

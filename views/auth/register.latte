@@ -4,7 +4,7 @@
 
 {block body}
 <section id="auth-register" class="form-admin d-flex justify-content-center">
-  <form hx-post="/register" hx-boost="true" hx-target="#body" hx-url-push="true">
+  <form hx-post="/register" hx-boost="true" hx-target="#body" {if $two_fa_enabled}hx-replace-url="/two-factor-authentication/register"{else}hx-replace-url="/module/dashboard"{/if} hx-url-push="true">
     {csrf()|noescape}
     <h1 class="h3 mb-3 fw-normal text-center">Create new account</h1>
 

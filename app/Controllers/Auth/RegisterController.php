@@ -21,13 +21,16 @@ final class RegisterController extends Controller
   #[Get("/register", "register.index")]
   public function index(): string
   {
-    return latte("auth/register.latte");
+    return latte("auth/register.latte", [
+      'two_fa_enabled' => config("auth.two_fa_enabled"),
+    ]);
   }
 
   #[Get("/register/part", "register.part")]
   public function index_part(): string
   {
     return latte("auth/register.latte", [
+      'two_fa_enabled' => config("auth.two_fa_enabled"),
       "name" => request()->get("name"),
     ], "body");
   }
@@ -65,7 +68,6 @@ final class RegisterController extends Controller
         }
       }
     } 
-    // Validation failed, show the register form
     return $this->index_part();
   }
 }

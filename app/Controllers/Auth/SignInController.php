@@ -13,13 +13,16 @@ final class SignInController extends Controller
   #[Get("/sign-in", "sign-in.index")]
   public function index(): string
   {
-    return latte("auth/sign-in.latte");
+    return latte("auth/sign-in.latte", [
+      'two_fa_enabled' => config("auth.two_fa_enabled"),
+    ]);
   }
 
   #[Get("/sign-in/part", "sign-in.part")]
   public function index_part(): string
   {
     return latte("auth/sign-in.latte", [
+      'two_fa_enabled' => config("auth.two_fa_enabled"),
       'email' => request()->get("email"),
     ], "body");
   }
@@ -39,11 +42,9 @@ final class SignInController extends Controller
           return Auth::signIn($user);
         }
       } else {
-        // Trigger some errors
         Validate::addError("password", "Bad email or password");
       }
     }
-    // Validation failed, show the sign in form
     return $this->index_part();
   }
 }
