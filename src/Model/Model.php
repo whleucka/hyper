@@ -127,11 +127,13 @@ class Model implements NebulaModel
      * Create a new model
      * @return self|null
      */
-    public function save(): ?self
+    public function save($ignore = false): ?self
     {
         $model = self::staticClass();
         $model->setup();
-        $qb = QueryBuilder::insert($model->table_name)->columns($model->data());
+        $qb = $ignore
+            ? QueryBuilder::insertIgnore($model->table_name)->columns($model->data())
+            : QueryBuilder::insert($model->table_name)->columns($model->data());
         $result = db()->run($qb->build(), $qb->values());
         if (!$result) {
             return null;

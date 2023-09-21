@@ -70,6 +70,18 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
+     * Construct an insert sql query
+     * @param Model $model
+     */
+    public static function insertIgnore(string $table_name): self
+    {
+        $qb = new QueryBuilder();
+        $qb->table_name = $table_name;
+        $qb->mode = "insert_ignore";
+        return $qb;
+    }
+
+    /**
      * Construct an update sql query
      * @param Model $model
      */
@@ -180,6 +192,7 @@ class QueryBuilder implements QueryBuilderInterface
         $sql = match ($this->mode) {
             "select" => "SELECT * FROM $this->table_name ",
             "insert" => "INSERT INTO $this->table_name SET ",
+            "insert_ignore" => "INSERT IGNORE INTO $this->table_name SET ",
             "update" => "UPDATE $this->table_name SET ",
             "delete" => "DELETE FROM $this->table_name ",
         };
