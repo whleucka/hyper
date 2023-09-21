@@ -127,22 +127,18 @@ class Model implements NebulaModel
      * Create a new model
      * @return self|null
      */
-    public function save($ignore = false): ?self
+    public function save($insert_ignore = false): mixed
     {
-        $model = self::staticClass();
-        $model->setup();
-        $qb = $ignore
-            ? QueryBuilder::insertIgnore($model->table_name)->columns($model->data())
-            : QueryBuilder::insert($model->table_name)->columns($model->data());
+        $qb = $insert_ignore
+            ? QueryBuilder::insertIgnore($this->table_name)->columns($this->data())
+            : QueryBuilder::insert($this->table_name)->columns($this->data());
         $result = db()->run($qb->build(), $qb->values());
         if (!$result) {
             return null;
         }
         // Set the id and reload the model
-        $model->id = db()->lastInsertId();
-        // Refresh the model
-        $model->refresh();
-        return $model;
+        $id = db()->lastInsertId();
+        return $id;
     }
 
     /**

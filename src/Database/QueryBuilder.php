@@ -111,7 +111,7 @@ class QueryBuilder implements QueryBuilderInterface
      */
     public function columns(array $columns): self
     {
-        if ($this->mode === "insert" || $this->mode === "update") {
+        if ($this->mode === "insert" || $this->mode === "insert_ignore" || $this->mode === "update") {
             $this->values = array_merge($this->values, array_values($columns));
         }
         $this->columns = $columns;
