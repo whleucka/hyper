@@ -9,9 +9,9 @@ use StellarRouter\Group;
 #[Group(middleware: ["auth"])]
 class DashboardController extends ModuleController
 {
-  #[Get("/module/dashboard", "dashboard.index")]
-  public function index(): string
-  {
-    return latte("dashboard/index.latte");
-  }
+    #[Get("/module/dashboard", "dashboard.index")]
+    public function index(): string
+    {
+        return latte("dashboard/index.latte");
+    }
 }

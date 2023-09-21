@@ -120,7 +120,7 @@ EOT;
             foreach ($opts as $opt => $desc) {
                 $opt = str_replace(":", "", $opt);
                 $opt = $type === "short" ? "-" . $opt : "--" . $opt;
-                $spacer = round(strlen($opt) / 8);
+                $spacer = round(strlen($opt) / 9);
                 $offset = 4;
                 $spacer = str_repeat("\t", $offset - $spacer);
                 $help .= "  {$opt}{$spacer}{$desc}" . PHP_EOL;

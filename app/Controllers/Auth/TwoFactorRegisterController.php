@@ -10,45 +10,62 @@ use StellarRouter\{Get, Post};
 
 final class TwoFactorRegisterController extends Controller
 {
-  private User $user;
+    private User $user;
 
-  public function __construct()
-  {
-    $uuid = session()->get("two_fa");
-    $user = User::search(["uuid" => $uuid]);
-    if (is_null($user)) {
-      redirectRoute("sign-in.index");
+    public function __construct()
+    {
+        $uuid = session()->get("two_fa");
+        $user = User::search(["uuid" => $uuid]);
+        if (is_null($user)) {
+            redirectRoute("sign-in.index");
+        }
+        $this->user = $user;
     }
-    $this->user = $user;
-  }
 
-  #[Get("/two-factor-authentication/register", "two-factor-register.index")]
-  public function index(): string
-  {
-    $url = Auth::urlQR($this->user);
-    return latte("auth/two-factor-register.latte", ['url' => $url]);
-  }
-  
-  #[Get("/two-factor-authentication/register/part", "two-factor-register.part")]
-  public function index_part(): string
-  {
-    $url = Auth::urlQR($this->user);
-    return latte("auth/two-factor-register.latte", ['url' => $url], block: "body");
-  }
+    #[Get("/two-factor-authentication/register", "two-factor-register.index")]
+    public function index(): string
+    {
+        $url = Auth::urlQR($this->user);
+        return latte("auth/two-factor-register.latte", ["url" => $url]);
+    }
 
-  #[Post("/two-factor-authentication/register", "two-factor-register.post")]
-  public function post(): string
-  {
-    if ($this->validate([
-      "code" => ["required", "numeric", "min_length=6", "max_length=6"],
-    ])) {
-      if (Auth::validateCode($this->user->two_fa_secret, request()->code)) {
-        return Auth::signIn($this->user);
-      } else {
-        Validate::addError("code", "Bad code, please try again");
-      } 
-    } 
-    return $this->index_part();
-  }
+    #[
+        Get(
+            "/two-factor-authentication/register/part",
+            "two-factor-register.part"
+        )
+    ]
+    public function index_part(): string
+    {
+        $url = Auth::urlQR($this->user);
+        return latte(
+            "auth/two-factor-register.latte",
+            ["url" => $url],
+            block: "body"
+        );
+    }
+
+    #[Post("/two-factor-authentication/register", "two-factor-register.post")]
+    public function post(): string
+    {
+        if (
+            $this->validate([
+                "code" => [
+                    "required",
+                    "numeric",
+                    "min_length=6",
+                    "max_length=6",
+                ],
+            ])
+        ) {
+            if (
+                Auth::validateCode($this->user->two_fa_secret, request()->code)
+            ) {
+                return Auth::signIn($this->user);
+            } else {
+                Validate::addError("code", "Bad code, please try again");
+            }
+        }
+        return $this->index_part();
+    }
 }
-
