@@ -13,7 +13,11 @@ class Model implements NebulaModel
 
     public string $table_name;
     public string $primary_key;
-    protected array $guarded = [];
+    protected array $guarded = [
+        "id",
+        "created_at",
+        "updated_at",
+    ];
 
     /**
      * Return the static class
