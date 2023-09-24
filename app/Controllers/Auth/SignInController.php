@@ -40,7 +40,7 @@ final class SignInController extends Controller
                 "password" => ["required"],
             ])
         ) {
-            $user = User::search([["email", "=", request()->email]]);
+            $user = User::search(["email", "=", request()->email]);
             if ($user && Auth::validatePassword($user, request()->password)) {
                 if (config("auth.two_fa_enabled")) {
                     return Auth::twoFactorAuthentication($user);

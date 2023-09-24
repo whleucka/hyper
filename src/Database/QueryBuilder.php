@@ -120,12 +120,11 @@ class QueryBuilder implements QueryBuilderInterface
 
     /**
      * Add a where clause to the query
-     * @param array<int,mixed> $where
      */
-    public function where(array $where): self
+    public function where(...$args): self
     {
-        $this->where = $where;
-        $this->extractValues($where);
+        $this->where = $args;
+        $this->extractValues($args);
         return $this;
     }
 
@@ -141,12 +140,11 @@ class QueryBuilder implements QueryBuilderInterface
 
     /**
      * Add a having by clause to the query
-     * @param array<int,mixed> $having
      */
-    public function having(array $having): self
+    public function having(...$args): self
     {
-        $this->having = $having;
-        $this->extractValues($having);
+        $this->having = $args;
+        $this->extractValues($args);
         return $this;
     }
 

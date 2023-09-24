@@ -11,9 +11,9 @@ final class QueryBuilderTest extends TestCase
     {
         $qb = QueryBuilder::select("users")
             ->columns(["id", "email", "name"])
-            ->where([["id", "=", 1], ["name", "=", "test"]])
+            ->where(["id", "=", 1], ["name", "=", "test"])
             ->groupBy(["id", "name"])
-            ->having([["id", "=", 2], ["name", "=", "blue"]])
+            ->having(["id", "=", 2], ["name", "=", "blue"])
             ->orderBy(["id" => "ASC", "name" => "DESC"])
             ->limit(1)
             ->offset(2);
@@ -41,7 +41,7 @@ final class QueryBuilderTest extends TestCase
     {
         $qb = QueryBuilder::update("users")
             ->columns(["name" => "test", "email" => "test@test.com"])
-            ->where([["id", "=", 1]]);
+            ->where(["id", "=", 1]);
         $this->assertSame($qb->values(), ["test", "test@test.com", 1]);
         $this->assertSame(
             "UPDATE users SET name = ?, email = ? WHERE (id = ?)",
@@ -51,7 +51,7 @@ final class QueryBuilderTest extends TestCase
 
     public function test_delete_query(): void
     {
-        $qb = QueryBuilder::delete("users")->where([["id", "=", 1]]);
+        $qb = QueryBuilder::delete("users")->where(["id", "=", 1]);
         $this->assertSame($qb->values(), [1]);
         $this->assertSame("DELETE FROM users WHERE (id = ?)", $qb->build());
     }

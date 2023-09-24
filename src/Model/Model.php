@@ -59,20 +59,19 @@ class Model implements NebulaModel
     public static function find(mixed $id): ?self
     {
         $model = app()->get(static::class);
-        return self::search([[$model->primary_key, "=", $id]]);
+        return self::search([$model->primary_key, "=", $id]);
     }
 
     /**
      * Find a model by an attribute
      */
-    public static function search(array $where = [], ?int $limit = null): mixed
+    public static function search(...$args): mixed
     {
         $model = self::staticClass();
         // Build the sql query
         $qb = QueryBuilder::select($model->table_name)
             ->columns($model->getTableColumns())
-            ->where($where)
-            ->limit($limit);
+            ->where(...$args);
         // Select one item from the db
         $result = db()
             ->run($qb->build(), $qb->values())
@@ -168,7 +167,7 @@ class Model implements NebulaModel
         // Note: we use $this->id to refer to the current model
         $qb = QueryBuilder::update($model->table_name)
             ->columns($data)
-            ->where([[$model->primary_key, "=", $this->id]]);
+            ->where([$model->primary_key, "=", $this->id]);
         $result = db()->run($qb->build(), $qb->values());
         return $result !== null;
     }

@@ -235,7 +235,7 @@ class Validate
         if (!$table) {
             throw new \Error("unique requires a table name");
         }
-        $qb = QueryBuilder::select($table)->where([[$column, "=", $value]]);
+        $qb = QueryBuilder::select($table)->where([$column, "=", $value]);
         $result = db()->select($qb->build(), ...$qb->values());
         return !$result;
     }

@@ -101,7 +101,7 @@ Search for models based on specific conditions using the `search` method:
 
 ```php
 $operator = "=";
-$models = YourModel::search([["column", $operator, $value]]);
+$models = YourModel::search(["column", $operator, $value]);
 ```
 
 ### Creating Models
