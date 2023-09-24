@@ -25,7 +25,7 @@ class UserFactory extends Factory
         $user->password = Auth::hashPassword($password);
         $user->two_fa_secret = Auth::generateTwoFASecret();
         $user->failed_login_attempts = 0;
-        $id = $user->save();
+        $id = $user->insert();
         return User::find($id);
     }
 

@@ -33,7 +33,7 @@ interface Model
 {
   public static function find(mixed $id): ?self;
   public static function search(array $where): mixed;
-  public function save(): ?self;
+  public function insert(): ?self;
   public function update(): void;
   public function refresh(): void;
   public function delete(): void;
@@ -109,7 +109,7 @@ To create and insert a new model instance into the database, use the `save` meth
 ```php
 $newModel = new YourModel();
 $newModel->property = "value";
-$newModel->save();
+$newModel->insert();
 ```
 
 ### Updating and Deleting Models

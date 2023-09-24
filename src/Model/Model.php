@@ -127,7 +127,7 @@ class Model implements NebulaModel
      * Create a new model
      * @return self|null
      */
-    public function save($insert_ignore = false): mixed
+    public function insert($insert_ignore = false): mixed
     {
         $qb = $insert_ignore
             ? QueryBuilder::insertIgnore($this->table_name)->columns($this->data())

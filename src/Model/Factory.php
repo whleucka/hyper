@@ -25,7 +25,7 @@ class Factory implements NebulaFactory
         for ($i = 0; $i < $n; $i++) {
             $model = $this->new($data, $mock);
             if ($save) {
-                $model->save();
+                $model->insert();
             }
             $models[] = $model;
         }
