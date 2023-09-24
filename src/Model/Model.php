@@ -124,14 +124,30 @@ class Model implements NebulaModel
     }
 
     /**
+     * Save model state
+     * If $this->id is set, then update. 
+     * Otherwise insert new record
+     * Returns null if failure, id if insert, bool if update
+     * @return mixed
+     */
+    public function save(): mixed
+    {
+        $result = $this->id
+            ? $this->update($this->data())
+            : $this->insert($this->data());
+        return $result;
+    }
+
+    /**
      * Create a new model
+     * Save data to database
      * @return self|null
      */
-    public function insert($insert_ignore = false): mixed
+    public function insert(array $data, $ignore = false): mixed
     {
-        $qb = $insert_ignore
-            ? QueryBuilder::insertIgnore($this->table_name)->columns($this->data())
-            : QueryBuilder::insert($this->table_name)->columns($this->data());
+        $qb = $ignore
+            ? QueryBuilder::insertIgnore($this->table_name)->columns($data)
+            : QueryBuilder::insert($this->table_name)->columns($data);
         $result = db()->run($qb->build(), $qb->values());
         if (!$result) {
             return null;
@@ -143,6 +159,7 @@ class Model implements NebulaModel
 
     /**
      * Update a model
+     * Save data to database
      */
     public function update(array $data): bool
     {
@@ -153,7 +170,7 @@ class Model implements NebulaModel
             ->columns($data)
             ->where([$model->primary_key => $this->id]);
         $result = db()->run($qb->build(), $qb->values());
-        return (bool) $model;
+        return $result !== null;
     }
 
     /**

@@ -66,7 +66,7 @@ class UserFactory extends Factory
     $user->name = $name;
     $user->email = $email;
     $user->password = Auth::hashPassword($password);
-    return $user->insert();
+    return $user->save();
   }
 
   public function default(): array

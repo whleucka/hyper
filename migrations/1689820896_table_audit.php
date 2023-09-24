@@ -22,8 +22,8 @@ return new class () implements Migration
         $table->dateTime("created_at")->default("CURRENT_TIMESTAMP");
         $table->primaryKey("id");
         $table->foreignKey("user_id")
-        ->references("users", "id")
-        ->onDelete("SET NULL");
+          ->references("users", "id")
+          ->onDelete("SET NULL");
       });
     }
 
