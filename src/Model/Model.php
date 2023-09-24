@@ -65,7 +65,7 @@ class Model implements NebulaModel
     /**
      * Find a model by an attribute
      */
-    public static function search(array $where, ?int $limit = null): mixed
+    public static function search(array $where = [], ?int $limit = null): mixed
     {
         $model = self::staticClass();
         // Build the sql query
