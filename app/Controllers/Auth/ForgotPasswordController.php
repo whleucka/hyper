@@ -35,7 +35,7 @@ final class ForgotPasswordController extends Controller
                 "email" => ["required", "email"],
             ])
         ) {
-            $user = User::search(["email" => request()->email]);
+            $user = User::search([["email", "=", request()->email]]);
             Auth::forgotPassword($user);
             // Always display a success message
             return $this->index_part(true);

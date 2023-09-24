@@ -125,7 +125,7 @@ class QueryBuilder implements QueryBuilderInterface
     public function where(array $where): self
     {
         $this->where = $where;
-        $this->values = array_merge($this->values, array_values($where));
+        $this->extractValues($where);
         return $this;
     }
 
@@ -146,7 +146,7 @@ class QueryBuilder implements QueryBuilderInterface
     public function having(array $having): self
     {
         $this->having = $having;
-        $this->values = array_merge($this->values, array_values($having));
+        $this->extractValues($having);
         return $this;
     }
 
@@ -183,6 +183,30 @@ class QueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    private function extractValues(array $clause): void
+    {
+        foreach ($clause as $parts) {
+            if (count($parts) != 3) {
+                throw new \Exception("Incorrect format operation, clause count must be 3");
+            }
+            list($left, $operator, $right) = $parts;
+            $this->values[] = $right;
+        }
+    }
+
+    private function formatOperation(array $clause): string
+    {
+        $split = [];
+        foreach ($clause as $parts) {
+            if (count($parts) != 3) {
+                throw new \Exception("Incorrect format operation, clause count must be 3");
+            }
+            list($left, $operator, $right) = $parts;
+            $split[] = "($left $operator ?)";
+        }
+        return implode(" AND ", $split);
+    }
+
     /**
      * Return the sql string
      * @return string
@@ -202,11 +226,7 @@ class QueryBuilder implements QueryBuilderInterface
                 $sql = str_replace("*", $select_stmt, $sql);
             }
             if (!empty($this->where)) {
-                $where_clause = $this->mapToString(
-                    array_keys($this->where),
-                    fn($key) => "($key = ?)",
-                    " AND "
-                );
+                $where_clause = $this->formatOperation($this->where);
                 $sql .= "WHERE $where_clause ";
             }
             if (!empty($this->group_by)) {
@@ -218,11 +238,7 @@ class QueryBuilder implements QueryBuilderInterface
                 $sql .= "GROUP BY $group_by_clause ";
             }
             if (!empty($this->having)) {
-                $having_clause = $this->mapToString(
-                    array_values($this->group_by),
-                    fn($key) => "($key = ?)",
-                    " AND "
-                );
+                $having_clause = $this->formatOperation($this->having);
                 $sql .= "HAVING $having_clause ";
             }
             if (!empty($this->order_by)) {
@@ -254,11 +270,7 @@ class QueryBuilder implements QueryBuilderInterface
         }
         if ($this->mode === "update" || $this->mode === "delete") {
             if (!empty($this->where)) {
-                $where_clause = $this->mapToString(
-                    array_keys($this->where),
-                    fn($key) => "($key = ?)",
-                    " AND "
-                );
+                $where_clause = $this->formatOperation($this->where);
                 $sql .= "WHERE $where_clause ";
             }
         }

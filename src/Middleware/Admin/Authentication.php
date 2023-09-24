@@ -41,7 +41,7 @@ class Authentication implements Middleware
         if (!$uuid) {
             return false;
         }
-        $user = User::search(["uuid" => $uuid]);
+        $user = User::search([["uuid", "=", $uuid]]);
         return !is_null($user);
     }
 }

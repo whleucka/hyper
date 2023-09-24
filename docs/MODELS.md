@@ -100,7 +100,8 @@ $model = YourModel::find($id);
 Search for models based on specific conditions using the `search` method:
 
 ```php
-$models = YourModel::search(["column" => $value]);
+$operator = "=";
+$models = YourModel::search([["column", $operator, $value]]);
 ```
 
 ### Creating Models

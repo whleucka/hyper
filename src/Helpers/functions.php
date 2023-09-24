@@ -188,7 +188,7 @@ function user(): ?User
 {
     $uuid = session()->get("user");
     if ($uuid) {
-        $user = User::search(["uuid" => $uuid]);
+        $user = User::search([["uuid", "=", $uuid]]);
         if ($user) {
             return $user;
         }
