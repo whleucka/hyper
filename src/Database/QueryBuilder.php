@@ -185,7 +185,10 @@ class QueryBuilder implements QueryBuilderInterface
     {
         foreach ($clause as $parts) {
             if (count($parts) === 3) {
-                list($left, $operator, $right) = $parts;
+                [$left, $operator, $right] = $parts;
+                $this->values[] = $right;
+            } else if (count($parts) === 2) {
+                [$left, $right] = $parts;
                 $this->values[] = $right;
             }
         }
@@ -198,6 +201,9 @@ class QueryBuilder implements QueryBuilderInterface
             if (count($parts) === 3) {
                 [$left, $operator, $right] = $parts;
                 $split[] = "($left $operator ?)";
+            } else if (count($parts) === 2) {
+                [$left, $right] = $parts;
+                $split[] = "($left = ?)";
             } else if (count($parts) === 1) {
                 [$where] = $parts;
                 $split[] = "($where)";

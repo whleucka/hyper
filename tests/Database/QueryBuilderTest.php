@@ -7,6 +7,42 @@ use Nebula\Database\QueryBuilder;
 
 final class QueryBuilderTest extends TestCase
 {
+    public function test_where_params(): void
+    {
+        $qb = QueryBuilder::select("users")
+        ->columns(["id", "email", "name"])
+        ->where(["id IS NOT NULL"]);
+        $this->assertSame(
+            "SELECT id, email, name FROM users WHERE (id IS NOT NULL)",
+            $qb->build()
+        );
+        $qb = QueryBuilder::select("users")
+        ->columns(["id", "email", "name"])
+        ->where(["id", 3]);
+        $this->assertSame(
+            "SELECT id, email, name FROM users WHERE (id = ?)",
+            $qb->build()
+        );
+        $qb = QueryBuilder::select("users")
+        ->columns(["id", "email", "name"])
+        ->where(["id", ">", 3]);
+        $this->assertSame(
+            "SELECT id, email, name FROM users WHERE (id > ?)",
+            $qb->build()
+        );
+    }
+
+    public function test_where_operators(): void
+    {
+        $qb = QueryBuilder::select("users")
+        ->columns(["id", "email", "name"])
+        ->where(["id", ">", 3], ["email", "IS NOT", "NULL"], ["name", "!=", "bacon"]);
+        $this->assertSame(
+            "SELECT id, email, name FROM users WHERE (id > ?) AND (email IS NOT ?) AND (name != ?)",
+            $qb->build()
+        );
+    }
+
     public function test_select_query(): void
     {
         $qb = QueryBuilder::select("users")
