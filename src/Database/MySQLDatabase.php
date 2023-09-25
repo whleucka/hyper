@@ -108,6 +108,35 @@ class MySQLDatabase implements Database
     }
 
     /**
+     * Begin SQL transaction
+     */
+    public function beginTransaction(): bool
+    {
+        return $this->connection->beginTransaction();
+    }
+
+    /**
+     * Commit SQL transaction
+     */
+    public function commit(): bool
+    {
+        return $this->connection->commit();
+    }
+
+    /**
+     * Roll back SQL transaction
+     */
+    public function rollBack(): bool
+    {
+        return $this->connection->rollBack();
+    }
+
+    public function lastInsertId(): string|false
+    {
+        return $this->connection->lastInsertId();
+    }
+
+    /**
      * Call PDO methods
      * @param string $method PDO method
      * @param array $args PDO method arguments
