@@ -67,6 +67,7 @@ final class RegisterController extends Controller
             );
             if ($user) {
                 if (config("auth.two_fa_enabled")) {
+                    session()->set("register_two_fa", true);
                     return Auth::twoFactorRegister($user);
                 } else {
                     return Auth::signIn($user);

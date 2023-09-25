@@ -14,9 +14,10 @@ final class TwoFactorRegisterController extends Controller
 
     public function __construct()
     {
+        $register = session()->get("register_two_fa");
         $uuid = session()->get("two_fa");
         $user = User::search(["uuid", "=", $uuid]);
-        if (is_null($user)) {
+        if (is_null($register) || is_null($user)) {
             redirectRoute("sign-in.index");
         }
         $this->user = $user;
@@ -61,6 +62,7 @@ final class TwoFactorRegisterController extends Controller
             if (
                 Auth::validateCode($this->user->two_fa_secret, request()->code)
             ) {
+                session()->set("register_two_fa", false);
                 return Auth::signIn($this->user);
             } else {
                 Validate::addError("code", "Bad code, please try again");
