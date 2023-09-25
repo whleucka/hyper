@@ -15,7 +15,7 @@ final class PasswordResetController extends Controller
     #[Get("/password-reset/{uuid}/{token}", "password-reset.index")]
     public function index($uuid, $token): string
     {
-        $user = User::search(["uuid", "=", $uuid], ["reset_token", "=", $token]);
+        $user = User::search(["uuid", $uuid], ["reset_token", $token]);
         if ($user && time() < $user->reset_expires_at) {
             return latte("auth/password-reset.latte", [
                 "uuid" => $uuid,
@@ -28,7 +28,7 @@ final class PasswordResetController extends Controller
     #[Get("/password-reset/{uuid}/{token}/part", "password-reset.part")]
     public function index_part($uuid, $token): string
     {
-        $user = User::search(["uuid", "=", $uuid], ["reset_token", "=", $token]);
+        $user = User::search(["uuid", $uuid], ["reset_token", $token]);
         if ($user && time() < $user->reset_expires_at) {
             return latte(
                 "auth/password-reset.latte",
@@ -45,7 +45,7 @@ final class PasswordResetController extends Controller
     #[Post("/password-reset/{uuid}/{token}", "password-reset.post")]
     public function post($uuid, $token): string
     {
-        $user = User::search(["uuid", "=", $uuid], ["reset_token", "=", $token]);
+        $user = User::search(["uuid", $uuid], ["reset_token", $token]);
         if (!$user) {
             return $this->response(403, "Invalid token");
         }

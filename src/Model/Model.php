@@ -59,7 +59,7 @@ class Model implements NebulaModel
     public static function find(mixed $id): ?self
     {
         $model = app()->get(static::class);
-        return self::search([$model->primary_key, "=", $id]);
+        return self::search([$model->primary_key, $id]);
     }
 
     /**

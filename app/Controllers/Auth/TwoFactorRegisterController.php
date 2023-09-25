@@ -16,7 +16,7 @@ final class TwoFactorRegisterController extends Controller
     {
         $register = session()->get("register_two_fa");
         $uuid = session()->get("two_fa");
-        $user = User::search(["uuid", "=", $uuid]);
+        $user = User::search(["uuid", $uuid]);
         if (is_null($register) || is_null($user)) {
             redirectRoute("sign-in.index");
         }

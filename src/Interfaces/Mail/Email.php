@@ -10,8 +10,8 @@ interface Email
         string $body,
         ?string $plain_text = null,
         array $to_addresses = [],
-        array $cc_addresses,
-        array $bcc_addresses,
-        array $attachments
+        array $cc_addresses = [],
+        array $bcc_addresses = [],
+        array $attachments = []
     ): bool;
 }

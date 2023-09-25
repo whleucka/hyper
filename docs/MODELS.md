@@ -99,10 +99,17 @@ $model = YourModel::find($id);
 
 Search for models based on specific conditions using the `search` method:
 
+Note: the search method accepts arrays that are transformed into where clauses, separated by "AND".
+
 ```php
-$operator = "=";
-$models = YourModel::search(["column", $operator, $value]);
+// You can set the operator with the second param. Eg) (id > 3) AND (name != "William")
+$models = YourModel::search(["id", ">", 3], ["name", "!=", "William"]);
+// If you do not specify an operator, then = is assumed. Eg) (id = 3)
+$models = YourModel::search(["id", 3]);
+// You can also provide one argument with no value binding.
+$models = YourModel::search(["id IS NOT NULL"]);
 ```
+
 
 ### Creating Models
 
