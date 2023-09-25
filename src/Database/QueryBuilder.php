@@ -184,11 +184,10 @@ class QueryBuilder implements QueryBuilderInterface
     private function extractValues(array $clause): void
     {
         foreach ($clause as $parts) {
-            if (count($parts) != 3) {
-                throw new \Exception("Incorrect format operation, clause count must be 3");
+            if (count($parts) === 3) {
+                list($left, $operator, $right) = $parts;
+                $this->values[] = $right;
             }
-            list($left, $operator, $right) = $parts;
-            $this->values[] = $right;
         }
     }
 
@@ -196,11 +195,13 @@ class QueryBuilder implements QueryBuilderInterface
     {
         $split = [];
         foreach ($clause as $parts) {
-            if (count($parts) != 3) {
-                throw new \Exception("Incorrect format operation, clause count must be 3");
+            if (count($parts) === 3) {
+                [$left, $operator, $right] = $parts;
+                $split[] = "($left $operator ?)";
+            } else if (count($parts) === 1) {
+                [$where] = $parts;
+                $split[] = "($where)";
             }
-            list($left, $operator, $right) = $parts;
-            $split[] = "($left $operator ?)";
         }
         return implode(" AND ", $split);
     }
