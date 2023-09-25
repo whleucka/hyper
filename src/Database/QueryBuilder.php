@@ -111,7 +111,11 @@ class QueryBuilder implements QueryBuilderInterface
      */
     public function columns(array $columns): self
     {
-        if ($this->mode === "insert" || $this->mode === "insert_ignore" || $this->mode === "update") {
+        if (
+            $this->mode === "insert" ||
+            $this->mode === "insert_ignore" ||
+            $this->mode === "update"
+        ) {
             $this->values = array_merge($this->values, array_values($columns));
         }
         $this->columns = $columns;
@@ -187,7 +191,7 @@ class QueryBuilder implements QueryBuilderInterface
             if (count($parts) === 3) {
                 [$left, $operator, $right] = $parts;
                 $this->values[] = $right;
-            } else if (count($parts) === 2) {
+            } elseif (count($parts) === 2) {
                 [$left, $right] = $parts;
                 $this->values[] = $right;
             }
@@ -201,10 +205,10 @@ class QueryBuilder implements QueryBuilderInterface
             if (count($parts) === 3) {
                 [$left, $operator, $right] = $parts;
                 $split[] = "($left $operator ?)";
-            } else if (count($parts) === 2) {
+            } elseif (count($parts) === 2) {
                 [$left, $right] = $parts;
                 $split[] = "($left = ?)";
-            } else if (count($parts) === 1) {
+            } elseif (count($parts) === 1) {
                 [$where] = $parts;
                 $split[] = "($where)";
             }

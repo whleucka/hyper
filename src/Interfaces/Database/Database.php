@@ -10,8 +10,8 @@ interface Database
     public function select(string $sql, ...$params): mixed;
     public function selectAll(string $sql, ...$params): ?array;
     public function query(string $sql, ...$params): ?PDOStatement;
-    public function beginTransaction():bool;
-    public function rollback():bool;
-    public function commit():bool;
+    public function beginTransaction(): bool;
+    public function rollback(): bool;
+    public function commit(): bool;
     public function lastInsertId(): string|false;
 }

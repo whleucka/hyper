@@ -13,11 +13,7 @@ class Model implements NebulaModel
 
     public string $table_name;
     public string $primary_key;
-    protected array $guarded = [
-        "id",
-        "created_at",
-        "updated_at",
-    ];
+    protected array $guarded = ["id", "created_at", "updated_at"];
 
     /**
      * Return the static class
@@ -124,7 +120,7 @@ class Model implements NebulaModel
 
     /**
      * Save model state
-     * If $this->id is set, then update. 
+     * If $this->id is set, then update.
      * Otherwise insert new record
      * Returns null if failure, id if insert, bool if update
      * @return mixed
