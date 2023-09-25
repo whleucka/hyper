@@ -4,7 +4,7 @@
 
 {block body}
 <section id="auth-two-factor-register" class="form-auth d-flex justify-content-center">
-  <form hx-post="/two-factor-authentication/register" hx-boost="true" hx-target="#body" hx-replace-url="/module/dashboard" hx-url-push="true">
+  <form hx-post="/two-factor-authentication/register" hx-boost="true" hx-target="#body" hx-replace-url="/dashboard" hx-url-push="true">
     {csrf()|noescape}
     <h1 class="h3 mb-3 fw-normal text-center">Two factor authentication</h1>
     <div class="d-flex justify-content-center p-2">
