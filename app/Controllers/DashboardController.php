@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
-use Nebula\Controller\ModuleController as NebulaModule;
+use Nebula\Controller\Controller;
 use StellarRouter\{Get, Group};
 
 #[Group(middleware: ["auth"])]
-class ModuleController extends NebulaModule
+class DashboardController extends Controller
 {
     #[Get("/dashboard", "dashboard.index")]
     public function index(): string
