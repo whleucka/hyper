@@ -29,7 +29,7 @@ final class TwoFactorAuthenticationController extends Controller
     }
 
     #[Get("/two-factor-authentication/part", "two-factor-authentication.part")]
-    public function index_part(): string
+    public function part(): string
     {
         return latte("auth/two-factor-authentication.latte", block: "body");
     }

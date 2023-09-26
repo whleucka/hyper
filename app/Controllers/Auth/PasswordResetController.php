@@ -26,7 +26,7 @@ final class PasswordResetController extends Controller
     }
 
     #[Get("/password-reset/{uuid}/{token}/part", "password-reset.part")]
-    public function index_part($uuid, $token): string
+    public function part($uuid, $token): string
     {
         $user = User::search(["uuid", $uuid], ["reset_token", $token]);
         if ($user && time() < $user->reset_expires_at) {

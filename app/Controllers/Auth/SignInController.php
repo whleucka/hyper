@@ -18,8 +18,8 @@ final class SignInController extends Controller
         ]);
     }
 
-    #[Get("/sign-in/part", "sign-in.part")]
-    public function index_part(): string
+    #[Get("/sign-in/part", "sign-in.part", ["push-url=/sign-in"])]
+    public function part(): string
     {
         return latte(
             "auth/sign-in.latte",

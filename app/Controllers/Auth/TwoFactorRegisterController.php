@@ -36,7 +36,7 @@ final class TwoFactorRegisterController extends Controller
             "two-factor-register.part"
         )
     ]
-    public function index_part(): string
+    public function part(): string
     {
         $url = Auth::urlQR($this->user);
         return latte(

@@ -15,8 +15,8 @@ final class ForgotPasswordController extends Controller
         return latte("auth/forgot-password.latte");
     }
 
-    #[Get("/forgot-password/part", "forgot-password.part")]
-    public function index_part($show_success = false): string
+    #[Get("/forgot-password/part", "forgot-password.part", ["push-url=/forgot-password"])]
+    public function part($show_success = false): string
     {
         return latte(
             "auth/forgot-password.latte",
