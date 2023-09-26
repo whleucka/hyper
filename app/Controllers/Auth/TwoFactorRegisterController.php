@@ -68,6 +68,6 @@ final class TwoFactorRegisterController extends Controller
                 Validate::addError("code", "Bad code, please try again");
             }
         }
-        return $this->index_part();
+        return $this->part();
     }
 }

@@ -51,6 +51,6 @@ final class SignInController extends Controller
                 Validate::addError("password", "Bad email or password");
             }
         }
-        return $this->index_part();
+        return $this->part();
     }
 }

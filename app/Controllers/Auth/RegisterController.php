@@ -74,6 +74,6 @@ final class RegisterController extends Controller
                 }
             }
         }
-        return $this->index_part();
+        return $this->part();
     }
 }

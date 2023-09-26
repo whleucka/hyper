@@ -38,8 +38,8 @@ final class ForgotPasswordController extends Controller
             $user = User::search(["email", request()->email]);
             Auth::forgotPassword($user);
             // Always display a success message
-            return $this->index_part(true);
+            return $this->part(true);
         }
-        return $this->index_part();
+        return $this->part();
     }
 }

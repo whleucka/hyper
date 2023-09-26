@@ -64,6 +64,6 @@ final class PasswordResetController extends Controller
             Auth::changePassword($user, request()->password);
             return Auth::signIn($user);
         }
-        return $this->index_part($uuid, $token);
+        return $this->part($uuid, $token);
     }
 }
