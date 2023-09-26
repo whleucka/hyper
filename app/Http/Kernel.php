@@ -15,6 +15,7 @@ final class Kernel extends HttpKernel
         \Nebula\Middleware\Http\RateLimit::class,
         \Nebula\Middleware\Admin\Authentication::class,
         \Nebula\Middleware\Http\CachedResponse::class,
+        \Nebula\Middleware\Http\PushUrl::class,
         \Nebula\Middleware\Http\JsonResponse::class,
         \Nebula\Middleware\Http\Log::class,
     ];
