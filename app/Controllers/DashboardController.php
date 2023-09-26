@@ -7,7 +7,7 @@ use StellarRouter\Get;
 
 class DashboardController extends Controller
 {
-    #[Get("/dashboard", "dashboard.index", ["push-url"])]
+    #[Get("/dashboard", "dashboard.index", ["auth", "push-url"])]
     public function index(): string
     {
         return latte("dashboard/index.latte");
