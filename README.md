@@ -7,6 +7,6 @@
 
 ## Introduction
 
-Soprano media player HTMX project. WIP
+HTMX media player project. WIP
 
 ✌️
