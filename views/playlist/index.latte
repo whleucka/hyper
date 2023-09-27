@@ -1,0 +1,31 @@
+{layout "../layout/app.latte"}
+
+{block title}Search{/block}
+
+{block content}
+<section id="module-playlist" class="module">
+	{foreach $playlist as $key => $track}
+		<div id="{$track->hash}" class="d-flex w-100 playlist-row align-items-center">
+			<img onClick="playPlaylist({$track->hash}, {$key})" loading="lazy" class="cover rounded me-2" src="{$track->cover}" alt="cover" />
+			<div onClick="playPlaylist({$track->hash}, {$key})" class="flex-grow-1">
+				<span class="title">{$track->title|noescape}            </span> 
+				<br>
+				<span class="artist text-secondary">{$track->artist|noescape}</span>
+			</div>
+			<div class="btn-group">
+			  <button type="button" class="btn dropdown-toggle text-white text-end" data-bs-toggle="dropdown" aria-expanded="false">
+				{$track->playtime_string}
+			  </button>
+			  <ul class="dropdown-menu dropdown-menu-end">
+				<li><a class="dropdown-item" onClick="removeFromPlaylist({$track->hash})">Remove from playlist</a></li>
+			  </ul>
+			</div>
+		</div>
+	{/foreach}
+
+	{if !$playlist}
+		<p class="text-secondary py-2"><i>Playlist is empty</i></p>
+	{/if}
+</section>
+{/block}
+

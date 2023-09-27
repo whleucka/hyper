@@ -1,10 +1,8 @@
-{layout "../layout/base.latte"}
+{layout "../layout/app.latte"}
 
 {block title}Dashboard{/block}
 
-{block body}
-<p>You are now signed in.</p>
-<div class="mt-2">
-    <button hx-get="/sign-out" hx-replace-url="/sign-in"  hx-url-push="true" hx-target="body">Sign out</button>
-</div>
-{/block}
+{block content}
+<section id="module-dashboard" class="module">
+	<p>You are now signed in.</p>
+</section>

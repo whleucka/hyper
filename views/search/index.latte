@@ -1,0 +1,29 @@
+{layout "../layout/app.latte"}
+
+{block title}Search{/block}
+
+{block content}
+<section id="module-search" class="module">
+    <div id="control" class="mb-3 sticky-top bg-dark">
+        <form class="d-flex" hx-post="/search" hx-target="#module-search #results">
+            {csrf()|noescape}
+            <div class="input-group w-100">
+                <input name="search" 
+                    id="search-input" 
+                    class="form-control no-border bg-dark p-2 ps-5"
+                    type="search" 
+                    value="{$search_value}"
+                    hx-trigger="load"
+                    hx-post="/search" 
+                    hx-target="#module-search #results"
+                    placeholder="I want to listen to..." 
+                    autocomplete="off" />
+                <button type="submit" class="btn btn-sm btn-dark">Search</button>
+                <button type="submit" onClick="clearSearch()" class="btn btn-sm btn-dark">Clear</button>
+            </div>
+        </form>
+    </div> 
+    <div id="results">
+    </div>
+</section>
+{/block}

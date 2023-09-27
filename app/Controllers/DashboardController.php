@@ -13,4 +13,10 @@ class DashboardController extends Controller
     {
         return latte("dashboard/index.latte");
     }
+
+    #[Get("/dashboard/part", "dashboard.part", ["push-url=/dashboard"])]
+    public function part(): string
+    {
+        return latte("dashboard/index.latte", [], "content");
+    }
 }

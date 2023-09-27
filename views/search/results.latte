@@ -1,0 +1,22 @@
+{foreach $results as $key => $track}
+    <div class="d-flex w-100 search-result-row align-items-center">
+        <img onClick="playResult({$track->hash})" loading="lazy" class="cover rounded me-2" src="{$track->cover}" alt="cover" />
+        <div onClick="playResult({$track->hash})" class="flex-grow-1">
+            <span class="title">{$track->title|noescape}            </span> 
+            <br>
+            <span class="artist text-secondary">{$track->artist|noescape}</span>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn dropdown-toggle text-white text-end" data-bs-toggle="dropdown" aria-expanded="false">
+            {$track->playtime_string}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" onClick="addToPlaylist({$track->hash})">Add to playlist</a></li>
+          </ul>
+        </div>
+    </div>
+{/foreach}
+
+{if !$results}
+    <p class="text-secondary py-2"><i>No results found</i></p>
+{/if}

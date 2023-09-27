@@ -1,0 +1,16 @@
+{layout "../layout/base.latte"}
+
+{block body}
+<section hx-boost="true" id="app" class="d-flex flex-column h-100">
+  <section id="top" class="d-flex flex-row h-100 glex-grow-1">
+      {include "../layout/components/sidebar.latte"}
+      {include "../layout/components/content.latte" with blocks}
+  </section>
+    {include "../layout/components/player.latte"}
+</section>
+{/block}
+
+{block body_scripts}
+  <script src="/assets/js/soprano.js"></script>
+  {include parent}
+{/block}

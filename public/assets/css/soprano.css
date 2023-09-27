@@ -1,0 +1,126 @@
+#app {
+  background-color: #000;
+  height: 100%;
+  color: #fbfbfb;
+}
+
+#app #top {
+  max-height: calc(100% - 100px);
+}
+
+#app #content {
+  overflow-y: auto;
+  margin: 10px 10px 10px 0;
+}
+
+#app .module {
+  padding: 20px;
+}
+
+#app .no-border {   
+  border: 0;
+  box-shadow: none;
+  outline: 0 none;
+}
+
+#app .bg-dark, #app .btn-dark {
+  background-color: #111 !important;
+}
+
+#app .bg-dark, #app .btn {
+  border: 0;
+}
+
+/** Scrollbar */
+::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+}
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 30px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #b3afb3;
+}
+::-webkit-scrollbar-track {
+    background: #222222;
+    border-radius: 0px;
+    -webkit-box-shadow: inset 0px 0px 0px 0px #f0f0f0;
+    box-shadow: inset 0px 0px 0px 0px #f0f0f0;
+}
+
+/** Sidebar */
+#app #sidebar {
+  margin: 10px;
+  padding: 20px;
+  width: 180px;
+  min-height: 140px;
+  overflow-y: hidden;
+}
+
+#app #sidebar ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+#app #sidebar ul li {
+  margin-bottom: 10px;
+}
+
+#app #sidebar a {
+  color: #fbfbfb;
+  text-decoration: none;
+}
+
+/** Player */
+#app #player {
+  height: 100px;
+}
+
+
+#app #player #artwork {
+  margin: 20px;
+}
+
+#app #player #artwork .cover {
+  width: 80px;
+  height: 80px;
+}
+
+#app #player #controls .btn {
+  margin: 10px;
+}
+
+
+/** Search */
+#app #module-search #search-input {
+  font-size: 1.1rem;
+  color: #fbfbfb;
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Feedbin-Favicon-search-light.svg/120px-Feedbin-Favicon-search-light.svg.png") ;
+  background-size: 14px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+
+#app #module-search .search-result-row:hover,
+#app #module-playlist .playlist-row:hover {
+  cursor: pointer;
+  background-color: rgba(25,25,25,0.8);
+}
+
+#app #module-search .search-result-row .cover, 
+#app #module-playlist .playlist-row .cover {
+  height: 44px;
+  width: 44px;
+}
+
+#app #module-search .search-result-row .artist,
+#app #module-playlist .playlist-row .artist {
+  font-size: 0.8rem;
+}
+
+#app #module-search .search-result-row .title,
+#app #module-playlist .playlist-row .title {
+  font-size: 0.9rem;
+}

@@ -1,0 +1,13 @@
+<section id="player" class="w-100 bg-dark d-flex align-items-center">
+  <div id="artwork">
+    <img id="player-cover" class="cover rounded" src="/assets/img/no-album.png" alt="artwork" />
+  </div>
+  <div id="controls" class="d-flex justify-content-center flex-grow-1">
+    <button class="btn btn-sm btn-dark" onClick="prevTrack()"><i data-feather="skip-back" /></button>
+    <button class="btn btn-sm btn-dark" onClick="playTrack()"><i data-feather="play" /></button>
+    <button class="btn btn-sm btn-dark" onClick="pauseTrack()"><i data-feather="pause" /></button>
+    <button class="btn btn-sm btn-dark" onClick="nextTrack()"><i data-feather="skip-forward" /></button>
+  </div>
+  <audio id="audio"></audio>
+</section>
+
